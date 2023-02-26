@@ -1,17 +1,17 @@
+import { useSelector } from "react-redux";
+
 import DownloadChapterListItem from "./Item/Item";
 
 import style from "./style.module.scss";
 
-const DownloadChapterList = ({ list, onClick, queue }) => {
+const DownloadChapterList = () => {
+  const mangaData = useSelector((state) => state.currentComic);
+  const chapters = mangaData.allposts;
+
   return (
     <ul className={style.downloadChapterList}>
-      {list.map((val, key) => (
-        <DownloadChapterListItem
-          key={key}
-          data={val}
-          queue={queue}
-          onClick={() => !!onClick && onClick(val)}
-        />
+      {chapters.map((val, key) => (
+        <DownloadChapterListItem key={key} data={val} />
       ))}
     </ul>
   );

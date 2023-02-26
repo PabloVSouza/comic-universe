@@ -1,35 +1,25 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import lang from "lang";
 
 import Window from "components/Window";
-import Image from "components/Image";
-
-import style from "./style.module.scss";
 import DownloadChapterHeader from "components/DownloadChapterHeader";
 import DownloadChapterList from "components/DownloadChapterList/list";
 import DownloadChapterNav from "components/DownloadChapterNav";
 
+import style from "./style.module.scss";
+
 const DownloadManga = () => {
+  const dispatch = useDispatch();
   const { slug } = useParams();
-
-  const [mangaData, setMangaData] = useState(null);
-  const [downloadQueue, setDownloadQueue] = useState([]);
-
-  const handleClick = (data) => {
-    const found = downloadQueue.findIndex((val) => val.num === data.num);
-    if (found < 0) {
-      setDownloadQueue((downloadQueue) => [...downloadQueue, data]);
-    } else {
-      setDownloadQueue(downloadQueue.filter((val) => val.num !== data.num));
-    }
-  };
 
   useMemo(() => {
     window.electron.ipcRenderer.invoke("getMangaData", slug).then((res) => {
-      setMangaData(res);
+      dispatch({ type: "SET_CURRENT_COMIC", payload: res });
     });
   }, []);
+
+  const mangaData = useSelector((state) => state.currentComic);
 
   return (
     !!mangaData && (
@@ -40,16 +30,9 @@ const DownloadManga = () => {
         contentClassName={style.content}
       >
         <DownloadChapterHeader mangaData={mangaData} />
-        <DownloadChapterNav
-          chapters={mangaData.allposts}
-          queue={downloadQueue}
-        />
+        <DownloadChapterNav />
 
-        <DownloadChapterList
-          list={mangaData.allposts}
-          onClick={handleClick}
-          queue={downloadQueue}
-        />
+        <DownloadChapterList />
       </Window>
     )
   );

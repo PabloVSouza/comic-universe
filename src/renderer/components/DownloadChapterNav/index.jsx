@@ -1,14 +1,30 @@
+import { useSelector, useDispatch } from "react-redux";
+import Button from "components/Button";
 import lang from "lang";
 
-import Button from "components/Button";
 import style from "./style.module.scss";
 
 import clipboardIcon from "assets/clipboard.svg";
 import downloadIcon from "assets/download-icon-2.svg";
 import Container from "components/Container";
 
-const DownloadChapterNav = ({ chapters = [], queue = [] }) => {
-  const addAllToQueue = () => {};
+const DownloadChapterNav = () => {
+  const dispatch = useDispatch();
+
+  const mangaData = useSelector((state) => state.currentComic);
+  const queue = useSelector((state) => state.downloadQueue);
+
+  const chapters = mangaData.allposts;
+
+  const addAllToQueue = () => {
+    if (queue.length === chapters.length) {
+      dispatch({ type: "SET_DOWNLOAD_QUEUE", payload: [] });
+    } else {
+      const newQueue = Array.from(new Set(queue.concat(chapters)));
+      dispatch({ type: "SET_DOWNLOAD_QUEUE", payload: newQueue });
+    }
+  };
+
   const downloadQueue = () => {};
 
   return (

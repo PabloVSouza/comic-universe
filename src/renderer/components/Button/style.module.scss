@@ -34,11 +34,51 @@ $green: rgba(0, 255, 0, 0.4);
 
   //Colors
 
+  &.white {
+    background: $white-transparent !important;
+
+    &:hover {
+      background: $white !important;
+    }
+  }
+
+  &.black {
+    background: $black-transparent !important;
+
+    &:hover {
+      background: $black !important;
+    }
+  }
+
   &.green {
     background: $green-transparent !important;
 
     &:hover {
       background: $green !important;
+    }
+  }
+
+  &.red {
+    background: $red-transparent !important;
+
+    &:hover {
+      background: $red !important;
+    }
+  }
+
+  &.blue {
+    background: $blue-transparent !important;
+
+    &:hover {
+      background: $blue !important;
+    }
+  }
+
+  &.yellow {
+    background: $yellow-transparent !important;
+
+    &:hover {
+      background: $yellow !important;
     }
   }
 
@@ -49,6 +89,7 @@ $green: rgba(0, 255, 0, 0.4);
     background-color: unset;
     margin: 0 2.5px;
     aspect-ratio: 1/1;
+    border-radius: $radius-default;
 
     img {
       height: 100%;
@@ -57,7 +98,7 @@ $green: rgba(0, 255, 0, 0.4);
     }
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.05);
+      background-color: $white-transparent;
     }
   }
 

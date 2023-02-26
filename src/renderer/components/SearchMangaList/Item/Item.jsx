@@ -34,7 +34,9 @@ const MangaListItem = ({ data }) => {
         <p className={style.genre}>{data.genre}</p>
       </div>
       <div className={style.cover}>
-        <div className={style.chapters}>{data.videos}</div>
+        <div className={style.chapters}>
+          {data.videos} {lang.SearchManga.chapters}
+        </div>
         <Image className={style.coverImage} src={data.cover} />
       </div>
       {!!mangaDetails && extended && (

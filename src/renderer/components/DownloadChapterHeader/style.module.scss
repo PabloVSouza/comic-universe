@@ -13,7 +13,7 @@
       "TITLE COVER"
       "DESCRIPTION COVER";
     column-gap: 30px;
-    overflow: hidden;
+    // overflow: hidden;
 
     .title {
       grid-area: TITLE;
@@ -30,14 +30,15 @@
         }
       }
     }
-  }
+    .cover {
+      grid-area: COVER;
+      aspect-ratio: 10/16;
+      object-fit: cover;
+      height: 300px;
+    }
 
-  .cover {
-    grid-area: COVER;
-    height: 400px;
-  }
-
-  .description {
-    grid-area: DESCRIPTION;
+    .description {
+      grid-area: DESCRIPTION;
+    }
   }
 }

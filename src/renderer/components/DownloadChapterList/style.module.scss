@@ -4,4 +4,7 @@
   width: 100%;
   gap: 10px;
   justify-content: center;
+  flex-grow: 1;
+  background: $white-transparent;
+  padding: 10px;
 }

@@ -8,17 +8,5 @@
     flex-direction: column;
     justify-content: flex-start;
     overflow: auto;
-    .chapters {
-      width: 100%;
-      flex-grow: 1;
-      margin-top: 1px;
-      background: $white-transparent;
-      padding-bottom: 10px;
-
-      h1 {
-        text-align: center;
-        margin: 20px 0;
-      }
-    }
   }
 }

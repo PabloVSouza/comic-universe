@@ -8,6 +8,7 @@ import Image from "components/Image";
 import style from "./style.module.scss";
 import DownloadChapterHeader from "components/DownloadChapterHeader";
 import DownloadChapterList from "components/DownloadChapterList/list";
+import DownloadChapterNav from "components/DownloadChapterNav";
 
 const DownloadManga = () => {
   const { slug } = useParams();
@@ -39,15 +40,16 @@ const DownloadManga = () => {
         contentClassName={style.content}
       >
         <DownloadChapterHeader mangaData={mangaData} />
+        <DownloadChapterNav
+          chapters={mangaData.allposts}
+          queue={downloadQueue}
+        />
 
-        <div className={style.chapters}>
-          <h1>{lang.DownloadManga.chaptersTitle}</h1>
-          <DownloadChapterList
-            list={mangaData.allposts}
-            onClick={handleClick}
-            queue={downloadQueue}
-          />
-        </div>
+        <DownloadChapterList
+          list={mangaData.allposts}
+          onClick={handleClick}
+          queue={downloadQueue}
+        />
       </Window>
     )
   );

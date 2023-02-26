@@ -1,6 +1,7 @@
 const SearchManga = {
   textPlaceholder: "Digite sua Busca",
   goToPage: "Ir para a Página",
+  chapters: "Capítulos",
   pagination: {
     previous: "Anterior",
     next: "Próxima",
@@ -9,6 +10,12 @@ const SearchManga = {
 
 const DownloadManga = {
   chaptersTitle: "Capítulos",
+  navigation: {
+    downloadQueue: "Na fila",
+    downloadButton: "Baixar agora",
+    addToQueue: "Adicionar todos na fila",
+    removeFromQueue: "Remover todos da fila",
+  },
 };
 
 const lang = {

@@ -1,0 +1,43 @@
+.header {
+  background: $white-transparent;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+
+  .container {
+    display: grid;
+    width: 100%;
+    max-width: 1000px;
+    grid-template:
+      "TITLE COVER"
+      "DESCRIPTION COVER";
+    column-gap: 30px;
+    overflow: hidden;
+
+    .title {
+      grid-area: TITLE;
+      .chapter {
+        margin: 10px 0;
+        display: flex;
+        gap: 5px;
+
+        div {
+          background: $green-transparent;
+          border-radius: $radius-default;
+          padding: 5px;
+          box-shadow: $shadow-default;
+        }
+      }
+    }
+  }
+
+  .cover {
+    grid-area: COVER;
+    height: 400px;
+  }
+
+  .description {
+    grid-area: DESCRIPTION;
+  }
+}

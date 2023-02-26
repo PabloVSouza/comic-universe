@@ -1,0 +1,126 @@
+$bgWhite: rgb(255, 255, 255);
+$green: rgba(0, 255, 0, 0.4);
+.Button {
+  cursor: pointer;
+  position: relative;
+  transition: $transition-bg-default, border-color 0.6s ease, opacity 0.6s ease,
+    transform 0.6s ease;
+  overflow: hidden;
+
+  img {
+    height: 100%;
+  }
+
+  //sizes
+  &.size-xxs {
+    width: 35px;
+  }
+  &.size-xs {
+    width: 50px;
+  }
+  &.size-s {
+    width: 80px;
+  }
+  &.size-m {
+    width: 100px;
+  }
+  &.size-l {
+    width: 170px;
+  }
+  &.size-xl {
+    width: 200px;
+    padding: 20px;
+  }
+
+  //Colors
+
+  &.green {
+    background: $green-transparent !important;
+
+    &:hover {
+      background: $green !important;
+    }
+  }
+
+  //Themes
+  &.pure {
+    border: none;
+    padding: 5px;
+    background-color: unset;
+    margin: 0 2.5px;
+    aspect-ratio: 1/1;
+
+    img {
+      height: 100%;
+      width: 100%;
+      aspect-ratio: 1/1;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  &.closeButton {
+    $closeButtonColor: $red-transparent;
+    $closeButtonDefaultBorder: 1px solid $white-transparent;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 7;
+    width: 40px;
+    height: 30px;
+    border: none;
+    border-radius: unset;
+    border-bottom-left-radius: $radius-default;
+    background-color: $white-transparent;
+    &::after {
+      content: "X";
+    }
+
+    &:hover {
+      background-color: $red-transparent;
+    }
+  }
+
+  &.roundedSquare,
+  &.roundedRectangle {
+    border: none;
+    box-shadow: 5px 5px 9px -7px rgba(0, 0, 0, 0.6);
+    background: $white-transparent;
+    border-radius: $radius-default;
+
+    img {
+      height: 100%;
+    }
+
+    &:hover {
+      background-color: $white;
+    }
+  }
+
+  &.roundedSquare {
+    padding: 5px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &.roundedRectangle {
+    padding: 10px;
+    aspect-ratio: unset;
+    height: 45px;
+    img {
+      margin-left: 10px;
+      height: 100%;
+      // position: absolute;
+      background-color: $bgWhite;
+      // right: 0;
+      padding: 10px;
+    }
+  }
+}

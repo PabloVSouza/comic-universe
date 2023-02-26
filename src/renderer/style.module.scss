@@ -1,0 +1,12 @@
+#Base {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  width: 100vw;
+  background-repeat: no-repeat;
+  background: url('@/assets/wallpapers/1.jpeg');
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  position: relative;
+}

@@ -1,0 +1,36 @@
+.downloadChapterListItem {
+  cursor: pointer;
+  padding: 10px;
+  margin-bottom: 1px;
+  background: $white-transparent;
+  border-radius: $radius-default;
+  box-shadow: $shadow-default;
+  transition: $transition-bg-default, $transition-color-default;
+  min-width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  &:hover {
+    background: $white;
+  }
+
+  &.active {
+    background: $yellow-transparent;
+
+    &:hover {
+      background: $yellow;
+    }
+  }
+
+  p {
+    font-size: 20px;
+    font-weight: lighter;
+  }
+
+  span {
+    font-size: 10px;
+    font-weight: 400;
+  }
+}

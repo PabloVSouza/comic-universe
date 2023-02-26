@@ -1,0 +1,10 @@
+.mangaList {
+  height: calc(100% - 51px);
+  width: 200px;
+  top: 51px;
+  position: absolute;
+  left: 0;
+  background-color: $white-transparent;
+  overflow: auto;
+  transition: transform 0.6s ease;
+}

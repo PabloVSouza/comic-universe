@@ -1,4 +1,4 @@
-import ComicListItem from "./Item/Item";
+import ComicListItem from "./Item";
 
 import style from "./style.module.scss";
 

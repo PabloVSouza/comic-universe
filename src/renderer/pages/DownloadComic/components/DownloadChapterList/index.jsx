@@ -1,4 +1,4 @@
-import DownloadChapterListItem from "./Item/Item";
+import DownloadChapterListItem from "./Item";
 
 import style from "./style.module.scss";
 

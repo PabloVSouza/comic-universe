@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 
 import Window from "components/Window";
-import SearchComicList from "components/SearchComicList/List";
+import SearchComicList from "pages/SearchComic/components/SearchComicList";
 
 import lang from "lang";
 

@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import merge from "lodash.merge";
 
 import Window from "components/Window";
-import DownloadChapterHeader from "components/DownloadChapterHeader";
-import DownloadChapterList from "components/DownloadChapterList/list";
-import DownloadChapterNav from "components/DownloadChapterNav";
+import DownloadChapterHeader from "./components/DownloadChapterHeader";
+import DownloadChapterList from "./components/DownloadChapterList";
+import DownloadChapterNav from "./components/DownloadChapterNav";
 
 import style from "./style.module.scss";
 

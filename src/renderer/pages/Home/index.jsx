@@ -1,7 +1,7 @@
 import Window from "components/Window";
-import TopMenu from "components/TopMenu";
-import MangaList from "components/ComicList/List";
-import MangaDashboard from "components/ComicDashboard/ComicDashboard";
+import TopMenu from "./components/TopMenu";
+import ComicList from "./components/ComicList";
+import ComicDashboard from "./components/ComicDashboard";
 
 import style from "./style.module.scss";
 
@@ -9,8 +9,8 @@ const Home = () => {
   return (
     <Window className={style.Home}>
       <TopMenu />
-      <MangaList />
-      <MangaDashboard />
+      <ComicList />
+      <ComicDashboard />
     </Window>
   );
 };

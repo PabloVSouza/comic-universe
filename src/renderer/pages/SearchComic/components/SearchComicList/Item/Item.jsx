@@ -16,15 +16,15 @@ const ComicListItem = ({ data }) => {
   const [extended, setExtended] = useState(false);
   const [comicDetails, setComicDetails] = useState(null);
 
+  const { invoke } = window.electron.ipcRenderer;
+
   const handleClick = () => {
     setExtended(!extended);
 
     if (!comicDetails) {
-      window.electron.ipcRenderer
-        .invoke("getComicDetails", data.hash)
-        .then((res) => {
-          setComicDetails(res[0]);
-        });
+      invoke("getDetails", { type: "manga", id: data.hash }).then((res) => {
+        setComicDetails(res[0]);
+      });
     }
   };
 

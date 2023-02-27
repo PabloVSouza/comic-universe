@@ -1,18 +1,19 @@
 import { parse } from "node-html-parser";
 
-import api from "../lib/api";
 import CreateDirectory from "../utils/CreateDirectory";
 import DownloadFile from "../utils/DownloadFile";
+import UseApi from "../lib/api";
 
 export class MangaRepository {
   constructor(directory, url) {
     this.url = url;
     this.directory = directory;
+    this.api = new UseApi().api;
   }
 
   async getList() {
     try {
-      const res = await api.get(`${this.url}/api/show3.php`);
+      const res = await this.api.get(`${this.url}/api/show3.php`);
 
       return new Promise((resolve) => {
         resolve(res.data);
@@ -24,7 +25,7 @@ export class MangaRepository {
 
   async getDetails(id) {
     try {
-      const res = await api.get(`${this.url}/api/show3.php?id=${id}`);
+      const res = await this.api.get(`${this.url}/api/show3.php?id=${id}`);
 
       return new Promise((resolve) => {
         resolve(res.data);
@@ -37,7 +38,7 @@ export class MangaRepository {
   async getChapters(id) {
     try {
       //id = slug
-      const res = await api.get(`${this.url}/manga/${id}`);
+      const res = await this.api.get(`${this.url}/manga/${id}`);
 
       const parsedData = parse(res.data);
       const json = JSON.parse(parsedData.getElementById("manga-info").rawText);
@@ -54,7 +55,7 @@ export class MangaRepository {
     try {
       const chapterUrl = chapter.chapters[0].id;
 
-      const res = await api.get(`${chapterUrl}`);
+      const res = await this.api.get(`${chapterUrl}`);
 
       const parsedData = parse(res.data);
 

@@ -1,21 +1,19 @@
 import axios from "axios";
-
 import { BrowserWindow } from "electron";
 
-// const win = BrowserWindow.getAllWindows([0]);
+export default class UseApi {
+  constructor() {
+    this.win = BrowserWindow.getAllWindows()[0];
+    this.api = axios.create();
 
-// const { send } = win.webContents;
+    this.api.interceptors.request.use((config) => {
+      this.win.webContents.send("loading", true);
+      return config;
+    });
 
-const api = axios.create();
-
-// api.interceptors.request.use((config) => {
-//   send("loading", true);
-//   return config;
-// });
-
-// api.interceptors.response.use((response) => {
-//   send("loading", false);
-//   return response;
-// });
-
-export default api;
+    this.api.interceptors.response.use((response) => {
+      this.win.webContents.send("loading", true);
+      return response;
+    });
+  }
+}

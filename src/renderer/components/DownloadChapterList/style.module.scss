@@ -1,10 +1,14 @@
 .downloadChapterList {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  gap: 10px;
-  justify-content: center;
   flex-grow: 1;
   background: $white-transparent;
   padding: 10px;
+
+  ul {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 10px;
+    justify-content: center;
+  }
 }

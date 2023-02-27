@@ -1,26 +1,28 @@
 import { useState, useEffect, useMemo } from "react";
 
 import Window from "components/Window";
-import SearchMangaList from "components/SearchMangaList/List";
+import SearchComicList from "components/SearchComicList/List";
 
 import lang from "lang";
 
 import style from "./style.module.scss";
 
-const SearchManga = () => {
-  const [mangaList, setMangaList] = useState([]);
+const { invoke } = window.electron.ipcRenderer;
+
+const SearchComic = () => {
+  const [comicList, setComicList] = useState([]);
   const [search, setSearch] = useState("");
   const [currentList, setCurrentList] = useState([]);
 
   useMemo(() => {
-    window.electron.ipcRenderer.invoke("getMangaList").then((res) => {
-      setMangaList(res);
+    invoke("getList", { type: "manga" }).then((res) => {
+      setComicList(res);
       setCurrentList(res);
     });
   }, []);
 
   useEffect(() => {
-    const filteredList = mangaList.filter((val) =>
+    const filteredList = comicList.filter((val) =>
       val.title.toUpperCase().startsWith(search.toUpperCase())
     );
 
@@ -30,21 +32,21 @@ const SearchManga = () => {
   return (
     <Window
       close
-      className={style.searchManga}
+      className={style.searchComic}
       contentClassName={style.content}
       to="/"
     >
       <input
         className={style.input}
-        placeholder={lang.SearchManga.textPlaceholder}
+        placeholder={lang.SearchComic.textPlaceholder}
         type="text"
         onChange={(e) => setSearch(e.target.value)}
       />
       <div className={style.result}>
-        <SearchMangaList list={currentList} />
+        <SearchComicList list={currentList} />
       </div>
     </Window>
   );
 };
 
-export default SearchManga;
+export default SearchComic;

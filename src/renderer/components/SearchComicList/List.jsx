@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 
-import MangaListItem from "./Item/Item";
+import ComicListItem from "./Item/Item";
 
 import lang from "lang";
 
 import style from "./style.module.scss";
 
-const SearchMangaList = ({ list, itemsPerPage = 10, reset }) => {
+const SearchComicList = ({ list, itemsPerPage = 10, reset }) => {
   const [offset, setOffset] = useState(0);
   const endOffset = offset + itemsPerPage;
   const currentItems = list.slice(offset, endOffset);
@@ -19,10 +19,10 @@ const SearchMangaList = ({ list, itemsPerPage = 10, reset }) => {
   };
 
   return (
-    <div className={style.searchMangaList}>
+    <div className={style.searchComicList}>
       <ul className={style.list}>
-        {currentItems.map((manga) => {
-          return <MangaListItem data={manga} key={manga.title} />;
+        {currentItems.map((comic) => {
+          return <ComicListItem data={comic} key={comic.title} />;
         })}
       </ul>
       <ReactPaginate
@@ -37,12 +37,12 @@ const SearchMangaList = ({ list, itemsPerPage = 10, reset }) => {
         pageRangeDisplayed={3}
         marginPagesDisplayed={3}
         pageCount={totalPages}
-        nextLabel={lang.SearchManga.pagination.next}
-        previousLabel={lang.SearchManga.pagination.previous}
+        nextLabel={lang.SearchComic.pagination.next}
+        previousLabel={lang.SearchComic.pagination.previous}
         renderOnZeroPageCount={null}
       />
     </div>
   );
 };
 
-export default SearchMangaList;
+export default SearchComicList;

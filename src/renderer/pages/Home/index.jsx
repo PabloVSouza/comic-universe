@@ -1,7 +1,7 @@
 import Window from "components/Window";
 import TopMenu from "components/TopMenu";
-import MangaList from "components/MangaList/List";
-import MangaDashboard from "components/MangaDashboard/MangaDashboard";
+import MangaList from "components/ComicList/List";
+import MangaDashboard from "components/ComicDashboard/ComicDashboard";
 
 import style from "./style.module.scss";
 

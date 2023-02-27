@@ -1,6 +1,8 @@
 import { useState } from "react";
-import classNames from "classnames";
+import { useNavigate } from "react-router-dom";
 import ReactHtmlParser from "react-html-parser";
+import classNames from "classnames";
+import merge from "lodash.merge";
 
 import lang from "lang";
 import Image from "components/Image";
@@ -8,25 +10,32 @@ import Button from "components/Button";
 
 import style from "./style.module.scss";
 
-const MangaListItem = ({ data }) => {
+const ComicListItem = ({ data }) => {
+  const navigate = useNavigate();
+
   const [extended, setExtended] = useState(false);
-  const [mangaDetails, setMangaDetails] = useState(null);
+  const [comicDetails, setComicDetails] = useState(null);
 
   const handleClick = () => {
     setExtended(!extended);
 
-    if (!mangaDetails) {
+    if (!comicDetails) {
       window.electron.ipcRenderer
-        .invoke("getMangaDetails", data.hash)
+        .invoke("getComicDetails", data.hash)
         .then((res) => {
-          setMangaDetails(res[0]);
+          setComicDetails(res[0]);
         });
     }
   };
 
+  const goToPage = () => {
+    // dispatch({ type: "SET_CURRENT_COMIC", payload: merge(data, comicDetails) });
+    navigate(`/download/${data.slug}`);
+  };
+
   return (
     <li
-      className={classNames(style.mangaListItem, !!extended && style.extended)}
+      className={classNames(style.comicListItem, !!extended && style.extended)}
       onClick={() => handleClick()}
     >
       <div className={style.name}>
@@ -35,23 +44,23 @@ const MangaListItem = ({ data }) => {
       </div>
       <div className={style.cover}>
         <div className={style.chapters}>
-          {data.videos} {lang.SearchManga.chapters}
+          {data.videos} {lang.SearchComic.chapters}
         </div>
         <Image className={style.coverImage} src={data.cover} />
       </div>
-      {!!mangaDetails && extended && (
+      {!!comicDetails && extended && (
         <>
           <div className={style.synopsis}>
-            {ReactHtmlParser(mangaDetails.synopsis)}
+            {ReactHtmlParser(comicDetails.synopsis)}
           </div>
           <div className={style.buttonArea}>
             <Button
               theme="roundedRectangle"
               size="xl"
               color="green"
-              to={`/download/${data.slug}`}
+              onClick={() => goToPage()}
             >
-              {lang.SearchManga.goToPage}
+              {lang.SearchComic.goToPage}
             </Button>
           </div>
         </>
@@ -60,4 +69,4 @@ const MangaListItem = ({ data }) => {
   );
 };
 
-export default MangaListItem;
+export default ComicListItem;

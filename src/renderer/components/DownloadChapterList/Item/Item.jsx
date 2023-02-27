@@ -1,35 +1,36 @@
-import { useSelector, useDispatch } from "react-redux";
-
 import classNames from "classnames";
 
 import style from "./style.module.scss";
 
 const DownloadChapterListItem = ({ data }) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const queue = useSelector((state) => state.downloadQueue);
+  const downloadedChapters = useSelector((state) => state.downloadedChapters);
+  const downloaded = !!downloadedChapters.find((e) => e.num == data.num);
   const active = !!queue.find((e) => e.num == data.num);
 
   const addToQueue = () => {
-    const found = queue.findIndex((val) => val.num === data.num);
-
-    if (found < 0) {
-      dispatch({ type: "SET_DOWNLOAD_QUEUE", payload: [...queue, data] });
-    }
-
-    if (found >= 0) {
-      dispatch({
-        type: "SET_DOWNLOAD_QUEUE",
-        payload: queue.filter((val) => val.num !== data.num),
-      });
-    }
+    // if (!downloaded) {
+    //   const found = queue.findIndex((val) => val.num === data.num);
+    //   if (found < 0) {
+    //     dispatch({ type: "SET_DOWNLOAD_QUEUE", payload: [...queue, data] });
+    //   }
+    //   if (found >= 0) {
+    //     dispatch({
+    //       type: "SET_DOWNLOAD_QUEUE",
+    //       payload: queue.filter((val) => val.num !== data.num),
+    //     });
+    //   }
+    // }
   };
 
   return (
     <li
       className={classNames(
         style.downloadChapterListItem,
-        active ? style.active : null
+        active ? style.active : null,
+        downloaded ? style.downloaded : null
       )}
       onClick={() => addToQueue(data)}
     >

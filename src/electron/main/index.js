@@ -2,7 +2,8 @@ import { app, shell, BrowserWindow } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 
-import apiEvents from "../api/apiEvents";
+import apiEvents from "../events/apiEvents";
+import dbEvents from "../events/dbEvents";
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -16,6 +17,9 @@ function createWindow() {
     },
     icon: join(__dirname, "../../../resources/icon.png"),
   });
+
+  apiEvents();
+  dbEvents();
 
   mainWindow.on("ready-to-show", () => {
     mainWindow.show();
@@ -45,8 +49,6 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
-
-apiEvents();
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

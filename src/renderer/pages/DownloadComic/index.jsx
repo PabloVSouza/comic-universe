@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import merge from "lodash.merge";
 
 import Window from "components/Window";
 import DownloadChapterHeader from "components/DownloadChapterHeader";
@@ -9,27 +9,26 @@ import DownloadChapterNav from "components/DownloadChapterNav";
 
 import style from "./style.module.scss";
 
-const DownloadManga = () => {
-  const dispatch = useDispatch();
+const DownloadComic = () => {
   const { slug } = useParams();
 
-  useMemo(() => {
-    window.electron.ipcRenderer.invoke("getMangaData", slug).then((res) => {
-      dispatch({ type: "SET_CURRENT_COMIC", payload: res });
-    });
+  useMemo(async () => {
+    // dispatch(getComicData());
   }, []);
 
-  const mangaData = useSelector((state) => state.currentComic);
+  // const comicData = useSelector((state) => state.currentComic);
+
+  // console.log(comicData, slug);
 
   return (
-    !!mangaData && (
+    !!comicData?.allposts && (
       <Window
         closebar
         to={"/"}
-        className={style.downloadManga}
+        className={style.downloadComic}
         contentClassName={style.content}
       >
-        <DownloadChapterHeader mangaData={mangaData} />
+        <DownloadChapterHeader comicData={comicData} />
         <DownloadChapterNav />
 
         <DownloadChapterList />
@@ -38,4 +37,4 @@ const DownloadManga = () => {
   );
 };
 
-export default DownloadManga;
+export default DownloadComic;

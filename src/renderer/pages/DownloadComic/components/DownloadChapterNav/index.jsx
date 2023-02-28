@@ -6,17 +6,12 @@ import style from "./style.module.scss";
 import clipboardIcon from "assets/clipboard.svg";
 import downloadIcon from "assets/download-icon-2.svg";
 import Container from "components/Container";
+import { useComicData } from "store/comic";
 
 const DownloadChapterNav = () => {
-  // const dispatch = useDispatch();
-
-  // const comicData = useSelector((state) => state.currentComic);
+  const { currentComic, chapters, queue } = useComicData((state) => state);
 
   const { invoke } = window.electron.ipcRenderer;
-
-  // const queue = useSelector((state) => state.downloadQueue);
-
-  const chapters = comicData.allposts;
 
   const addAllToQueue = () => {
     if (queue.length === chapters.length) {

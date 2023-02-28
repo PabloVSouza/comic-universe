@@ -28,7 +28,7 @@ export class MangaRepository {
       const res = await this.api.get(`${this.url}/api/show3.php?id=${id}`);
 
       return new Promise((resolve) => {
-        resolve(res.data);
+        resolve(res.data[0]);
       });
     } catch (e) {
       throw e;
@@ -38,13 +38,14 @@ export class MangaRepository {
   async getChapters(id) {
     try {
       //id = slug
+
       const res = await this.api.get(`${this.url}/manga/${id}`);
 
       const parsedData = parse(res.data);
       const json = JSON.parse(parsedData.getElementById("manga-info").rawText);
 
       return new Promise((resolve) => {
-        resolve(json);
+        resolve(json.allposts);
       });
     } catch (e) {
       throw e;

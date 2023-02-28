@@ -1,10 +1,10 @@
+import { useComicData } from "store/comic";
 import DownloadChapterListItem from "./Item";
 
 import style from "./style.module.scss";
 
 const DownloadChapterList = () => {
-  const comicData = {};
-  const chapters = comicData.allposts;
+  const { chapters } = useComicData((state) => state);
 
   return (
     <div className={style.downloadChapterList}>

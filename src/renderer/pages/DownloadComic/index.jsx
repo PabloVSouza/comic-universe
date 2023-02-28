@@ -2,6 +2,8 @@ import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import merge from "lodash.merge";
 
+import { useComicData } from "store/comic";
+
 import Window from "components/Window";
 import DownloadChapterHeader from "./components/DownloadChapterHeader";
 import DownloadChapterList from "./components/DownloadChapterList";
@@ -12,23 +14,21 @@ import style from "./style.module.scss";
 const DownloadComic = () => {
   const { slug } = useParams();
 
-  useMemo(async () => {
-    // dispatch(getComicData());
+  const { currentComic, getChapters } = useComicData((state) => state);
+
+  useMemo(() => {
+    getChapters(slug);
   }, []);
 
-  // const comicData = useSelector((state) => state.currentComic);
-
-  // console.log(comicData, slug);
-
   return (
-    !!comicData?.allposts && (
+    !!currentComic.slug && (
       <Window
         closebar
         to={"/"}
         className={style.downloadComic}
         contentClassName={style.content}
       >
-        <DownloadChapterHeader comicData={comicData} />
+        <DownloadChapterHeader />
         <DownloadChapterNav />
 
         <DownloadChapterList />

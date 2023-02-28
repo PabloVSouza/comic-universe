@@ -1,13 +1,14 @@
+import { useComicData } from "store/comic";
 import classNames from "classnames";
 
 import style from "./style.module.scss";
 
 const DownloadChapterListItem = ({ data }) => {
+  const { queue } = useComicData((state) => state);
   // const dispatch = useDispatch();
 
-  const queue = useSelector((state) => state.downloadQueue);
-  const downloadedChapters = useSelector((state) => state.downloadedChapters);
-  const downloaded = !!downloadedChapters.find((e) => e.num == data.num);
+  // const downloadedChapters = useSelector((state) => state.downloadedChapters);
+  // const downloaded = !!downloadedChapters.find((e) => e.num == data.num);
   const active = !!queue.find((e) => e.num == data.num);
 
   const addToQueue = () => {
@@ -29,8 +30,8 @@ const DownloadChapterListItem = ({ data }) => {
     <li
       className={classNames(
         style.downloadChapterListItem,
-        active ? style.active : null,
-        downloaded ? style.downloaded : null
+        active ? style.active : null
+        // downloaded ? style.downloaded : null
       )}
       onClick={() => addToQueue(data)}
     >

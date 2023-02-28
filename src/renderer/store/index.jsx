@@ -1,29 +1,3 @@
-import { create } from "zustand";
-import merge from "lodash.merge";
-
-const { on, invoke } = window.electron.ipcRenderer;
-
-const useBearStore = create((set) => ({
-  loading: {
-    status: false,
-    label: "",
-    progress: {
-      current: 0,
-      total: 0,
-    },
-  },
-
-  downloader: {
-    current: {},
-    queue: {},
-    chapters: {},
-  },
-
-  getComicFromDB: () => set((state) => {}),
-}));
-
-export default useBearStore;
-
 // import merge from "lodash.merge";
 
 // const initialState = {

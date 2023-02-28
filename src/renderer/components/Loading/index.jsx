@@ -3,10 +3,12 @@ import Image from "components/Image";
 
 import imgLoading from "assets/loading.gif";
 
+import { useLoading } from "store/loading";
+
 const Loading = () => {
-  const loading = false;
+  const { status } = useLoading((state) => state);
   return (
-    <Cover visible={loading} index="999">
+    <Cover visible={status} index="999">
       <Image pure src={imgLoading} alt="" />
     </Cover>
   );

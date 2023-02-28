@@ -7,12 +7,12 @@ export default class UseApi {
     this.api = axios.create();
 
     this.api.interceptors.request.use((config) => {
-      this.win.webContents.send("loading", true);
+      this.win.webContents.send("loading", { status: true });
       return config;
     });
 
     this.api.interceptors.response.use((response) => {
-      this.win.webContents.send("loading", true);
+      this.win.webContents.send("loading", { status: false });
       return response;
     });
   }

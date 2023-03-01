@@ -67,21 +67,20 @@ const initialState = (set) => ({
   },
 
   getDetails: async (id) => {
-    const { type } = useComicData.getState();
+    const { list, type, setComicData } = useComicData.getState();
 
     const data = await invoke("getDetails", { type, id });
 
     const state = useComicData.getState();
-    const { list } = state;
 
     let item = list.find((val) => val.id == id);
 
     item = await merge(item, data);
 
-    const mergeData = await merge(state, { list });
+    await setComicData({ list });
 
     return new Promise((resolve) => {
-      resolve(set(mergeData));
+      resolve();
     });
   },
 

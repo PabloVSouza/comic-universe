@@ -6,6 +6,8 @@
   border-radius: $radius-default;
   overflow: hidden;
   box-shadow: $shadow-default;
+  transform: translate3d(0, 0, 0);
+
   backdrop-filter: $blur-default;
   display: flex;
   flex-direction: column;

@@ -1,27 +1,20 @@
 import { create } from "zustand";
 import merge from "lodash.merge";
 
-const initialState = {
+const initialState = (set) => ({
   status: false,
-  label: "",
-  progress: {
-    current: 0,
-    total: 0,
-  },
-};
-
-export const useLoading = create((set) => ({
-  status: false,
-  label: "",
+  message: "",
   progress: {
     current: 0,
     total: 0,
   },
 
-  setLoading: (data) => set(async (state) => await merge(state, data)),
+  setLoading: (data) => set(data),
 
   resetLoading: () => set(initialState),
-}));
+});
+
+export const useLoading = create((set) => initialState(set));
 
 const { on } = window.electron.ipcRenderer;
 

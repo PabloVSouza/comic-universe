@@ -1,15 +1,17 @@
-import { parse } from "node-html-parser";
+import { BrowserWindow } from "electron";
+import slugify from "slugify";
 
 import { GraphQLClient, gql } from "graphql-request";
 import CreateDirectory from "../utils/CreateDirectory";
 import DownloadFile from "../utils/DownloadFile";
-import slugify from "slugify";
 
 export class HqRepository {
   constructor(directory, url) {
+    const win = BrowserWindow.getAllWindows()[0];
     this.url = url;
     this.directory = directory;
     this.client = new GraphQLClient(this.url);
+    this.ipc = win.webContents;
   }
 
   async getList() {
@@ -102,6 +104,12 @@ export class HqRepository {
   }
 
   async downloadChapter(comic, chapter) {
+    this.ipc.send("loading", {
+      status: true,
+      message: chapter.number,
+      progress: { current: 0, total: chapter.pages.length },
+    });
+
     const path = `${this.directory}/${slugify(comic.name)}/`;
 
     const chapterPath = path + `${chapter.number}/`;
@@ -112,9 +120,16 @@ export class HqRepository {
 
     const pageFiles = [];
 
-    for (const page of chapter.pages) {
+    for (const [i, page] of chapter.pages.entries()) {
       pageFiles.push(await DownloadFile(chapterPath, page.url));
+      this.ipc.send("loading", {
+        status: true,
+        message: chapter.number,
+        progress: { current: i + 1, total: chapter.pages.length },
+      });
     }
+
+    this.ipc.send("loading", { status: false });
 
     return new Promise((resolve) => {
       resolve({ cover, pageFiles });

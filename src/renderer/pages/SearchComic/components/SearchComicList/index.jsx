@@ -22,9 +22,10 @@ const SearchComicList = ({ list, itemsPerPage = 10, reset }) => {
     <div className={style.searchComicList}>
       <ul className={style.list}>
         {currentItems.map((comic) => {
-          return <ComicListItem data={comic} key={comic.title} />;
+          return <ComicListItem data={comic} id={comic.id} key={comic.id} />;
         })}
       </ul>
+
       <ReactPaginate
         breakLabel="..."
         className={style.pagination}

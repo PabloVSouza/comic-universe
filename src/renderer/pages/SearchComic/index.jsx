@@ -1,33 +1,30 @@
-import { useState, useEffect, useMemo } from "react";
-
+import { useState, useMemo } from "react";
 import Window from "components/Window";
-import SearchComicList from "pages/SearchComic/components/SearchComicList";
+import SearchComicList from "./components/SearchComicList";
+
+import useComicData from "store/comic";
 
 import lang from "lang";
-
 import style from "./style.module.scss";
 
-const { invoke } = window.electron.ipcRenderer;
-
 const SearchComic = () => {
-  const [comicList, setComicList] = useState([]);
   const [search, setSearch] = useState("");
-  const [currentList, setCurrentList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const { list } = useComicData((state) => state);
+
+  const setList = () => {
+    search.length > 0
+      ? setFilteredList(
+          list.filter((val) =>
+            val.name.toUpperCase().startsWith(search.toUpperCase())
+          )
+        )
+      : setFilteredList(list);
+  };
 
   useMemo(() => {
-    invoke("getList", { type: "manga" }).then((res) => {
-      setComicList(res);
-      setCurrentList(res);
-    });
-  }, []);
-
-  useEffect(() => {
-    const filteredList = comicList.filter((val) =>
-      val.title.toUpperCase().startsWith(search.toUpperCase())
-    );
-
-    setCurrentList(filteredList);
-  }, [search]);
+    setList();
+  }, [list, search]);
 
   return (
     <Window
@@ -43,7 +40,7 @@ const SearchComic = () => {
         onChange={(e) => setSearch(e.target.value)}
       />
       <div className={style.result}>
-        <SearchComicList list={currentList} />
+        <SearchComicList list={filteredList} />
       </div>
     </Window>
   );

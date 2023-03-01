@@ -4,19 +4,21 @@ import Image from "components/Image";
 
 import style from "./style.module.scss";
 
-import { useComicData } from "store/comic";
+import useComicData from "store/comic";
 
 const DownloadChapterHeader = () => {
   const { currentComic } = useComicData((state) => state);
-  const genres = currentComic.genre.split(", ");
   return (
     <div className={style.header}>
       <Container className={style.container}>
-        <div className={style.title}>
-          <h1>{currentComic.title}</h1>
+        <div className={style.name}>
+          <h1>{currentComic.name} </h1>
+          <div className={style.status}>{currentComic.status}</div>
           <div className={style.genres}>
-            {genres.map((val) => (
-              <div key={val}>{val}</div>
+            {currentComic.genres.map((val) => (
+              <div className={style.genre} key={val}>
+                {val}
+              </div>
             ))}
           </div>
         </div>

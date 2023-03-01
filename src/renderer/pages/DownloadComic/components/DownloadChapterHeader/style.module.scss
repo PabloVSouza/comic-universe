@@ -10,19 +10,32 @@
     width: 100%;
     max-width: 1000px;
     grid-template:
-      "TITLE COVER"
+      "NAME COVER"
       "DESCRIPTION COVER";
     column-gap: 30px;
     // overflow: hidden;
 
-    .title {
-      grid-area: TITLE;
+    .name {
+      grid-area: NAME;
+
+      .status {
+        border-radius: $radius-default;
+        padding: 5px 10px;
+        box-shadow: $shadow-default;
+        background: $yellow-transparent;
+        font-weight: 500;
+        font-size: 10px;
+        white-space: nowrap;
+        margin: 0 auto;
+        display: inline-block;
+      }
+
       .genres {
         margin: 10px 0;
         display: flex;
+        flex-wrap: wrap;
         gap: 5px;
-
-        div {
+        .genre {
           background: $green-transparent;
           border-radius: $radius-default;
           padding: 5px;

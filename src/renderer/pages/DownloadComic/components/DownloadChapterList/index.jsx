@@ -1,4 +1,4 @@
-import { useComicData } from "store/comic";
+import useComicData from "store/comic";
 import DownloadChapterListItem from "./Item";
 
 import style from "./style.module.scss";

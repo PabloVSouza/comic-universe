@@ -13,7 +13,7 @@ const eventList = () => {
     ),
     hq: new HqRepository(
       `${app.getPath("userData")}/downloads/hqs`,
-      "https://mangayabu.top"
+      "https://admin.hq-now.com/graphql"
     ),
   };
 
@@ -23,6 +23,7 @@ const eventList = () => {
   handle("getPages", (event, { type, chapter }) =>
     repo[type].getPages(chapter)
   );
+  handle("getFullData", (event, { type, id }) => repo[type].getFullData(id));
   handle("downloadChapter", (event, { type, comic, chapter }) =>
     repo[type].downloadChapter(comic, chapter)
   );

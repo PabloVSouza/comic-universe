@@ -6,7 +6,7 @@ import style from "./style.module.scss";
 import clipboardIcon from "assets/clipboard.svg";
 import downloadIcon from "assets/download-icon-2.svg";
 import Container from "components/Container";
-import { useComicData } from "store/comic";
+import useComicData from "store/comic";
 
 const DownloadChapterNav = () => {
   const { currentComic, chapters, queue } = useComicData((state) => state);

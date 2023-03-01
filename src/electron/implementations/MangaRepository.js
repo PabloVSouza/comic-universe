@@ -13,10 +13,24 @@ export class MangaRepository {
 
   async getList() {
     try {
-      const res = await this.api.get(`${this.url}/api/show3.php`);
+      const { data } = await this.api.get(`${this.url}/api/show3.php`);
+
+      const formatted = data.reduce((acc, cur) => {
+        return [
+          ...acc,
+          {
+            name: cur.title,
+            genres: cur.genre.split(", "),
+            cover: cur.cover,
+            totalChapters: cur.videos,
+            id: cur.slug,
+            idSite: cur.hash,
+          },
+        ];
+      }, []);
 
       return new Promise((resolve) => {
-        resolve(res.data);
+        resolve(formatted);
       });
     } catch (e) {
       throw e;
@@ -28,7 +42,8 @@ export class MangaRepository {
       const res = await this.api.get(`${this.url}/api/show3.php?id=${id}`);
 
       return new Promise((resolve) => {
-        resolve(res.data[0]);
+        const { status, synopsis } = res.data[0];
+        resolve({ status, synopsis });
       });
     } catch (e) {
       throw e;
@@ -73,6 +88,16 @@ export class MangaRepository {
 
       return new Promise((resolve) => {
         resolve(pageLinks);
+      });
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async getFullData(id) {
+    try {
+      return new Promise((resolve) => {
+        resolve();
       });
     } catch (e) {
       throw e;

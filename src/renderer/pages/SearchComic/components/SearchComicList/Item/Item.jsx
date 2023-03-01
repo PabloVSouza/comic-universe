@@ -4,7 +4,7 @@ import ReactHtmlParser from "react-html-parser";
 import classNames from "classnames";
 import merge from "lodash.merge";
 
-import { useComicData } from "store/comic";
+import useComicData from "store/comic";
 
 import lang from "lang";
 import Image from "components/Image";
@@ -12,58 +12,47 @@ import Button from "components/Button";
 
 import style from "./style.module.scss";
 
-const ComicListItem = ({ data }) => {
+const ComicListItem = ({ data, ...props }) => {
   const navigate = useNavigate();
 
-  const { currentComic, setComicData, resetComic } = useComicData(
+  const { selectedComic, setComicData, getDetails } = useComicData(
     (state) => state
   );
 
-  const extended = currentComic.slug === data.slug;
+  const extended = selectedComic.id === data.id;
 
-  const { invoke } = window.electron.ipcRenderer;
-
-  const handleClick = async (e) => {
-    if (e.target.localName !== "button" && !extended) {
-      resetComic();
-    }
-
-    if (data.slug !== currentComic.slug) {
-      const details = await invoke("getDetails", {
-        type: "manga",
-        id: data.hash,
-      });
-
-      const comicData = await merge(data, details);
-
-      setComicData({ currentComic: comicData });
+  const expandItem = async () => {
+    if (data.id !== selectedComic.id) {
+      if (!data.synopsis) {
+        getDetails(data.idSite);
+      }
+      setComicData({ selectedComic: data });
     }
   };
 
   const goToPage = () => {
-    navigate(`/download/${currentComic.slug}`);
+    navigate(`/download/${selectedComic.id}`);
   };
 
   return (
     <li
       className={classNames(style.comicListItem, !!extended && style.extended)}
-      onClick={(e) => handleClick(e)}
+      onClick={() => expandItem()}
+      {...props}
     >
       <div className={style.name}>
-        <h1 className={style.title}>{data.title}</h1>
-        <p className={style.genre}>{data.genre}</p>
+        <h1 className={style.title}>{data.name}</h1>
+        <p className={style.genre}>{data.genres.join(", ")}</p>
       </div>
       <div className={style.cover}>
         <div className={style.chapters}>
-          {data.videos} {lang.SearchComic.chapters}
+          {data.totalChapters} {lang.SearchComic.chapters}
         </div>
         <Image className={style.coverImage} src={data.cover} />
       </div>
       {extended && (
         <>
-          <div className={style.synopsis}>
-            {ReactHtmlParser(currentComic.synopsis)}
-          </div>
+          <div className={style.synopsis}>{ReactHtmlParser(data.synopsis)}</div>
           <div className={style.buttonArea}>
             <Button
               theme="roundedRectangle"

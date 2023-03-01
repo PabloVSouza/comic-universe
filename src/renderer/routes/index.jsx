@@ -11,7 +11,7 @@ const Router = () => {
         <Route path="/*" element={<Navigate to="/" />} />
       </Route>
       <Route path="/search" element={<SearchComic />} />
-      <Route path="/download/:slug" element={<DownloadComic />} />
+      <Route path="/download/:id" element={<DownloadComic />} />
     </Routes>
   );
 };

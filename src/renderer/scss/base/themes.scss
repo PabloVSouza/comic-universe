@@ -1,0 +1,9 @@
+.theme-light {
+  --colorBackground: #{$white-transparent};
+  --colorText: #{$black};
+}
+
+.theme-dark {
+  --colorText: #{$white};
+  --colorBackground: #{$black-transparent};
+}

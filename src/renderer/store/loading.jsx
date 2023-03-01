@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import merge from "lodash.merge";
 
 const initialState = (set) => ({
   status: false,

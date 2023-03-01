@@ -71,8 +71,6 @@ const initialState = (set) => ({
 
     const data = await invoke("getDetails", { type, id });
 
-    const state = useComicData.getState();
-
     let item = list.find((val) => val.id == id);
 
     item = await merge(item, data);

@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import Window from "components/Window";
-import SearchComicList from "./components/SearchComicList";
+import SearchComicList from "./components/List";
 
 import useComicData from "store/comic";
 

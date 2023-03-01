@@ -1,8 +1,8 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 
 import Home from "../pages/Home";
-import SearchComic from "pages/SearchComic";
-import DownloadComic from "pages/DownloadComic";
+import SearchComic from "pages/Search";
+import DownloadComic from "pages/Download";
 
 const Router = () => {
   return (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactHtmlParser from "react-html-parser";
 import classNames from "classnames";
@@ -19,15 +19,16 @@ const ComicListItem = ({ data, ...props }) => {
     (state) => state
   );
 
+  useMemo(() => {
+    if (!data.cover || !data.synopsis) {
+      getDetails(data.id);
+    }
+  }, []);
+
   const extended = selectedComic.id === data.id;
 
   const expandItem = async () => {
-    if (data.id !== selectedComic.id) {
-      if (!data.synopsis) {
-        getDetails(data.idSite);
-      }
-      setComicData({ selectedComic: data });
-    }
+    setComicData({ selectedComic: data });
   };
 
   const goToPage = () => {
@@ -40,30 +41,44 @@ const ComicListItem = ({ data, ...props }) => {
       onClick={() => expandItem()}
       {...props}
     >
-      <div className={style.name}>
-        <h1 className={style.title}>{data.name}</h1>
-        <p className={style.genre}>{data.genres.join(", ")}</p>
-      </div>
-      <div className={style.cover}>
-        <div className={style.chapters}>
-          {data.totalChapters} {lang.SearchComic.chapters}
+      <div className={style.content}>
+        <div className={style.texts}>
+          <h1 className={style.name}>{data.name}</h1>
+          {!!data.publisher && (
+            <p className={style.publisher}>{data.publisher}</p>
+          )}
+          {!!data.genres && (
+            <p className={style.genre}>
+              {!!data.genres && data.genres.join(", ")}
+            </p>
+          )}
+          {!!data.status && <p className={style.status}>{data.status}</p>}
+          {extended && (
+            <div className={style.synopsis}>
+              {ReactHtmlParser(data.synopsis)}
+            </div>
+          )}
         </div>
-        <Image className={style.coverImage} src={data.cover} />
+        <div className={style.cover}>
+          {!!data.chapters && (
+            <div className={style.chapters}>
+              {data.totalChapters} {lang.SearchComic.chapters}
+            </div>
+          )}
+          <Image className={style.coverImage} src={data.cover} />
+        </div>
       </div>
       {extended && (
-        <>
-          <div className={style.synopsis}>{ReactHtmlParser(data.synopsis)}</div>
-          <div className={style.buttonArea}>
-            <Button
-              theme="roundedRectangle"
-              size="xl"
-              color="green"
-              onClick={() => goToPage()}
-            >
-              {lang.SearchComic.goToPage}
-            </Button>
-          </div>
-        </>
+        <div className={style.buttonArea}>
+          <Button
+            theme="roundedRectangle"
+            size="xl"
+            color="green"
+            onClick={() => goToPage()}
+          >
+            {lang.SearchComic.goToPage}
+          </Button>
+        </div>
       )}
     </li>
   );

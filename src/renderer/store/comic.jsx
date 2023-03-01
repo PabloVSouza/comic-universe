@@ -28,7 +28,7 @@ const initialState = (set) => ({
       const downloadedChapters = await invoke("dbFind", {
         table: "Chapter",
         query: {
-          mangaId: inDatabase._id,
+          hqId: inDatabase._id,
         },
       });
 
@@ -40,58 +40,66 @@ const initialState = (set) => ({
     if (!inDatabase) {
       if (state.list.length === 0) await state.getList();
 
-      const comic = await state.list.find((val) => val.id === id);
+      const comic = await state.list.find((val) => val.id == id);
 
-      if (comic.synopsis == undefined) await state.getDetails(comic.idSite);
+      if (!comic.synopsis || !comic.cover) await state.getDetails(id);
 
       data.currentComic = comic;
     }
 
-    await state.getChapters(id);
     await state.setComicData(data);
+    await state.getChapters();
   },
 
   getList: async () => {
-    const list = await invoke("getList", { type: "manga" });
-
+    const list = await invoke("getList", { type: "hq" });
     return new Promise((resolve) => {
-      set(async (state) => {
-        const data = await merge(state, { list });
-        return data;
-      });
-      resolve();
+      resolve(
+        set(async (state) => {
+          const data = await merge(state, { list });
+          return data;
+        })
+      );
     });
   },
 
-  getDetails: async (idSite) => {
+  getDetails: async (id) => {
     const data = await invoke("getDetails", {
-      type: "manga",
-      id: idSite,
+      type: "hq",
+      id,
     });
 
+    const state = useComicData.getState();
+    const { list } = state;
+
+    let item = list.find((val) => val.id == id);
+
+    item = await merge(item, data);
+
+    const mergeData = await merge(state, { list });
+
     return new Promise((resolve) => {
-      set(async (state) => {
-        const { list } = state;
-        let item = list.find((val) => val.idSite === idSite);
-
-        item = await merge(item, data);
-
-        return await merge(state, { list });
-      });
-      resolve();
+      resolve(set(mergeData));
     });
   },
 
   getChapters: async (id) => {
-    const chapters = await invoke("getChapters", {
-      type: "manga",
-      id,
-    });
+    const { currentComic } = useComicData.getState();
+
+    const chapters = !currentComic.chapters
+      ? await invoke("getChapters", {
+          type: "hq",
+          id,
+        })
+      : currentComic.chapters;
+
     return new Promise((resolve) => {
       set(async (state) => await merge(state, { chapters }));
       resolve();
     });
   },
+
+  setQueue: (data) => set((state) => (state.queue = data)),
 
   setComicData: (data) => set(async (state) => await merge(state, data)),
 

@@ -99,6 +99,8 @@ const initialState = (set) => ({
     });
   },
 
+  downloadChapter: (data) => {},
+
   setQueue: (data) => set((state) => (state.queue = data)),
 
   setComicData: (data) => set(async (state) => await merge(state, data)),

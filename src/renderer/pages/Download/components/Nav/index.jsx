@@ -9,16 +9,18 @@ import Container from "components/Container";
 import useComicData from "store/comic";
 
 const DownloadChapterNav = () => {
-  const { currentComic, chapters, queue } = useComicData((state) => state);
+  const { downloadChapter, chapters, queue, setQueue } = useComicData(
+    (state) => state
+  );
 
   const { invoke } = window.electron.ipcRenderer;
 
   const addAllToQueue = () => {
     if (queue.length === chapters.length) {
-      // dispatch({ type: "SET_DOWNLOAD_QUEUE", payload: [] });
+      setQueue([]);
     } else {
       const newQueue = Array.from(new Set(queue.concat(chapters)));
-      // dispatch({ type: "SET_DOWNLOAD_QUEUE", payload: newQueue });
+      setQueue(newQueue);
     }
   };
 

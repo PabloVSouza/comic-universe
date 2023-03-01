@@ -8,29 +8,28 @@ const DownloadChapterListItem = ({ data }) => {
     (state) => state
   );
 
-  // const downloadedChapters = useSelector((state) => state.downloadedChapters);
-  // const downloaded = !!downloadedChapters.find((e) => e.num == data.num);
+  const downloaded = !!downloadedChapters.find((e) => e.number == data.number);
   const active = !!queue.find((e) => e.number == data.number);
 
   const addToQueue = () => {
-    // if (!downloaded) {
-    const found = queue.findIndex((val) => val.number === data.number);
-    if (found < 0) {
-      setQueue([...queue, data]);
+    if (!downloaded) {
+      const found = queue.findIndex((val) => val.number === data.number);
+      if (found < 0) {
+        setQueue([...queue, data]);
+      }
+      if (found >= 0) {
+        const newQueue = queue.filter((val) => val.number !== data.number);
+        setQueue(newQueue);
+      }
     }
-    if (found >= 0) {
-      const newQueue = queue.filter((val) => val.number !== data.number);
-      setQueue(newQueue);
-    }
-    // }
   };
 
   return (
     <li
       className={classNames(
         style.downloadChapterListItem,
-        active ? style.active : null
-        // downloaded ? style.downloaded : null
+        active ? style.active : null,
+        downloaded ? style.downloaded : null
       )}
       onClick={() => addToQueue(data)}
     >

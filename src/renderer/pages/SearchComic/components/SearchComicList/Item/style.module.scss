@@ -38,11 +38,13 @@
       min-width: 40px;
       padding: 10px 5px;
       box-shadow: $shadow-default;
-      background: $white-transparent;
+      background: $black-transparent;
+      color: $white;
       display: flex;
       justify-content: center;
       align-items: center;
       white-space: nowrap;
+      border-top-left-radius: $radius-default;
     }
     .coverImage {
       z-index: 0;

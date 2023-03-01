@@ -1,3 +1,5 @@
+import fs from "fs";
+
 const CreateDirectory = (path) => {
   return new Promise((resolve) => {
     if (!fs.existsSync(path)) {

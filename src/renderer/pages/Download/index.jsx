@@ -13,14 +13,14 @@ import style from "./style.module.scss";
 const DownloadComic = () => {
   const { id } = useParams();
 
-  const { currentComic, getComicData } = useComicData((state) => state);
+  const { comic, getComicData } = useComicData((state) => state);
 
   useMemo(() => {
     getComicData(id);
   }, []);
 
   return (
-    !!currentComic.id && (
+    !!comic.id && (
       <Window
         closebar
         to={"/"}

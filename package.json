@@ -35,6 +35,7 @@
     "react-simple-img": "^3.0.0",
     "realm": "^11.5.1",
     "sass": "^1.58.3",
+    "slugify": "^1.6.5",
     "zustand": "^4.3.4"
   },
   "devDependencies": {

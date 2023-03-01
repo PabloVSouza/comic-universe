@@ -1,10 +1,9 @@
 import { parse } from "node-html-parser";
 
-import UseApi from "../lib/api";
+import { GraphQLClient, gql } from "graphql-request";
 import CreateDirectory from "../utils/CreateDirectory";
 import DownloadFile from "../utils/DownloadFile";
-import axios from "axios";
-import { GraphQLClient, gql } from "graphql-request";
+import slugify from "slugify";
 
 export class HqRepository {
   constructor(directory, url) {
@@ -103,12 +102,22 @@ export class HqRepository {
   }
 
   async downloadChapter(comic, chapter) {
-    try {
-      return new Promise((resolve) => {
-        resolve();
-      });
-    } catch (e) {
-      throw e;
+    const path = `${this.directory}/${slugify(comic.name)}/`;
+
+    const chapterPath = path + `${chapter.number}/`;
+
+    await CreateDirectory(chapterPath);
+
+    const cover = await DownloadFile(path, comic.cover);
+
+    const pageFiles = [];
+
+    for (const page of chapter.pages) {
+      pageFiles.push(await DownloadFile(chapterPath, page.url));
     }
+
+    return new Promise((resolve) => {
+      resolve({ cover, pageFiles });
+    });
   }
 }

@@ -13,8 +13,6 @@ const DownloadChapterNav = () => {
     (state) => state
   );
 
-  const { invoke } = window.electron.ipcRenderer;
-
   const addAllToQueue = () => {
     if (queue.length === chapters.length) {
       setQueue([]);
@@ -25,60 +23,9 @@ const DownloadChapterNav = () => {
   };
 
   const downloadQueue = async () => {
-    const chapterData = await invoke(
-      "downloadChapters",
-      { slug: comicData.slug, ...comicData },
-      queue
-    );
-
-    const dbData = {
-      title: comicData.title,
-      description: comicData.description,
-      slug: comicData.slug,
-      siteId: comicData.hash,
-      cover: chapterData.coverName,
-      genres: comicData.genres,
-    };
-
-    let exist = await invoke("db-update", {
-      table: "Comic",
-      query: {
-        title: comicData.title,
-      },
-      data: dbData,
-    });
-
-    if (exist === 0) {
-      exist = await invoke("db-insert", {
-        table: "Comic",
-        data: dbData,
-      });
+    for (const item of queue) {
+      await downloadChapter(item);
     }
-
-    if (exist === 1) {
-      exist = await invoke("db-findOne", {
-        table: "Comic",
-        query: { title: comicData.title },
-      });
-    }
-
-    for (const chapter of chapterData.chapterFiles) {
-      const chapterWriteData = {
-        comic_id: exist._id,
-        title: dbData.title,
-        num: chapter.num,
-        pages: chapter.files,
-      };
-
-      await invoke("db-insert", {
-        table: "Chapter",
-        data: JSON.parse(JSON.stringify(chapterWriteData)),
-      });
-    }
-
-    // dispatch({ type: "GET_CHAPTERS" });
-
-    // dispatch({ type: "SET_DOWNLOAD_QUEUE", payload: [] });
   };
 
   return (

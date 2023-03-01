@@ -1,14 +1,14 @@
+import axios from "axios";
 import { parse } from "node-html-parser";
 
 import CreateDirectory from "../utils/CreateDirectory";
 import DownloadFile from "../utils/DownloadFile";
-import UseApi from "../lib/api";
 
 export class MangaRepository {
   constructor(directory, url) {
     this.url = url;
     this.directory = directory;
-    this.api = new UseApi().api;
+    this.api = axios;
   }
 
   async getList() {

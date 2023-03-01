@@ -5,7 +5,8 @@ import omit from "lodash.omit";
 const { invoke } = window.electron.ipcRenderer;
 
 const initialState = (set) => ({
-  currentComic: {},
+  type: "hq",
+  comic: {},
   queue: [],
   chapters: [],
   downloadedChapters: [],
@@ -23,7 +24,7 @@ const initialState = (set) => ({
     });
 
     if (inDatabase) {
-      data.currentComic = inDatabase;
+      data.comic = inDatabase;
 
       const downloadedChapters = await invoke("dbFind", {
         table: "Chapter",
@@ -44,7 +45,7 @@ const initialState = (set) => ({
 
       if (!comic.synopsis || !comic.cover) await state.getDetails(id);
 
-      data.currentComic = comic;
+      data.comic = comic;
     }
 
     await state.setComicData(data);
@@ -52,7 +53,9 @@ const initialState = (set) => ({
   },
 
   getList: async () => {
-    const list = await invoke("getList", { type: "hq" });
+    const { type } = useComicData.getState();
+
+    const list = await invoke("getList", { type });
     return new Promise((resolve) => {
       resolve(
         set(async (state) => {
@@ -64,10 +67,9 @@ const initialState = (set) => ({
   },
 
   getDetails: async (id) => {
-    const data = await invoke("getDetails", {
-      type: "hq",
-      id,
-    });
+    const { type } = useComicData.getState();
+
+    const data = await invoke("getDetails", { type, id });
 
     const state = useComicData.getState();
     const { list } = state;
@@ -84,14 +86,13 @@ const initialState = (set) => ({
   },
 
   getChapters: async (id) => {
-    const { currentComic } = useComicData.getState();
+    const { type } = useComicData.getState();
 
-    const chapters = !currentComic.chapters
-      ? await invoke("getChapters", {
-          type: "hq",
-          id,
-        })
-      : currentComic.chapters;
+    const { comic } = useComicData.getState();
+
+    const chapters = !comic.chapters
+      ? await invoke("getChapters", { type, id })
+      : comic.chapters;
 
     return new Promise((resolve) => {
       set(async (state) => await merge(state, { chapters }));
@@ -99,7 +100,18 @@ const initialState = (set) => ({
     });
   },
 
-  downloadChapter: (data) => {},
+  downloadChapter: async (chapter) => {
+    const { comic, type } = useComicData.getState();
+
+    if (!chapter.pages) {
+      await invoke("getPages", { type, comic, chapter });
+    }
+    const result = invoke("downloadChapter", { type, comic, chapter });
+
+    return new Promise((resolve) => {
+      resolve(result);
+    });
+  },
 
   setQueue: (data) => set((state) => (state.queue = data)),
 

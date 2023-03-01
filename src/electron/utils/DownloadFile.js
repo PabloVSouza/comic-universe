@@ -1,10 +1,10 @@
-import api from "../lib/api";
+import axios from "axios";
+import fs from "fs";
 
-const DownloadFile = async ({ path, url }) => {
+const DownloadFile = async (path, url) => {
   const fileName = url.substring(url.lastIndexOf("/") + 1);
-
   try {
-    await api({
+    await axios({
       method: "get",
       url,
       responseType: "stream",

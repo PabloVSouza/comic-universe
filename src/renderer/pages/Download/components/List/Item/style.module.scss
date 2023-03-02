@@ -2,7 +2,8 @@
   cursor: pointer;
   padding: 10px;
   margin-bottom: 1px;
-  background: $white-transparent;
+  background: var(--colorBackground);
+  color: var(--colorText);
   border-radius: $radius-default;
   box-shadow: $shadow-default;
   transition: $transition-bg-default, $transition-color-default;
@@ -13,7 +14,7 @@
   flex-direction: column;
 
   &:hover {
-    background: $white;
+    background: var(--colorHightlight);
   }
 
   &.active {

@@ -1,8 +1,9 @@
 .downloadChapterList {
   flex-grow: 1;
   width: 100%;
-  background: $white-transparent;
-  padding: 10px;
+  background: var(--colorBackground);
+  color: var(--colorText);
+  padding: 30px;
 
   ul {
     display: flex;

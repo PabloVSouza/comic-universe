@@ -1,9 +1,11 @@
 .theme-light {
-  --colorBackground: #{$white-transparent};
   --colorText: #{$black};
+  --colorHighlight: #{$white};
+  --colorBackground: #{$white-transparent};
 }
 
 .theme-dark {
   --colorText: #{$white};
+  --colorHighlight: #{$black};
   --colorBackground: #{$black-transparent};
 }

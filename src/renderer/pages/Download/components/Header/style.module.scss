@@ -1,57 +1,84 @@
 .header {
-  background: $white-transparent;
+  background: var(--colorBackground);
+  color: var(--colorText);
   width: 100%;
   padding: 10px;
   display: flex;
   justify-content: center;
 
   .container {
-    display: grid;
+    display: flex;
     width: 100%;
-    max-width: 1000px;
-    grid-template:
-      "NAME COVER"
-      "DESCRIPTION COVER";
-    column-gap: 30px;
-    // overflow: hidden;
-
-    .name {
-      grid-area: NAME;
-
-      .status {
-        border-radius: $radius-default;
-        padding: 5px 10px;
-        box-shadow: $shadow-default;
-        background: $yellow-transparent;
-        font-weight: 500;
-        font-size: 10px;
-        white-space: nowrap;
-        margin: 0 auto;
+    max-width: 1100px;
+    height: auto;
+    justify-content: space-between;
+    align-items: center;
+    .texts {
+      padding: 10px;
+      text-align: center;
+      max-width: 1000px;
+      .title {
+        font-size: 25px;
+        font-weight: 300;
         display: inline-block;
+        text-align: center;
+        width: 100%;
       }
-
-      .genres {
-        margin: 10px 0;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-        .genre {
-          background: $green-transparent;
-          border-radius: $radius-default;
-          padding: 5px;
-          box-shadow: $shadow-default;
-        }
+      .publisher {
+        white-space: nowrap;
+        font-size: 10px;
+        text-align: center;
+      }
+      .genre {
+        font-size: 15px;
+        padding: 10px 0;
+      }
+      .status {
+        text-align: center;
+      }
+      .synopsis {
+        padding-top: 20px;
+        display: -webkit-box;
+        width: 100%;
+        height: 100%;
+        -webkit-line-clamp: 12;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
     }
+
     .cover {
-      grid-area: COVER;
+      height: 350px;
+      flex-shrink: 0;
+      max-height: 500px;
       aspect-ratio: 10/16;
-      object-fit: cover;
-      height: 300px;
-    }
-
-    .description {
-      grid-area: DESCRIPTION;
+      position: relative;
+      .chapters {
+        position: absolute;
+        z-index: 1;
+        right: 0;
+        bottom: 0;
+        min-width: 40px;
+        padding: 10px 5px;
+        box-shadow: $shadow-default;
+        background: $black-transparent;
+        color: $white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        white-space: nowrap;
+        border-top-left-radius: $radius-default;
+      }
+      .coverImage {
+        height: 100%;
+        z-index: 0;
+        height: inherit;
+        right: 0;
+        position: absolute;
+        transition: all 0.6s ease;
+        aspect-ratio: 10/16;
+        object-fit: cover;
+      }
     }
   }
 }

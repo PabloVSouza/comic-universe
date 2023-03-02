@@ -4,9 +4,11 @@ const initialState = (set) => ({
   theme: "dark",
 
   switchTheme: () =>
-    set((state) => (state.theme === "dark" ? "light" : "dark")),
+    set((state) =>
+      state.theme === "dark" ? { theme: "light" } : { theme: "dark" }
+    ),
 
-  resetGlobal: () => set(initialState),
+  resetGlobal: (set) => set(initialState(set)),
 });
 
 const useGlobal = create((set) => initialState(set));

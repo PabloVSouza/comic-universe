@@ -6,21 +6,35 @@
 
   .content {
     flex-direction: column;
-    .input {
+    .searchInput {
+      display: flex;
       width: 90%;
-      margin: 20px;
-      height: 50px;
-      border: none;
-      background-color: $white-transparent;
+      background-color: var(--colorBackground);
+      box-shadow: $shadow-default;
       border-radius: $radius-default;
       padding: 0 20px;
-      font-size: 18px;
-      box-shadow: $shadow-default;
-      background-image: url("assets/magnifying-glass-search.svg");
-      background-repeat: no-repeat;
-      background-position: right;
-      background-origin: content-box;
-      background-size: 30px;
+      margin: 20px;
+      height: 50px;
+      justify-content: center;
+
+      .input {
+        border: none;
+        background-color: transparent;
+        color: var(--colorText);
+        font-size: 18px;
+        flex-grow: 1;
+      }
+      .searchIcon {
+        width: 30px;
+        height: 100%;
+        -webkit-mask-image: url("assets/magnifying-glass-search.svg");
+        -webkit-mask-size: contain;
+        -webkit-mask-position: center;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-origin: content-box;
+        background-color: var(--colorText);
+        opacity: 0.5;
+      }
     }
 
     .result {

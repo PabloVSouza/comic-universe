@@ -6,15 +6,18 @@ import useGlobal from "store/global";
 
 import style from "./style.module.scss";
 
-const { theme } = useGlobal.getState();
+const Main = ({ children }) => {
+  const { theme } = useGlobal((state) => state);
+  return <div className={`theme-${theme}`}>{children}</div>;
+};
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <HashRouter>
-    <div className={`theme-${theme}`}>
+    <Main>
       <Loading />
       <div id={style.Base}>
         <Routes />
       </div>
-    </div>
+    </Main>
   </HashRouter>
 );

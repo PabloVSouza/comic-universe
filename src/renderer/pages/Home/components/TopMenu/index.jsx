@@ -4,8 +4,11 @@ import style from "./style.module.scss";
 
 import downloadIcon from "assets/download-icon.svg";
 import userProfileIcon from "assets/user-profile.svg";
+import useGlobal from "store/global";
 
 const TopMenu = () => {
+  const { switchTheme } = useGlobal((state) => state);
+
   return (
     <div className={style.topMenu}>
       <div className={style.groupLeft}>
@@ -23,6 +26,7 @@ const TopMenu = () => {
           icon={userProfileIcon}
           size="xs"
           theme="pure"
+          onClick={() => switchTheme()}
         />
       </div>
     </div>

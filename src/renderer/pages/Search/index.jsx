@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import Window from "components/Window";
+import Image from "components/Image";
 import SearchComicList from "./components/List";
 
 import useComicData from "store/comic";
@@ -33,12 +34,16 @@ const SearchComic = () => {
       contentClassName={style.content}
       to="/"
     >
-      <input
-        className={style.input}
-        placeholder={lang.SearchComic.textPlaceholder}
-        type="text"
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <div className={style.searchInput}>
+        <input
+          className={style.input}
+          placeholder={lang.SearchComic.textPlaceholder}
+          type="text"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        <div className={style.searchIcon} />
+      </div>
       <div className={style.result}>
         <SearchComicList list={filteredList} />
       </div>

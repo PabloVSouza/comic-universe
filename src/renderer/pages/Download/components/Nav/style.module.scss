@@ -1,7 +1,8 @@
 .downloadChapterNav {
   width: 100%;
   height: 60px;
-  background: $white-transparent;
+  background: var(--colorBackground);
+  color: var(--colorText);
   margin: 2px 0;
   flex-shrink: 0;
   text-align: center;
@@ -13,17 +14,21 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
-  }
+    .queue,
+    .chapters {
+      font-size: 1.5rem;
+    }
 
-  .queue,
-  .chapters {
-    font-size: 1.5rem;
-  }
-
-  .buttons {
-    height: 100%;
-    button {
+    .buttons {
       height: 100%;
+      display: flex;
+      justify-content: right;
+      flex-shrink: 0;
+      button {
+        width: 40px;
+        flex-shrink: 0;
+        height: 100%;
+      }
     }
   }
 }

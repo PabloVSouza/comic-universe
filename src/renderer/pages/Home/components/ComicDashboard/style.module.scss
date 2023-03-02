@@ -1,0 +1,9 @@
+.comicDashboard {
+  position: absolute;
+  top: 51px;
+  left: 201px;
+  width: calc(100% - 201px);
+  height: calc(100% - 51px);
+  background-color: var(--colorBackground);
+  transition: width 0.6s ease, left 0.6s ease;
+}

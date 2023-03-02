@@ -1,4 +1,4 @@
-const SearchManga = {
+const SearchComic = {
   textPlaceholder: "Digite sua Busca",
   goToPage: "Ir para a Página",
   chapters: "Capítulos",
@@ -8,7 +8,7 @@ const SearchManga = {
   },
 };
 
-const DownloadManga = {
+const DownloadComic = {
   chaptersTitle: "Capítulos",
   navigation: {
     downloadQueue: "Na fila",
@@ -19,8 +19,8 @@ const DownloadManga = {
 };
 
 const lang = {
-  SearchManga,
-  DownloadManga,
+  SearchComic,
+  DownloadComic,
 };
 
 export default lang;

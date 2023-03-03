@@ -4,25 +4,21 @@ export default class DBRepository {
   constructor() {}
 
   async getComicDB(id) {
-    return new Promise((resolve, reject) => {
-      if (db.Comic) {
-        db.Comic.findOne({ id }).exec((err, res) => {
-          if (!err) {
-            resolve(res);
-          } else {
-            reject(err);
-          }
+    if (db.Comic) {
+      return new Promise((resolve) => {
+        db.Comic.findOne({ id }, (err, res) => {
+          resolve(res);
         });
-      } else {
-        reject("Database not found");
-      }
-    });
+      });
+    } else {
+      reject("Database not found");
+    }
   }
 
-  async getComicChapters(comicId) {
+  async getComicChaptersDB(comicId) {
     return new Promise((resolve, reject) => {
       if (db.Chapter) {
-        db.Chapter.find({ id }).exec((err, res) => {
+        db.Chapter.find({ comicId }, (err, res) => {
           if (!err) {
             resolve(res);
           } else {
@@ -35,25 +31,24 @@ export default class DBRepository {
     });
   }
 
-  async createComicDB(comic, chapters) {
+  async createComicDB(comic, chapter) {
     if (db.Comic && db.Chapter) {
       try {
-        let comicDBData = comic;
-        if (!comicDBData._id) {
-          comicDBData = await db.Comic.insert(comic).exec();
-        }
+        if (!comic._id) {
+          db.Comic.insert(
+            { ...comic, id: String(comic.id) },
+            (errComic, comicDBData) => {
+              if (comicDBData._id) {
+                const chapterData = { comicId: comicDBData._id, ...chapter };
 
-        if (comicDBData._id) {
-          const chaptersData = chapters.reduce((acc, cur) => [
-            ...cur,
-            { mangaId: comicDBData._id, ...cur },
-          ]);
-
-          const chaptersDBData = await db.Chapters.insert(chaptersData).exec();
-
-          return new Promise((resolve, reject) => {
-            resolve({ comicDBData, chaptersDBData });
-          });
+                db.Chapter.insert(chapterData, (errChapter, chapterDBData) => {
+                  return new Promise((resolve, reject) => {
+                    resolve({ comicDBData, chapterDBData });
+                  });
+                });
+              }
+            }
+          );
         }
       } catch (e) {
         throw e;

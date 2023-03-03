@@ -2,7 +2,7 @@ import { create } from "zustand";
 import merge from "lodash.merge";
 import pick from "lodash.pick";
 
-const { invoke } = window.electron.ipcRenderer;
+const { invoke } = window.Electron.ipcRenderer;
 
 const initialState = (set) => ({
   type: "hq",
@@ -15,14 +15,13 @@ const initialState = (set) => ({
 
   getComicData: async (id) => {
     const data = {};
-
-    const inDatabase = await invoke("getComicDB", { id });
+    const inDatabase = await invoke("getComicDB", { id: String(id) });
 
     if (inDatabase) {
       data.comic = inDatabase;
 
-      const downloadedChapters = await invoke("getComicChapters", {
-        comicId: inDatabase._id,
+      const downloadedChapters = await invoke("getComicChaptersDB", {
+        id: inDatabase._id,
       });
 
       if (downloadedChapters) data.downloadedChapters = downloadedChapters;
@@ -80,7 +79,7 @@ const initialState = (set) => ({
     const { comic } = useComicData.getState();
 
     const chapters = !comic.chapters
-      ? await invoke("getChapters", { type, id })
+      ? await invoke("getChapters", { type, id: comic.id })
       : comic.chapters;
 
     return new Promise((resolve) => {
@@ -90,21 +89,38 @@ const initialState = (set) => ({
   },
 
   downloadChapter: async (chapter) => {
-    const { comic, type } = useComicData.getState();
+    const { comic, type, getComicData } = useComicData.getState();
 
     if (!chapter.pages) {
       await invoke("getPages", { type, comic, chapter });
     }
-    const result = await invoke("downloadChapter", { type, comic, chapter });
 
-    console.log(result);
+    comic.type = type;
+
+    const downloadData = {
+      type,
+      comic,
+      chapter,
+    };
+
+    const chapterFiles = await invoke("downloadChapter", downloadData);
+
+    comic.cover = chapterFiles.cover;
+
+    chapter.pages = chapterFiles.pageFiles;
+
+    delete comic.chapters;
+
+    await invoke("createComicDB", { comic, chapter });
+
+    await getComicData(comic.id);
 
     return new Promise((resolve) => {
-      resolve(result);
+      resolve();
     });
   },
 
-  setQueue: (data) => set((state) => (state.queue = data)),
+  setQueue: (data) => set((state) => ({ ...state, queue: data })),
 
   setComicData: (data) => set(async (state) => await merge(state, data)),
 

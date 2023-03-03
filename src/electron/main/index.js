@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 
+import appEvents from "../events/appEvents";
 import apiEvents from "../events/apiEvents";
 import dbCrudEvents from "../events/dbCrudEvents";
 import dbComicEvents from "../events/dbComicEvents";
@@ -13,12 +14,14 @@ function createWindow() {
     show: false,
     autoHideMenuBar: true,
     webPreferences: {
+      webSecurity: false,
       preload: join(__dirname, "../preload/index.js"),
       sandbox: false,
     },
     icon: join(__dirname, "../../../resources/icon.png"),
   });
 
+  appEvents();
   apiEvents();
   dbCrudEvents();
   dbComicEvents();

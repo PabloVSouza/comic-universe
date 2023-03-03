@@ -75,8 +75,31 @@ export class HqRepository {
 
   async getChapters(id) {
     try {
+      const query = gql`
+        query getHqsById($id: Int!) {
+          getHqsById(id: $id) {
+            chapters: capitulos {
+              name
+              id
+              number
+              pages: pictures {
+                url: pictureUrl
+              }
+            }
+          }
+        }
+      `;
+
+      const variables = {
+        id: Number(id),
+      };
+
+      const res = await this.client.request(query, variables);
+
+      const data = res.getHqsById[0].chapters;
+
       return new Promise((resolve) => {
-        resolve();
+        resolve(data);
       });
     } catch (e) {
       throw e;

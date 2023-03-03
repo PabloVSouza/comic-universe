@@ -6,16 +6,29 @@ export default class DBRepository {
   async getComicDB(id) {
     return new Promise((resolve, reject) => {
       if (db.Comic) {
-        db[params.Comic]
-          .findOne({ id })
-          .sort({ createdAt })
-          .exec((err, res) => {
-            if (!err) {
-              resolve(res);
-            } else {
-              reject(err);
-            }
-          });
+        db.Comic.findOne({ id }).exec((err, res) => {
+          if (!err) {
+            resolve(res);
+          } else {
+            reject(err);
+          }
+        });
+      } else {
+        reject("Database not found");
+      }
+    });
+  }
+
+  async getComicChapters(comicId) {
+    return new Promise((resolve, reject) => {
+      if (db.Chapter) {
+        db.Chapter.find({ id }).exec((err, res) => {
+          if (!err) {
+            resolve(res);
+          } else {
+            reject(err);
+          }
+        });
       } else {
         reject("Database not found");
       }
@@ -23,7 +36,7 @@ export default class DBRepository {
   }
 
   async createComicDB(comic, chapters) {
-    if (db.Comic && db.Chapters) {
+    if (db.Comic && db.Chapter) {
       try {
         let comicDBData = comic;
         if (!comicDBData._id) {

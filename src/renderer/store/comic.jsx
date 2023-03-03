@@ -16,21 +16,13 @@ const initialState = (set) => ({
   getComicData: async (id) => {
     const data = {};
 
-    const inDatabase = await invoke("dbFindOne", {
-      table: "Comic",
-      query: {
-        id,
-      },
-    });
+    const inDatabase = await invoke("getComicDB", { id });
 
     if (inDatabase) {
       data.comic = inDatabase;
 
-      const downloadedChapters = await invoke("dbFind", {
-        table: "Chapter",
-        query: {
-          hqId: inDatabase._id,
-        },
+      const downloadedChapters = await invoke("getComicChapters", {
+        comicId: inDatabase._id,
       });
 
       if (downloadedChapters) data.downloadedChapters = downloadedChapters;
@@ -103,7 +95,9 @@ const initialState = (set) => ({
     if (!chapter.pages) {
       await invoke("getPages", { type, comic, chapter });
     }
-    const result = invoke("downloadChapter", { type, comic, chapter });
+    const result = await invoke("downloadChapter", { type, comic, chapter });
+
+    console.log(result);
 
     return new Promise((resolve) => {
       resolve(result);

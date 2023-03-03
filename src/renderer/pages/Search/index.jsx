@@ -24,6 +24,12 @@ const SearchComic = () => {
   };
 
   useMemo(() => {
+    if (list.length == 0) {
+      setList();
+    }
+  }, []);
+
+  useMemo(() => {
     setList();
   }, [list, search]);
 

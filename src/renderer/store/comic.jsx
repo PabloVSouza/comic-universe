@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import merge from "lodash.merge";
-import omit from "lodash.omit";
+import pick from "lodash.pick";
 
 const { invoke } = window.electron.ipcRenderer;
 
@@ -114,7 +114,7 @@ const initialState = (set) => ({
 
   setComicData: (data) => set(async (state) => await merge(state, data)),
 
-  resetComic: () => set(omit(initialState(set), ["list"]), true),
+  resetComic: () => set(() => pick(initialState(set), ["list"]), true),
 });
 
 const useComicData = create((set) => initialState(set));

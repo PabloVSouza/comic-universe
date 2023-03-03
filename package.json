@@ -27,6 +27,7 @@
     "graphql-request": "^5.1.0",
     "lodash.merge": "^4.6.2",
     "lodash.omit": "^4.5.0",
+    "lodash.pick": "^4.4.0",
     "nedb": "^1.8.0",
     "node-html-parser": "^6.1.5",
     "react-html-parser": "^2.0.2",

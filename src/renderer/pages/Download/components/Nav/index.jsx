@@ -26,6 +26,7 @@ const DownloadChapterNav = () => {
     for (const item of queue) {
       await downloadChapter(item);
     }
+    setQueue([]);
   };
 
   return (

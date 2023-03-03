@@ -1,8 +1,8 @@
 import axios from "axios";
 import { parse } from "node-html-parser";
 
-import CreateDirectory from "../utils/CreateDirectory";
-import DownloadFile from "../utils/DownloadFile";
+import CreateDirectory from "../../utils/CreateDirectory";
+import DownloadFile from "../../utils/DownloadFile";
 
 export class MangaRepository {
   constructor(directory, url) {

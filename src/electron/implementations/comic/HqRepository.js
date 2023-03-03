@@ -118,8 +118,6 @@ export class HqRepository {
 
     const cover = await DownloadFile(path, comic.cover);
 
-    console.log(cover);
-
     const pageFiles = [];
 
     for (const [i, page] of chapter.pages.entries()) {

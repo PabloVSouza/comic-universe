@@ -3,7 +3,8 @@ import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 
 import apiEvents from "../events/apiEvents";
-import dbEvents from "../events/dbEvents";
+import dbCrudEvents from "../events/dbCrudEvents";
+import dbComicEvents from "../events/dbComicEvents";
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -19,7 +20,8 @@ function createWindow() {
   });
 
   apiEvents();
-  dbEvents();
+  dbCrudEvents();
+  dbComicEvents();
 
   mainWindow.on("ready-to-show", () => {
     mainWindow.show();

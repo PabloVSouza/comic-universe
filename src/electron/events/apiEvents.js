@@ -1,7 +1,7 @@
 import { app, ipcMain } from "electron";
 
-import { MangaRepository } from "../implementations/MangaRepository";
-import { HqRepository } from "../implementations/HqRepository";
+import { MangaRepository } from "../implementations/comic/MangaRepository";
+import { HqRepository } from "../implementations/comic/HqRepository";
 
 const eventList = () => {
   const { handle } = ipcMain;

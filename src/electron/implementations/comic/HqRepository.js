@@ -2,8 +2,8 @@ import { BrowserWindow } from "electron";
 import slugify from "slugify";
 
 import { GraphQLClient, gql } from "graphql-request";
-import CreateDirectory from "../utils/CreateDirectory";
-import DownloadFile from "../utils/DownloadFile";
+import CreateDirectory from "../../utils/CreateDirectory";
+import DownloadFile from "../../utils/DownloadFile";
 
 export class HqRepository {
   constructor(directory, url) {

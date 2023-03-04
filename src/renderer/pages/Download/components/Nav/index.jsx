@@ -9,15 +9,20 @@ import Container from "components/Container";
 import useComicData from "store/comic";
 
 const DownloadChapterNav = () => {
-  const { downloadChapter, chapters, queue, setQueue } = useComicData(
-    (state) => state
-  );
+  const { downloadChapter, chapters, queue, setQueue, downloadedChapters } =
+    useComicData((state) => state);
 
   const addAllToQueue = () => {
     if (queue.length === chapters.length) {
       setQueue([]);
     } else {
-      const newQueue = Array.from(new Set(queue.concat(chapters)));
+      const filteredChapters = chapters.filter((val) => {
+        if (!downloadedChapters.find((item) => item.id === val.id)) {
+          return val;
+        }
+      });
+
+      const newQueue = Array.from(new Set(queue.concat(filteredChapters)));
       setQueue(newQueue);
     }
   };

@@ -1,11 +1,15 @@
 .theme-light {
   --colorText: #{$black};
-  --colorHighlight: #{$white};
+  --colorTextHightlight: #{$black};
+  --colorHighlight: #{$white-transparent};
+  --colorHover: #{$white};
   --colorBackground: #{$white-transparent};
 }
 
 .theme-dark {
   --colorText: #{$white};
-  --colorHighlight: #{$black};
+  --colorTextHightlight: #{$black};
+  --colorHighlight: #{$white-transparent};
+  --colorHover: #{$white};
   --colorBackground: #{$black-transparent};
 }

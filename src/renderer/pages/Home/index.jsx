@@ -4,12 +4,10 @@ import ComicList from "./components/ComicList";
 import ComicDashboard from "./components/ComicDashboard";
 
 import style from "./style.module.scss";
-import useComicData from "store/comic";
-import useReader from "store/reader";
+import useDashboard from "store/dashboard";
 
 const Home = () => {
-  const { resetComic } = useComicData((state) => state);
-  const { getList, list } = useReader((state) => state);
+  const { list } = useDashboard((state) => state);
 
   return (
     <Window className={style.Home} contentClassName={style.content}>

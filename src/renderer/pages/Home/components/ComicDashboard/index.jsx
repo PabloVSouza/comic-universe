@@ -1,6 +1,6 @@
 import style from "./style.module.scss";
 
-const ComicDashboard = () => {
+const ComicDashboard = ({ item }) => {
   return <div className={style.comicDashboard}></div>;
 };
 

@@ -13,9 +13,9 @@ const initialState = (set) => ({
   resetReader: () => set(initialState),
 });
 
-const useReader = create((set) => initialState(set));
+const useDashboard = create((set) => initialState(set));
 
-const { getListDB } = useReader.getState();
+const { getListDB } = useDashboard.getState();
 getListDB();
 
-export default useReader;
+export default useDashboard;

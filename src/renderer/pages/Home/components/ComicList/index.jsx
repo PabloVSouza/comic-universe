@@ -2,11 +2,13 @@ import ComicListItem from "./Item";
 
 import style from "./style.module.scss";
 
-const ComicList = () => {
+const ComicList = ({ list }) => {
   return (
-    <div className={style.comicList}>
-      <ComicListItem />
-    </div>
+    <ul className={style.comicList}>
+      {list.map((item) => (
+        <ComicListItem key={item.id} item={item} />
+      ))}
+    </ul>
   );
 };
 

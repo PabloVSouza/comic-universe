@@ -1,7 +1,7 @@
 import Cover from "components/Cover";
 import Image from "components/Image";
 
-import { useLoading } from "store/loading";
+import useLoading from "store/loading";
 
 import style from "./style.module.scss";
 

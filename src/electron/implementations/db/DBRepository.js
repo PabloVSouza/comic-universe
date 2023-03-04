@@ -15,7 +15,7 @@ export default class DBRepository {
     }
   }
 
-  async getComicChaptersDB(comicId) {
+  async getChaptersDB(comicId) {
     return new Promise((resolve, reject) => {
       if (db.Chapter) {
         db.Chapter.find({ comicId }, (err, res) => {
@@ -31,35 +31,41 @@ export default class DBRepository {
     });
   }
 
+  async getListDB() {
+    return new Promise((resolve) => {
+      if (db.Comic) {
+        db.Comic.find({}, (err, result) => {
+          resolve(result);
+        });
+      }
+    });
+  }
+
   async createComicDB(comic, chapter) {
     if (db.Comic && db.Chapter) {
-      try {
-        if (!comic._id) {
-          db.Comic.insert(
-            { ...comic, id: String(comic.id) },
-            (errComic, comicDBData) => {
-              if (!!comicDBData._id) {
-                const chapterData = { comicId: comicDBData._id, ...chapter };
-                db.Chapter.insert(chapterData, (errChapter, chapterDBData) => {
-                  return new Promise((resolve, reject) => {
-                    resolve({ comicDBData, chapterDBData });
-                  });
+      if (!comic._id) {
+        db.Comic.insert(
+          { ...comic, id: String(comic.id) },
+          (errComic, comicDBData) => {
+            if (!!comicDBData._id) {
+              const chapterData = { comicId: comicDBData._id, ...chapter };
+              db.Chapter.insert(chapterData, (errChapter, chapterDBData) => {
+                return new Promise((resolve, reject) => {
+                  resolve({ comicDBData, chapterDBData });
                 });
-              }
-            }
-          );
-        } else {
-          if (!!comic._id) {
-            const chapterData = { comicId: comic._id, ...chapter };
-            db.Chapter.insert(chapterData, (errChapter, chapterDBData) => {
-              return new Promise((resolve, reject) => {
-                resolve({ comic, chapterDBData });
               });
-            });
+            }
           }
+        );
+      } else {
+        if (!!comic._id) {
+          const chapterData = { comicId: comic._id, ...chapter };
+          db.Chapter.insert(chapterData, (errChapter, chapterDBData) => {
+            return new Promise((resolve, reject) => {
+              resolve({ comic, chapterDBData });
+            });
+          });
         }
-      } catch (e) {
-        throw e;
       }
     } else {
       throw "Database not found";

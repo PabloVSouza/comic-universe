@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import merge from "lodash.merge";
-import pick from "lodash.pick";
 
 const { invoke } = window.Electron.ipcRenderer;
 
@@ -20,7 +19,7 @@ const initialState = (set) => ({
     if (inDatabase) {
       data.comic = inDatabase;
 
-      const downloadedChapters = await invoke("getComicChaptersDB", {
+      const downloadedChapters = await invoke("getChaptersDB", {
         id: inDatabase._id,
       });
 

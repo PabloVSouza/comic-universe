@@ -12,10 +12,12 @@ const Home = () => {
   const { getList, list } = useReader((state) => state);
 
   return (
-    <Window className={style.Home}>
+    <Window className={style.Home} contentClassName={style.content}>
       <TopMenu />
-      <ComicList list={list} />
-      <ComicDashboard />
+      <div className={style.body}>
+        <ComicList list={list} />
+        <ComicDashboard />
+      </div>
     </Window>
   );
 };

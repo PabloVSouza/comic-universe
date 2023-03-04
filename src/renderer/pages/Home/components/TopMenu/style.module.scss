@@ -1,8 +1,7 @@
 .topMenu {
-  position: absolute;
-  top: 0;
   width: 100%;
   height: 50px;
+  flex-shrink: 0;
   background: var(--colorBackground);
   display: flex;
   justify-content: space-between;

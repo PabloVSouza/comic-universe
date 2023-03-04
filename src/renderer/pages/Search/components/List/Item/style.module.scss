@@ -4,7 +4,6 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition: all 0.3s ease;
   min-height: 100px;
   flex-direction: column;
 
@@ -80,7 +79,6 @@
         height: inherit;
         right: 0;
         position: absolute;
-        transition: all 0.6s ease;
         aspect-ratio: 10/16;
         object-fit: cover;
       }

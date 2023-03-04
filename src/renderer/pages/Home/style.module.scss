@@ -1,4 +1,20 @@
 .Home {
   width: calc(100% - 40px);
   height: calc(100% - 40px);
+  display: flex;
+  flex-direction: column;
+
+  .content {
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+    .body {
+      display: flex;
+      width: 100%;
+      flex-grow: 1;
+      gap: 1px;
+    }
+  }
 }

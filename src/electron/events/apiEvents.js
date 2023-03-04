@@ -8,11 +8,11 @@ const eventList = () => {
 
   const repo = {
     manga: new MangaRepository(
-      `${app.getPath("userData")}/downloads/mangas`,
+      `${app.getPath("userData")}/downloads/manga`,
       "https://mangayabu.top"
     ),
     hq: new HqRepository(
-      `${app.getPath("userData")}/downloads/hqs`,
+      `${app.getPath("userData")}/downloads/hq`,
       "https://admin.hq-now.com/graphql"
     ),
   };

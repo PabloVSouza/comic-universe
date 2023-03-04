@@ -3,8 +3,6 @@ $green: rgba(0, 255, 0, 0.4);
 .Button {
   cursor: pointer;
   position: relative;
-  transition: $transition-bg-default, border-color 0.6s ease, opacity 0.6s ease,
-    transform 0.6s ease;
   overflow: hidden;
 
   img {
@@ -85,10 +83,9 @@ $green: rgba(0, 255, 0, 0.4);
   //Themes
   &.pure {
     border: none;
-    padding: 5px;
     background-color: unset;
-    margin: 0 2.5px;
     aspect-ratio: 1/1;
+    padding: 5px;
     border-radius: $radius-default;
 
     .icon {

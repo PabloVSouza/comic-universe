@@ -1,5 +1,6 @@
 import { contextBridge } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
+import path from "path";
 
 // Custom APIs for renderer
 const api = {};
@@ -9,12 +10,14 @@ const api = {};
 // just add to the DOM global.
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld("electron", electronAPI);
+    contextBridge.exposeInMainWorld("Electron", electronAPI);
     contextBridge.exposeInMainWorld("api", api);
+    contextBridge.exposeInMainWorld("path", path);
   } catch (error) {
     console.error(error);
   }
 } else {
-  window.electron = electronAPI;
+  window.Electron = electronAPI;
   window.api = api;
+  window.path = path;
 }

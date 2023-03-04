@@ -6,7 +6,6 @@
   color: var(--colorText);
   border-radius: $radius-default;
   box-shadow: $shadow-default;
-  transition: $transition-bg-default, $transition-color-default;
   min-width: 110px;
   display: flex;
   justify-content: center;
@@ -28,6 +27,7 @@
   &.downloaded {
     cursor: unset;
     background: $green;
+    color: $black;
   }
 
   p {

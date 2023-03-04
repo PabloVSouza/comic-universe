@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import Window from "components/Window";
-import Image from "components/Image";
 import SearchComicList from "./components/List";
 
 import useComicData from "store/comic";
@@ -11,7 +10,7 @@ import style from "./style.module.scss";
 const SearchComic = () => {
   const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
-  const { list } = useComicData((state) => state);
+  const { list, resetComic } = useComicData((state) => state);
 
   const setList = () => {
     search.length > 0
@@ -21,6 +20,10 @@ const SearchComic = () => {
           )
         )
       : setFilteredList(list);
+  };
+
+  const handle = () => {
+    console.log("Oi");
   };
 
   useMemo(() => {
@@ -36,9 +39,10 @@ const SearchComic = () => {
   return (
     <Window
       close
+      to={"/"}
+      onClick={() => resetComic()}
       className={style.searchComic}
       contentClassName={style.content}
-      to="/"
     >
       <div className={style.searchInput}>
         <input

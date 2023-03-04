@@ -13,9 +13,11 @@ const initialState = (set) => ({
   resetLoading: () => set(initialState),
 });
 
-export const useLoading = create((set) => initialState(set));
+const useLoading = create((set) => initialState(set));
 
-const { on } = window.electron.ipcRenderer;
+export default useLoading;
+
+const { on } = window.Electron.ipcRenderer;
 
 on("loading", (event, data) => {
   useLoading.getState().setLoading(data);

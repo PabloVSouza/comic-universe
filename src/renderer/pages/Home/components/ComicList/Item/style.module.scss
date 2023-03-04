@@ -1,3 +1,26 @@
-.ComicListItem {
+.comicListItem {
   width: 100%;
+  height: 100px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $white-transparent;
+  cursor: pointer;
+  .name {
+    flex-grow: 1;
+    padding: 5px 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .cover {
+    padding: 2px 0;
+    flex-shrink: 0;
+    height: 100%;
+    aspect-ratio: 10/16;
+    flex-grow: 0;
+  }
 }

@@ -9,6 +9,7 @@ const Button = ({
   children,
   color,
   icon,
+  onClick,
   size,
   theme,
   to,
@@ -24,9 +25,8 @@ const Button = ({
     className
   );
   const handleClick = () => {
-    if (to) {
-      navigate(to);
-    }
+    if (onClick) onClick();
+    if (to) navigate(to);
   };
 
   const iconStyle = {

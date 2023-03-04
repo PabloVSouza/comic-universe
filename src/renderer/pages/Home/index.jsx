@@ -4,21 +4,18 @@ import ComicList from "./components/ComicList";
 import ComicDashboard from "./components/ComicDashboard";
 
 import style from "./style.module.scss";
-import useComicData from "store/comic";
-import { useMemo } from "react";
+import useDashboard from "store/dashboard";
 
 const Home = () => {
-  const { resetComic } = useComicData((state) => state);
-
-  useMemo(() => {
-    // resetComic();
-  }, []);
+  const { list } = useDashboard((state) => state);
 
   return (
-    <Window className={style.Home}>
+    <Window className={style.Home} contentClassName={style.content}>
       <TopMenu />
-      <ComicList />
-      <ComicDashboard />
+      <div className={style.body}>
+        <ComicList list={list} />
+        <ComicDashboard />
+      </div>
     </Window>
   );
 };

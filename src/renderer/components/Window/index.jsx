@@ -6,20 +6,21 @@ const Window = ({
   children,
   close,
   closebar,
-  to,
   className,
   contentClassName,
+  onClick,
+  to,
   ...props
 }) => {
   return (
     <div className={classNames(style.Window, className)} {...props}>
       {closebar && (
         <div className={style.topBar}>
-          <Button theme="closeButton" to={to} />
+          <Button theme="closeButton" onClick={onClick} to={to} />
         </div>
       )}
 
-      {close && <Button theme="closeButton" to={to} />}
+      {close && <Button theme="closeButton" onClick={onClick} to={to} />}
 
       <div className={classNames(style.content, contentClassName)}>
         {children}

@@ -38,9 +38,8 @@ export default class DBRepository {
           db.Comic.insert(
             { ...comic, id: String(comic.id) },
             (errComic, comicDBData) => {
-              if (comicDBData._id) {
+              if (!!comicDBData._id) {
                 const chapterData = { comicId: comicDBData._id, ...chapter };
-
                 db.Chapter.insert(chapterData, (errChapter, chapterDBData) => {
                   return new Promise((resolve, reject) => {
                     resolve({ comicDBData, chapterDBData });
@@ -49,6 +48,15 @@ export default class DBRepository {
               }
             }
           );
+        } else {
+          if (!!comic._id) {
+            const chapterData = { comicId: comic._id, ...chapter };
+            db.Chapter.insert(chapterData, (errChapter, chapterDBData) => {
+              return new Promise((resolve, reject) => {
+                resolve({ comic, chapterDBData });
+              });
+            });
+          }
         }
       } catch (e) {
         throw e;

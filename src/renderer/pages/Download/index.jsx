@@ -13,7 +13,7 @@ import style from "./style.module.scss";
 const DownloadComic = () => {
   const { id } = useParams();
 
-  const { comic, getComicData } = useComicData((state) => state);
+  const { comic, getComicData, resetComic } = useComicData((state) => state);
 
   useMemo(() => {
     getComicData(id);
@@ -24,6 +24,7 @@ const DownloadComic = () => {
       <Window
         closebar
         to={"/"}
+        onClick={() => resetComic()}
         className={style.downloadComic}
         contentClassName={style.content}
       >

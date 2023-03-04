@@ -7,10 +7,12 @@ import clipboardIcon from "assets/clipboard.svg";
 import downloadIcon from "assets/download-icon-2.svg";
 import Container from "components/Container";
 import useComicData from "store/comic";
+import useDashboard from "store/dashboard";
 
 const DownloadChapterNav = () => {
   const { downloadChapter, chapters, queue, setQueue, downloadedChapters } =
     useComicData((state) => state);
+  const { getListDB } = useDashboard((state) => state);
 
   const addAllToQueue = () => {
     if (queue.length === chapters.length) {
@@ -32,6 +34,7 @@ const DownloadChapterNav = () => {
       await downloadChapter(item);
     }
     setQueue([]);
+    getListDB();
   };
 
   return (

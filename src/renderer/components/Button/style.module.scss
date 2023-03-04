@@ -85,10 +85,9 @@ $green: rgba(0, 255, 0, 0.4);
   //Themes
   &.pure {
     border: none;
-    padding: 5px;
     background-color: unset;
-    margin: 0 2.5px;
     aspect-ratio: 1/1;
+    padding: 5px;
     border-radius: $radius-default;
 
     .icon {

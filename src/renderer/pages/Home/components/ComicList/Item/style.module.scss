@@ -8,10 +8,12 @@
   background: var(--colorHighlight);
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &.active {
     background: var(--colorHover);
     color: var(--colorTextHightlight);
   }
+
   .name {
     flex-grow: 1;
     padding: 5px 0;

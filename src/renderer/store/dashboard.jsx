@@ -10,6 +10,8 @@ const initialState = (set) => ({
     set((state) => ({ ...state, list }));
   },
 
+  setActiveComic: (comic) => set((state) => ({ ...state, activeComic: comic })),
+
   resetReader: () => set(initialState),
 });
 

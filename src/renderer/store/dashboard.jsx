@@ -9,6 +9,7 @@ const initialState = (set) => ({
   getListDB: async () => {
     const list = await invoke("getListDB");
     set((state) => ({ ...state, list }));
+    set((state) => ({ ...state, activeComic: list[0] }));
   },
 
   getChaptersDB: async () => {

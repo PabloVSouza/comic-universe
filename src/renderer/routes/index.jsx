@@ -1,8 +1,9 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 
 import Home from "../pages/Home";
-import SearchComic from "pages/Search";
-import DownloadComic from "pages/Download";
+import Search from "pages/Search";
+import Download from "pages/Download";
+import Reader from "pages/Reader";
 
 const Router = () => {
   return (
@@ -10,8 +11,9 @@ const Router = () => {
       <Route path="/" element={<Home />}>
         <Route path="/*" element={<Navigate to="/" />} />
       </Route>
-      <Route path="/search" element={<SearchComic />} />
-      <Route path="/download/:id" element={<DownloadComic />} />
+      <Route path="/search" element={<Search />} />
+      <Route path="/download/:id" element={<Download />} />
+      <Route path="/reader/:id" element={<Reader />} />
     </Routes>
   );
 };

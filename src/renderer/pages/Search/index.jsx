@@ -7,7 +7,7 @@ import useComicData from "store/comic";
 import lang from "lang";
 import style from "./style.module.scss";
 
-const SearchComic = () => {
+const Search = () => {
   const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
   const { list, resetComic } = useComicData((state) => state);
@@ -57,4 +57,4 @@ const SearchComic = () => {
   );
 };
 
-export default SearchComic;
+export default Search;

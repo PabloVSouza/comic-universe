@@ -10,7 +10,7 @@ import useComicData from "store/comic";
 
 import style from "./style.module.scss";
 
-const DownloadComic = () => {
+const Download = () => {
   const { id } = useParams();
 
   const { comic, getComicData, resetComic } = useComicData((state) => state);
@@ -37,4 +37,4 @@ const DownloadComic = () => {
   );
 };
 
-export default DownloadComic;
+export default Download;

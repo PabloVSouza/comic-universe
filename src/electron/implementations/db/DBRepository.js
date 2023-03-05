@@ -18,13 +18,15 @@ export default class DBRepository {
   async getChaptersDB(comicId) {
     return new Promise((resolve, reject) => {
       if (db.Chapter) {
-        db.Chapter.find({ comicId }, (err, res) => {
-          if (!err) {
-            resolve(res);
-          } else {
-            reject(err);
-          }
-        });
+        db.Chapter.find({ comicId })
+          .sort({ createdAt: 1 })
+          .exec((err, res) => {
+            if (!err) {
+              resolve(res);
+            } else {
+              reject(err);
+            }
+          });
       } else {
         reject("Database not found");
       }

@@ -22,10 +22,6 @@ const SearchComic = () => {
       : setFilteredList(list);
   };
 
-  const handle = () => {
-    console.log("Oi");
-  };
-
   useMemo(() => {
     if (list.length == 0) {
       setList();

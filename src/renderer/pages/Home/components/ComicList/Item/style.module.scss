@@ -3,6 +3,7 @@
   height: 100px;
   overflow: hidden;
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   background: var(--colorHighlight);
@@ -24,10 +25,10 @@
     text-align: center;
   }
   .cover {
-    // padding: 2px 0;
     flex-shrink: 0;
     height: 100%;
     aspect-ratio: 10/16;
-    flex-grow: 0;
+    object-fit: cover;
+    object-position: 50% 50%;
   }
 }

@@ -2,12 +2,22 @@ import { create } from "zustand";
 const { invoke } = window.Electron.ipcRenderer;
 
 const initialState = (set) => ({
-  list: [],
   activeComic: {},
+  chapters: [],
+  list: [],
 
   getListDB: async () => {
     const list = await invoke("getListDB");
     set((state) => ({ ...state, list }));
+  },
+
+  getChaptersDB: async () => {
+    const { activeComic } = useDashboard.getState();
+    const chapters = await invoke("getChaptersDB", {
+      comicId: activeComic._id,
+    });
+
+    set((state) => ({ ...state, chapters }));
   },
 
   setActiveComic: (comic) => set((state) => ({ ...state, activeComic: comic })),

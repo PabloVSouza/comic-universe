@@ -1,7 +1,6 @@
 .topMenu {
   width: 100%;
   height: 50px;
-  flex-shrink: 0;
   background: var(--colorBackground);
   display: flex;
   justify-content: space-between;
@@ -11,13 +10,21 @@
     height: 100%;
     .button {
       height: 100%;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
     }
   }
 
   .groupLeft {
     left: 0px;
+    .button {
+      border-top-right-radius: 0;
+    }
   }
   .groupRight {
     right: 0px;
+    .button {
+      border-top-left-radius: 0;
+    }
   }
 }

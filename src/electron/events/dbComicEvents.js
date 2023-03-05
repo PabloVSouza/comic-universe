@@ -7,7 +7,7 @@ const db = new DBRepository();
 
 const eventList = () => {
   handle("getComicDB", (event, { id }) => db.getComicDB(id));
-  handle("getChaptersDB", (event, { id }) => db.getChaptersDB(id));
+  handle("getChaptersDB", (event, { comicId }) => db.getChaptersDB(comicId));
   handle("createComicDB", (event, { comic, chapter }) =>
     db.createComicDB(comic, chapter)
   );

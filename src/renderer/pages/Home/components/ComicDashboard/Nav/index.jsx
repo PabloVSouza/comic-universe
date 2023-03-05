@@ -1,7 +1,7 @@
 import style from "./style.module.scss";
 
 const DashboardNav = () => {
-  return <div></div>;
+  return <div className={style.DashboardNav}></div>;
 };
 
 export default DashboardNav;

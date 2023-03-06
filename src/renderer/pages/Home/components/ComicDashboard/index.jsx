@@ -11,7 +11,7 @@ const ComicDashboard = ({ item }) => {
 
   return (
     <div className={style.comicDashboard}>
-      {!!item._id && (
+      {!!item?._id && (
         <>
           <DashboardHeader item={item} />
           <DashboardNav />

@@ -13,7 +13,7 @@ const Router = () => {
       </Route>
       <Route path="/search" element={<Search />} />
       <Route path="/download/:id" element={<Download />} />
-      <Route path="/reader/:id" element={<Reader />} />
+      <Route path="/reader/:comicId/:number" element={<Reader />} />
     </Routes>
   );
 };

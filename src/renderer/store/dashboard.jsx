@@ -28,7 +28,7 @@ const initialState = (set) => ({
 
 const useDashboard = create((set) => initialState(set));
 
-const { getListDB } = useDashboard.getState();
+const { getListDB, getChaptersDB } = useDashboard.getState();
 getListDB();
 
 export default useDashboard;

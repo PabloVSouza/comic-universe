@@ -20,7 +20,7 @@ const initialState = (set) => ({
       data.comic = inDatabase;
 
       const downloadedChapters = await invoke("getChaptersDB", {
-        id: inDatabase._id,
+        comicId: inDatabase._id,
       });
 
       if (downloadedChapters) data.downloadedChapters = downloadedChapters;

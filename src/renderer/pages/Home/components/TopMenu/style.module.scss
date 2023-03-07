@@ -1,9 +1,9 @@
 .topMenu {
   width: 100%;
   height: 50px;
-  background: var(--colorBackground);
   display: flex;
   justify-content: space-between;
+  background: var(--colorBackground);
 
   .groupLeft,
   .groupRight {

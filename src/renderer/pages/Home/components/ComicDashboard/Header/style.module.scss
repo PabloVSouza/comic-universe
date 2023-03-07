@@ -2,7 +2,7 @@
   height: 300px;
   width: 100%;
   flex-shrink: 0;
-  background: var(--colorHighlight);
+  background: var(--colorBackground);
   display: flex;
 
   .texts {
@@ -30,6 +30,7 @@
 
       p {
         height: 100%;
+        line-height: 1.5;
       }
     }
   }

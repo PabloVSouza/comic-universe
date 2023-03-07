@@ -1,9 +1,9 @@
 .comicList {
   height: 100%;
   width: 250px;
-  background-color: var(--colorBackground);
   overflow: auto;
   display: flex;
   flex-direction: column;
   gap: 1px;
+  background: var(--colorBackground);
 }

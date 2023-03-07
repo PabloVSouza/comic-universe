@@ -1,5 +1,9 @@
 .comicDashboard {
   height: 100%;
+  width: 100%;
   flex-grow: 1;
-  background-color: var(--colorBackground);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--colorBackground);
 }

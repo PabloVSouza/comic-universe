@@ -13,7 +13,8 @@
   flex-direction: column;
 
   &:hover {
-    background: var(--colorHightlight);
+    background: var(--colorHover);
+    color: var(--colorTextHightlight);
   }
 
   &.active {

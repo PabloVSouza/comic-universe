@@ -1,0 +1,125 @@
+import { useMemo, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import slugify from "slugify";
+
+import Image from "components/Image";
+
+import useReader from "store/reader";
+import useGlobal from "store/global";
+
+import style from "./style.module.scss";
+
+const Reader = () => {
+  const navigate = useNavigate();
+
+  const { comicId, number } = useParams();
+
+  const { appPath } = useGlobal((state) => state);
+  const {
+    activeComic,
+    chapter,
+    chapters,
+    page,
+    pages,
+    getChapterData,
+    setChapter,
+    setPage,
+  } = useReader((state) => state);
+
+  useMemo(() => {
+    getChapterData(comicId, number);
+  }, []);
+
+  const chapterIndex = chapters.findIndex(
+    (val) => val.number === chapter?.number
+  );
+
+  const getPath = (page) => {
+    return `file:///${encodeURI(
+      path.join(
+        appPath,
+        "downloads",
+        activeComic?.type,
+        slugify(activeComic.name),
+        slugify(chapter.number),
+        String(page)
+      )
+    )}`;
+  };
+
+  const nextPage = () => {
+    if (page < pages.length - 1) setPage(page + 1);
+    if (page === pages.length - 1) {
+      setPage(0);
+      getChapterData(comicId, chapters[chapterIndex + 1].number);
+    }
+  };
+
+  const previousPage = () => {
+    if (page > 0) setPage(page - 1);
+    if (page === 0 && chapterIndex > 0) {
+      getChapterData(comicId, chapters[chapterIndex - 1].number);
+      setPage(chapters[chapterIndex - 1].pages.length - 1);
+    }
+  };
+
+  const handleKeys = (e) => {
+    const keys = {
+      ArrowLeft: () => {
+        // if (!users.value.activeUser.reverse) {
+        previousPage();
+        // } else {
+        //   nextPage()
+        // }
+      },
+
+      ArrowRight: () => {
+        // if (!users.value.activeUser.reverse) {
+        nextPage();
+        // } else {
+        //   previousPage()
+        // }
+      },
+
+      Escape: () => {
+        navigate("/");
+      },
+    };
+
+    if (keys[e.key]) {
+      keys[e.key]();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeys);
+    return () => {
+      document.removeEventListener("keydown", handleKeys);
+    };
+  }, [chapters, page, pages, setPage, setChapter, chapterIndex]);
+
+  const position = {
+    transform: `translateX(-${page * 100}%)`,
+  };
+
+  return (
+    <div className={style.Reader}>
+      <div className={style.pages} style={position}>
+        {pages?.map((page) => (
+          <div key={page} className={style.page}>
+            <div className={style.buttons}>
+              <button
+                className={style.btnPrevious}
+                onClick={() => previousPage()}
+              />
+              <button className={style.btnNext} onClick={() => nextPage()} />
+            </div>
+            <Image className={style.Image} src={getPath(page)} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Reader;

@@ -7,14 +7,14 @@ import style from "./style.module.scss";
 import useDashboard from "store/dashboard";
 
 const Home = () => {
-  const { list } = useDashboard((state) => state);
+  const { list, activeComic } = useDashboard((state) => state);
 
   return (
     <Window className={style.Home} contentClassName={style.content}>
       <TopMenu />
       <div className={style.body}>
         <ComicList list={list} />
-        <ComicDashboard />
+        <ComicDashboard item={activeComic} />
       </div>
     </Window>
   );

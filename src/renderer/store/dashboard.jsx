@@ -21,6 +21,16 @@ const initialState = (set) => ({
     set((state) => ({ ...state, chapters }));
   },
 
+  getReadProgress: async (chapterId) => {
+    return new Promise((resolve) => {
+      invoke("getReadProgressDB", {
+        chapterId,
+      }).then((res) => {
+        resolve(res);
+      });
+    });
+  },
+
   setActiveComic: (comic) => set((state) => ({ ...state, activeComic: comic })),
 
   resetReader: () => set(initialState),

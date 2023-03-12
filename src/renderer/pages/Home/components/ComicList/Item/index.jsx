@@ -14,8 +14,12 @@ const ComicListItem = ({ item }) => {
 
   const active = activeComic._id === item._id;
 
-  const cover = `file:///${encodeURI(
-    path.join(appPath, "downloads", item.type, slugify(item.name), item.cover)
+  const cover = `file:///${path.join(
+    appPath,
+    "downloads",
+    item.type,
+    slugify(item.name),
+    item.cover
   )}`;
 
   return (

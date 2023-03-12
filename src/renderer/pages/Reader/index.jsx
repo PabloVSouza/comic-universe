@@ -35,15 +35,13 @@ const Reader = () => {
   );
 
   const getPath = (page) => {
-    return `file:///${encodeURI(
-      path.join(
-        appPath,
-        "downloads",
-        activeComic?.type,
-        slugify(activeComic.name),
-        slugify(chapter.number),
-        String(page)
-      )
+    return `file:///${path.join(
+      appPath,
+      "downloads",
+      activeComic?.type,
+      slugify(activeComic.name),
+      slugify(chapter.number),
+      String(page)
     )}`;
   };
 

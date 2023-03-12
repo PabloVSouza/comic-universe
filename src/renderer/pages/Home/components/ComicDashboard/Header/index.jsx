@@ -8,8 +8,12 @@ import style from "./style.module.scss";
 const DashboardHeader = ({ item }) => {
   const { appPath } = useGlobal((state) => state);
 
-  const cover = `file:///${encodeURI(
-    path.join(appPath, "downloads", item.type, slugify(item.name), item.cover)
+  const cover = `file:///${path.join(
+    appPath,
+    "downloads",
+    item.type,
+    slugify(item.name),
+    item.cover
   )}`;
 
   return (

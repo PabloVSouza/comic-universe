@@ -23,7 +23,7 @@ const Reader = () => {
     pages,
     getChapterData,
     setChapter,
-    setPage,
+    changePage,
   } = useReader((state) => state);
 
   useMemo(() => {
@@ -48,18 +48,17 @@ const Reader = () => {
   };
 
   const nextPage = () => {
-    if (page < pages.length - 1) setPage(page + 1);
+    if (page < pages.length - 1) changePage(page + 1);
     if (page === pages.length - 1) {
-      setPage(0);
       getChapterData(comicId, chapters[chapterIndex + 1].number);
     }
   };
 
-  const previousPage = () => {
-    if (page > 0) setPage(page - 1);
+  const previousPage = async () => {
+    if (page > 0) changePage(page - 1);
     if (page === 0 && chapterIndex > 0) {
-      getChapterData(comicId, chapters[chapterIndex - 1].number);
-      setPage(chapters[chapterIndex - 1].pages.length - 1);
+      await getChapterData(comicId, chapters[chapterIndex - 1].number);
+      await changePage(chapters[chapterIndex - 1].pages.length - 1);
     }
   };
 
@@ -96,7 +95,7 @@ const Reader = () => {
     return () => {
       document.removeEventListener("keydown", handleKeys);
     };
-  }, [chapters, page, pages, setPage, setChapter, chapterIndex]);
+  }, [chapters, page, pages, changePage, setChapter, chapterIndex]);
 
   const position = {
     transform: `translateX(-${page * 100}%)`,

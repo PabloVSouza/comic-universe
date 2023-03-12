@@ -1,3 +1,5 @@
+import lang from "lang";
+
 import useDashboard from "store/dashboard";
 
 import style from "./style.module.scss";
@@ -25,10 +27,12 @@ const DashboardNav = () => {
 
   return (
     <div className={style.DashboardNav}>
-      <div
-        className={style.progressBar}
-        style={{ width: `${totalPercent}%` }}
-      />
+      <div className={style.progressBar}>
+        <p>
+          {totalPercent}% {lang.Dashboard.read}
+        </p>
+        <div style={{ width: `${totalPercent}%` }} />
+      </div>
     </div>
   );
 };

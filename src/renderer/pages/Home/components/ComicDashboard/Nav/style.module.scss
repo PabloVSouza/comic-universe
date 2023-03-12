@@ -6,7 +6,23 @@
 
   .progressBar {
     position: absolute;
-    background: $green-transparent;
     height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    p {
+      z-index: 1;
+      font-weight: 500;
+    }
+
+    div {
+      z-index: 0;
+      position: absolute;
+      left: 0;
+      height: 100%;
+      background: $green-transparent;
+    }
   }
 }

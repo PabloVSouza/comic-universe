@@ -11,6 +11,7 @@ const SearchComic = {
 const Dashboard = {
   setComplete: "Mark as Read",
   resetProgress: "Mark as Unread",
+  read: "Read",
 };
 
 const DownloadComic = {

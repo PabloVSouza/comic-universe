@@ -11,6 +11,7 @@ const SearchComic = {
 const Dashboard = {
   setComplete: "Definir como Lido",
   resetProgress: "Remover Progresso",
+  read: "Lido",
 };
 
 const DownloadComic = {

@@ -2,4 +2,11 @@
   height: 70px;
   flex-shrink: 0;
   background: var(--colorBackground);
+  position: relative;
+
+  .progressBar {
+    position: absolute;
+    background: $green-transparent;
+    height: 100%;
+  }
 }

@@ -109,10 +109,10 @@ export default class DBRepository {
     });
   }
 
-  async getReadProgressDB(chapterId) {
+  async getReadProgressDB(search) {
     if (db.ReadProgress) {
       return new Promise((resolve) => {
-        db.ReadProgress.findOne({ chapterId }, (err, res) => {
+        db.ReadProgress.find(search, (err, res) => {
           resolve(res);
         });
       });

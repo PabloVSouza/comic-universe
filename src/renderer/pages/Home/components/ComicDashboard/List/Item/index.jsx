@@ -1,4 +1,3 @@
-import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 
@@ -16,21 +15,17 @@ import bookStack from "assets/book-stack.svg";
 const DashboardListItem = ({ item }) => {
   const navigate = useNavigate();
 
-  const { activeComic, getReadProgress, changeReadProgress } = useDashboard(
-    (state) => state
-  );
-  const [readProgress, setReadProgress] = useState(null);
-
-  useMemo(() => {
-    getReadProgress(item._id).then((res) => {
-      setReadProgress(res);
-    });
-  }, []);
+  const { activeComic, readProgress, getReadProgressDB, changeReadProgress } =
+    useDashboard((state) => state);
 
   const totalPages = item.pages.length - 1;
 
-  const percentage = readProgress
-    ? Math.round((100 / readProgress.totalPages) * readProgress.page)
+  const chapterProgress = readProgress.find(
+    (val) => val.chapterId === item._id
+  );
+
+  const percentage = chapterProgress
+    ? Math.round((100 / chapterProgress.totalPages) * chapterProgress.page)
     : 0;
 
   const openChapter = () => {
@@ -39,9 +34,7 @@ const DashboardListItem = ({ item }) => {
 
   const handleReadProgress = async (page) => {
     await changeReadProgress(item, page);
-    getReadProgress(item._id).then((res) => {
-      setReadProgress(res);
-    });
+    getReadProgressDB();
   };
 
   return (

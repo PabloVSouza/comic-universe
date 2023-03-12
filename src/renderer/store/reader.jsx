@@ -27,9 +27,11 @@ const initialState = (set) => ({
     setChapter(chapter);
 
     let ReadProgress;
-    ReadProgress = await invoke("getReadProgressDB", {
-      chapterId: chapter._id,
-    });
+    ReadProgress = (
+      await invoke("getReadProgressDB", {
+        chapterId: chapter._id,
+      })
+    )[0];
 
     if (!ReadProgress) {
       ReadProgress = await invoke("changePageDB", {

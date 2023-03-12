@@ -5,6 +5,7 @@ const initialState = (set) => ({
   activeComic: {},
   chapters: [],
   list: [],
+  readProgress: [],
 
   getListDB: async () => {
     const list = await invoke("getListDB");
@@ -21,13 +22,13 @@ const initialState = (set) => ({
     set((state) => ({ ...state, chapters }));
   },
 
-  getReadProgress: async (chapterId) => {
-    return new Promise((resolve) => {
-      invoke("getReadProgressDB", {
-        chapterId,
-      }).then((res) => {
-        resolve(res);
-      });
+  getReadProgressDB: async () => {
+    const { activeComic } = useDashboard.getState();
+
+    invoke("getReadProgressDB", {
+      comicId: activeComic._id,
+    }).then((res) => {
+      set((state) => ({ ...state, readProgress: res }));
     });
   },
 

@@ -33,6 +33,7 @@ const initialState = (set) => ({
 
   changeReadProgress: async (chapter, page) => {
     await invoke("changePageDB", {
+      comicId: chapter.comicId,
       chapter,
       page,
     });

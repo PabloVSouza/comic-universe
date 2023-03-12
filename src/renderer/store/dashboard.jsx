@@ -31,6 +31,13 @@ const initialState = (set) => ({
     });
   },
 
+  changeReadProgress: async (chapter, page) => {
+    await invoke("changePageDB", {
+      chapter,
+      page,
+    });
+  },
+
   setActiveComic: (comic) => set((state) => ({ ...state, activeComic: comic })),
 
   resetReader: () => set(initialState),

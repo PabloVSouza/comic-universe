@@ -18,7 +18,7 @@ const DashboardList = () => {
   return (
     <ul className={style.DashboardList}>
       {chapters.map((item) => (
-        <DashboardListItem key={item.number} item={item} />
+        <DashboardListItem key={item._id} item={item} />
       ))}
     </ul>
   );

@@ -5,7 +5,8 @@
   padding: 0;
   box-sizing: border-box;
   outline: 0;
-  transition: all 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: $transition-default;
+
   &::-webkit-scrollbar-track {
     background-color: $white-transparent;
   }

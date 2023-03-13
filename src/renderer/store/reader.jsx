@@ -11,7 +11,7 @@ const initialState = (set) => ({
   activeComic: {},
 
   getChapterData: async (comicId, number) => {
-    const { setChapter, setPages, setChapters, setActiveComic } =
+    const { setChapter, setPages, setChapters, setActiveComic, setPage } =
       useReader.getState();
     const { list } = useDashboard.getState();
 
@@ -26,7 +26,36 @@ const initialState = (set) => ({
 
     setChapter(chapter);
 
-    setPages(chapter.pages);
+    let ReadProgress;
+    ReadProgress = (
+      await invoke("getReadProgressDB", {
+        chapterId: chapter._id,
+      })
+    )[0];
+
+    if (!ReadProgress) {
+      ReadProgress = await invoke("changePageDB", {
+        comicId: comic._id,
+        chapter,
+        page: 0,
+      });
+    }
+
+    await setPages(chapter.pages);
+    await setPage(ReadProgress.page);
+    return new Promise((resolve) => {
+      resolve();
+    });
+  },
+
+  changePage: async (page) => {
+    const { chapter, setPage } = useReader.getState();
+
+    await invoke("changePageDB", {
+      chapter,
+      page,
+    });
+    setPage(page);
   },
 
   setActiveComic: (activeComic) => set((state) => ({ ...state, activeComic })),

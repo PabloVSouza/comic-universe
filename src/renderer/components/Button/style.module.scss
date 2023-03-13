@@ -96,12 +96,12 @@ $green: rgba(0, 255, 0, 0.4);
       -webkit-mask-position: center;
       -webkit-mask-repeat: no-repeat;
       -webkit-mask-origin: content-box;
-      background-color: var(--colorText);
+      background: var(--colorText);
       opacity: 0.8;
     }
 
     &:hover {
-      background-color: $white-transparent;
+      background: var(--colorHighlight);
     }
   }
 

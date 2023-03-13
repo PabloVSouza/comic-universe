@@ -15,7 +15,7 @@ const DownloadChapterNav = () => {
   const { getListDB } = useDashboard((state) => state);
 
   const addAllToQueue = () => {
-    if (queue.length === chapters.length) {
+    if (queue.length + downloadedChapters.length === chapters.length) {
       setQueue([]);
     } else {
       const filteredChapters = chapters.filter((val) => {

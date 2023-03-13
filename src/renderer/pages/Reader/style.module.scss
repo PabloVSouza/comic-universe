@@ -2,6 +2,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  position: relative;
 
   .pages {
     height: 100%;
@@ -11,6 +12,7 @@
       flex-shrink: 0;
       height: 100%;
       width: 100%;
+      overflow: hidden;
 
       .buttons {
         position: absolute;
@@ -21,10 +23,15 @@
 
         .btnPrevious,
         .btnNext {
-          width: 50%;
+          width: 100px;
           height: 100%;
           background: transparent;
           border: none;
+          cursor: pointer;
+
+          &:hover {
+            background: var(--colorHighlight);
+          }
         }
       }
 

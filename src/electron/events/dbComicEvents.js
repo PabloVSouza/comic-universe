@@ -12,6 +12,8 @@ const eventList = () => {
     db.createComicDB(comic, chapter)
   );
   handle("getListDB", (event) => db.getListDB());
+  handle("getReadProgressDB", (event, search) => db.getReadProgressDB(search));
+  handle("changePageDB", (event, data) => db.changePageDB(data));
 };
 
 export default eventList;

@@ -14,14 +14,12 @@ const DownloadChapterHeader = () => {
 
   const cover = !comic._id
     ? comic.cover
-    : `file:///${encodeURI(
-        path.join(
-          appPath,
-          "downloads",
-          comic.type,
-          slugify(comic.name),
-          comic.cover
-        )
+    : `file:///${path.join(
+        appPath,
+        "downloads",
+        comic.type,
+        slugify(comic.name),
+        comic.cover
       )}`;
 
   return (

@@ -11,7 +11,7 @@ export default class DBRepository {
         });
       });
     } else {
-      reject("Database not found");
+      throw "Database not found";
     }
   }
 
@@ -28,7 +28,7 @@ export default class DBRepository {
             }
           });
       } else {
-        reject("Database not found");
+        throw "Database not found";
       }
     });
   }
@@ -69,6 +69,53 @@ export default class DBRepository {
           });
         }
       }
+    } else {
+      throw "Database not found";
+    }
+  }
+
+  async changePageDB({ comicId, chapter, page }) {
+    return new Promise((resolve) => {
+      if (db.ReadProgress) {
+        db.ReadProgress.findOne(
+          { chapterId: chapter._id },
+          (err, currentProgress) => {
+            const data = {
+              comicId,
+              chapterId: chapter._id,
+              totalPages: chapter.pages.length - 1,
+              page,
+            };
+
+            if (!currentProgress) {
+              db.ReadProgress.insert(data, (err, res) => {
+                resolve(res);
+              });
+            } else {
+              db.ReadProgress.update(
+                { chapterId: chapter._id },
+                { $set: { page } },
+                {},
+                (err, res) => {
+                  resolve(res);
+                }
+              );
+            }
+          }
+        );
+      } else {
+        throw "Database not found";
+      }
+    });
+  }
+
+  async getReadProgressDB(search) {
+    if (db.ReadProgress) {
+      return new Promise((resolve) => {
+        db.ReadProgress.find(search, (err, res) => {
+          resolve(res);
+        });
+      });
     } else {
       throw "Database not found";
     }

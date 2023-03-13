@@ -23,10 +23,15 @@
 
         .btnPrevious,
         .btnNext {
-          width: 50%;
+          width: 100px;
           height: 100%;
           background: transparent;
           border: none;
+          cursor: pointer;
+
+          &:hover {
+            background: var(--colorHighlight);
+          }
         }
       }
 

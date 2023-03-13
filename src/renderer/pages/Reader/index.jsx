@@ -114,13 +114,13 @@ const Reader = () => {
       <div className={style.pages} style={position}>
         {pages?.map((currentPage) => (
           <div key={currentPage} className={style.page}>
-            {/* <div className={style.buttons}>
+            <div className={style.buttons}>
               <button
-              className={style.btnPrevious}
-              onClick={() => previousPage()}
+                className={style.btnPrevious}
+                onClick={() => previousPage()}
               />
               <button className={style.btnNext} onClick={() => nextPage()} />
-            </div> */}
+            </div>
             <Image className={style.Image} src={getPath(currentPage)} />
           </div>
         ))}

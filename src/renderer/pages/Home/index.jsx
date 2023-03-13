@@ -1,5 +1,5 @@
 import Window from "components/Window";
-import TopMenu from "./components/TopMenu";
+import TopBar from "./components/TopBar";
 import ComicList from "./components/ComicList";
 import ComicDashboard from "./components/ComicDashboard";
 
@@ -11,11 +11,13 @@ const Home = () => {
 
   return (
     <Window className={style.Home} contentClassName={style.content}>
-      <TopMenu />
-      <div className={style.body}>
-        <ComicList list={list} />
-        <ComicDashboard item={activeComic} />
-      </div>
+      <TopBar />
+      {list.length > 0 && (
+        <div className={style.body}>
+          <ComicList list={list} />
+          <ComicDashboard item={activeComic} />
+        </div>
+      )}
     </Window>
   );
 };

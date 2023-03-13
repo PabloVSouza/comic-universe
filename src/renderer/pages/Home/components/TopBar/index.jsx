@@ -6,11 +6,11 @@ import downloadIcon from "assets/download-icon.svg";
 import userProfileIcon from "assets/user-profile.svg";
 import useGlobal from "store/global";
 
-const TopMenu = () => {
+const TopBar = () => {
   const { switchTheme } = useGlobal((state) => state);
 
   return (
-    <div className={style.topMenu}>
+    <div className={style.topBar}>
       <div className={style.groupLeft}>
         <Button
           className={style.button}
@@ -33,4 +33,4 @@ const TopMenu = () => {
   );
 };
 
-export default TopMenu;
+export default TopBar;

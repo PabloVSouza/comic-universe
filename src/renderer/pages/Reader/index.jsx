@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import slugify from "slugify";
 
@@ -8,11 +8,15 @@ import useReader from "store/reader";
 import useGlobal from "store/global";
 
 import style from "./style.module.scss";
+import ZoomWindow from "./components/ZoomWindow";
 
 const Reader = () => {
   const navigate = useNavigate();
 
   const { comicId, number } = useParams();
+
+  const [mousePos, setMousePos] = useState({});
+  const [zoomVisible, setZoomVisible] = useState(false);
 
   const { appPath } = useGlobal((state) => state);
   const {
@@ -34,16 +38,15 @@ const Reader = () => {
     (val) => val.number === chapter?.number
   );
 
-  const getPath = (page) => {
-    return `file:///${path.join(
+  const getPath = (page) =>
+    `file:///${path.join(
       appPath,
       "downloads",
       activeComic?.type,
-      slugify(activeComic.name),
-      slugify(chapter.number),
+      slugify(activeComic?.name),
+      slugify(chapter?.number),
       String(page)
     )}`;
-  };
 
   const nextPage = () => {
     if (page < pages.length - 1) changePage(page + 1);
@@ -63,19 +66,11 @@ const Reader = () => {
   const handleKeys = (e) => {
     const keys = {
       ArrowLeft: () => {
-        // if (!users.value.activeUser.reverse) {
         previousPage();
-        // } else {
-        //   nextPage()
-        // }
       },
 
       ArrowRight: () => {
-        // if (!users.value.activeUser.reverse) {
         nextPage();
-        // } else {
-        //   previousPage()
-        // }
       },
 
       Escape: () => {
@@ -86,6 +81,10 @@ const Reader = () => {
     if (keys[e.key]) {
       keys[e.key]();
     }
+  };
+
+  const defineMousePos = (e) => {
+    setMousePos({ x: e.pageX, y: e.pageY });
   };
 
   useEffect(() => {
@@ -100,18 +99,29 @@ const Reader = () => {
   };
 
   return (
-    <div className={style.Reader}>
+    <div
+      className={style.Reader}
+      onMouseMoveCapture={(e) => defineMousePos(e)}
+      onContextMenu={() => setZoomVisible(!zoomVisible)}
+    >
+      {pages.length > 0 && (
+        <ZoomWindow
+          mousePos={mousePos}
+          image={getPath(pages[page] ?? pages[0])}
+          visible={zoomVisible}
+        />
+      )}
       <div className={style.pages} style={position}>
-        {pages?.map((page) => (
-          <div key={page} className={style.page}>
-            <div className={style.buttons}>
+        {pages?.map((currentPage) => (
+          <div key={currentPage} className={style.page}>
+            {/* <div className={style.buttons}>
               <button
-                className={style.btnPrevious}
-                onClick={() => previousPage()}
+              className={style.btnPrevious}
+              onClick={() => previousPage()}
               />
               <button className={style.btnNext} onClick={() => nextPage()} />
-            </div>
-            <Image className={style.Image} src={getPath(page)} />
+            </div> */}
+            <Image className={style.Image} src={getPath(currentPage)} />
           </div>
         ))}
       </div>

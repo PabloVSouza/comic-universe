@@ -11,7 +11,7 @@
   z-index: 999;
   visibility: hidden;
   transition: unset !important;
-
+  cursor: zoom-in;
   &.visible {
     visibility: unset;
   }

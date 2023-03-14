@@ -1,10 +1,14 @@
 import classNames from "classnames";
-import "./Cover.scss";
+import style from "./style.module.scss";
 
 const Cover = ({ className, children, visible, index, ...props }) => {
   return (
     <div
-      className={classNames("cover", className, { visible })}
+      className={classNames(
+        style.cover,
+        className,
+        visible ? style.visible : null
+      )}
       style={index ? { zIndex: index } : {}}
     >
       {children}

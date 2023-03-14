@@ -1,3 +1,5 @@
+import classNames from "classnames";
+
 import Cover from "components/Cover";
 
 import useGlobal from "store/global";
@@ -33,7 +35,10 @@ const RightNav = () => {
   ];
 
   return (
-    <Cover visible={menuVisible} className={style.RightNav}>
+    <Cover
+      visible={menuVisible}
+      className={classNames(style.RightNav, menuVisible ? style.visible : null)}
+    >
       <ul>
         {options.map((option) => (
           <li onClick={option.onClick} key={option.label}>

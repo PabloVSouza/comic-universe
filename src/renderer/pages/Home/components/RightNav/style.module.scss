@@ -1,7 +1,14 @@
 .RightNav {
   z-index: 999;
 
+  &.visible {
+    ul {
+      transform: translateX(0);
+    }
+  }
+
   ul {
+    transform: translateX(100%);
     padding-top: 51px;
     margin-left: auto;
     margin-bottom: auto;

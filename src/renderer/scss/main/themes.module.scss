@@ -1,4 +1,4 @@
-.theme-light {
+.light {
   --colorText: #{$black};
   --colorTextHightlight: #{$black};
   --colorHighlight: #{$white-transparent};
@@ -6,7 +6,7 @@
   --colorBackground: #{$white-transparent};
 }
 
-.theme-dark {
+.dark {
   --colorText: #{$white};
   --colorTextHightlight: #{$black};
   --colorHighlight: #{$white-transparent};

@@ -18,8 +18,6 @@ const Button = ({
 }) => {
   const navigate = useNavigate();
 
-  console.log(active);
-
   const classes = classNames(
     style.Button,
     style[color],

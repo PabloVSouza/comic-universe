@@ -109,6 +109,67 @@ $green: rgba(0, 255, 0, 0.4);
     }
   }
 
+  &.burguer {
+    height: 100%;
+    aspect-ratio: 1/1;
+    border: none;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .icon {
+      width: 40px;
+      height: 6px;
+      background: var(--colorText);
+      border-radius: 5px;
+
+      &::before,
+      &::after {
+        content: " ";
+        position: absolute;
+        width: 40px;
+        height: 6px;
+        background: var(--colorText);
+        border-radius: 5px;
+        transition: $transition-default;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+      }
+
+      &::before {
+        transform: translateY(-14px);
+      }
+      &::after {
+        transform: translateY(14px);
+      }
+    }
+    &:hover {
+      background: var(--colorHover);
+    }
+    &:hover > .icon,
+    &:hover > .icon::before,
+    &:hover > .icon::after {
+      background: var(--colorTextHightlight);
+    }
+
+    &.active {
+      .icon {
+        transform: translateX(-100%);
+        background: transparent;
+
+        &::before {
+          transform: translate(100%) rotate(45deg);
+        }
+
+        &::after {
+          transform: translate(100%) rotate(-45deg);
+        }
+      }
+    }
+  }
+
   &.closeButton {
     $closeButtonDefaultBorder: 1px solid var(--colorBackground);
 

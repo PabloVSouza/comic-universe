@@ -5,6 +5,7 @@ import Image from "components/Image";
 import style from "./style.module.scss";
 
 const Button = ({
+  active,
   className,
   children,
   color,
@@ -17,12 +18,15 @@ const Button = ({
 }) => {
   const navigate = useNavigate();
 
+  console.log(active);
+
   const classes = classNames(
     style.Button,
     style[color],
     style[theme],
     style[`size-${size}`],
-    className
+    className,
+    active ? style.active : ""
   );
   const handleClick = () => {
     if (onClick) onClick();

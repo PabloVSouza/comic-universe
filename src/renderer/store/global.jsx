@@ -4,11 +4,15 @@ const { invoke } = window.Electron.ipcRenderer;
 const initialState = (set) => ({
   theme: "dark",
   appPath: "",
+  menuVisible: false,
 
   switchTheme: () =>
     set((state) =>
       state.theme === "dark" ? { theme: "light" } : { theme: "dark" }
     ),
+
+  toggleMenu: () =>
+    set((state) => ({ ...state, menuVisible: !state.menuVisible })),
 
   getAppPath: async () => {
     const appPath = await invoke("getAppPath");

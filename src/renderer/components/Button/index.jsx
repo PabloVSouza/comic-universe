@@ -35,7 +35,6 @@ const Button = ({
 
   return (
     <button className={classes} onClick={() => handleClick()} {...props}>
-      {/* {!!icon && <Image src={icon} alt="" pure />} */}
       <div className={style.icon} style={iconStyle} />
       {children}
     </button>

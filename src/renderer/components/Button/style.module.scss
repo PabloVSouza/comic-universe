@@ -101,7 +101,11 @@ $green: rgba(0, 255, 0, 0.4);
     }
 
     &:hover {
-      background: var(--colorHighlight);
+      background: var(--colorHover);
+    }
+
+    &:hover > .icon {
+      background: var(--colorTextHightlight);
     }
   }
 

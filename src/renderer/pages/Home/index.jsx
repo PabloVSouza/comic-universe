@@ -2,6 +2,7 @@ import Window from "components/Window";
 import TopBar from "./components/TopBar";
 import ComicList from "./components/ComicList";
 import ComicDashboard from "./components/ComicDashboard";
+import RightNav from "./components/RightNav";
 
 import style from "./style.module.scss";
 import useDashboard from "store/dashboard";
@@ -12,6 +13,7 @@ const Home = () => {
   return (
     <Window className={style.Home} contentClassName={style.content}>
       <TopBar />
+      <RightNav />
       {list.length > 0 && (
         <div className={style.body}>
           <ComicList list={list} />

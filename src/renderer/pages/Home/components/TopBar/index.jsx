@@ -3,11 +3,11 @@ import Button from "components/Button";
 import style from "./style.module.scss";
 
 import downloadIcon from "assets/download-icon.svg";
-import userProfileIcon from "assets/user-profile.svg";
+import userIcon from "assets/user.svg";
 import useGlobal from "store/global";
 
 const TopBar = () => {
-  const { switchTheme } = useGlobal((state) => state);
+  const { toggleMenu } = useGlobal((state) => state);
 
   return (
     <div className={style.topBar}>
@@ -23,10 +23,10 @@ const TopBar = () => {
       <div className={style.groupRight}>
         <Button
           className={style.button}
-          icon={userProfileIcon}
+          icon={userIcon}
           size="xs"
           theme="pure"
-          onClick={() => switchTheme()}
+          onClick={() => toggleMenu()}
         />
       </div>
     </div>

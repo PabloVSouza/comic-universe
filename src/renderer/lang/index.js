@@ -1,8 +1,10 @@
+import useGlobal from "store/global";
+
 import ptBR from "./ptBR";
 import enUS from "./enUS";
 
-const defaultLanguage = "ptBR";
+const { lang } = useGlobal.getState();
 
-const lang = { ptBR, enUS };
+const langList = { ptBR, enUS };
 
-export default lang[defaultLanguage];
+export default langList[lang];

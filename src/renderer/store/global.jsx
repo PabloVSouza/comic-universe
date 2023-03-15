@@ -3,6 +3,7 @@ const { invoke } = window.Electron.ipcRenderer;
 
 const initialState = (set) => ({
   theme: "dark",
+  lang: "ptBR",
   appPath: "",
   menuVisible: false,
 

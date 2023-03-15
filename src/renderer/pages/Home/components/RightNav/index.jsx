@@ -2,6 +2,8 @@ import classNames from "classnames";
 
 import Cover from "components/Cover";
 
+import lang from "lang";
+
 import useGlobal from "store/global";
 
 import style from "./style.module.scss";
@@ -16,20 +18,20 @@ const RightNav = () => {
 
   const options = [
     {
-      label: "About this App",
+      label: lang.RightNav.about,
       icon: infoIcon,
     },
     {
-      label: "Settings",
+      label: lang.RightNav.settings,
       icon: settingsIcon,
     },
     {
-      label: "Dark Mode",
+      label: lang.RightNav.darkMode,
       icon: darkmodeIcon,
       onClick: () => switchTheme(),
     },
     {
-      label: "Change User",
+      label: lang.RightNav.changeUser,
       icon: userIcon,
     },
   ];

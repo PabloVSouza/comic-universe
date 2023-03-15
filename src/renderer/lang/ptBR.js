@@ -12,6 +12,8 @@ const Dashboard = {
   setComplete: "Definir como Lido",
   resetProgress: "Remover Progresso",
   read: "Lido",
+  continueReading: "Continuar de onde Parou",
+  downloadMore: "Baixar mais Capítulos",
 };
 
 const DownloadComic = {
@@ -24,10 +26,18 @@ const DownloadComic = {
   },
 };
 
+const RightNav = {
+  about: "Sobre este App",
+  settings: "Configurações",
+  darkMode: "Modo Noturno",
+  changeUser: "Trocar de Usuário",
+};
+
 const lang = {
   SearchComic,
   Dashboard,
   DownloadComic,
+  RightNav,
 };
 
 export default lang;

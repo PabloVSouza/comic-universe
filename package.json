@@ -1,7 +1,7 @@
 {
   "name": "comic-universe",
   "version": "1.5.0",
-  "description": "Aplicativo para download e leitura de comics utilizando Electron e VueJS",
+  "description": "Aplicativo para download e leitura de comics utilizando Electron e ReactJS",
   "main": "./out/main/index.js",
   "author": "Pablo Souza",
   "repository": "https://github.com/pablovsouza/comic-universe",

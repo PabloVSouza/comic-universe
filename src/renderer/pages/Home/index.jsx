@@ -14,12 +14,14 @@ const Home = () => {
     <Window className={style.Home} contentClassName={style.content}>
       <TopBar />
       <RightNav />
-      {list.length > 0 && (
-        <div className={style.body}>
-          <ComicList list={list} />
-          <ComicDashboard item={activeComic} />
-        </div>
-      )}
+      <div className={style.body}>
+        {list.length > 0 && (
+          <>
+            <ComicList list={list} />
+            <ComicDashboard item={activeComic} />
+          </>
+        )}
+      </div>
     </Window>
   );
 };

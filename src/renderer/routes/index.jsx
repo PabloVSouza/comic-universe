@@ -1,6 +1,6 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 
-import Home from "../pages/Home";
+import Home from "pages/Home";
 import Search from "pages/Search";
 import Download from "pages/Download";
 import Reader from "pages/Reader";

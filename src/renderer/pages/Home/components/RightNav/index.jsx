@@ -14,9 +14,7 @@ import darkmodeIcon from "assets/darkmode.svg";
 import userIcon from "assets/user.svg";
 
 const RightNav = () => {
-  const { menuVisible, switchTheme, changeLanguage, lang } = useGlobal(
-    (state) => state
-  );
+  const { menuVisible, switchTheme } = useGlobal((state) => state);
 
   const texts = useLang();
 
@@ -33,10 +31,6 @@ const RightNav = () => {
       label: texts.RightNav.darkMode,
       icon: darkmodeIcon,
       onClick: () => switchTheme(),
-    },
-    {
-      label: "Change Language",
-      onClick: () => changeLanguage(),
     },
     {
       label: texts.RightNav.changeUser,

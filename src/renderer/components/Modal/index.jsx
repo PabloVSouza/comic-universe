@@ -1,17 +1,18 @@
 import Cover from "components/Cover";
-import Window from "components/Window";
+import Search from "./Search";
 
 import style from "./style.module.scss";
 
 const Modal = ({ modal, ...props }) => {
-  const components = {};
+  const components = {
+    Search,
+  };
 
   return (
     !!components[modal] && (
-      <div className={style.modal}>
-        <Cover visible index="2" />
-        <Window className="window">{components[modal]({ ...props })}</Window>
-      </div>
+      <Cover visible index="2" className={style.modal}>
+        {components[modal]({ ...props })}
+      </Cover>
     )
   );
 };

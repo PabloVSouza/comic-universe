@@ -2,7 +2,7 @@ import classNames from "classnames";
 
 import Cover from "components/Cover";
 
-import lang from "lang";
+import useLang from "lang";
 
 import useGlobal from "store/global";
 
@@ -14,24 +14,32 @@ import darkmodeIcon from "assets/darkmode.svg";
 import userIcon from "assets/user.svg";
 
 const RightNav = () => {
-  const { menuVisible, switchTheme } = useGlobal((state) => state);
+  const { menuVisible, switchTheme, changeLanguage, lang } = useGlobal(
+    (state) => state
+  );
+
+  const texts = useLang();
 
   const options = [
     {
-      label: lang.RightNav.about,
+      label: texts.RightNav.about,
       icon: infoIcon,
     },
     {
-      label: lang.RightNav.settings,
+      label: texts.RightNav.settings,
       icon: settingsIcon,
     },
     {
-      label: lang.RightNav.darkMode,
+      label: texts.RightNav.darkMode,
       icon: darkmodeIcon,
       onClick: () => switchTheme(),
     },
     {
-      label: lang.RightNav.changeUser,
+      label: "Change Language",
+      onClick: () => changeLanguage(),
+    },
+    {
+      label: texts.RightNav.changeUser,
       icon: userIcon,
     },
   ];

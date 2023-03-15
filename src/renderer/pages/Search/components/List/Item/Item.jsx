@@ -6,7 +6,8 @@ import merge from "lodash.merge";
 
 import useComicData from "store/comic";
 
-import lang from "lang";
+import useLang from "lang";
+
 import Image from "components/Image";
 import Button from "components/Button";
 
@@ -14,6 +15,8 @@ import style from "./style.module.scss";
 
 const ComicListItem = ({ data, ...props }) => {
   const navigate = useNavigate();
+
+  const texts = useLang();
 
   const { selectedComic, setComicData, getDetails } = useComicData(
     (state) => state
@@ -62,7 +65,7 @@ const ComicListItem = ({ data, ...props }) => {
         <div className={style.cover}>
           {!!data.chapters && (
             <div className={style.chapters}>
-              {data.totalChapters} {lang.SearchComic.chapters}
+              {data.totalChapters} {texts.SearchComic.chapters}
             </div>
           )}
           <Image className={style.coverImage} src={data.cover} />
@@ -76,7 +79,7 @@ const ComicListItem = ({ data, ...props }) => {
             color="green"
             onClick={() => goToPage()}
           >
-            {lang.SearchComic.goToPage}
+            {texts.SearchComic.goToPage}
           </Button>
         </div>
       )}

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 
-import lang from "lang";
+import useLang from "lang";
 
 import Button from "components/Button";
 
@@ -14,6 +14,8 @@ import bookStack from "assets/book-stack.svg";
 
 const DashboardListItem = ({ item }) => {
   const navigate = useNavigate();
+
+  const texts = useLang();
 
   const { activeComic, readProgress, getReadProgressDB, changeReadProgress } =
     useDashboard((state) => state);
@@ -53,7 +55,7 @@ const DashboardListItem = ({ item }) => {
           theme="pure"
           size="xxs"
           icon={closedBook}
-          title={lang.Dashboard.resetProgress}
+          title={texts.Dashboard.resetProgress}
           onClick={() => handleReadProgress(0)}
         />
       </div>
@@ -62,7 +64,7 @@ const DashboardListItem = ({ item }) => {
           theme="pure"
           size="xxs"
           icon={bookStack}
-          title={lang.Dashboard.setComplete}
+          title={texts.Dashboard.setComplete}
           onClick={() => handleReadProgress(totalPages)}
         />
       </div>

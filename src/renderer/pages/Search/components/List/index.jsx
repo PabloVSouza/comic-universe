@@ -3,7 +3,7 @@ import ReactPaginate from "react-paginate";
 
 import ComicListItem from "./Item/Item";
 
-import lang from "lang";
+import useLang from "lang";
 
 import style from "./style.module.scss";
 
@@ -12,6 +12,8 @@ const SearchComicList = ({ list, itemsPerPage = 10, reset }) => {
   const endOffset = offset + itemsPerPage;
   const currentItems = list.slice(offset, endOffset);
   const totalPages = Math.ceil(list.length / itemsPerPage);
+
+  const texts = useLang();
 
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % list.length;
@@ -38,8 +40,8 @@ const SearchComicList = ({ list, itemsPerPage = 10, reset }) => {
         pageRangeDisplayed={3}
         marginPagesDisplayed={3}
         pageCount={totalPages}
-        nextLabel={lang.SearchComic.pagination.next}
-        previousLabel={lang.SearchComic.pagination.previous}
+        nextLabel={texts.SearchComic.pagination.next}
+        previousLabel={texts.SearchComic.pagination.previous}
         renderOnZeroPageCount={null}
       />
     </div>

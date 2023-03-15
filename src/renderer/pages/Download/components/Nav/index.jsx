@@ -1,6 +1,5 @@
 import Button from "components/Button";
-import lang from "lang";
-
+import useLang from "lang";
 import style from "./style.module.scss";
 
 import clipboardIcon from "assets/clipboard.svg";
@@ -10,6 +9,8 @@ import useComicData from "store/comic";
 import useDashboard from "store/dashboard";
 
 const DownloadChapterNav = () => {
+  const texts = useLang();
+
   const { downloadChapter, chapters, queue, setQueue, downloadedChapters } =
     useComicData((state) => state);
   const { getListDB } = useDashboard((state) => state);
@@ -42,19 +43,19 @@ const DownloadChapterNav = () => {
       <Container className={style.container}>
         <div className={style.chapters}>Capítulos: {chapters.length}</div>
         <div className={style.queue}>
-          {lang.DownloadComic.navigation.downloadQueue}: {queue.length}
+          {texts.DownloadComic.navigation.downloadQueue}: {queue.length}
         </div>
         <div className={style.buttons}>
           <Button
             theme="pure"
             onClick={() => addAllToQueue()}
-            title={lang.DownloadComic.navigation.addToQueue}
+            title={texts.DownloadComic.navigation.addToQueue}
             icon={clipboardIcon}
           />
           <Button
             theme="pure"
             onClick={() => downloadQueue()}
-            title={lang.DownloadComic.navigation.downloadButton}
+            title={texts.DownloadComic.navigation.downloadButton}
             icon={downloadIcon}
           />
         </div>

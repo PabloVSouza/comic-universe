@@ -20,6 +20,12 @@ const initialState = (set) => ({
     set((state) => ({ ...state, appPath }));
   },
 
+  changeLanguage: () =>
+    set((state) => ({
+      ...state,
+      lang: state.lang === "ptBR" ? "enUS" : "ptBR",
+    })),
+
   resetGlobal: (set) => set(initialState(set)),
 });
 

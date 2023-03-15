@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 
 import Button from "components/Button";
 
-import lang from "lang";
+import useLang from "lang";
+
 import useDashboard from "store/dashboard";
 
 import style from "./style.module.scss";
@@ -12,6 +13,8 @@ import comicBook from "assets/comic-book.svg";
 
 const DashboardNav = () => {
   const navigate = useNavigate();
+
+  const texts = useLang();
 
   const { activeComic, chapters, readProgress } = useDashboard(
     (state) => state
@@ -67,7 +70,7 @@ const DashboardNav = () => {
       </div>
       <div className={style.progressBar}>
         <p>
-          {totalPercent}% {lang.Dashboard.read}
+          {totalPercent}% {texts.Dashboard.read}
         </p>
         <div style={{ width: `${totalPercent}%` }} />
       </div>

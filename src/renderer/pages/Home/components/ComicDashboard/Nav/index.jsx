@@ -59,12 +59,14 @@ const DashboardNav = () => {
           theme="pure"
           size="xxs"
           icon={downloadIcon}
+          title={texts.Dashboard.downloadMore}
           to={`download/${activeComic.id}`}
         />
         <Button
           theme="pure"
           size="xxs"
           icon={comicBook}
+          title={texts.Dashboard.continueReading}
           onClick={() => continueReading()}
         />
       </div>

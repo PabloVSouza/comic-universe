@@ -12,6 +12,8 @@ const Dashboard = {
   setComplete: "Mark as Read",
   resetProgress: "Mark as Unread",
   read: "Read",
+  continueReading: "Continue Reading",
+  downloadMore: "Download More",
 };
 
 const DownloadComic = {
@@ -24,10 +26,18 @@ const DownloadComic = {
   },
 };
 
+const RightNav = {
+  about: "About This App",
+  settings: "Settings",
+  darkMode: "Dark Mode",
+  changeUser: "Change User",
+};
+
 const lang = {
   SearchComic,
   Dashboard,
   DownloadComic,
+  RightNav,
 };
 
 export default lang;

@@ -1,0 +1,56 @@
+.RightNav {
+  z-index: 999;
+
+  &.visible {
+    ul {
+      transform: translateX(0);
+    }
+  }
+
+  ul {
+    transform: translateX(100%);
+    padding-top: 51px;
+    margin-left: auto;
+    margin-bottom: auto;
+    width: 200px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--colorBackground);
+    gap: 2px;
+
+    li {
+      height: 50px;
+      background: var(--colorBackground);
+      color: var(--colorText);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+
+      p {
+        flex-grow: 1;
+      }
+
+      .icon {
+        background: var(--colorText);
+        height: 100%;
+        padding: 10px;
+        aspect-ratio: 1/1;
+        -webkit-mask-size: contain;
+        -webkit-mask-origin: content-box;
+        -webkit-mask-repeat: no-repeat;
+      }
+
+      &:hover {
+        background: var(--colorHover);
+        color: var(--colorTextHightlight);
+      }
+
+      &:hover > .icon {
+        background: var(--colorTextHightlight);
+      }
+    }
+  }
+}

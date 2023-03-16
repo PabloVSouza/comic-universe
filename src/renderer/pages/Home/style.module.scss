@@ -9,13 +9,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.5px;
+    gap: 1px;
     .body {
       display: flex;
       width: 100%;
       min-height: 0;
       flex-grow: 1;
-      gap: 0.5px;
+      gap: 1px;
     }
   }
 }

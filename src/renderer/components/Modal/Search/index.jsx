@@ -4,13 +4,15 @@ import SearchComicList from "./components/List";
 
 import useComicData from "store/comic";
 
-import lang from "lang";
+import useLang from "lang";
 import style from "./style.module.scss";
 
-const Search = () => {
+const ModalSearch = () => {
   const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
   const { list, resetComic } = useComicData((state) => state);
+
+  const texts = useLang();
 
   const setList = () => {
     search.length > 0
@@ -43,7 +45,7 @@ const Search = () => {
       <div className={style.searchInput}>
         <input
           className={style.input}
-          placeholder={lang.SearchComic.textPlaceholder}
+          placeholder={texts.SearchComic.textPlaceholder}
           type="text"
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -57,4 +59,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default ModalSearch;

@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: comic-universe
+productName: Comic Universe
 directories:
   buildResources: build
 files:

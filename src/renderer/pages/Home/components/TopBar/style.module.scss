@@ -1,4 +1,4 @@
-.topMenu {
+.topBar {
   width: 100%;
   height: 50px;
   display: flex;
@@ -8,23 +8,21 @@
   .groupLeft,
   .groupRight {
     height: 100%;
-    .button {
-      height: 100%;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .groupLeft {
-    left: 0px;
     .button {
-      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      height: 100%;
     }
   }
   .groupRight {
-    right: 0px;
     .button {
-      border-top-left-radius: 0;
+      z-index: 1000;
     }
   }
 }

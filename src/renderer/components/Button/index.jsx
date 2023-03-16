@@ -5,6 +5,7 @@ import Image from "components/Image";
 import style from "./style.module.scss";
 
 const Button = ({
+  active,
   className,
   children,
   color,
@@ -22,7 +23,8 @@ const Button = ({
     style[color],
     style[theme],
     style[`size-${size}`],
-    className
+    className,
+    active ? style.active : ""
   );
   const handleClick = () => {
     if (onClick) onClick();
@@ -35,7 +37,6 @@ const Button = ({
 
   return (
     <button className={classes} onClick={() => handleClick()} {...props}>
-      {/* {!!icon && <Image src={icon} alt="" pure />} */}
       <div className={style.icon} style={iconStyle} />
       {children}
     </button>

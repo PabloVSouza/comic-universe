@@ -16,7 +16,7 @@ import darkmodeIcon from "assets/darkmode.svg";
 import userIcon from "assets/user.svg";
 
 const RightNav = () => {
-  const { menuVisible, switchTheme } = useGlobal((state) => state);
+  const { menuVisible, switchTheme, toggleMenu } = useGlobal((state) => state);
   const navigate = useNavigate();
   const texts = useLang();
 
@@ -41,6 +41,11 @@ const RightNav = () => {
     },
   ];
 
+  const handleClick = (onClick) => {
+    toggleMenu();
+    onClick();
+  };
+
   return (
     <Cover
       visible={menuVisible}
@@ -48,7 +53,7 @@ const RightNav = () => {
     >
       <ul>
         {options.map((option) => (
-          <li onClick={option.onClick} key={option.label}>
+          <li onClick={() => handleClick(option.onClick)} key={option.label}>
             <div
               className={style.icon}
               style={{ WebkitMaskImage: `url(${option.icon})` }}

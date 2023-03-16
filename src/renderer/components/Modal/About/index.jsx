@@ -7,7 +7,6 @@ import appIcon from "assets/icon.png";
 
 const ModalAbout = () => {
   const { app } = window;
-  console.log(app);
   return (
     <Window
       close
@@ -22,7 +21,7 @@ const ModalAbout = () => {
         <p>Author: {app.author}</p>
         <p>License: {app.license}</p>
         {app.description.split(". ").map((description) => (
-          <p>{description}.</p>
+          <p key={description}>{description}.</p>
         ))}
         <a href={app.repository} target="_blank">
           <u>Github Repository</u>

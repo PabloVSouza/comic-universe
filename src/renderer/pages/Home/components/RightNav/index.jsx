@@ -29,6 +29,7 @@ const RightNav = () => {
     {
       label: texts.RightNav.settings,
       icon: settingsIcon,
+      onClick: () => navigate("/?modal=settings"),
     },
     {
       label: texts.RightNav.darkMode,
@@ -38,6 +39,7 @@ const RightNav = () => {
     {
       label: texts.RightNav.changeUser,
       icon: userIcon,
+      onClick: () => navigate("/users"),
     },
   ];
 

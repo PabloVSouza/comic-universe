@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import classNames from "classnames";
 
 import Cover from "components/Cover";
@@ -15,13 +17,14 @@ import userIcon from "assets/user.svg";
 
 const RightNav = () => {
   const { menuVisible, switchTheme } = useGlobal((state) => state);
-
+  const navigate = useNavigate();
   const texts = useLang();
 
   const options = [
     {
       label: texts.RightNav.about,
       icon: infoIcon,
+      onClick: () => navigate("/?modal=about"),
     },
     {
       label: texts.RightNav.settings,

@@ -185,13 +185,13 @@ $green: rgba(0, 255, 0, 0.4);
     border-radius: unset;
     border-bottom-left-radius: $radius-default;
     color: var(--colorText);
-    background-color: var(--colorBackground);
+    background-color: $red-transparent;
     &::after {
       content: "X";
     }
 
     &:hover {
-      background-color: $red-transparent;
+      background-color: $red;
     }
   }
 

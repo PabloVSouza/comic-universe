@@ -7,7 +7,7 @@ import useComicData from "store/comic";
 import useLang from "lang";
 import style from "./style.module.scss";
 
-const Search = () => {
+const ModalSearch = () => {
   const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
   const { list, resetComic } = useComicData((state) => state);
@@ -59,4 +59,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default ModalSearch;

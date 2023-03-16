@@ -3,7 +3,7 @@ import { electronAPI } from "@electron-toolkit/preload";
 import fs from "fs";
 import path from "path";
 
-const packageJson = fs.readFileSync("./package.json");
+const packageJson = fs.readFileSync(__dirname + "/../../package.json");
 const { version, description, repository, license, author } =
   JSON.parse(packageJson);
 

@@ -16,7 +16,7 @@ const TopBar = () => {
           icon={downloadIcon}
           size="xs"
           theme="pure"
-          to="/?modal=Search"
+          to="/?modal=search"
         />
       </div>
       <div className={style.groupRight}>

@@ -34,6 +34,7 @@
     "react-html-parser": "^2.0.2",
     "react-paginate": "^8.1.4",
     "react-router-dom": "^6.8.1",
+    "react-select": "^5.7.0",
     "react-simple-img": "^3.0.0",
     "realm": "^11.5.1",
     "sass": "^1.58.3",

@@ -123,6 +123,7 @@ const initialState = (set) => ({
 
   setComicData: (data) => set(async (state) => await merge(state, data)),
 
+  setType: (type) => set((state) => ({ ...state, type })),
   resetComic: () =>
     set((state) => ({ ...initialState(set), list: state.list })),
 });

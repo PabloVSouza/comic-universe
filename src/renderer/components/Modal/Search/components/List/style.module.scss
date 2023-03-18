@@ -46,19 +46,9 @@
 
     .previous,
     .next {
+      background: $green-transparent;
       padding: 0 10px;
       color: $black;
-    }
-
-    .previous {
-      background: $red-transparent;
-      &:hover {
-        background: $red;
-      }
-    }
-
-    .next {
-      background: $green-transparent;
       &:hover {
         background: $green;
       }

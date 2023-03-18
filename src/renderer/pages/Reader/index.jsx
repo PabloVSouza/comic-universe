@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import slugify from "slugify";
 
 import Image from "components/Image";
+import Modal from "components/Modal";
 
 import useReader from "store/reader";
 import useGlobal from "store/global";
@@ -99,33 +100,36 @@ const Reader = () => {
   };
 
   return (
-    <div
-      className={style.Reader}
-      onMouseMoveCapture={(e) => defineMousePos(e)}
-      onContextMenu={() => setZoomVisible(!zoomVisible)}
-    >
-      {pages.length > 0 && (
-        <ZoomWindow
-          mousePos={mousePos}
-          image={getPath(pages[page] ?? pages[0])}
-          visible={zoomVisible}
-        />
-      )}
-      <div className={style.pages} style={position}>
-        {pages?.map((currentPage) => (
-          <div key={currentPage} className={style.page}>
-            <div className={style.buttons}>
-              <button
-                className={style.btnPrevious}
-                onClick={() => previousPage()}
-              />
-              <button className={style.btnNext} onClick={() => nextPage()} />
+    <>
+      <Modal modal="" />
+      <div
+        className={style.Reader}
+        onMouseMoveCapture={(e) => defineMousePos(e)}
+        onContextMenu={() => setZoomVisible(!zoomVisible)}
+      >
+        {pages.length > 0 && (
+          <ZoomWindow
+            mousePos={mousePos}
+            image={getPath(pages[page] ?? pages[0])}
+            visible={zoomVisible}
+          />
+        )}
+        <div className={style.pages} style={position}>
+          {pages?.map((currentPage) => (
+            <div key={currentPage} className={style.page}>
+              <div className={style.buttons}>
+                <button
+                  className={style.btnPrevious}
+                  onClick={() => previousPage()}
+                />
+                <button className={style.btnNext} onClick={() => nextPage()} />
+              </div>
+              <Image className={style.Image} src={getPath(currentPage)} />
             </div>
-            <Image className={style.Image} src={getPath(currentPage)} />
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

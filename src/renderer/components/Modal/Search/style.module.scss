@@ -1,6 +1,6 @@
 .searchComic {
-  width: calc(100% - 40px);
-  height: calc(100% - 40px);
+  width: 90%;
+  height: 90%;
   max-width: 1000px;
   padding-top: 20px;
   background: var(--modalBackground);
@@ -9,31 +9,66 @@
     .searchInput {
       display: flex;
       width: 90%;
-      background-color: var(--colorBackground);
       box-shadow: $shadow-default;
-      border-radius: $radius-default;
-      padding: 0 20px;
       margin: 20px;
       height: 50px;
+      align-items: center;
       justify-content: center;
 
-      .input {
-        border: none;
-        background-color: transparent;
-        color: var(--colorText);
-        font-size: 18px;
-        flex-grow: 1;
+      .inputSelect {
+        margin-right: 1px;
+        width: 130px;
+        border-radius: $radius-default 0 0 $radius-default;
+        &:hover {
+          background: var(--colorHover);
+          [class$="-control"] {
+            color: var(--colorTextHightlight);
+          }
+        }
+
+        &,
+        * {
+          cursor: pointer;
+          transition: $transition-default;
+        }
       }
-      .searchIcon {
-        width: 30px;
+
+      .inputText {
+        flex-grow: 1;
+        padding: 0 20px;
+        .inputElement {
+          border: none;
+          height: 100%;
+          width: 100%;
+          background: transparent;
+          color: var(--colorText);
+          font-size: 18px;
+        }
+      }
+
+      .inputIcon {
+        padding-right: 20px;
+        border-radius: 0 $radius-default $radius-default;
+        .searchIcon {
+          width: 30px;
+          height: 30px;
+          aspect-ratio: 1/1;
+          -webkit-mask-image: url("assets/magnifying-glass-search.svg");
+          -webkit-mask-size: contain;
+          -webkit-mask-position: center;
+          -webkit-mask-repeat: no-repeat;
+          -webkit-mask-origin: content-box;
+          background-color: var(--colorText);
+          opacity: 0.5;
+        }
+      }
+
+      .inputBlock {
+        background-color: var(--colorBackground);
         height: 100%;
-        -webkit-mask-image: url("assets/magnifying-glass-search.svg");
-        -webkit-mask-size: contain;
-        -webkit-mask-position: center;
-        -webkit-mask-repeat: no-repeat;
-        -webkit-mask-origin: content-box;
-        background-color: var(--colorText);
-        opacity: 0.5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
 

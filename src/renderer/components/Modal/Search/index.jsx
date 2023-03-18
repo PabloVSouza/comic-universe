@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
+import classNames from "classnames";
 import Window from "components/Window";
 import SearchComicList from "./components/List";
-
+import Select from "components/Select";
 import useComicData from "store/comic";
 
 import useLang from "lang";
@@ -10,7 +11,9 @@ import style from "./style.module.scss";
 const ModalSearch = () => {
   const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
-  const { list, resetComic } = useComicData((state) => state);
+  const { list, getList, resetComic, type, setType } = useComicData(
+    (state) => state
+  );
 
   const texts = useLang();
 
@@ -24,11 +27,20 @@ const ModalSearch = () => {
       : setFilteredList(list);
   };
 
+  const selectOptions = [
+    { value: "hq", label: "HQs" },
+    { value: "manga", label: "Mangás" },
+  ];
+
   useMemo(() => {
     if (list.length == 0) {
       setList();
     }
   }, []);
+
+  useMemo(() => {
+    getList();
+  }, [type]);
 
   useMemo(() => {
     setList();
@@ -43,14 +55,26 @@ const ModalSearch = () => {
       contentClassName={style.content}
     >
       <div className={style.searchInput}>
-        <input
-          className={style.input}
-          placeholder={texts.SearchComic.textPlaceholder}
-          type="text"
-          onChange={(e) => setSearch(e.target.value)}
-        />
-
-        <div className={style.searchIcon} />
+        <div className={classNames(style.inputBlock, style.inputSelect)}>
+          <Select
+            className={style.select}
+            defaultValue={selectOptions.find((val) => val.value === type)}
+            options={selectOptions}
+            onChange={(option) => setType(option.value)}
+            isSearchable={false}
+          />
+        </div>
+        <div className={classNames(style.inputBlock, style.inputText)}>
+          <input
+            className={style.inputElement}
+            placeholder={texts.SearchComic.textPlaceholder}
+            type="text"
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className={classNames(style.inputBlock, style.inputIcon)}>
+          <div className={style.searchIcon} />
+        </div>
       </div>
       <div className={style.result}>
         <SearchComicList list={filteredList} />

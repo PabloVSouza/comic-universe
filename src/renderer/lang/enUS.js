@@ -33,6 +33,14 @@ const RightNav = {
   changeUser: "Change User",
 };
 
+const Users = {
+  header: "Select Your User",
+  createButton: "Create new User",
+  saveButton: "Save Info",
+  cancelButton: "Cancel",
+  namePlaceholder: "User Name",
+};
+
 const lang = {
   SearchComic,
   Dashboard,

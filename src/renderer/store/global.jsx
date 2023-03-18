@@ -4,7 +4,6 @@ import { persist, createJSONStorage } from "zustand/middleware";
 const { invoke } = window.Electron.ipcRenderer;
 
 const initialState = (set) => ({
-  lang: "ptBR",
   appPath: "",
   menuVisible: false,
 
@@ -34,8 +33,18 @@ export const usePersistedData = create(
   persist(
     (set, get) => ({
       theme: "dark",
+      lang: "ptBR",
+      currentUser: {},
+
       switchTheme: (theme) =>
         set({ theme: theme || get().theme === "dark" ? "light" : "dark" }),
+
+      changeLanguage: (lang) =>
+        set({
+          lang: lang || get().lang === "ptBR" ? "enUS" : "ptBR",
+        }),
+
+      setCurrentUser: (currentUser) => set({ currentUser }),
     }),
     {
       name: "comic-universe",

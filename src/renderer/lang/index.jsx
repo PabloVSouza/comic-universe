@@ -1,10 +1,10 @@
-import useGlobal from "store/global";
+import { usePersistedData } from "store/global";
 
 import ptBR from "./ptBR";
 import enUS from "./enUS";
 
 const useLang = () => {
-  const { lang } = useGlobal((state) => state);
+  const { lang } = usePersistedData((state) => state);
 
   const langList = {
     ptBR,

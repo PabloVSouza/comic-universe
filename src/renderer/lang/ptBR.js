@@ -33,11 +33,20 @@ const RightNav = {
   changeUser: "Trocar de Usuário",
 };
 
+const Users = {
+  header: "Selecione o seu Usuário",
+  createButton: "Criar Usuário",
+  saveButton: "Salvar Usuário",
+  cancelButton: "Cancelar",
+  namePlaceholder: "Nome do Usuário",
+};
+
 const lang = {
   SearchComic,
   Dashboard,
   DownloadComic,
   RightNav,
+  Users,
 };
 
 export default lang;

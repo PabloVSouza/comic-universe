@@ -1,8 +1,9 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+
 const { invoke } = window.Electron.ipcRenderer;
 
 const initialState = (set) => ({
-  theme: "dark",
   lang: "ptBR",
   appPath: "",
   menuVisible: false,
@@ -28,6 +29,20 @@ const initialState = (set) => ({
 
   resetGlobal: (set) => set(initialState(set)),
 });
+
+export const usePersistedData = create(
+  persist(
+    (set, get) => ({
+      theme: "dark",
+      switchTheme: (theme) =>
+        set({ theme: theme || get().theme === "dark" ? "light" : "dark" }),
+    }),
+    {
+      name: "comic-universe",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
 
 const useGlobal = create((set) => initialState(set));
 export default useGlobal;

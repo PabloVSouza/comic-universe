@@ -6,7 +6,7 @@ import Cover from "components/Cover";
 
 import useLang from "lang";
 
-import useGlobal from "store/global";
+import useGlobal, { usePersistedData } from "store/global";
 
 import style from "./style.module.scss";
 
@@ -16,7 +16,9 @@ import darkmodeIcon from "assets/darkmode.svg";
 import userIcon from "assets/user.svg";
 
 const RightNav = () => {
-  const { menuVisible, switchTheme, toggleMenu } = useGlobal((state) => state);
+  const { menuVisible, toggleMenu } = useGlobal((state) => state);
+  const { switchTheme } = usePersistedData((state) => state);
+
   const navigate = useNavigate();
   const texts = useLang();
 

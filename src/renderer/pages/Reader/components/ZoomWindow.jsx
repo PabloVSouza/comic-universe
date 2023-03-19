@@ -22,7 +22,7 @@ const ZoomWindow = ({ mousePos, image, visible }) => {
   };
 
   const changeZoomFactor = (e) => {
-    let delta = e.deltaY;
+    const delta = e.deltaY;
 
     if (delta > 0) {
       if (zoomFactor - 1 >= 2) {

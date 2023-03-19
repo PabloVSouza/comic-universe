@@ -1,0 +1,44 @@
+.message {
+  width: 400px;
+  height: 250px;
+  border-radius: $radius-default;
+  box-shadow: $shadow-default;
+  background: $black-transparent;
+  color: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+
+  img {
+    height: 100px;
+  }
+
+  .progressBar {
+    display: flex;
+    flex-direction: column;
+    height: 60px;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    position: relative;
+    background: $white-transparent;
+    border-radius: $radius-default;
+    p {
+      position: absolute;
+      margin: 0 auto;
+      left: 0;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: 500;
+    }
+
+    .bar {
+      background: $green-transparent;
+      flex-grow: 1;
+      border-radius: $radius-default;
+    }
+  }
+}

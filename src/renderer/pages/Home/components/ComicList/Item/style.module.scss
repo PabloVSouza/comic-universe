@@ -1,0 +1,34 @@
+.comicListItem {
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  background: var(--colorBackground);
+  cursor: pointer;
+
+  &:hover,
+  &.active {
+    background: var(--colorHover);
+    color: var(--colorTextHighlight);
+  }
+
+  .name {
+    flex-grow: 1;
+    padding: 5px 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .cover {
+    flex-shrink: 0;
+    height: 100%;
+    aspect-ratio: 10/16;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+}

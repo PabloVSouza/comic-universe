@@ -1,0 +1,41 @@
+.DashboardHeader {
+  height: 300px;
+  width: 100%;
+  flex-shrink: 0;
+  background: var(--colorBackground);
+  display: flex;
+
+  .texts {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    .title {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      h1,
+      p {
+        text-align: center;
+      }
+    }
+
+    .synopsis {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      padding: 10px;
+
+      p {
+        height: 100%;
+        line-height: 1.5;
+      }
+    }
+  }
+  .cover {
+    height: 100%;
+    object-fit: fill;
+  }
+}

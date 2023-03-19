@@ -1,0 +1,45 @@
+.Reader {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+
+  .pages {
+    height: 100%;
+    display: flex;
+
+    .page {
+      flex-shrink: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+
+      .buttons {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        .btnPrevious,
+        .btnNext {
+          width: 100px;
+          height: 100%;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+
+          &:hover {
+            background: var(--colorHighlight);
+          }
+        }
+      }
+
+      .Image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+}

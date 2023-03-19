@@ -1,13 +1,3 @@
-const SearchComic = {
-  textPlaceholder: "Digite sua Busca",
-  goToPage: "Ir para a Página",
-  chapters: "Capítulos",
-  pagination: {
-    previous: "Anterior",
-    next: "Próxima",
-  },
-};
-
 const Dashboard = {
   setComplete: "Definir como Lido",
   resetProgress: "Remover Progresso",
@@ -33,6 +23,33 @@ const RightNav = {
   changeUser: "Trocar de Usuário",
 };
 
+const SearchComic = {
+  textPlaceholder: "Digite sua Busca",
+  goToPage: "Ir para a Página",
+  chapters: "Capítulos",
+  pagination: {
+    previous: "Anterior",
+    next: "Próxima",
+  },
+};
+
+const Settings = {
+  title: "Configurações",
+  pages: {
+    header: "Troca de páginas",
+    pageDirectionOptions: {
+      leftToRight: "Esquerda para Direita",
+      rightToLeft: "Direita para Esquerda",
+    },
+  },
+  wallpaper: {
+    header: "Selecione o Papel de Parede",
+    wallpaperMode: "Modo do Papel de Parede",
+    uploadWallpaper: "Envie um Papel de Parede",
+  },
+  selectLanguage: "Selecione o Idioma do App",
+};
+
 const Users = {
   header: "Selecione o seu Usuário",
   createButton: "Criar Usuário",
@@ -42,10 +59,11 @@ const Users = {
 };
 
 const lang = {
-  SearchComic,
   Dashboard,
   DownloadComic,
   RightNav,
+  SearchComic,
+  Settings,
   Users,
 };
 

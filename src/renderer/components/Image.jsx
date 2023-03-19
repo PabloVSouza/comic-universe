@@ -19,8 +19,8 @@ const Image = ({ placeholder, pure, src, svg, ...props }) => {
         key={src}
         placeholder={placeholder || (!pure ? false : "")}
         src={src}
-        {...props}
         style={!!svg ? iconStyle : {}}
+        {...props}
       />
     )
   );

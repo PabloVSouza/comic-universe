@@ -17,7 +17,8 @@
       "pages/*": ["./pages/*"],
       "routes/*": ["./routes/*"],
       "scss/*": ["./scss/*"],
-      "store/*": ["./store/*"]
+      "store/*": ["./store/*"],
+      "@types/*": ["./@types/*"]
     }
   }
 }

@@ -1,54 +1,56 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 
-import classNames from "classnames";
+import classNames from 'classnames'
 
-import Cover from "components/Cover";
+import Cover from 'components/Cover'
 
-import useLang from "lang";
+import useLang from 'lang'
 
-import useGlobal, { usePersistedData } from "store/global";
+import useGlobal from 'store/global'
 
-import style from "./style.module.scss";
+import usePersist from 'store/persist'
 
-import infoIcon from "assets/info.svg";
-import settingsIcon from "assets/settings.svg";
-import darkmodeIcon from "assets/darkmode.svg";
-import userIcon from "assets/user.svg";
+import style from './style.module.scss'
+
+import infoIcon from 'assets/info.svg'
+import settingsIcon from 'assets/settings.svg'
+import darkmodeIcon from 'assets/darkmode.svg'
+import userIcon from 'assets/user.svg'
 
 const RightNav = () => {
-  const { menuVisible, toggleMenu } = useGlobal((state) => state);
-  const { switchTheme } = usePersistedData((state) => state);
+  const { menuVisible, toggleMenu } = useGlobal()
+  const { switchTheme } = usePersist()
 
-  const navigate = useNavigate();
-  const texts = useLang();
+  const navigate = useNavigate()
+  const texts = useLang()
 
   const options = [
     {
       label: texts.RightNav.about,
       icon: infoIcon,
-      onClick: () => navigate("/?modal=about"),
+      onClick: () => navigate('/?modal=about')
     },
     {
       label: texts.RightNav.settings,
       icon: settingsIcon,
-      onClick: () => navigate("/?modal=settings"),
+      onClick: () => navigate('/?modal=settings')
     },
     {
       label: texts.RightNav.darkMode,
       icon: darkmodeIcon,
-      onClick: () => switchTheme(),
+      onClick: () => switchTheme()
     },
     {
       label: texts.RightNav.changeUser,
       icon: userIcon,
-      onClick: () => navigate("/users"),
-    },
-  ];
+      onClick: () => navigate('/users')
+    }
+  ]
 
   const handleClick = (onClick) => {
-    toggleMenu();
-    onClick();
-  };
+    toggleMenu()
+    onClick()
+  }
 
   return (
     <Cover
@@ -58,16 +60,13 @@ const RightNav = () => {
       <ul>
         {options.map((option) => (
           <li onClick={() => handleClick(option.onClick)} key={option.label}>
-            <div
-              className={style.icon}
-              style={{ WebkitMaskImage: `url(${option.icon})` }}
-            />
+            <div className={style.icon} style={{ WebkitMaskImage: `url(${option.icon})` }} />
             <p>{option.label}</p>
           </li>
         ))}
       </ul>
     </Cover>
-  );
-};
+  )
+}
 
-export default RightNav;
+export default RightNav

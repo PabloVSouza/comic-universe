@@ -27,16 +27,16 @@ const Button = ({
   theme,
   to,
   ...props
-}: Button): JSX.Element => {
+}: Partial<Button>): JSX.Element => {
   const navigate = useNavigate()
 
   const classes = classNames(
     style.Button,
-    style[color],
-    style[theme],
-    style[`size-${size}`],
+    color ? style[color] : null,
+    theme ? style[theme] : null,
+    size ? style[`size-${size}`] : null,
     className,
-    active ? style.active : ''
+    active ? style.active : null
   )
   const handleClick = (): void => {
     if (onClick) onClick()

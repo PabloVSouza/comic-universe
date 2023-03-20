@@ -1,12 +1,12 @@
-import Button from "components/Button";
+import Button from 'components/Button'
 
-import style from "./style.module.scss";
+import style from './style.module.scss'
 
-import downloadIcon from "assets/download-icon.svg";
-import useGlobal from "store/global";
+import downloadIcon from 'assets/download-icon.svg'
+import useGlobal from 'store/global'
 
-const TopBar = () => {
-  const { toggleMenu, menuVisible } = useGlobal((state) => state);
+const TopBar = (): JSX.Element => {
+  const { toggleMenu, menuVisible } = useGlobal((state) => state)
 
   return (
     <div className={style.topBar}>
@@ -25,11 +25,11 @@ const TopBar = () => {
           size="xs"
           active={menuVisible}
           theme="burguer"
-          onClick={() => toggleMenu()}
+          onClick={(): void => toggleMenu()}
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TopBar;
+export default TopBar

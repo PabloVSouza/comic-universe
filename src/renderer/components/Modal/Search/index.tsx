@@ -2,20 +2,20 @@ import { useState, useMemo } from 'react'
 import classNames from 'classnames'
 import Window from 'components/Window'
 import SearchComicList from './components/List'
-import Select from 'components/Select'
+// import Select from 'components/Select'
 import useComicData from 'store/comic'
-
 import useLang from 'lang'
 import style from './style.module.scss'
+import Select from 'react-select'
 
-const ModalSearch = () => {
+const ModalSearch = (): JSX.Element => {
   const [search, setSearch] = useState('')
-  const [filteredList, setFilteredList] = useState([])
+  const [filteredList, setFilteredList] = useState<Comic[]>([])
   const { list, getList, resetComic, type, setType } = useComicData((state) => state)
 
   const texts = useLang()
 
-  const setList = () => {
+  const setList = (): void => {
     search.length > 0
       ? setFilteredList(
           list.filter((val) => val.name.toUpperCase().startsWith(search.toUpperCase()))
@@ -28,10 +28,12 @@ const ModalSearch = () => {
     { value: 'manga', label: 'Mangás' }
   ]
 
+  const handleChange = (option): void => {
+    if (option) setType(option.value)
+  }
+
   useMemo(() => {
-    if (list.length == 0) {
-      setList()
-    }
+    if (list.length == 0) setList()
   }, [])
 
   useMemo(() => {
@@ -46,7 +48,7 @@ const ModalSearch = () => {
     <Window
       close
       to={'/'}
-      onClick={() => resetComic()}
+      onClick={(): void => resetComic()}
       className={style.searchComic}
       contentClassName={style.content}
     >
@@ -56,7 +58,7 @@ const ModalSearch = () => {
             className={style.select}
             defaultValue={selectOptions.find((val) => val.value === type)}
             options={selectOptions}
-            onChange={(option) => setType(option.value)}
+            onChange={handleChange}
             isSearchable={false}
           />
         </div>
@@ -65,7 +67,7 @@ const ModalSearch = () => {
             className={style.inputElement}
             placeholder={texts.SearchComic.textPlaceholder}
             type="text"
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e): void => setSearch(e.target.value)}
           />
         </div>
         <div className={classNames(style.inputBlock, style.inputIcon)}>

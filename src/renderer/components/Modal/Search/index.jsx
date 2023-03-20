@@ -1,55 +1,51 @@
-import { useState, useMemo } from "react";
-import classNames from "classnames";
-import Window from "components/Window";
-import SearchComicList from "./components/List";
-import Select from "components/Select";
-import useComicData from "store/comic";
+import { useState, useMemo } from 'react'
+import classNames from 'classnames'
+import Window from 'components/Window'
+import SearchComicList from './components/List'
+import Select from 'components/Select'
+import useComicData from 'store/comic'
 
-import useLang from "lang";
-import style from "./style.module.scss";
+import useLang from 'lang'
+import style from './style.module.scss'
 
 const ModalSearch = () => {
-  const [search, setSearch] = useState("");
-  const [filteredList, setFilteredList] = useState([]);
-  const { list, getList, resetComic, type, setType } = useComicData(
-    (state) => state
-  );
+  const [search, setSearch] = useState('')
+  const [filteredList, setFilteredList] = useState([])
+  const { list, getList, resetComic, type, setType } = useComicData((state) => state)
 
-  const texts = useLang();
+  const texts = useLang()
 
   const setList = () => {
     search.length > 0
       ? setFilteredList(
-          list.filter((val) =>
-            val.name.toUpperCase().startsWith(search.toUpperCase())
-          )
+          list.filter((val) => val.name.toUpperCase().startsWith(search.toUpperCase()))
         )
-      : setFilteredList(list);
-  };
+      : setFilteredList(list)
+  }
 
   const selectOptions = [
-    { value: "hq", label: "HQs" },
-    { value: "manga", label: "Mangás" },
-  ];
+    { value: 'hq', label: 'HQs' },
+    { value: 'manga', label: 'Mangás' }
+  ]
 
   useMemo(() => {
     if (list.length == 0) {
-      setList();
+      setList()
     }
-  }, []);
+  }, [])
 
   useMemo(() => {
-    getList();
-  }, [type]);
+    getList()
+  }, [type])
 
   useMemo(() => {
-    setList();
-  }, [list, search]);
+    setList()
+  }, [list, search])
 
   return (
     <Window
       close
-      to={"/"}
+      to={'/'}
       onClick={() => resetComic()}
       className={style.searchComic}
       contentClassName={style.content}
@@ -80,7 +76,7 @@ const ModalSearch = () => {
         <SearchComicList list={filteredList} />
       </div>
     </Window>
-  );
-};
+  )
+}
 
-export default ModalSearch;
+export default ModalSearch

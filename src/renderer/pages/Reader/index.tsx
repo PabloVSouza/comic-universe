@@ -9,14 +9,14 @@ import useReader from 'store/reader'
 import useGlobal from 'store/global'
 
 import style from './style.module.scss'
-import ZoomWindow from './components/ZoomWindow'
+import ZoomWindow, { MousePos } from './components/ZoomWindow'
 
 const Reader = (): JSX.Element => {
   const navigate = useNavigate()
 
   const { comicId, number } = useParams()
 
-  const [mousePos, setMousePos] = useState({})
+  const [mousePos, setMousePos] = useState<MousePos>({} as MousePos)
   const [zoomVisible, setZoomVisible] = useState(false)
 
   const { appPath } = useGlobal((state) => state)

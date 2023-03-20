@@ -1,13 +1,11 @@
-import { create } from "zustand";
+import { create } from 'zustand'
 
 const initialState = (set) => ({
   usersList: [],
 
-  getUsersList: async () => {},
+  getUsersList: async () => {}
+})
 
-  resetLoading: () => set(initialState),
-});
+const useUsers = create((set) => initialState(set))
 
-const useUsers = create((set) => initialState(set));
-
-export default useUsers;
+export default useUsers

@@ -6,25 +6,24 @@ import ModalSettings from './Settings'
 import style from './style.module.scss'
 
 interface Modal {
-  modal: string
+  modal?: string
 }
 
-const useModal = ({ modal }: Modal): (() => JSX.Element) | null => {
+const useModal = ({ modal }: Modal): (() => JSX.Element) => {
   if (modal === 'search') return ModalSearch
   if (modal === 'about') return ModalAbout
   if (modal === 'settings') return ModalSettings
-  return null
+  const Empty = (): JSX.Element => <></>
+  return Empty
 }
 
-const Modal = ({ modal, ...props }: Modal): JSX.Element | void => {
+const Modal = ({ modal, ...props }: Modal): JSX.Element => {
   const ModalComponent = useModal({ modal })
-
-  if (ModalComponent)
-    return (
-      <Cover visible index="2" className={style.modal}>
-        {<ModalComponent {...props} />}
-      </Cover>
-    )
+  return (
+    <Cover visible index="2" className={style.modal}>
+      {<ModalComponent {...props} />}
+    </Cover>
+  )
 }
 
 export default Modal

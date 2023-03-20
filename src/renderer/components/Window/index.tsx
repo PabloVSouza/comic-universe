@@ -4,13 +4,13 @@ import Button from 'components/Button'
 import classNames from 'classnames'
 
 interface Window {
-  children: ReactNode
-  close: boolean
-  closebar: boolean
-  className: string
-  contentClassName: string
-  onClick: () => void
-  to: string
+  children?: ReactNode
+  close?: boolean
+  closebar?: boolean
+  className?: string
+  contentClassName?: string
+  onClick?: () => void
+  to?: string
 }
 
 const Window = ({

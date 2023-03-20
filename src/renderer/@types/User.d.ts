@@ -1,4 +1,7 @@
 interface User {
-  _id: string
   name: string
+  _id: string
+  createdAt: {
+    $$date: number
+  }
 }

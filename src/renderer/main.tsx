@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { HashRouter } from 'react-router-dom'
 import ReactDOM from 'react-dom/client'
 import Routes from 'routes'

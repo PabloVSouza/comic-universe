@@ -5,7 +5,7 @@ interface useDashboard {
   activeComic: Comic
   chapters: Chapter[]
   list: Comic[]
-  readProgress: []
+  readProgress: ReadProgress[]
   getListDB: () => Promise<void>
   getChaptersDB: () => Promise<void>
   getReadProgressDB: () => Promise<void>

@@ -1,10 +1,10 @@
-import { CSSProperties, ReactNode } from 'react'
+import { ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 
 import style from './style.module.scss'
 
-interface Button {
+interface Button extends ButtonHTMLAttributes<unknown> {
   active: boolean
   className: string
   children: ReactNode

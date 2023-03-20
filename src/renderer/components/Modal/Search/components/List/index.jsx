@@ -1,30 +1,32 @@
-import { useState, useEffect } from "react";
-import ReactPaginate from "react-paginate";
+import { useState } from 'react'
+import ReactPaginate from 'react-paginate'
 
-import ComicListItem from "./Item/Item";
+import ComicListItem from './Item/Item'
 
-import useLang from "lang";
+import useLang from 'lang'
+import useComic from 'store/comic'
 
-import style from "./style.module.scss";
+import style from './style.module.scss'
 
-const SearchComicList = ({ list, itemsPerPage = 10, reset }) => {
-  const [offset, setOffset] = useState(0);
-  const endOffset = offset + itemsPerPage;
-  const currentItems = list.slice(offset, endOffset);
-  const totalPages = Math.ceil(list.length / itemsPerPage);
+const SearchComicList = ({ list, itemsPerPage = 10 }) => {
+  const [offset, setOffset] = useState(0)
+  const endOffset = offset + itemsPerPage
+  const currentItems = list.slice(offset, endOffset)
+  const totalPages = Math.ceil(list.length / itemsPerPage)
 
-  const texts = useLang();
+  const texts = useLang()
+  const { getDetails } = useComic()
 
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % list.length;
-    setOffset(newOffset);
-  };
+    const newOffset = (event.selected * itemsPerPage) % list.length
+    setOffset(newOffset)
+  }
 
   return (
     <div className={style.searchComicList}>
       <ul className={style.list}>
         {currentItems.map((comic) => {
-          return <ComicListItem data={comic} id={comic.id} key={comic.id} />;
+          return <ComicListItem data={comic} id={comic.id} key={comic.id} />
         })}
       </ul>
 
@@ -45,7 +47,7 @@ const SearchComicList = ({ list, itemsPerPage = 10, reset }) => {
         renderOnZeroPageCount={null}
       />
     </div>
-  );
-};
+  )
+}
 
-export default SearchComicList;
+export default SearchComicList

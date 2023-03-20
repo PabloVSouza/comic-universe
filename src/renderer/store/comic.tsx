@@ -1,19 +1,38 @@
-import { create } from 'zustand'
+import { create, StoreApi } from 'zustand'
 import merge from 'lodash.merge'
 
 const { invoke } = window.Electron.ipcRenderer
 
-const initialState = (set) => ({
+interface useComic {
+  type: string
+  comic: Comic
+  queue: Chapter[]
+  chapters: Chapter[]
+  downloadedChapters: Chapter[]
+  list: Comic[]
+  selectedComic: Comic
+  getComicData: (id: string) => Promise<void>
+  getList: () => Promise<void>
+  getDetails: (id: string) => Promise<void>
+  getChapters: () => Promise<void>
+  downloadChapter: (chapter: Chapter) => Promise<void>
+  setComic: (data: Comic) => void
+  setQueue: (data: Chapter[]) => void
+  setType: (type: string) => void
+  resetComic: () => void
+}
+
+const initialState = (set: StoreApi<unknown>['setState']): useComic => ({
   type: 'hq',
-  comic: {},
+  comic: {} as Comic,
   queue: [],
   chapters: [],
   downloadedChapters: [],
   list: [],
-  selectedComic: {},
+  selectedComic: {} as Comic,
 
-  getComicData: async (id) => {
-    const data = {}
+  getComicData: async (id): Promise<void> => {
+    const data = {} as useComic
     const inDatabase = await invoke('getComicDB', { id: String(id) })
 
     if (inDatabase) {
@@ -31,48 +50,48 @@ const initialState = (set) => ({
     if (!inDatabase) {
       if (state.list.length === 0) await state.getList()
 
-      const comic = await state.list.find((val) => val.id == id)
+      const comic = state.list.find((val) => val.id == id) as Comic
 
       if (!comic.synopsis || !comic.cover) await state.getDetails(id)
 
       data.comic = comic
     }
 
-    await state.setComicData(data)
+    set((state: useComic) => ({ ...state, ...data }))
     await state.getChapters()
-  },
-
-  getList: async () => {
-    const { type } = useComicData.getState()
-
-    const list = await invoke('getList', { type })
-    return new Promise((resolve) => {
-      resolve(
-        set(async (state) => {
-          const data = await merge(state, { list })
-          return data
-        })
-      )
-    })
-  },
-
-  getDetails: async (id) => {
-    const { list, type, setComicData } = useComicData.getState()
-
-    const data = await invoke('getDetails', { type, id })
-
-    let item = list.find((val) => val.id == id)
-
-    item = await merge(item, data)
-
-    await setComicData({ list })
 
     return new Promise((resolve) => {
       resolve()
     })
   },
 
-  getChapters: async (id) => {
+  getList: async (): Promise<void> => {
+    const { type } = useComicData.getState()
+    const list = await invoke('getList', { type })
+
+    return new Promise((resolve) => {
+      set((state: useComic) => ({ ...state, list }))
+      resolve()
+    })
+  },
+
+  getDetails: async (id): Promise<void> => {
+    const { list, type } = useComicData.getState()
+
+    const data = await invoke('getDetails', { type, id })
+
+    const index = list.findIndex((val) => val.id == id)
+
+    list[index] = await merge(list[index], data)
+
+    set((state: useComic) => ({ ...state, list }))
+
+    return new Promise((resolve) => {
+      resolve()
+    })
+  },
+
+  getChapters: async (): Promise<void> => {
     const { type } = useComicData.getState()
 
     const { comic } = useComicData.getState()
@@ -82,12 +101,12 @@ const initialState = (set) => ({
       : comic.chapters
 
     return new Promise((resolve) => {
-      set(async (state) => await merge(state, { chapters }))
+      set((state: useComic) => ({ ...state, chapters }))
       resolve()
     })
   },
 
-  downloadChapter: async (chapter) => {
+  downloadChapter: async (chapter): Promise<void> => {
     const { comic, type, getComicData } = useComicData.getState()
 
     if (!chapter.pages) {
@@ -119,15 +138,14 @@ const initialState = (set) => ({
     })
   },
 
-  setQueue: (data) => set((state) => ({ ...state, queue: data })),
+  setComic: (data) => set((state: useComic) => ({ ...state, selectedComic: data })),
+  setQueue: (data) => set((state: useComic) => ({ ...state, queue: data })),
+  setType: (type) => set((state: useComic) => ({ ...state, type })),
 
-  setComicData: (data) => set(async (state) => await merge(state, data)),
-
-  setType: (type) => set((state) => ({ ...state, type })),
-  resetComic: () => set((state) => ({ ...initialState(set), list: state.list }))
+  resetComic: () => set((state: useComic) => ({ ...initialState(set), list: state.list }))
 })
 
-const useComicData = create((set) => initialState(set))
+const useComicData = create<useComic>((set) => initialState(set))
 
 const state = useComicData.getState()
 

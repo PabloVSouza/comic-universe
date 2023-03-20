@@ -20,12 +20,10 @@ const Main = ({ children }: Props): JSX.Element => {
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <HashRouter>
-      <Main>
-        <Loading />
-        <Routes />
-      </Main>
-    </HashRouter>
-  </React.StrictMode>
+  <HashRouter>
+    <Main>
+      <Loading />
+      <Routes />
+    </Main>
+  </HashRouter>
 )

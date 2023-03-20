@@ -9,7 +9,7 @@ interface useDashboard {
   getListDB: () => Promise<void>
   getChaptersDB: () => Promise<void>
   getReadProgressDB: () => Promise<void>
-  changeReadProgress: (chapter: Chapter, page: string) => Promise<void>
+  changeReadProgress: (chapter: Chapter, page: number) => Promise<void>
   setActiveComic: (comic: Comic) => void
 }
 

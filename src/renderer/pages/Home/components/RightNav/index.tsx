@@ -17,7 +17,7 @@ import settingsIcon from 'assets/settings.svg'
 import darkmodeIcon from 'assets/darkmode.svg'
 import userIcon from 'assets/user.svg'
 
-const RightNav = () => {
+const RightNav = (): JSX.Element => {
   const { menuVisible, toggleMenu } = useGlobal()
   const { switchTheme } = usePersist()
 
@@ -28,26 +28,26 @@ const RightNav = () => {
     {
       label: texts.RightNav.about,
       icon: infoIcon,
-      onClick: () => navigate('/?modal=about')
+      onClick: (): void => navigate('/?modal=about')
     },
     {
       label: texts.RightNav.settings,
       icon: settingsIcon,
-      onClick: () => navigate('/?modal=settings')
+      onClick: (): void => navigate('/?modal=settings')
     },
     {
       label: texts.RightNav.darkMode,
       icon: darkmodeIcon,
-      onClick: () => switchTheme()
+      onClick: (): void => switchTheme()
     },
     {
       label: texts.RightNav.changeUser,
       icon: userIcon,
-      onClick: () => navigate('/users')
+      onClick: (): void => navigate('/users')
     }
   ]
 
-  const handleClick = (onClick) => {
+  const handleClick = (onClick: () => void): void => {
     toggleMenu()
     onClick()
   }
@@ -59,7 +59,7 @@ const RightNav = () => {
     >
       <ul>
         {options.map((option) => (
-          <li onClick={() => handleClick(option.onClick)} key={option.label}>
+          <li onClick={(): void => handleClick(option.onClick)} key={option.label}>
             <div className={style.icon} style={{ WebkitMaskImage: `url(${option.icon})` }} />
             <p>{option.label}</p>
           </li>

@@ -5,8 +5,8 @@ interface usePersist {
   theme: string
   lang: string
   currentUser: User
-  switchTheme: (theme: string) => void
-  changeLanguage: (lang: string) => void
+  switchTheme: (theme?: string) => void
+  changeLanguage: (lang?: string) => void
   setCurrentUser: (currentUser: User) => void
 }
 
@@ -15,7 +15,7 @@ const usePersist = create<usePersist>()(
     (set, get) => ({
       theme: 'dark',
       lang: 'ptBR',
-      currentUser: { _id: '', name: '' },
+      currentUser: {} as User,
 
       switchTheme: (theme): void =>
         set({ theme: theme || get().theme === 'dark' ? 'light' : 'dark' }),

@@ -9,7 +9,7 @@ interface useReader {
   pages: string[]
   chapters: Chapter[]
   activeComic: Comic
-  getChapterData: (comicId: string, number: string) => Promise<void>
+  getChapterData: (comicId?: string, number?: string) => Promise<void>
   changePage: (page: number) => Promise<void>
   setActiveComic: (activeComic: Comic) => void
   setChapters: (chapters: Chapter[]) => void

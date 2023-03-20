@@ -26,4 +26,6 @@ if (process.contextIsolated) {
   window.api = api
   // @ts-ignore (define in dts)
   window.app = app
+  // @ts-ignore (define in dts)
+  window.path = path
 }

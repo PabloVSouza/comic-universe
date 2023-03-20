@@ -1,13 +1,13 @@
+import { CSSProperties, ImgHTMLAttributes } from 'react'
 import { SimpleImg } from 'react-simple-img'
 
-interface Image {
-  placeholder: string
-  pure: boolean
-  src: string
-  svg: boolean
+interface Image extends ImgHTMLAttributes<unknown> {
+  placeholder?: string
+  pure?: boolean
+  svg?: boolean
 }
 
-const Image = ({ placeholder, pure, src, svg, ...props }: Image): JSX.Element | void => {
+const Image = ({ placeholder, pure, src, svg, ...props }: Partial<Image>): JSX.Element => {
   let Comp: typeof SimpleImg | string
   Comp = SimpleImg
   if (pure) Comp = 'img'
@@ -19,7 +19,7 @@ const Image = ({ placeholder, pure, src, svg, ...props }: Image): JSX.Element | 
     WebkitMaskPosition: 'center',
     WebkitMaskRepeat: 'no-repeat',
     WebkitMaskOrigin: 'content-box'
-  }
+  } as CSSProperties
 
   if (src)
     return (
@@ -27,10 +27,11 @@ const Image = ({ placeholder, pure, src, svg, ...props }: Image): JSX.Element | 
         key={src}
         placeholder={placeholder || (!pure ? false : '')}
         src={src}
-        style={svg ? iconStyle : {}}
+        style={svg ? iconStyle : undefined}
         {...props}
       />
     )
+  return <></>
 }
 
 export default Image

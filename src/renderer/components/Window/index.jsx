@@ -1,6 +1,6 @@
-import style from "./style.module.scss";
-import Button from "components/Button";
-import classNames from "classnames";
+import style from './style.module.scss'
+import Button from 'components/Button'
+import classNames from 'classnames'
 
 const Window = ({
   children,
@@ -22,11 +22,9 @@ const Window = ({
 
       {close && <Button theme="closeButton" onClick={onClick} to={to} />}
 
-      <div className={classNames(style.content, contentClassName)}>
-        {children}
-      </div>
+      <div className={classNames(style.content, contentClassName)}>{children}</div>
     </div>
-  );
-};
+  )
+}
 
-export default Window;
+export default Window

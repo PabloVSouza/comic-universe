@@ -3,10 +3,10 @@ import classNames from 'classnames'
 import style from './style.module.scss'
 
 interface Cover {
-  className: string
-  children: ReactNode
-  visible: boolean
-  index: number
+  className?: string
+  children?: ReactNode
+  visible?: boolean
+  index?: string
 }
 
 const Cover = ({ className, children, visible, index, ...props }: Cover): JSX.Element => {

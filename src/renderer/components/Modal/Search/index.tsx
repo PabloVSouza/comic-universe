@@ -2,11 +2,10 @@ import { useState, useMemo } from 'react'
 import classNames from 'classnames'
 import Window from 'components/Window'
 import SearchComicList from './components/List'
-// import Select from 'components/Select'
+import Select from 'react-select'
 import useComicData from 'store/comic'
 import useLang from 'lang'
 import style from './style.module.scss'
-import Select from 'react-select'
 
 const ModalSearch = (): JSX.Element => {
   const [search, setSearch] = useState('')
@@ -59,6 +58,7 @@ const ModalSearch = (): JSX.Element => {
             defaultValue={selectOptions.find((val) => val.value === type)}
             options={selectOptions}
             onChange={handleChange}
+            unstyled
             isSearchable={false}
           />
         </div>

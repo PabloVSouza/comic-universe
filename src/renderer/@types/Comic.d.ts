@@ -8,6 +8,7 @@ interface Comic {
   status?: string
   genres?: string[]
   synopsis: string
+  totalChapters?: number
   type: string
   _id: string
   createdAt: {

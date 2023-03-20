@@ -12,7 +12,11 @@ import Button from 'components/Button'
 
 import style from './style.module.scss'
 
-const ComicListItem = ({ data, ...props }) => {
+interface ComicListItem {
+  data: Comic
+}
+
+const ComicListItem = ({ data, ...props }: ComicListItem): JSX.Element => {
   const navigate = useNavigate()
 
   const texts = useLang()
@@ -27,14 +31,14 @@ const ComicListItem = ({ data, ...props }) => {
 
   const extended = selectedComic.id === data.id
 
-  const goToPage = () => {
+  const goToPage = (): void => {
     navigate(`/download/${selectedComic.id}`)
   }
 
   return (
     <li
       className={classNames(style.comicListItem, !!extended && style.extended)}
-      onClick={() => setComic(data)}
+      onClick={(): void => setComic(data)}
       {...props}
     >
       <div className={style.content}>
@@ -58,7 +62,7 @@ const ComicListItem = ({ data, ...props }) => {
       </div>
       {extended && (
         <div className={style.buttonArea}>
-          <Button theme="roundedRectangle" size="xl" color="green" onClick={() => goToPage()}>
+          <Button theme="roundedRectangle" size="xl" color="green" onClick={(): void => goToPage()}>
             {texts.SearchComic.goToPage}
           </Button>
         </div>

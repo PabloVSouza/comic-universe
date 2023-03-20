@@ -2,22 +2,24 @@ import { useState } from 'react'
 import ReactPaginate from 'react-paginate'
 
 import ComicListItem from './Item/Item'
-
 import useLang from 'lang'
-import useComic from 'store/comic'
 
 import style from './style.module.scss'
 
-const SearchComicList = ({ list, itemsPerPage = 10 }) => {
+interface SearchComicList {
+  list: Comic[]
+  itemsPerPage?: number
+}
+
+const SearchComicList = ({ list, itemsPerPage = 10 }: SearchComicList): JSX.Element => {
   const [offset, setOffset] = useState(0)
   const endOffset = offset + itemsPerPage
   const currentItems = list.slice(offset, endOffset)
   const totalPages = Math.ceil(list.length / itemsPerPage)
 
   const texts = useLang()
-  const { getDetails } = useComic()
 
-  const handlePageClick = (event) => {
+  const handlePageClick = (event): void => {
     const newOffset = (event.selected * itemsPerPage) % list.length
     setOffset(newOffset)
   }
@@ -44,7 +46,6 @@ const SearchComicList = ({ list, itemsPerPage = 10 }) => {
         pageCount={totalPages}
         nextLabel={texts.SearchComic.pagination.next}
         previousLabel={texts.SearchComic.pagination.previous}
-        renderOnZeroPageCount={null}
       />
     </div>
   )

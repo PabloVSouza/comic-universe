@@ -7,7 +7,7 @@ import useDashboard from 'store/dashboard'
 import style from './style.module.scss'
 
 const DashboardList = (): JSX.Element => {
-  const { activeComic, chapters, getChaptersDB } = useDashboard((state) => state)
+  const { activeComic, chapters, getChaptersDB } = useDashboard()
 
   useMemo(() => {
     getChaptersDB()

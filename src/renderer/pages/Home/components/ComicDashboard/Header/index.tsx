@@ -1,20 +1,20 @@
-import slugify from "slugify";
-import Image from "components/Image";
+import slugify from 'slugify'
+import Image from 'components/Image'
 
-import useGlobal from "store/global";
+import useGlobal from 'store/global'
 
-import style from "./style.module.scss";
+import style from './style.module.scss'
 
-const DashboardHeader = ({ item }) => {
-  const { appPath } = useGlobal((state) => state);
+const DashboardHeader = ({ item }: { item: Comic }): JSX.Element => {
+  const { appPath } = useGlobal((state) => state)
 
-  const cover = `file:///${path.join(
+  const cover = `file:///${window.path.join(
     appPath,
-    "downloads",
+    'downloads',
     item.type,
     slugify(item.name),
     item.cover
-  )}`;
+  )}`
 
   return (
     <div className={style.DashboardHeader}>
@@ -30,7 +30,7 @@ const DashboardHeader = ({ item }) => {
       </div>
       <Image className={style.cover} src={cover} />
     </div>
-  );
-};
+  )
+}
 
-export default DashboardHeader;
+export default DashboardHeader

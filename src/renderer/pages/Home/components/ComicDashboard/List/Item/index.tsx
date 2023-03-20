@@ -17,9 +17,7 @@ const DashboardListItem = ({ item }: { item: Chapter }): JSX.Element => {
 
   const texts = useLang()
 
-  const { activeComic, readProgress, getReadProgressDB, changeReadProgress } = useDashboard(
-    (state) => state
-  )
+  const { activeComic, readProgress, getReadProgressDB, changeReadProgress } = useDashboard()
 
   const totalPages = item.pages.length - 1
 

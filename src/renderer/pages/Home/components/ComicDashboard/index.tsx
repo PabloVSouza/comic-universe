@@ -9,13 +9,11 @@ import useDashboard from 'store/dashboard'
 import style from './style.module.scss'
 
 const ComicDashboard = ({ item }: { item: Comic }): JSX.Element => {
-  const { getReadProgressDB, activeComic } = useDashboard((state) => state)
+  const { getReadProgressDB, activeComic } = useDashboard()
 
   useMemo(() => {
     getReadProgressDB()
   }, [activeComic])
-
-  const { list } = useDashboard((state) => state)
 
   return (
     <div className={style.comicDashboard}>
@@ -23,7 +21,7 @@ const ComicDashboard = ({ item }: { item: Comic }): JSX.Element => {
         <>
           <DashboardHeader item={item} />
           <DashboardNav />
-          <DashboardList list={list} />
+          <DashboardList />
         </>
       )}
     </div>

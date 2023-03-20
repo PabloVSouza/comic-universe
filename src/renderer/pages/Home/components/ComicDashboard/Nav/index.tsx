@@ -16,7 +16,7 @@ const DashboardNav = (): JSX.Element => {
 
   const texts = useLang()
 
-  const { activeComic, chapters, readProgress } = useDashboard((state) => state)
+  const { activeComic, chapters, readProgress } = useDashboard()
 
   const calcTotalProgress = (): number => {
     let totalRead = 0

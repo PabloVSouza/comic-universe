@@ -1,10 +1,10 @@
-import { create } from "zustand";
-import merge from "lodash.merge";
+import { create } from 'zustand'
+import merge from 'lodash.merge'
 
-const { invoke } = window.Electron.ipcRenderer;
+const { invoke } = window.Electron.ipcRenderer
 
 const initialState = (set) => ({
-  type: "hq",
+  type: 'hq',
   comic: {},
   queue: [],
   chapters: [],
@@ -13,110 +13,110 @@ const initialState = (set) => ({
   selectedComic: {},
 
   getComicData: async (id) => {
-    const data = {};
-    const inDatabase = await invoke("getComicDB", { id: String(id) });
+    const data = {}
+    const inDatabase = await invoke('getComicDB', { id: String(id) })
 
     if (inDatabase) {
-      data.comic = inDatabase;
+      data.comic = inDatabase
 
-      const downloadedChapters = await invoke("getChaptersDB", {
-        comicId: inDatabase._id,
-      });
+      const downloadedChapters = await invoke('getChaptersDB', {
+        comicId: inDatabase._id
+      })
 
-      if (downloadedChapters) data.downloadedChapters = downloadedChapters;
+      if (downloadedChapters) data.downloadedChapters = downloadedChapters
     }
 
-    const state = useComicData.getState();
+    const state = useComicData.getState()
 
     if (!inDatabase) {
-      if (state.list.length === 0) await state.getList();
+      if (state.list.length === 0) await state.getList()
 
-      const comic = await state.list.find((val) => val.id == id);
+      const comic = await state.list.find((val) => val.id == id)
 
-      if (!comic.synopsis || !comic.cover) await state.getDetails(id);
+      if (!comic.synopsis || !comic.cover) await state.getDetails(id)
 
-      data.comic = comic;
+      data.comic = comic
     }
 
-    await state.setComicData(data);
-    await state.getChapters();
+    await state.setComicData(data)
+    await state.getChapters()
   },
 
   getList: async () => {
-    const { type } = useComicData.getState();
+    const { type } = useComicData.getState()
 
-    const list = await invoke("getList", { type });
+    const list = await invoke('getList', { type })
     return new Promise((resolve) => {
       resolve(
         set(async (state) => {
-          const data = await merge(state, { list });
-          return data;
+          const data = await merge(state, { list })
+          return data
         })
-      );
-    });
+      )
+    })
   },
 
   getDetails: async (id) => {
-    const { list, type, setComicData } = useComicData.getState();
+    const { list, type, setComicData } = useComicData.getState()
 
-    const data = await invoke("getDetails", { type, id });
+    const data = await invoke('getDetails', { type, id })
 
-    let item = list.find((val) => val.id == id);
+    let item = list.find((val) => val.id == id)
 
-    item = await merge(item, data);
+    item = await merge(item, data)
 
-    await setComicData({ list });
+    await setComicData({ list })
 
     return new Promise((resolve) => {
-      resolve();
-    });
+      resolve()
+    })
   },
 
   getChapters: async (id) => {
-    const { type } = useComicData.getState();
+    const { type } = useComicData.getState()
 
-    const { comic } = useComicData.getState();
+    const { comic } = useComicData.getState()
 
     const chapters = !comic.chapters
-      ? await invoke("getChapters", { type, id: comic.id })
-      : comic.chapters;
+      ? await invoke('getChapters', { type, id: comic.id })
+      : comic.chapters
 
     return new Promise((resolve) => {
-      set(async (state) => await merge(state, { chapters }));
-      resolve();
-    });
+      set(async (state) => await merge(state, { chapters }))
+      resolve()
+    })
   },
 
   downloadChapter: async (chapter) => {
-    const { comic, type, getComicData } = useComicData.getState();
+    const { comic, type, getComicData } = useComicData.getState()
 
     if (!chapter.pages) {
-      await invoke("getPages", { type, comic, chapter });
+      await invoke('getPages', { type, comic, chapter })
     }
 
-    comic.type = type;
+    comic.type = type
 
     const downloadData = {
       type,
       comic,
-      chapter,
-    };
+      chapter
+    }
 
-    const chapterFiles = await invoke("downloadChapter", downloadData);
+    const chapterFiles = await invoke('downloadChapter', downloadData)
 
-    comic.cover = chapterFiles.cover;
+    comic.cover = chapterFiles.cover
 
-    chapter.pages = chapterFiles.pageFiles;
+    chapter.pages = chapterFiles.pageFiles
 
-    delete comic.chapters;
+    delete comic.chapters
 
-    await invoke("createComicDB", { comic, chapter });
+    await invoke('createComicDB', { comic, chapter })
 
-    await getComicData(comic.id);
+    await getComicData(comic.id)
 
     return new Promise((resolve) => {
-      resolve();
-    });
+      resolve()
+    })
   },
 
   setQueue: (data) => set((state) => ({ ...state, queue: data })),
@@ -124,14 +124,13 @@ const initialState = (set) => ({
   setComicData: (data) => set(async (state) => await merge(state, data)),
 
   setType: (type) => set((state) => ({ ...state, type })),
-  resetComic: () =>
-    set((state) => ({ ...initialState(set), list: state.list })),
-});
+  resetComic: () => set((state) => ({ ...initialState(set), list: state.list }))
+})
 
-const useComicData = create((set) => initialState(set));
+const useComicData = create((set) => initialState(set))
 
-const state = useComicData.getState();
+const state = useComicData.getState()
 
-state.getList();
+state.getList()
 
-export default useComicData;
+export default useComicData

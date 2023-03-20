@@ -10,13 +10,20 @@ import style from './style.module.scss'
 import plusIcon from 'assets/plus.svg'
 import userIcon from 'assets/user.svg'
 
-const UsersListItem = ({ data, newUser }) => {
+interface UsersListItem {
+  data?: User
+  newUser?: boolean
+}
+
+const UsersListItem = ({ data, newUser }: UsersListItem): JSX.Element => {
   const navigate = useNavigate()
   const { setCurrentUser } = usePersist()
 
-  const setUser = () => {
-    setCurrentUser(data)
-    navigate('/')
+  const setUser = (): void => {
+    if (data) {
+      setCurrentUser(data)
+      navigate('/')
+    }
   }
 
   if (newUser)
@@ -27,9 +34,9 @@ const UsersListItem = ({ data, newUser }) => {
     )
 
   return (
-    <div className={style.UsersListItem} onClick={() => setUser()}>
+    <div className={style.UsersListItem} onClick={(): void => setUser()}>
       <Image className={style.background} svg src={userIcon} />
-      <p className={style.name}>{data.name}</p>
+      <p className={style.name}>{data?.name}</p>
     </div>
   )
 }

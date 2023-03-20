@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { LiHTMLAttributes, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ReactHtmlParser from 'react-html-parser'
 import classNames from 'classnames'
@@ -12,7 +12,7 @@ import Button from 'components/Button'
 
 import style from './style.module.scss'
 
-interface ComicListItem {
+interface ComicListItem extends LiHTMLAttributes<unknown> {
   data: Comic
 }
 

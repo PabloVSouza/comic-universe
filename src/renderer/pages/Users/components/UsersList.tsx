@@ -1,8 +1,8 @@
-import UsersListItem from "./Item";
+import UsersListItem from './Item'
 
-import style from "./style.module.scss";
+import style from './style.module.scss'
 
-const UsersList = ({ list }) => {
+const UsersList = ({ list }: { list: User[] }): JSX.Element => {
   return (
     <div className={style.UsersList}>
       <UsersListItem newUser />
@@ -10,6 +10,6 @@ const UsersList = ({ list }) => {
         <UsersListItem key={item._id} data={item} />
       ))}
     </div>
-  );
-};
-export default UsersList;
+  )
+}
+export default UsersList

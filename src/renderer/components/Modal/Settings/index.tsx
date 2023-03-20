@@ -1,17 +1,12 @@
-import Window from "components/Window";
-import useLang from "lang";
-import style from "./style.module.scss";
+import Window from 'components/Window'
+import useLang from 'lang'
+import style from './style.module.scss'
 
-const ModalSettings = () => {
-  const lang = useLang();
+const ModalSettings = (): JSX.Element => {
+  const lang = useLang()
 
   return (
-    <Window
-      close
-      to={"/"}
-      className={style.Settings}
-      contentClassName={style.content}
-    >
+    <Window close to={'/'} className={style.Settings} contentClassName={style.content}>
       <h1>{lang.Settings.title}</h1>
       <div className={style.options}>
         <div className={style.option}>
@@ -25,7 +20,7 @@ const ModalSettings = () => {
         </div>
       </div>
     </Window>
-  );
-};
+  )
+}
 
-export default ModalSettings;
+export default ModalSettings

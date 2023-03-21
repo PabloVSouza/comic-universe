@@ -4,7 +4,7 @@
     "src/env.d.ts",
     "src/**/*",
     "src/**/*.tsx",
-    "src/electron/preload/*.d.ts"
+    "src/@types/*.d.ts"
   ],
   "compilerOptions": {
     "composite": true,

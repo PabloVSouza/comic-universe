@@ -1,4 +1,4 @@
-import db from '../lib/db'
+import db from '../lib/nedb'
 import { ipcMain } from 'electron'
 
 const { handle } = ipcMain

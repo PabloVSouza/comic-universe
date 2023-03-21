@@ -1,39 +1,4 @@
-import db from '../../lib/db'
-
-type Comic = {
-  id: string
-  name: string
-  synopsis: string
-  status?: string
-  cover: string
-  genre?: [string]
-  author?: string
-  publisher?: string
-  totalChapters: number
-  type: string
-  _id?: string
-  createdAt?: {
-    $$date: number
-  }
-  updatedAt?: {
-    $$date: number
-  }
-}
-
-type Chapter = {
-  comicId: string
-  name: string
-  id: string
-  number: string
-  pages: [string]
-  _id?: string
-  createdAt?: {
-    $$date: number
-  }
-  updatedAt?: {
-    $$date: number
-  }
-}
+import db from '../../lib/nedb'
 
 export default class DBRepository {
   async getComicDB(id: string): Promise<Comic> {
@@ -76,7 +41,10 @@ export default class DBRepository {
     })
   }
 
-  async createComicDB(comic: Comic, chapter: Chapter): Promise<any> {
+  async createComicDB(
+    comic: Comic,
+    chapter: Chapter
+  ): Promise<{ comic: Comic; chapter: Chapter }> | undefined {
     if (db.Comic && db.Chapter) {
       if (!comic._id) {
         db.Comic.insert({ ...comic, id: String(comic.id) }, (errComic, comicDBData) => {
@@ -84,7 +52,7 @@ export default class DBRepository {
             const chapterData = { comicId: comicDBData._id, ...chapter }
             db.Chapter.insert(chapterData, (errChapter, chapterDBData) => {
               return new Promise((resolve, reject) => {
-                resolve({ comicDBData, chapterDBData })
+                resolve({ comic: comicDBData, chapterDBData })
               })
             })
           }

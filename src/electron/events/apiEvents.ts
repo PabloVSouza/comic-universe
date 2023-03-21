@@ -1,20 +1,20 @@
 import { app, ipcMain } from 'electron'
 
-import { MangaRepository } from '../implementations/comic/MangaRepository'
-import { HqRepository } from '../implementations/comic/HqRepository'
+// import { MangaRepository } from '../implementations/comic/MangaRepository'
+// import { HqRepository } from 'implementations/'
 
 const eventList = (): void => {
   const { handle } = ipcMain
 
   const repo = {
-    manga: new MangaRepository(
-      `${app.getPath('userData')}/downloads/manga`,
-      'https://mangayabu.top'
-    ),
-    hq: new HqRepository(
-      `${app.getPath('userData')}/downloads/hq`,
-      'https://admin.hq-now.com/graphql'
-    )
+    // manga: new MangaRepository(
+    //   `${app.getPath('userData')}/downloads/manga`,
+    //   'https://mangayabu.top'
+    // ),
+    // hq: new HqRepository(
+    //   `${app.getPath('userData')}/downloads/hq`,
+    //   'https://admin.hq-now.com/graphql'
+    // )
   }
 
   handle('getList', (event, { type }) => repo[type].getList())

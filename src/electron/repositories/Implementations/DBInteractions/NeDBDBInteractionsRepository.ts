@@ -64,11 +64,11 @@ export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
         } as ReadProgress
 
         if (!readProgress) {
-          db.ReadProgress.insert(data, (_err, res) => {
+          db.ReadProgress.insert(data, () => {
             resolve()
           })
         }
-        db.ReadProgress.update({ chapterId: chapter._id }, { $set: { page } }, {}, (_err, res) => {
+        db.ReadProgress.update({ chapterId: chapter._id }, { $set: { page } }, {}, () => {
           resolve()
         })
       })

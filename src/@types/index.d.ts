@@ -1,5 +1,6 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
 import { PlatformPath } from 'path'
+import { IDBInteractionsRepository } from '../electron/repositories/IDBInteractionsRepository'
 
 declare global {
   interface Window {
@@ -14,5 +15,6 @@ declare global {
       author: string
       path: string
     }
+    db: IDBInteractionsRepository
   }
 }

@@ -2,6 +2,7 @@ import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import fs from 'fs'
 import path from 'path'
+import { NeDBDBInteractionsRepository } from '../repositories/Implementations/DBInteractions/NeDBDBInteractionsRepository'
 
 const packageJson = String(fs.readFileSync(__dirname + '/../../package.json'))
 const { version, description, repository, license, author } = JSON.parse(packageJson)
@@ -16,6 +17,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('api', api)
     contextBridge.exposeInMainWorld('path', path)
     contextBridge.exposeInMainWorld('app', app)
+    contextBridge.exposeInMainWorld('db', NeDBDBInteractionsRepository)
   } catch (error) {
     console.error(error)
   }
@@ -28,4 +30,6 @@ if (process.contextIsolated) {
   window.app = app
   // @ts-ignore (define in dts)
   window.path = path
+  // @ts-ignore (define in dts)
+  window.db = NeDBDBInteractionsRepository
 }

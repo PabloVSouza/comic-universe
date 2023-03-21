@@ -1,6 +1,6 @@
 import { app, ipcMain } from 'electron'
 
-const eventList = (): void => {
+const eventList = (win): void => {
   const { handle } = ipcMain
 
   handle('getAppPath', () => app.getPath('userData'))

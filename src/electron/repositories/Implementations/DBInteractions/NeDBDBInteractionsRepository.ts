@@ -1,77 +1,98 @@
-import db from '../../../lib/nedb'
+import { BrowserWindow, WebContents } from 'electron'
+import { NeDB } from '../../../lib/nedb'
 
 import { IDBInteractionsRepository } from '../../IDBInteractionsRepository'
 
 export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
-  async dbGetComic(id: string): Promise<Comic> {
-    return new Promise((resolve) => {
-      db.Comic.findOne({ id }, (_err, res) => {
-        resolve(res)
-      })
-    })
+  private db: NeDB
+  private ipc: WebContents
+
+  constructor(private path: string, private win: BrowserWindow) {
+    this.db = new NeDB(this.path)
+    this.ipc = this.win.webContents
   }
 
-  async dbGetAllComics(): Promise<Comic[]> {
-    return new Promise((resolve) => {
-      db.Comic.find({}, (_err: Error, res: Comic[]) => {
-        resolve(res)
-      })
-    })
-  }
-
-  async dbGetChapters(comicId: string): Promise<Chapter[]> {
-    return new Promise((resolve) => {
-      db.Chapter.find({ comicId })
-        .sort({ createdAt: 1 })
-        .exec((_err, res) => {
+  methods = {
+    dbGetComic: async (id: string): Promise<Comic> => {
+      return new Promise((resolve) => {
+        this.db.Comic.findOne({ id }, (_err, res) => {
           resolve(res)
         })
-    })
-  }
+      })
+    },
 
-  async dbInsertComic(comic: Comic, chapter: Chapter): Promise<{ comic: Comic; chapter: Chapter }> {
-    return new Promise((resolve) => {
-      let comicDB = comic
-
-      if (!comic._id) {
-        db.Comic.insert(comic, (_err, data) => {
-          comicDB = data
+    dbGetAllComics: async (): Promise<Comic[]> => {
+      return new Promise((resolve) => {
+        this.db.Comic.find({}, (_err: Error, res: Comic[]) => {
+          resolve(res)
         })
-      }
-
-      db.Chapter.insert({ ...chapter, comicId: comicDB._id }, (_err, chapterDB) => {
-        resolve({ comic: comicDB, chapter: chapterDB })
       })
-    })
-  }
+    },
 
-  async dbGetReadProgress(search: string): Promise<ReadProgress> {
-    return new Promise((resolve) => {
-      db.ReadProgress.findOne(search, (_err, res) => {
-        resolve(res)
+    dbGetChapters: async (comicId: string): Promise<Chapter[]> => {
+      return new Promise((resolve) => {
+        this.db.Chapter.find({ comicId })
+          .sort({ createdAt: 1 })
+          .exec((_err, res) => {
+            resolve(res)
+          })
       })
-    })
-  }
+    },
 
-  async dbUpdateReadProgress(comicId: string, chapter: Chapter, page: number): Promise<void> {
-    return new Promise((resolve) => {
-      db.ReadProgress.findOne({ chapterId: chapter._id }, (_err, readProgress: ReadProgress) => {
-        const data = {
-          comicId,
-          chapterId: chapter._id,
-          totalPages: chapter.pages.length - 1,
-          page
-        } as ReadProgress
+    dbInsertComic: async (
+      comic: Comic,
+      chapter: Chapter
+    ): Promise<{ comic: Comic; chapter: Chapter }> => {
+      return new Promise((resolve) => {
+        let comicDB = comic
 
-        if (!readProgress) {
-          db.ReadProgress.insert(data, () => {
-            resolve()
+        if (!comic._id) {
+          this.db.Comic.insert(comic, (_err, data) => {
+            comicDB = data
           })
         }
-        db.ReadProgress.update({ chapterId: chapter._id }, { $set: { page } }, {}, () => {
-          resolve()
+
+        this.db.Chapter.insert({ ...chapter, comicId: comicDB._id }, (_err, chapterDB) => {
+          resolve({ comic: comicDB, chapter: chapterDB })
         })
       })
-    })
+    },
+
+    dbGetReadProgress: async (search: string): Promise<ReadProgress> => {
+      return new Promise((resolve) => {
+        this.db.ReadProgress.findOne(search, (_err, res) => {
+          resolve(res)
+        })
+      })
+    },
+
+    dbUpdateReadProgress: async (
+      comicId: string,
+      chapter: Chapter,
+      page: number
+    ): Promise<void> => {
+      return new Promise((resolve) => {
+        this.db.ReadProgress.findOne(
+          { chapterId: chapter._id },
+          (_err, readProgress: ReadProgress) => {
+            const data = {
+              comicId,
+              chapterId: chapter._id,
+              totalPages: chapter.pages.length - 1,
+              page
+            } as ReadProgress
+
+            if (!readProgress) {
+              this.db.ReadProgress.insert(data, () => {
+                resolve()
+              })
+            }
+            this.db.ReadProgress.update({ chapterId: chapter._id }, { $set: { page } }, {}, () => {
+              resolve()
+            })
+          }
+        )
+      })
+    }
   }
 }

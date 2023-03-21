@@ -20,7 +20,7 @@ const useDashboard = create<useDashboard>((set) => ({
   readProgress: [],
 
   getListDB: async (): Promise<void> => {
-    const list = await invoke('getListDB')
+    const list = await invoke('dbGetAllComics')
     set((state) => ({ ...state, list }))
     set((state) => ({ ...state, activeComic: list[0] }))
   },

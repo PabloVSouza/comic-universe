@@ -33,7 +33,7 @@ const useReader = create<useReader>((set) => ({
 
     setActiveComic(comic)
 
-    const chapters = (await invoke('getChaptersDB', { comicId })) as Chapter[]
+    const chapters = (await invoke('dbGetChapters', { comicId })) as Chapter[]
     setChapters(chapters)
 
     const chapter = chapters.find((val) => val.number === number)
@@ -42,13 +42,13 @@ const useReader = create<useReader>((set) => ({
       setChapter(chapter)
       let ReadProgress: ReadProgress
       ReadProgress = (
-        await invoke('getReadProgressDB', {
+        await invoke('dbGetReadProgress', {
           chapterId: chapter._id
         })
       )[0]
 
       if (!ReadProgress) {
-        ReadProgress = await invoke('changePageDB', {
+        ReadProgress = await invoke('dbUpdateReadProgress', {
           comicId: comic._id,
           chapter,
           page: 0
@@ -67,7 +67,7 @@ const useReader = create<useReader>((set) => ({
   changePage: async (page): Promise<void> => {
     const { chapter, setPage } = useReader.getState()
 
-    await invoke('changePageDB', {
+    await invoke('dbUpdateReadProgress', {
       chapter,
       page
     })

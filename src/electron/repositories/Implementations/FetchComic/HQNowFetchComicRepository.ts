@@ -1,109 +1,112 @@
 import { WebContents } from 'electron'
 import slugify from 'slugify'
-import { GraphQLClient, gql } from 'graphql-request'
+import { ApolloClient, gql, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
+import fetch from 'cross-fetch'
 
-import { IFetchComicRepository, IFetchComicRepositoryInit } from '../../IFetchComicRepository'
+import {
+  IFetchComicMethods,
+  IFetchComicRepository,
+  IFetchComicRepositoryInit
+} from '../../IFetchComicRepository'
 import CreateDirectory from '../../../utils/CreateDirectory'
 import DownloadFile from '../../../utils/DownloadFile'
 
 export class HQNowFetchComicRepository implements IFetchComicRepository {
-  client: GraphQLClient
+  client: ApolloClient<NormalizedCacheObject>
   ipc: WebContents
   path: string
 
-  constructor(private data: IFetchComicRepositoryInit) {
-    this.client = new GraphQLClient(this.data.url)
-    this.ipc = this.data.win.webContents
-    this.path = this.data.path
+  constructor(data: IFetchComicRepositoryInit) {
+    const cache: InMemoryCache = new InMemoryCache({})
+    this.client = new ApolloClient({
+      cache,
+      link: new HttpLink({ uri: data.url, fetch })
+    })
+    this.ipc = data.win.webContents
+    this.path = data.path
   }
 
-  methods = {
+  methods: IFetchComicMethods = {
     getList: async (): Promise<Comic[]> => {
-      const query = gql`
-        query {
-          getAllHqs {
-            id
-            name
-            synopsis
-            status
+      const { data } = await this.client.query({
+        query: gql`
+          query {
+            getAllHqs {
+              id
+              name
+              synopsis
+              status
+            }
           }
-        }
-      `
-
-      const data = (await this.client.request(query)) as { getAllHqs: Comic[] }
+        `
+      })
 
       return new Promise((resolve) => {
-        resolve(data.getAllHqs)
+        resolve(data.getAllHqs as Comic[])
       })
     },
 
-    getDetails: async (id: string): Promise<Partial<Comic>> => {
-      const query = gql`
-        query getHqsById($id: Int!) {
-          getHqsById(id: $id) {
-            cover: hqCover
-            publisher: publisherName
-            chapters: capitulos {
-              name
-              id
-              number
-              pages: pictures {
-                url: pictureUrl
+    getDetails: async ({ id }): Promise<Partial<Comic>> => {
+      const { data } = await this.client.query({
+        query: gql`
+          query getHqsById($id: Int!) {
+            getHqsById(id: $id) {
+              cover: hqCover
+              publisher: publisherName
+              chapters: capitulos {
+                name
+                id
+                number
+                pages: pictures {
+                  url: pictureUrl
+                }
               }
             }
           }
-        }
-      `
+        `,
+        variables: { id: Number(id) }
+      })
 
-      const variables = {
-        id: Number(id)
+      const res = {
+        ...data.getHqsById[0],
+        totalChapters: data.getHqsById[0].chapters.length
       }
 
-      const res = (await this.client.request(query, variables)) as { getHqsById: Comic[] }
-
-      const data = res.getHqsById[0]
-      data.totalChapters = data.chapters?.length
-
       return new Promise((resolve) => {
-        resolve(data)
+        resolve(res)
       })
     },
 
-    getChapters: async (id: string): Promise<Chapter[]> => {
-      const query = gql`
-        query getHqsById($id: Int!) {
-          getHqsById(id: $id) {
-            chapters: capitulos {
-              name
-              id
-              number
-              pages: pictures {
-                url: pictureUrl
+    getChapters: async ({ id }): Promise<Chapter[]> => {
+      const { data } = await this.client.query({
+        query: gql`
+          query getHqsById($id: Int!) {
+            getHqsById(id: $id) {
+              chapters: capitulos {
+                name
+                id
+                number
+                pages: pictures {
+                  url: pictureUrl
+                }
               }
             }
           }
-        }
-      `
+        `,
+        variables: { id: Number(id) }
+      })
 
-      const variables = {
-        id: Number(id)
-      }
-
-      const res = (await this.client.request(query, variables)) as {
-        getHqsById: { chapters: Chapter[] }
-      }
-
-      const data = res.getHqsById[0].chapters
+      const res = data.getHqsById[0].chapters
 
       return new Promise((resolve) => {
-        resolve(data)
+        resolve(res)
       })
     },
 
-    downloadChapter: async (
-      comic: Comic,
-      chapter: Chapter
-    ): Promise<{ cover: string; pageFiles: string[] }> => {
+    downloadChapter: async ({
+      comic,
+      chapter
+    }): Promise<{ cover: string; pageFiles: string[] }> => {
       this.ipc.send('loading', {
         status: true,
         message: chapter.number,

@@ -2,22 +2,27 @@ import { IDBInteractionsMethods, IDBInteractionsRepository } from '../../IDBInte
 
 export class PrismaDBInteractionsRepository implements IDBInteractionsRepository {
   methods: IDBInteractionsMethods = {
-    async dbGetComic(id) {
+    dbGetComic: async ({ id }) => {
       return {} as Comic
     },
-    async dbGetAllComics() {
+    dbGetAllComics: async () => {
       return [] as Comic[]
     },
-    async dbGetChapters(comicId) {
+    dbGetChapters: async ({ comicId }) => {
       return [] as Chapter[]
     },
-    async dbInsertComic(comic, chapter) {
-      return { comic: {} as Comic, chapter: {} as Chapter }
+    dbInsertComic: async ({ comic, chapter }) => {
+      return { comic, chapter }
     },
-    async dbGetReadProgress(chapterId) {
-      return {} as ReadProgress
+    dbGetReadProgress: async ({ search }): Promise<ReadProgress[]> => {
+      return {} as ReadProgress[]
     },
-    async dbUpdateReadProgress(comicId, chapter, page) {
+    dbUpdateReadProgress: async ({ comicId, chapter, page }): Promise<void> => {
+      const obj = {
+        comicId,
+        chapter,
+        page
+      }
       return
     }
   }

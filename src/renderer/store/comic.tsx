@@ -33,12 +33,12 @@ const initialState = (set: StoreApi<unknown>['setState']): useComic => ({
 
   getComicData: async (id): Promise<void> => {
     const data = {} as useComic
-    const inDatabase = await invoke('getComicDB', { id: String(id) })
+    const inDatabase = await invoke('dbGetComic', { id: String(id) })
 
     if (inDatabase) {
       data.comic = inDatabase
 
-      const downloadedChapters = await invoke('getChaptersDB', {
+      const downloadedChapters = await invoke('dbGetChapters', {
         comicId: inDatabase._id
       })
 
@@ -115,13 +115,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useComic => ({
 
     comic.type = type
 
-    const downloadData = {
-      type,
-      comic,
-      chapter
-    }
-
-    const chapterFiles = await invoke('downloadChapter', downloadData)
+    const chapterFiles = await invoke('downloadChapter', { type, comic, chapter })
 
     comic.cover = chapterFiles.cover
 
@@ -129,7 +123,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useComic => ({
 
     delete comic.chapters
 
-    await invoke('createComicDB', { comic, chapter })
+    await invoke('dbInsertComic', { comic, chapter })
 
     await getComicData(comic.id)
 

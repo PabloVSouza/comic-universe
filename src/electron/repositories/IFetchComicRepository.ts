@@ -2,10 +2,13 @@ import { BrowserWindow } from 'electron'
 
 export interface IFetchComicMethods {
   getList(): Promise<Comic[]>
-  getDetails(id: string): Promise<Partial<Comic>>
-  getChapters(id: string): Promise<Chapter[]>
-  getPages?(chapter: Chapter): Promise<string[]>
-  downloadChapter(comic: Comic, chapter: Chapter): Promise<{ cover: string; pageFiles: string[] }>
+  getDetails(input: { id: string }): Promise<Partial<Comic>>
+  getChapters(input: { id: string }): Promise<Chapter[]>
+  getPages?(input: { chapter: Chapter }): Promise<string[]>
+  downloadChapter(input: {
+    comic: Comic
+    chapter: Chapter
+  }): Promise<{ cover: string; pageFiles: string[] }>
 }
 
 export interface IFetchComicRepository {

@@ -4,7 +4,7 @@ import { FetchComicRepository } from '../repositories/Implementations/FetchComic
 const apiEvents = (win: BrowserWindow, path: string): void => {
   const fetchComic = new FetchComicRepository('hqnow', {
     path,
-    url: 'https://www.hq-now.com/',
+    url: 'https://admin.hq-now.com/graphql',
     win
   })
 

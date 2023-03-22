@@ -67,7 +67,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useComic => ({
 
   getList: async (): Promise<void> => {
     const { type } = useComicData.getState()
-    // const list = await invoke('getList', { type })
+    const list = await invoke('getList', { type })
 
     return new Promise((resolve) => {
       set((state: useComic) => ({ ...state, list }))

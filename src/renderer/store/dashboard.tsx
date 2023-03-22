@@ -27,7 +27,7 @@ const useDashboard = create<useDashboard>((set) => ({
 
   getChaptersDB: async (): Promise<void> => {
     const { activeComic } = useDashboard.getState()
-    const chapters = await invoke('getChaptersDB', {
+    const chapters = await invoke('dbGetChapters', {
       comicId: activeComic._id
     })
 
@@ -37,7 +37,7 @@ const useDashboard = create<useDashboard>((set) => ({
   getReadProgressDB: async (): Promise<void> => {
     const { activeComic } = useDashboard.getState()
 
-    invoke('getReadProgressDB', {
+    invoke('dbGetReadProgress', {
       comicId: activeComic._id
     }).then((res) => {
       set((state) => ({ ...state, readProgress: res }))
@@ -45,7 +45,7 @@ const useDashboard = create<useDashboard>((set) => ({
   },
 
   changeReadProgress: async (chapter, page): Promise<void> => {
-    await invoke('changePageDB', {
+    await invoke('dbUpdateReadProgress', {
       comicId: chapter.comicId,
       chapter,
       page

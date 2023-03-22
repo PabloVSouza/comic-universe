@@ -1,22 +1,20 @@
-import { WebContents } from 'electron'
 import { NeDB } from '../../../lib/nedb'
 
 import {
   IDBInteractionsRepository,
+  IDBInteractionsMethods,
   IDBInteractionsRepositoryInit
 } from '../../IDBInteractionsRepository'
 
 export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
   private db: NeDB
-  private ipc: WebContents
 
   constructor(private data: IDBInteractionsRepositoryInit) {
     this.db = new NeDB(this.data.path)
-    this.ipc = this.data.win.webContents
   }
 
-  methods = {
-    dbGetComic: async (id: string): Promise<Comic> => {
+  methods: IDBInteractionsMethods = {
+    dbGetComic: async ({ id }): Promise<Comic> => {
       return new Promise((resolve) => {
         this.db.Comic.findOne({ id }, (_err, res) => {
           resolve(res)
@@ -32,7 +30,7 @@ export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
       })
     },
 
-    dbGetChapters: async (comicId: string): Promise<Chapter[]> => {
+    dbGetChapters: async ({ comicId }): Promise<Chapter[]> => {
       return new Promise((resolve) => {
         this.db.Chapter.find({ comicId })
           .sort({ createdAt: 1 })
@@ -42,10 +40,7 @@ export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
       })
     },
 
-    dbInsertComic: async (
-      comic: Comic,
-      chapter: Chapter
-    ): Promise<{ comic: Comic; chapter: Chapter }> => {
+    dbInsertComic: async ({ comic, chapter }): Promise<{ comic: Comic; chapter: Chapter }> => {
       return new Promise((resolve) => {
         let comicDB = comic
 
@@ -61,19 +56,15 @@ export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
       })
     },
 
-    dbGetReadProgress: async (search: string): Promise<ReadProgress> => {
+    dbGetReadProgress: async ({ search }): Promise<ReadProgress[]> => {
       return new Promise((resolve) => {
-        this.db.ReadProgress.findOne(search, (_err, res) => {
+        this.db.ReadProgress.find(search, (_err: Error, res: ReadProgress[]) => {
           resolve(res)
         })
       })
     },
 
-    dbUpdateReadProgress: async (
-      comicId: string,
-      chapter: Chapter,
-      page: number
-    ): Promise<void> => {
+    dbUpdateReadProgress: async ({ comicId, chapter, page }): Promise<void> => {
       return new Promise((resolve) => {
         this.db.ReadProgress.findOne(
           { chapterId: chapter._id },
@@ -85,11 +76,11 @@ export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
               page
             } as ReadProgress
 
-            if (!readProgress) {
+            if (!readProgress)
               this.db.ReadProgress.insert(data, () => {
                 resolve()
               })
-            }
+
             this.db.ReadProgress.update({ chapterId: chapter._id }, { $set: { page } }, {}, () => {
               resolve()
             })

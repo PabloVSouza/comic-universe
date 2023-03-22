@@ -1,15 +1,18 @@
-import { BrowserWindow, WebContents } from 'electron'
+import { WebContents } from 'electron'
 import { NeDB } from '../../../lib/nedb'
 
-import { IDBInteractionsRepository } from '../../IDBInteractionsRepository'
+import {
+  IDBInteractionsRepository,
+  IDBInteractionsRepositoryInit
+} from '../../IDBInteractionsRepository'
 
 export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
   private db: NeDB
   private ipc: WebContents
 
-  constructor(private path: string, private win: BrowserWindow) {
-    this.db = new NeDB(this.path)
-    this.ipc = this.win.webContents
+  constructor(private data: IDBInteractionsRepositoryInit) {
+    this.db = new NeDB(this.data.path)
+    this.ipc = this.data.win.webContents
   }
 
   methods = {

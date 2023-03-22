@@ -1,6 +1,5 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-
 import CreateMainWindow from '../windows/MainWindow'
 
 app.whenReady().then(() => {
@@ -12,7 +11,9 @@ app.whenReady().then(() => {
   CreateMainWindow()
 
   app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) CreateMainWindow()
+    if (BrowserWindow.getAllWindows().length === 0) {
+      CreateMainWindow()
+    }
   })
 })
 

@@ -1,3 +1,5 @@
+import { BrowserWindow } from 'electron'
+
 export interface IFetchComicMethods {
   getList(): Promise<Comic[]>
   getDetails(id: string): Promise<Partial<Comic>>
@@ -8,4 +10,10 @@ export interface IFetchComicMethods {
 
 export interface IFetchComicRepository {
   methods: IFetchComicMethods
+}
+
+export interface IFetchComicRepositoryInit {
+  path: string
+  url: string
+  win: BrowserWindow
 }

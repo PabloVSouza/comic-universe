@@ -1,3 +1,5 @@
+import { BrowserWindow } from 'electron'
+
 export type IDBInteractionsMethods = {
   dbGetComic: (id: string) => Promise<Comic> | null
   dbGetAllComics: () => Promise<Comic[]>
@@ -9,4 +11,9 @@ export type IDBInteractionsMethods = {
 
 export interface IDBInteractionsRepository {
   methods: IDBInteractionsMethods
+}
+
+export interface IDBInteractionsRepositoryInit {
+  path: string
+  win: BrowserWindow
 }

@@ -16,26 +16,28 @@ export class FireMangasFetchComicRepository implements IFetchComicRepository {
     this.api = axios
   }
 
-  async getList(): Promise<Comic[]> {
-    return []
-  }
+  methods = {
+    getList: async (): Promise<Comic[]> => {
+      return []
+    },
 
-  async getDetails(id: string): Promise<Partial<Comic>> {
-    return {}
-  }
+    getDetails: async (id: string): Promise<Partial<Comic>> => {
+      return {}
+    },
 
-  async getPages(chapter: Chapter): Promise<string[]> {
-    return []
-  }
+    getPages: async (chapter: Chapter): Promise<string[]> => {
+      return []
+    },
 
-  async getChapters(id: string): Promise<Chapter[]> {
-    return []
-  }
+    getChapters: async (id: string): Promise<Chapter[]> => {
+      return []
+    },
 
-  async downloadChapter(
-    comic: Comic,
-    chapter: Chapter
-  ): Promise<{ cover: string; pageFiles: string[] }> {
-    return { cover: '', pageFiles: [] }
+    downloadChapter: async (
+      comic: Comic,
+      chapter: Chapter
+    ): Promise<{ cover: string; pageFiles: string[] }> => {
+      return { cover: '', pageFiles: [] }
+    }
   }
 }

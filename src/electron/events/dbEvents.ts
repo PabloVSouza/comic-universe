@@ -1,9 +1,9 @@
-import { ipcMain, app, BrowserWindow } from 'electron'
-import { DBRepository } from '../repositories/Implementations/DBInteractions'
+import { ipcMain, BrowserWindow } from 'electron'
+import { DBInteractionsRepository } from '../repositories/Implementations/DBInteractions'
 const { handle } = ipcMain
 
-const eventList = (win: BrowserWindow): void => {
-  const db = new DBRepository('nedb', app.getPath('userData'), win)
+const dbEvents = (win: BrowserWindow, path: string): void => {
+  const db = new DBInteractionsRepository('nedb', { path, win })
 
   const properties = Object.getOwnPropertyNames(db.repo.methods)
 
@@ -12,4 +12,4 @@ const eventList = (win: BrowserWindow): void => {
   }
 }
 
-export default eventList
+export default dbEvents

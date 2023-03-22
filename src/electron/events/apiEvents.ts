@@ -1,14 +1,13 @@
-import { ipcMain, app, BrowserWindow } from 'electron'
+import { ipcMain, BrowserWindow } from 'electron'
 import { FetchComicRepository } from '../repositories/Implementations/FetchComic'
 const { handle } = ipcMain
 
-const eventList = (win: BrowserWindow): void => {
-  const fetchComic = new FetchComicRepository(
-    'hqnow',
-    app.getPath('userData'),
-    'https://www.hq-now.com/',
+const apiEvents = (win: BrowserWindow, path: string): void => {
+  const fetchComic = new FetchComicRepository('hqnow', {
+    path,
+    url: 'https://www.hq-now.com/',
     win
-  )
+  })
 
   const properties = Object.getOwnPropertyNames(fetchComic.repo.methods)
 
@@ -17,4 +16,4 @@ const eventList = (win: BrowserWindow): void => {
   }
 }
 
-export default eventList
+export default apiEvents

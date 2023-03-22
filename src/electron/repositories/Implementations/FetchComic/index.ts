@@ -1,10 +1,9 @@
-import { BrowserWindow } from 'electron'
-import { IFetchComicRepository } from '../../IFetchComicRepository'
+import { IFetchComicRepository, IFetchComicRepositoryInit } from '../../IFetchComicRepository'
 
 import { HQNowFetchComicRepository } from './HQNowFetchComicRepository'
 
 interface Repos {
-  [key: string]: new (directory: string, url: string, win: BrowserWindow) => IFetchComicRepository
+  [key: string]: new (data: IFetchComicRepositoryInit) => IFetchComicRepository
 }
 
 export class FetchComicRepository {
@@ -14,7 +13,7 @@ export class FetchComicRepository {
 
   public repo: IFetchComicRepository
 
-  constructor(repo: string, directory: string, url: string, win: BrowserWindow) {
-    this.repo = new this.Repos[repo](directory, url, win)
+  constructor(repo: string, data: IFetchComicRepositoryInit) {
+    this.repo = new this.Repos[repo](data)
   }
 }

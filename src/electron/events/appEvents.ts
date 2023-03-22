@@ -1,9 +1,8 @@
-import { app, ipcMain } from 'electron'
+import { BrowserWindow, ipcMain } from 'electron'
+const { handle } = ipcMain
 
-const eventList = (win): void => {
-  const { handle } = ipcMain
-
-  handle('getAppPath', () => app.getPath('userData'))
+const appEvents = (_win: BrowserWindow, path: string): void => {
+  handle('getAppPath', () => path)
 }
 
-export default eventList
+export default appEvents

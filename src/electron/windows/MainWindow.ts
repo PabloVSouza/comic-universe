@@ -1,10 +1,9 @@
-import { shell, BrowserWindow } from 'electron'
+import { shell, BrowserWindow, app } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
+import { createEvents, removeEvents } from '../events'
 
-import Events from '../events'
-
-const CreateMainWindow = (): void => {
+const CreateMainWindow = (): BrowserWindow => {
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
@@ -18,7 +17,7 @@ const CreateMainWindow = (): void => {
     icon: join(__dirname, '../../../resources/icon.png')
   })
 
-  Events(mainWindow)
+  createEvents(mainWindow, app.getPath('userData'))
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
@@ -34,6 +33,12 @@ const CreateMainWindow = (): void => {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  mainWindow.on('close', () => {
+    removeEvents()
+  })
+
+  return mainWindow
 }
 
 export default CreateMainWindow

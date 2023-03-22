@@ -1,18 +1,20 @@
-import { BrowserWindow, WebContents } from 'electron'
+import { WebContents } from 'electron'
 import slugify from 'slugify'
 import { GraphQLClient, gql } from 'graphql-request'
 
-import { IFetchComicRepository } from '../../IFetchComicRepository'
+import { IFetchComicRepository, IFetchComicRepositoryInit } from '../../IFetchComicRepository'
 import CreateDirectory from '../../../utils/CreateDirectory'
 import DownloadFile from '../../../utils/DownloadFile'
 
 export class HQNowFetchComicRepository implements IFetchComicRepository {
   client: GraphQLClient
   ipc: WebContents
+  path: string
 
-  constructor(private directory: string, private url: string, private win: BrowserWindow) {
-    this.client = new GraphQLClient(this.url)
-    this.ipc = this.win.webContents
+  constructor(private data: IFetchComicRepositoryInit) {
+    this.client = new GraphQLClient(this.data.url)
+    this.ipc = this.data.win.webContents
+    this.path = this.data.path
   }
 
   methods = {
@@ -108,7 +110,7 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
         progress: { current: 0, total: chapter.pages.length }
       })
 
-      const path = `${this.directory}/${slugify(comic.name)}/`
+      const path = `${this.path}/${slugify(comic.name)}/`
 
       const chapterPath = path + `${chapter.number}/`
 

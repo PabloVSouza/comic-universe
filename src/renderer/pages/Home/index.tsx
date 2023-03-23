@@ -7,11 +7,9 @@ import ComicDashboard from './components/ComicDashboard'
 import RightNav from './components/RightNav'
 
 import style from './style.module.scss'
-import useDashboard from 'store/dashboard'
 import Modal from 'components/Modal'
 
 const Home = (): JSX.Element => {
-  const { list, activeComic } = useDashboard((state) => state)
   const [searchParams] = useSearchParams()
 
   const { modal } = Object.fromEntries([...searchParams])
@@ -26,12 +24,8 @@ const Home = (): JSX.Element => {
         <TopBar />
         <RightNav />
         <div className={style.body}>
-          {list.length > 0 && (
-            <>
-              <ComicList list={list} />
-              <ComicDashboard item={activeComic} />
-            </>
-          )}
+          <ComicList />
+          <ComicDashboard />
         </div>
       </Window>
     </>

@@ -8,18 +8,20 @@ import useDashboard from 'store/dashboard'
 
 import style from './style.module.scss'
 
-const ComicDashboard = ({ item }: { item: Comic }): JSX.Element => {
+const ComicDashboard = (): JSX.Element => {
   const { getReadProgressDB, activeComic } = useDashboard()
 
-  useMemo(() => {
-    getReadProgressDB()
-  }, [activeComic])
+  if (activeComic) {
+    useMemo(() => {
+      getReadProgressDB()
+    }, [activeComic])
+  }
 
   return (
     <div className={style.comicDashboard}>
-      {!!item?._id && (
+      {!!activeComic && (
         <>
-          <DashboardHeader item={item} />
+          <DashboardHeader item={activeComic} />
           <DashboardNav />
           <DashboardList />
         </>

@@ -46,6 +46,26 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
       })
     },
 
+    search: async ({ search }): Promise<Comic[]> => {
+      const { data } = await this.client.query({
+        query: gql`
+          query getHqsByName($name: String!) {
+            getHqsByName(name: $name) {
+              id
+              name
+              synopsis
+              status
+            }
+          }
+        `,
+        variables: { search }
+      })
+
+      return new Promise((resolve) => {
+        resolve(data.getAllHqs as Comic[])
+      })
+    },
+
     getDetails: async ({ id }): Promise<Partial<Comic>> => {
       const { data } = await this.client.query({
         query: gql`

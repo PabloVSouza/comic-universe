@@ -14,7 +14,7 @@ interface SearchComicList {
 const SearchComicList = ({ list, itemsPerPage = 10 }: SearchComicList): JSX.Element => {
   const [offset, setOffset] = useState(0)
   const endOffset = offset + itemsPerPage
-  const currentItems = list.slice(offset, endOffset)
+  const currentItems = list?.slice(offset, endOffset)
   const totalPages = Math.ceil(list.length / itemsPerPage)
 
   const texts = useLang()

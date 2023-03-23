@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import ReactHtmlParser from 'react-html-parser'
 import classNames from 'classnames'
 
-import useComicData from 'store/comic'
+import useSearchStore from 'store/useSearchStore'
 
 import useLang from 'lang'
 
@@ -21,7 +21,7 @@ const ComicListItem = ({ data, ...props }: ComicListItem): JSX.Element => {
 
   const texts = useLang()
 
-  const { selectedComic, setComic, getDetails } = useComicData((state) => state)
+  const { comic, setComic, getDetails } = useSearchStore((state) => state)
 
   useMemo(() => {
     if (!data.cover || !data.synopsis) {
@@ -29,10 +29,10 @@ const ComicListItem = ({ data, ...props }: ComicListItem): JSX.Element => {
     }
   }, [])
 
-  const extended = selectedComic.id === data.id
+  const extended = comic.id === data.id
 
   const goToPage = (): void => {
-    navigate(`/download/${selectedComic.id}`)
+    navigate(`/download/${comic.id}`)
   }
 
   return (

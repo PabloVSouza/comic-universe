@@ -47,10 +47,10 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
     },
 
     search: async ({ search }): Promise<Comic[]> => {
-      const { data } = await this.client.query({
+      const query = {
         query: gql`
-          query getHqsByName($name: String!) {
-            getHqsByName(name: $name) {
+          query getHqsByName($search: String!) {
+            getHqsByName(name: $search) {
               id
               name
               synopsis
@@ -59,10 +59,12 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
           }
         `,
         variables: { search }
-      })
+      }
+
+      const { data } = await this.client.query(query)
 
       return new Promise((resolve) => {
-        resolve(data.getAllHqs as Comic[])
+        resolve(data.getHqsByName as Comic[])
       })
     },
 

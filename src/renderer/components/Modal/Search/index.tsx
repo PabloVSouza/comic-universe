@@ -1,47 +1,47 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import debounce from 'lodash.debounce'
 import classNames from 'classnames'
 import Window from 'components/Window'
 import SearchComicList from './components/List'
-import Select from 'react-select'
-import useComicData from 'store/comic'
+import Select, { SingleValue } from 'react-select'
+import useSearchStore from 'store/useSearchStore'
 import useLang from 'lang'
 import style from './style.module.scss'
 
 const ModalSearch = (): JSX.Element => {
-  const [search, setSearch] = useState('')
-  const [filteredList, setFilteredList] = useState<Comic[]>([])
-  const { list, getList, resetComic, type, setType } = useComicData((state) => state)
+  const [searchText, setSearchText] = useState('')
+  const { list, search, resetComic, repo, setRepo } = useSearchStore()
 
   const texts = useLang()
 
-  const setList = (): void => {
-    search.length > 0
-      ? setFilteredList(
-          list.filter((val) => val.name.toUpperCase().startsWith(search.toUpperCase()))
-        )
-      : setFilteredList(list)
+  const selectOptions = [{ value: 'hqnow', label: 'HQ Now' }]
+
+  const handleChangeRepo = (
+    option: SingleValue<{
+      value: string
+      label: string
+    }>
+  ): void => {
+    if (option) setRepo(option.value)
   }
 
-  const selectOptions = [
-    { value: 'hq', label: 'HQs' },
-    { value: 'manga', label: 'Mangás' }
-  ]
-
-  const handleChange = (option): void => {
-    if (option) setType(option.value)
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setSearchText(e.target.value)
   }
 
-  useMemo(() => {
-    if (list.length == 0) setList()
+  const debouncedResults = useMemo(() => {
+    return debounce(handleSearch, 500)
   }, [])
 
-  useMemo(() => {
-    getList()
-  }, [type])
+  useEffect(() => {
+    return () => {
+      debouncedResults.cancel()
+    }
+  })
 
   useMemo(() => {
-    setList()
-  }, [list, search])
+    search(searchText)
+  }, [searchText])
 
   return (
     <Window
@@ -55,9 +55,9 @@ const ModalSearch = (): JSX.Element => {
         <div className={classNames(style.inputBlock, style.inputSelect)}>
           <Select
             className={style.select}
-            defaultValue={selectOptions.find((val) => val.value === type)}
+            defaultValue={selectOptions.find((val) => val.value === repo)}
             options={selectOptions}
-            onChange={handleChange}
+            onChange={handleChangeRepo}
             unstyled
             isSearchable={false}
           />
@@ -67,7 +67,7 @@ const ModalSearch = (): JSX.Element => {
             className={style.inputElement}
             placeholder={texts.SearchComic.textPlaceholder}
             type="text"
-            onChange={(e): void => setSearch(e.target.value)}
+            onChange={debouncedResults}
           />
         </div>
         <div className={classNames(style.inputBlock, style.inputIcon)}>
@@ -75,7 +75,7 @@ const ModalSearch = (): JSX.Element => {
         </div>
       </div>
       <div className={style.result}>
-        <SearchComicList list={filteredList} />
+        <SearchComicList list={list} />
       </div>
     </Window>
   )

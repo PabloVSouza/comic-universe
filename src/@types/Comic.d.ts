@@ -1,5 +1,5 @@
 interface Comic {
-  id: string
+  siteId: string
   name: string
   chapters?: Chapter[]
   cover: string

@@ -41,8 +41,10 @@
       .status {
         text-align: center;
       }
+      .chapters {
+        margin: 20px 0;
+      }
       .synopsis {
-        padding-top: 20px;
         display: -webkit-box;
         width: 100%;
         height: 100%;
@@ -58,22 +60,6 @@
       max-height: 500px;
       aspect-ratio: 10/16;
       position: relative;
-      .chapters {
-        position: absolute;
-        z-index: 1;
-        right: 0;
-        bottom: 0;
-        min-width: 40px;
-        padding: 10px 5px;
-        box-shadow: $shadow-default;
-        background: $black-transparent;
-        color: $white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        white-space: nowrap;
-        border-top-left-radius: $radius-default;
-      }
       .coverImage {
         height: 100%;
         z-index: 0;

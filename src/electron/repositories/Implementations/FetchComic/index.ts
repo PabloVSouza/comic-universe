@@ -6,14 +6,15 @@ interface Repos {
   [key: string]: new (data: IFetchComicRepositoryInit) => IFetchComicRepository
 }
 
-export class FetchComicRepository {
-  private Repos: Repos = {
+const FetchComicRepository = (
+  repo: string,
+  data: IFetchComicRepositoryInit
+): IFetchComicRepository => {
+  const repos: Repos = {
     hqnow: HQNowFetchComicRepository
   }
 
-  public repo: IFetchComicRepository
-
-  constructor(repo: string, data: IFetchComicRepositoryInit) {
-    this.repo = new this.Repos[repo](data)
-  }
+  return new repos[repo](data)
 }
+
+export default FetchComicRepository

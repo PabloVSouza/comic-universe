@@ -28,18 +28,20 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
 
   methods: IFetchComicMethods = {
     getList: async (): Promise<Comic[]> => {
-      const { data } = await this.client.query({
+      const query = {
         query: gql`
           query {
             getAllHqs {
-              id
+              siteId: id
               name
               synopsis
               status
             }
           }
         `
-      })
+      }
+
+      const { data } = await this.client.query(query)
 
       return new Promise((resolve) => {
         resolve(data.getAllHqs as Comic[])
@@ -51,7 +53,7 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
         query: gql`
           query getHqsByName($search: String!) {
             getHqsByName(name: $search) {
-              id
+              siteId: id
               name
               synopsis
               status
@@ -68,60 +70,51 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
       })
     },
 
-    getDetails: async ({ id }): Promise<Partial<Comic>> => {
+    getDetails: async ({ siteId }): Promise<Partial<Comic>> => {
       const { data } = await this.client.query({
         query: gql`
           query getHqsById($id: Int!) {
             getHqsById(id: $id) {
               cover: hqCover
               publisher: publisherName
-              chapters: capitulos {
-                name
-                id
-                number
-                pages: pictures {
-                  url: pictureUrl
-                }
-              }
             }
           }
         `,
-        variables: { id: Number(id) }
+        variables: { id: Number(siteId) }
       })
 
       const res = {
-        ...data.getHqsById[0],
-        totalChapters: data.getHqsById[0].chapters.length
+        ...data.getHqsById[0]
       }
+
+      res.type = 'hq'
 
       return new Promise((resolve) => {
         resolve(res)
       })
     },
 
-    getChapters: async ({ id }): Promise<Chapter[]> => {
-      const { data } = await this.client.query({
+    getChapters: async ({ siteId }): Promise<Chapter[]> => {
+      const query = {
         query: gql`
-          query getHqsById($id: Int!) {
-            getHqsById(id: $id) {
-              chapters: capitulos {
-                name
-                id
-                number
-                pages: pictures {
-                  url: pictureUrl
-                }
+          query getChaptersByHqId($id: Int!) {
+            getChaptersByHqId(hqId: $id) {
+              name
+              siteId: id
+              pages: pictures {
+                filename: image
+                path: pictureUrl
               }
             }
           }
         `,
-        variables: { id: Number(id) }
-      })
+        variables: { id: Number(siteId) }
+      }
 
-      const res = data.getHqsById[0].chapters
+      const { data } = await this.client.query(query)
 
       return new Promise((resolve) => {
-        resolve(res)
+        resolve(data.getChaptersByHqId as Chapter[])
       })
     },
 

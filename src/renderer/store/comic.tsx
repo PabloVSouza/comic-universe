@@ -4,7 +4,7 @@ import merge from 'lodash.merge'
 const { invoke } = window.Electron.ipcRenderer
 
 interface useComic {
-  type: string
+  repo: string
   comic: Comic
   queue: Chapter[]
   chapters: Chapter[]
@@ -18,12 +18,12 @@ interface useComic {
   downloadChapter: (chapter: Chapter) => Promise<void>
   setComic: (data: Comic) => void
   setQueue: (data: Chapter[]) => void
-  setType: (type: string) => void
+  setRepo: (repo: string) => void
   resetComic: () => void
 }
 
 const initialState = (set: StoreApi<unknown>['setState']): useComic => ({
-  type: 'hq',
+  repo: 'hq',
   comic: {} as Comic,
   queue: [],
   chapters: [],
@@ -66,8 +66,8 @@ const initialState = (set: StoreApi<unknown>['setState']): useComic => ({
   },
 
   getList: async (): Promise<void> => {
-    const { type } = useComicData.getState()
-    const list = await invoke('getList', { type })
+    const { repo } = useComicData.getState()
+    const list = await invoke('getList', { repo: 'hqnow' })
 
     return new Promise((resolve) => {
       set((state: useComic) => ({ ...state, list }))
@@ -76,9 +76,9 @@ const initialState = (set: StoreApi<unknown>['setState']): useComic => ({
   },
 
   getDetails: async (id): Promise<void> => {
-    const { list, type } = useComicData.getState()
+    const { list, repo } = useComicData.getState()
 
-    const data = await invoke('getDetails', { type, id })
+    const data = await invoke('getDetails', { repo, id })
 
     const index = list.findIndex((val) => val.id == id)
 
@@ -92,12 +92,12 @@ const initialState = (set: StoreApi<unknown>['setState']): useComic => ({
   },
 
   getChapters: async (): Promise<void> => {
-    const { type } = useComicData.getState()
+    const { repo } = useComicData.getState()
 
     const { comic } = useComicData.getState()
 
     const chapters = !comic.chapters
-      ? await invoke('getChapters', { type, id: comic.id })
+      ? await invoke('getChapters', { repo, id: comic.id })
       : comic.chapters
 
     return new Promise((resolve) => {
@@ -107,15 +107,15 @@ const initialState = (set: StoreApi<unknown>['setState']): useComic => ({
   },
 
   downloadChapter: async (chapter): Promise<void> => {
-    const { comic, type, getComicData } = useComicData.getState()
+    const { comic, repo, getComicData } = useComicData.getState()
 
     if (!chapter.pages) {
-      await invoke('getPages', { type, comic, chapter })
+      await invoke('getPages', { repo, comic, chapter })
     }
 
-    comic.type = type
+    comic.repo = repo
 
-    const chapterFiles = await invoke('downloadChapter', { type, comic, chapter })
+    const chapterFiles = await invoke('downloadChapter', { repo, comic, chapter })
 
     comic.cover = chapterFiles.cover
 
@@ -134,7 +134,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useComic => ({
 
   setComic: (data) => set((state: useComic) => ({ ...state, selectedComic: data })),
   setQueue: (data) => set((state: useComic) => ({ ...state, queue: data })),
-  setType: (type) => set((state: useComic) => ({ ...state, type })),
+  setRepo: (repo) => set((state: useComic) => ({ ...state, repo })),
 
   resetComic: () => set((state: useComic) => ({ ...initialState(set), list: state.list }))
 })

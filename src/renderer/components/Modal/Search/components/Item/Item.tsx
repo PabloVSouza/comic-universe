@@ -16,30 +16,34 @@ interface ComicListItem extends LiHTMLAttributes<unknown> {
   data: Comic
 }
 
-const ComicListItem = ({ data, ...props }: ComicListItem): JSX.Element => {
+const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
   const navigate = useNavigate()
 
   const texts = useLang()
 
-  const { comic, setComic, getDetails } = useSearchStore((state) => state)
+  const { comic, chapters, setComic, getDetails, getChapters } = useSearchStore((state) => state)
+
+  const setActive = async (): Promise<void> => {
+    await getChapters(data.siteId)
+    setComic(data)
+  }
 
   useMemo(() => {
     if (!data.cover || !data.synopsis) {
-      getDetails(data.id)
+      getDetails(data.siteId)
     }
   }, [])
 
-  const extended = comic.id === data.id
+  const extended = comic.siteId === data.siteId
 
   const goToPage = (): void => {
-    navigate(`/download/${comic.id}`)
+    navigate(`/download/${comic.siteId}`)
   }
 
   return (
     <li
       className={classNames(style.comicListItem, !!extended && style.extended)}
-      onClick={(): void => setComic(data)}
-      {...props}
+      onClick={setActive}
     >
       <div className={style.content}>
         <div className={style.texts}>
@@ -49,21 +53,23 @@ const ComicListItem = ({ data, ...props }: ComicListItem): JSX.Element => {
             <p className={style.genre}>{!!data.genres && data.genres.join(', ')}</p>
           )}
           {!!data.status && <p className={style.status}>{data.status}</p>}
-          {extended && <div className={style.synopsis}>{ReactHtmlParser(data.synopsis)}</div>}
+          {extended && (
+            <>
+              <div className={style.chapters}>
+                {chapters.length} {texts.SearchComic.availableChapters}
+              </div>
+              <div className={style.synopsis}>{ReactHtmlParser(data.synopsis)}</div>
+            </>
+          )}
         </div>
         <div className={style.cover}>
-          {!!data.chapters && (
-            <div className={style.chapters}>
-              {data.totalChapters} {texts.SearchComic.chapters}
-            </div>
-          )}
           <Image className={style.coverImage} src={data.cover} />
         </div>
       </div>
       {extended && (
         <div className={style.buttonArea}>
           <Button theme="roundedRectangle" size="xl" color="green" onClick={(): void => goToPage()}>
-            {texts.SearchComic.goToPage}
+            {texts.SearchComic.bookmarkComic}
           </Button>
         </div>
       )}

@@ -25,8 +25,8 @@ interface RightNavLang {
 
 interface SearchComicLang {
   textPlaceholder: string
-  goToPage: string
-  chapters: string
+  bookmarkComic: string
+  availableChapters: string
   pagination: {
     previous: string
     next: string

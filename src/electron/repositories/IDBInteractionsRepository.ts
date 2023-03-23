@@ -6,8 +6,8 @@ export type IDBInteractionsMethods = {
   dbGetChapters: (input: { comicId: string }) => Promise<Chapter[]>
   dbInsertComic: (input: {
     comic: Comic
-    chapter: Chapter
-  }) => Promise<{ comic: Comic; chapter: Chapter }>
+    chapters: Chapter[]
+  }) => Promise<{ comic: Comic; chapters: Chapter[] }>
   dbGetReadProgress: (input: { search: string }) => Promise<ReadProgress[]>
   dbUpdateReadProgress: (input: {
     comicId: string

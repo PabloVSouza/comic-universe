@@ -10,8 +10,9 @@ interface useSearchStore {
   chapters: Chapter[]
   getList: () => Promise<void>
   search: (search: string) => Promise<void>
-  getDetails: (id: string) => Promise<void>
-  getChapters: () => Promise<void>
+  getDetails: (siteId: string) => Promise<void>
+  getChapters: (siteId: string) => Promise<void>
+  addToDB: (data: Comic) => Promise<void>
   setComic: (data: Comic) => void
   setRepo: (repo: string) => void
   resetComic: () => void
@@ -35,7 +36,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
 
   search: async (search): Promise<void> => {
     const { repo } = useSearchStore.getState()
-    const list = await invoke('search', { repo, search })
+    const list = await invoke('search', { repo, data: { search } })
 
     return new Promise((resolve) => {
       set((state: useSearchStore) => ({ ...state, list }))
@@ -43,12 +44,12 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
     })
   },
 
-  getDetails: async (id): Promise<void> => {
+  getDetails: async (siteId): Promise<void> => {
     const { repo, list } = useSearchStore.getState()
 
-    const data = await invoke('getDetails', { repo, id })
+    const data = await invoke('getDetails', { repo, data: { siteId } })
 
-    const index = list.findIndex((val) => val.id == id)
+    const index = list.findIndex((val) => val.siteId == siteId)
 
     list[index] = await merge(list[index], data)
 
@@ -59,12 +60,10 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
     })
   },
 
-  getChapters: async (): Promise<void> => {
-    const { repo, comic } = useSearchStore.getState()
+  getChapters: async (siteId): Promise<void> => {
+    const { repo } = useSearchStore.getState()
 
-    const chapters = !comic.chapters
-      ? await invoke('getChapters', { repo, id: comic.id })
-      : comic.chapters
+    const chapters = await invoke('getChapters', { repo, data: { siteId } })
 
     return new Promise((resolve) => {
       set((state: useSearchStore) => ({ ...state, chapters }))
@@ -72,7 +71,10 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
     })
   },
 
+  addToDB: async (): Promise<void> => {},
+
   setComic: (comic) => set((state: useSearchStore) => ({ ...state, comic })),
+
   setRepo: (repo) => set((state: useSearchStore) => ({ ...state, repo })),
 
   resetComic: () => set((state: useSearchStore) => ({ ...initialState(set), list: state.list }))

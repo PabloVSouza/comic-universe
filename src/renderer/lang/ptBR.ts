@@ -26,8 +26,8 @@ export default class ptBR implements Lang {
 
   SearchComic: SearchComicLang = {
     textPlaceholder: 'Digite sua Busca',
-    goToPage: 'Ir para a Página',
-    chapters: 'Capítulos',
+    bookmarkComic: 'Adicionar à Lista',
+    availableChapters: 'Capítulos Disponíveis',
     pagination: {
       previous: 'Anterior',
       next: 'Próxima'

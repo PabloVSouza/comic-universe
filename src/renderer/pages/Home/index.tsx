@@ -5,9 +5,9 @@ import TopBar from './components/TopBar'
 import ComicList from './components/ComicList'
 import ComicDashboard from './components/ComicDashboard'
 import RightNav from './components/RightNav'
+import Modal from 'components/Modal'
 
 import style from './style.module.scss'
-import Modal from 'components/Modal'
 
 const Home = (): JSX.Element => {
   const [searchParams] = useSearchParams()

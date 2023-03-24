@@ -21,8 +21,9 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
 
   getListDB: async (): Promise<void> => {
     const list = await invoke('dbGetAllComics')
+    const { comic } = useDashboardStore.getState()
     set((state) => ({ ...state, list }))
-    set((state) => ({ ...state, activeComic: list[0] }))
+    if (list.length && !comic._id) set((state) => ({ ...state, comic: list[0] }))
   },
 
   getChaptersDB: async (): Promise<void> => {

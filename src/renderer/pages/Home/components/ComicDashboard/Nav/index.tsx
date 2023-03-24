@@ -16,7 +16,7 @@ const DashboardNav = (): JSX.Element => {
 
   const texts = useLang()
 
-  const { activeComic, chapters, readProgress } = useDashboardStore()
+  const { comic, chapters, readProgress } = useDashboardStore()
 
   const calcTotalProgress = (): number => {
     let totalRead = 0
@@ -43,7 +43,7 @@ const DashboardNav = (): JSX.Element => {
       if (progress && progress.page > 0) lastRead = chapter
     }
 
-    navigate(`reader/${activeComic._id}/${lastRead.number}`)
+    navigate(`reader/${comic._id}/${lastRead.number}`)
   }
 
   return (
@@ -54,7 +54,7 @@ const DashboardNav = (): JSX.Element => {
           size="xxs"
           icon={downloadIcon}
           title={texts.Dashboard.downloadMore}
-          to={`download/${activeComic.siteId}`}
+          to={`download/${comic.siteId}`}
         />
         <Button
           theme="pure"

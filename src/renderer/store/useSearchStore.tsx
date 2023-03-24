@@ -72,9 +72,9 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
   },
 
   insertComic: async (): Promise<void> => {
-    const { comic, chapters } = useSearchStore.getState()
+    const { repo, comic, chapters } = useSearchStore.getState()
 
-    await invoke('dbInsertComic', { comic, chapters })
+    await invoke('dbInsertComic', { comic: { ...comic, repo }, chapters })
 
     const { getListDB } = useDashboardStore.getState()
     getListDB()
@@ -84,7 +84,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
 
   setRepo: (repo) => set((state: useSearchStore) => ({ ...state, repo })),
 
-  resetComic: () => set((state: useSearchStore) => ({ ...initialState(set), list: state.list }))
+  resetComic: () => set(() => ({ ...initialState(set) }))
 })
 
 const useSearchStore = create<useSearchStore>((set) => initialState(set))

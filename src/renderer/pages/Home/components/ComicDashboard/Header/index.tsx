@@ -1,27 +1,36 @@
 import slugify from 'slugify'
 import Image from 'components/Image'
 
+import useDashboardStore from 'store/useDashboardStore'
 import useGlobalStore from 'store/useGlobalStore'
 
 import style from './style.module.scss'
 
-const DashboardHeader = ({ item }: { item: Comic }): JSX.Element => {
+const DashboardHeader = (): JSX.Element => {
   const { appPath } = useGlobalStore()
 
-  const cover = item.cover.startsWith('http')
-    ? item.cover
-    : `file:///${window.path.join(appPath, 'downloads', item.type, slugify(item.name), item.cover)}`
+  const { comic } = useDashboardStore()
+
+  const cover = comic?.cover.startsWith('http')
+    ? comic.cover
+    : `file:///${window.path.join(
+        appPath,
+        'downloads',
+        comic.type,
+        slugify(comic.name),
+        comic.cover
+      )}`
 
   return (
     <div className={style.DashboardHeader}>
       <div className={style.texts}>
         <div className={style.title}>
-          <h1>{item.name}</h1>
-          <p>{item.publisher}</p>
-          <p>{item.status}</p>
+          <h1>{comic.name}</h1>
+          <p>{comic.publisher}</p>
+          <p>{comic.status}</p>
         </div>
         <div className={style.synopsis}>
-          <p>{item.synopsis}</p>
+          <p>{comic.synopsis}</p>
         </div>
       </div>
       <Image className={style.cover} src={cover} />

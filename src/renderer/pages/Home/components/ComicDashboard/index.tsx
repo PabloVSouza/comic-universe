@@ -9,19 +9,25 @@ import useDashboardStore from 'store/useDashboardStore'
 import style from './style.module.scss'
 
 const ComicDashboard = (): JSX.Element => {
-  const { getReadProgressDB, activeComic } = useDashboardStore()
+  const { comic, list, setComic, getReadProgressDB } = useDashboardStore()
 
-  if (activeComic) {
+  if (comic) {
     useMemo(() => {
       getReadProgressDB()
-    }, [activeComic])
+    }, [comic])
   }
+
+  useMemo(() => {
+    if (list.length && !comic._id) {
+      setComic(list[0])
+    }
+  }, [list])
 
   return (
     <div className={style.comicDashboard}>
-      {!!activeComic && (
+      {!!comic._id && (
         <>
-          <DashboardHeader item={activeComic} />
+          <DashboardHeader />
           <DashboardNav />
           <DashboardList />
         </>

@@ -11,9 +11,9 @@ const { path } = window
 
 const ComicListItem = ({ item }: { item: Comic }): JSX.Element => {
   const { appPath } = useGlobalStore()
-  const { activeComic, setActiveComic } = useDashboardStore()
+  const { comic, setComic } = useDashboardStore()
 
-  const active = activeComic._id === item._id
+  const active = comic._id === item._id
 
   const cover = item.cover.startsWith('http')
     ? item.cover
@@ -22,7 +22,7 @@ const ComicListItem = ({ item }: { item: Comic }): JSX.Element => {
   return (
     <li
       className={classNames(style.comicListItem, active ? style.active : null)}
-      onClick={(): void => setActiveComic(item)}
+      onClick={(): void => setComic(item)}
     >
       <p className={style.name}>{item.name}</p>
       <Image className={style.cover} src={cover} />

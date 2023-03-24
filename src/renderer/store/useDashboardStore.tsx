@@ -2,7 +2,7 @@ import { create } from 'zustand'
 const { invoke } = window.Electron.ipcRenderer
 
 interface useDashboardStore {
-  activeComic: Comic
+  comic: Comic
   chapters: Chapter[]
   list: Comic[]
   readProgress: ReadProgress[]
@@ -10,11 +10,11 @@ interface useDashboardStore {
   getChaptersDB: () => Promise<void>
   getReadProgressDB: () => Promise<void>
   changeReadProgress: (chapter: Chapter, page: number) => Promise<void>
-  setActiveComic: (comic: Comic) => void
+  setComic: (comic: Comic) => void
 }
 
 const useDashboardStore = create<useDashboardStore>((set) => ({
-  activeComic: {} as Comic,
+  comic: {} as Comic,
   chapters: [],
   list: [],
   readProgress: [],
@@ -26,19 +26,19 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
   },
 
   getChaptersDB: async (): Promise<void> => {
-    const { activeComic } = useDashboardStore.getState()
+    const { comic } = useDashboardStore.getState()
     const chapters = await invoke('dbGetChapters', {
-      comicId: activeComic._id
+      comicId: comic._id
     })
 
     set((state) => ({ ...state, chapters }))
   },
 
   getReadProgressDB: async (): Promise<void> => {
-    const { activeComic } = useDashboardStore.getState()
+    const { comic } = useDashboardStore.getState()
 
     invoke('dbGetReadProgress', {
-      comicId: activeComic._id
+      comicId: comic._id
     }).then((res) => {
       set((state) => ({ ...state, readProgress: res }))
     })
@@ -52,7 +52,7 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
     })
   },
 
-  setActiveComic: (comic): void => set((state) => ({ ...state, activeComic: comic }))
+  setComic: (comic): void => set((state) => ({ ...state, comic }))
 }))
 
 const { getListDB } = useDashboardStore.getState()

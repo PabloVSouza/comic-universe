@@ -8,13 +8,9 @@ import style from './style.module.scss'
 const DashboardHeader = ({ item }: { item: Comic }): JSX.Element => {
   const { appPath } = useGlobal((state) => state)
 
-  const cover = `file:///${window.path.join(
-    appPath,
-    'downloads',
-    item.type,
-    slugify(item.name),
-    item.cover
-  )}`
+  const cover = item.cover.startsWith('http')
+    ? item.cover
+    : `file:///${window.path.join(appPath, 'downloads', item.type, slugify(item.name), item.cover)}`
 
   return (
     <div className={style.DashboardHeader}>

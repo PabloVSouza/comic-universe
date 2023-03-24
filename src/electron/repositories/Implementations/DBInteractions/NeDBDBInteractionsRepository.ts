@@ -42,27 +42,35 @@ export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
 
     dbInsertComic: async ({ comic, chapters }): Promise<void> => {
       if (!comic._id) {
-        return new Promise((resolve) => {
-          this.db.Comic.insert(comic, (_err, data) => {
-            const comicDB = data
+        this.db.Comic.insert(comic, async (_err, data) => {
+          const comicDB = data
 
-            for (const chapter of chapters) {
-              this.db.Chapter.insert({ ...chapter, comicId: comicDB._id })
-            }
+          for (const chapter of chapters) {
+            await this.methods.dbInsertChapter({ chapter: { ...chapter, comicId: comicDB._id } })
+          }
+          return new Promise((resolve) => {
+            resolve()
           })
-          resolve()
         })
       }
 
       const chaptersDbList = await this.methods.dbGetChapters({ comicId: comic._id })
 
-      return new Promise((resolve) => {
-        for (const chapter of chapters) {
-          if (!chaptersDbList.find((c) => c.siteId === chapter.siteId)) {
-            this.db.Chapter.insert({ ...chapter, comicId: comic._id })
-          }
+      for (const chapter of chapters) {
+        if (!chaptersDbList.find((c) => c.siteId === chapter.siteId)) {
+          await this.methods.dbInsertChapter({ chapter: { ...chapter, comicId: comic._id } })
         }
+      }
+      return new Promise((resolve) => {
         resolve()
+      })
+    },
+
+    dbInsertChapter: async ({ chapter }): Promise<void> => {
+      return new Promise((resolve) => {
+        this.db.Chapter.insert(chapter, () => {
+          resolve()
+        })
       })
     },
 

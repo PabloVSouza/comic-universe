@@ -15,13 +15,9 @@ const ComicListItem = ({ item }: { item: Comic }): JSX.Element => {
 
   const active = activeComic._id === item._id
 
-  const cover = `file:///${path.join(
-    appPath,
-    'downloads',
-    item.type,
-    slugify(item.name),
-    item.cover
-  )}`
+  const cover = item.cover.startsWith('http')
+    ? item.cover
+    : `file:///${path.join(appPath, 'downloads', item.type, slugify(item.name), item.cover)}`
 
   return (
     <li

@@ -1,5 +1,6 @@
 import { create, StoreApi } from 'zustand'
 import merge from 'lodash.merge'
+import useDashboard from './dashboard'
 
 const { invoke } = window.Electron.ipcRenderer
 
@@ -75,6 +76,9 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
     const { comic, chapters } = useSearchStore.getState()
 
     await invoke('dbInsertComic', { comic, chapters })
+
+    const { getListDB } = useDashboard.getState()
+    getListDB()
   },
 
   setComic: (comic) => set((state: useSearchStore) => ({ ...state, comic })),

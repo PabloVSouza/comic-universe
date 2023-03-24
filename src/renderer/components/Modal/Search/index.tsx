@@ -10,7 +10,7 @@ import style from './style.module.scss'
 
 const ModalSearch = (): JSX.Element => {
   const [searchText, setSearchText] = useState('')
-  const { list, search, resetComic, repo, setRepo } = useSearchStore()
+  const { list, search, resetComic, repo, setRepo, getList } = useSearchStore()
 
   const texts = useLang()
 
@@ -40,7 +40,8 @@ const ModalSearch = (): JSX.Element => {
   })
 
   useMemo(() => {
-    search(searchText)
+    if (searchText.length > 0) search(searchText)
+    if (searchText.length === 0) getList()
   }, [searchText])
 
   return (

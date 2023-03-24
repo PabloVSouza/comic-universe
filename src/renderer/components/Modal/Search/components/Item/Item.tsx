@@ -1,9 +1,9 @@
 import { LiHTMLAttributes, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
 import ReactHtmlParser from 'react-html-parser'
 import classNames from 'classnames'
 
 import useSearchStore from 'store/useSearchStore'
+import useDashboard from 'store/dashboard'
 
 import useLang from 'lang'
 
@@ -17,9 +17,11 @@ interface ComicListItem extends LiHTMLAttributes<unknown> {
 }
 
 const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
-  const navigate = useNavigate()
-
   const texts = useLang()
+
+  const { list } = useDashboard()
+
+  const existsInDB = !!list.find((comic) => comic.siteId === data.siteId)
 
   const { comic, chapters, getDetails, getChapters, insertComic, setComic } = useSearchStore(
     (state) => state
@@ -70,8 +72,14 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
       </div>
       {extended && (
         <div className={style.buttonArea}>
-          <Button theme="roundedRectangle" size="xl" color="green" onClick={addToList}>
-            {texts.SearchComic.bookmarkComic}
+          <Button
+            theme="roundedRectangle"
+            size="xl"
+            color={existsInDB ? 'white' : 'green'}
+            onClick={addToList}
+            disabled={existsInDB}
+          >
+            {existsInDB ? 'downloaded' : texts.SearchComic.bookmarkComic}
           </Button>
         </div>
       )}

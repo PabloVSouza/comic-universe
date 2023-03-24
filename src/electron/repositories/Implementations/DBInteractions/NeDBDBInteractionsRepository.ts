@@ -47,9 +47,7 @@ export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
             const comicDB = data
 
             for (const chapter of chapters) {
-              if (!chaptersDbList.find((c) => c.siteId === chapter.siteId)) {
-                this.db.Chapter.insert({ ...chapter, comicId: comicDB._id })
-              }
+              this.db.Chapter.insert({ ...chapter, comicId: comicDB._id })
             }
           })
           resolve()

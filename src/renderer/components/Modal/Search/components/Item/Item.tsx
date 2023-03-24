@@ -21,7 +21,9 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
 
   const texts = useLang()
 
-  const { comic, chapters, setComic, getDetails, getChapters } = useSearchStore((state) => state)
+  const { comic, chapters, getDetails, getChapters, insertComic, setComic } = useSearchStore(
+    (state) => state
+  )
 
   const setActive = async (): Promise<void> => {
     await getChapters(data.siteId)
@@ -36,8 +38,8 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
 
   const extended = comic.siteId === data.siteId
 
-  const goToPage = (): void => {
-    navigate(`/download/${comic.siteId}`)
+  const addToList = (): void => {
+    insertComic()
   }
 
   return (
@@ -68,7 +70,7 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
       </div>
       {extended && (
         <div className={style.buttonArea}>
-          <Button theme="roundedRectangle" size="xl" color="green" onClick={(): void => goToPage()}>
+          <Button theme="roundedRectangle" size="xl" color="green" onClick={addToList}>
             {texts.SearchComic.bookmarkComic}
           </Button>
         </div>

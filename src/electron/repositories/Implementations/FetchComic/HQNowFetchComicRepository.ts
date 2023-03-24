@@ -17,7 +17,9 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
   path: string
 
   constructor(data: IFetchComicRepositoryInit) {
-    const cache: InMemoryCache = new InMemoryCache({})
+    const cache: InMemoryCache = new InMemoryCache({
+      addTypename: false
+    })
     this.client = new ApolloClient({
       cache,
       link: new HttpLink({ uri: data.url, fetch })
@@ -100,6 +102,7 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
           query getChaptersByHqId($id: Int!) {
             getChaptersByHqId(hqId: $id) {
               name
+              number
               siteId: id
               pages: pictures {
                 filename: image

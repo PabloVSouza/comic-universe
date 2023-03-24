@@ -40,19 +40,31 @@ export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
       })
     },
 
-    dbInsertComic: async ({ comic, chapter }): Promise<{ comic: Comic; chapter: Chapter }> => {
-      return new Promise((resolve) => {
-        let comicDB = comic
-
-        if (!comic._id) {
+    dbInsertComic: async ({ comic, chapters }): Promise<void> => {
+      if (!comic._id) {
+        return new Promise((resolve) => {
           this.db.Comic.insert(comic, (_err, data) => {
-            comicDB = data
-          })
-        }
+            const comicDB = data
 
-        this.db.Chapter.insert({ ...chapter, comicId: comicDB._id }, (_err, chapterDB) => {
-          resolve({ comic: comicDB, chapter: chapterDB })
+            for (const chapter of chapters) {
+              if (!chaptersDbList.find((c) => c.siteId === chapter.siteId)) {
+                this.db.Chapter.insert({ ...chapter, comicId: comicDB._id })
+              }
+            }
+          })
+          resolve()
         })
+      }
+
+      const chaptersDbList = await this.methods.dbGetChapters({ comicId: comic._id })
+
+      return new Promise((resolve) => {
+        for (const chapter of chapters) {
+          if (!chaptersDbList.find((c) => c.siteId === chapter.siteId)) {
+            this.db.Chapter.insert({ ...chapter, comicId: comic._id })
+          }
+        }
+        resolve()
       })
     },
 

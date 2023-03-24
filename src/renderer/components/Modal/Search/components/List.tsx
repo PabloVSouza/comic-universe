@@ -28,7 +28,7 @@ const SearchComicList = ({ list, itemsPerPage = 10 }: SearchComicList): JSX.Elem
     <div className={style.searchComicList}>
       <ul className={style.list}>
         {currentItems.map((comic) => {
-          return <ComicListItem data={comic} id={comic.id} key={comic.id} />
+          return <ComicListItem data={comic} id={comic.siteId} key={comic.siteId} />
         })}
       </ul>
 

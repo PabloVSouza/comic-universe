@@ -12,7 +12,7 @@ interface useSearchStore {
   search: (search: string) => Promise<void>
   getDetails: (siteId: string) => Promise<void>
   getChapters: (siteId: string) => Promise<void>
-  addToDB: (data: Comic) => Promise<void>
+  insertComic: () => Promise<void>
   setComic: (data: Comic) => void
   setRepo: (repo: string) => void
   resetComic: () => void
@@ -71,7 +71,11 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
     })
   },
 
-  addToDB: async (): Promise<void> => {},
+  insertComic: async (): Promise<void> => {
+    const { comic, chapters } = useSearchStore.getState()
+
+    await invoke('dbInsertComic', { comic, chapters })
+  },
 
   setComic: (comic) => set((state: useSearchStore) => ({ ...state, comic })),
 

@@ -2,16 +2,16 @@ import slugify from 'slugify'
 import classNames from 'classnames'
 
 import Image from 'components/Image'
-import useGlobal from 'store/global'
-import useDashboard from 'store/dashboard'
+import useGlobalStore from 'store/useGlobalStore'
+import useDashboardStore from 'store/useDashboardStore'
 
 import style from './style.module.scss'
 
 const { path } = window
 
 const ComicListItem = ({ item }: { item: Comic }): JSX.Element => {
-  const { appPath } = useGlobal((state) => state)
-  const { activeComic, setActiveComic } = useDashboard((state) => state)
+  const { appPath } = useGlobalStore()
+  const { activeComic, setActiveComic } = useDashboardStore()
 
   const active = activeComic._id === item._id
 

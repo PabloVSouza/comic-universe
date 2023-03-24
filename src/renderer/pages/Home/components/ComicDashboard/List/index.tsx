@@ -2,12 +2,12 @@ import { useMemo } from 'react'
 
 import DashboardListItem from './Item'
 
-import useDashboard from 'store/dashboard'
+import useDashboardStore from 'store/useDashboardStore'
 
 import style from './style.module.scss'
 
 const DashboardList = (): JSX.Element => {
-  const { activeComic, chapters, getChaptersDB } = useDashboard()
+  const { activeComic, chapters, getChaptersDB } = useDashboardStore()
 
   useMemo(() => {
     getChaptersDB()

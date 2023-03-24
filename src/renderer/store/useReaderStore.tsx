@@ -1,9 +1,9 @@
 import { create } from 'zustand'
-import useDashboard from './dashboard'
+import useDashboard from './useDashboardStore'
 
 const { invoke } = window.Electron.ipcRenderer
 
-interface useReader {
+interface useReaderStore {
   chapter: Chapter
   page: number
   pages: Page[]
@@ -18,7 +18,7 @@ interface useReader {
   setPage: (page: number) => void
 }
 
-const useReader = create<useReader>((set) => ({
+const useReaderStore = create<useReaderStore>((set) => ({
   chapter: {} as Chapter,
   page: 0,
   pages: [],
@@ -26,7 +26,7 @@ const useReader = create<useReader>((set) => ({
   activeComic: {} as Comic,
 
   getChapterData: async (comicId, number): Promise<void> => {
-    const { setChapter, setPages, setChapters, setActiveComic, setPage } = useReader.getState()
+    const { setChapter, setPages, setChapters, setActiveComic, setPage } = useReaderStore.getState()
     const { list } = useDashboard.getState()
 
     const comic = list.find((val) => val._id === comicId) as Comic
@@ -65,7 +65,7 @@ const useReader = create<useReader>((set) => ({
   },
 
   changePage: async (page): Promise<void> => {
-    const { chapter, setPage } = useReader.getState()
+    const { chapter, setPage } = useReaderStore.getState()
 
     await invoke('dbUpdateReadProgress', {
       chapter,
@@ -81,4 +81,4 @@ const useReader = create<useReader>((set) => ({
   setPage: (page): void => set((state) => ({ ...state, page }))
 }))
 
-export default useReader
+export default useReaderStore

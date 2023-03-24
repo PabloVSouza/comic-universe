@@ -1,14 +1,14 @@
 import Cover from 'components/Cover'
 import Image from 'components/Image'
 
-import useLoading from 'store/loading'
+import useLoadingStore from 'store/useLoadingStore'
 
 import style from './style.module.scss'
 
 import imgLoading from 'assets/loading.svg'
 
 const Loading = (): JSX.Element => {
-  const state = useLoading((state) => state)
+  const state = useLoadingStore()
   const { status, message, progress } = state
 
   const totalProgress = Math.round((100 / progress.total) * progress.current)

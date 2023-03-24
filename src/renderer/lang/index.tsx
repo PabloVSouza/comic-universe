@@ -1,10 +1,10 @@
-import usePersist from 'store/persist'
+import usePersistStore from 'store/usePersistStore'
 
 import ptBR from './ptBR'
 import enUS from './enUS'
 
 const useLang = (): Lang => {
-  const { lang } = usePersist()
+  const { lang } = usePersistStore()
 
   const langList = {
     ptBR,

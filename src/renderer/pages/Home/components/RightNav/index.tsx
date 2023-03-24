@@ -6,9 +6,9 @@ import Cover from 'components/Cover'
 
 import useLang from 'lang'
 
-import useGlobal from 'store/global'
+import useGlobalStore from 'store/useGlobalStore'
 
-import usePersist from 'store/persist'
+import usePersistStore from 'store/usePersistStore'
 
 import style from './style.module.scss'
 
@@ -18,8 +18,8 @@ import darkmodeIcon from 'assets/darkmode.svg'
 import userIcon from 'assets/user.svg'
 
 const RightNav = (): JSX.Element => {
-  const { menuVisible, toggleMenu } = useGlobal()
-  const { switchTheme } = usePersist()
+  const { menuVisible, toggleMenu } = useGlobalStore()
+  const { switchTheme } = usePersistStore()
 
   const navigate = useNavigate()
   const texts = useLang()

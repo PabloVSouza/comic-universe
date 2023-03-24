@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 const { invoke } = window.Electron.ipcRenderer
 
-interface useDashboard {
+interface useDashboardStore {
   activeComic: Comic
   chapters: Chapter[]
   list: Comic[]
@@ -13,7 +13,7 @@ interface useDashboard {
   setActiveComic: (comic: Comic) => void
 }
 
-const useDashboard = create<useDashboard>((set) => ({
+const useDashboardStore = create<useDashboardStore>((set) => ({
   activeComic: {} as Comic,
   chapters: [],
   list: [],
@@ -26,7 +26,7 @@ const useDashboard = create<useDashboard>((set) => ({
   },
 
   getChaptersDB: async (): Promise<void> => {
-    const { activeComic } = useDashboard.getState()
+    const { activeComic } = useDashboardStore.getState()
     const chapters = await invoke('dbGetChapters', {
       comicId: activeComic._id
     })
@@ -35,7 +35,7 @@ const useDashboard = create<useDashboard>((set) => ({
   },
 
   getReadProgressDB: async (): Promise<void> => {
-    const { activeComic } = useDashboard.getState()
+    const { activeComic } = useDashboardStore.getState()
 
     invoke('dbGetReadProgress', {
       comicId: activeComic._id
@@ -55,7 +55,7 @@ const useDashboard = create<useDashboard>((set) => ({
   setActiveComic: (comic): void => set((state) => ({ ...state, activeComic: comic }))
 }))
 
-const { getListDB } = useDashboard.getState()
+const { getListDB } = useDashboardStore.getState()
 getListDB()
 
-export default useDashboard
+export default useDashboardStore

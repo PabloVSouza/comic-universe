@@ -1,12 +1,12 @@
 import slugify from 'slugify'
 import Image from 'components/Image'
 
-import useGlobal from 'store/global'
+import useGlobalStore from 'store/useGlobalStore'
 
 import style from './style.module.scss'
 
 const DashboardHeader = ({ item }: { item: Comic }): JSX.Element => {
-  const { appPath } = useGlobal((state) => state)
+  const { appPath } = useGlobalStore()
 
   const cover = item.cover.startsWith('http')
     ? item.cover

@@ -3,7 +3,7 @@ import { HashRouter } from 'react-router-dom'
 import ReactDOM from 'react-dom/client'
 import Routes from 'routes'
 import Loading from 'components/Loading'
-import usePersist from 'store/persist'
+import usePersistStore from 'store/usePersistStore'
 
 import style from 'scss/main/style.module.scss'
 import themes from 'scss/main/themes.module.scss'
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const Main = ({ children }: Props): JSX.Element => {
-  const { theme } = usePersist()
+  const { theme } = usePersistStore()
   return <div className={classNames(themes[theme], style.main)}>{children}</div>
 }
 

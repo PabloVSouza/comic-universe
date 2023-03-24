@@ -3,10 +3,10 @@ import Button from 'components/Button'
 import style from './style.module.scss'
 
 import downloadIcon from 'assets/download-icon.svg'
-import useGlobal from 'store/global'
+import useGlobalStore from 'store/useGlobalStore'
 
 const TopBar = (): JSX.Element => {
-  const { toggleMenu, menuVisible } = useGlobal((state) => state)
+  const { toggleMenu, menuVisible } = useGlobalStore((state) => state)
 
   return (
     <div className={style.topBar}>

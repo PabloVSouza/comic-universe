@@ -5,7 +5,7 @@ import useLang from 'lang'
 
 import Button from 'components/Button'
 
-import useDashboard from 'store/dashboard'
+import useDashboardStore from 'store/useDashboardStore'
 
 import style from './style.module.scss'
 
@@ -17,7 +17,7 @@ const DashboardListItem = ({ item }: { item: Chapter }): JSX.Element => {
 
   const texts = useLang()
 
-  const { activeComic, readProgress, getReadProgressDB, changeReadProgress } = useDashboard()
+  const { activeComic, readProgress, getReadProgressDB, changeReadProgress } = useDashboardStore()
 
   const totalPages = item.pages.length - 1
 

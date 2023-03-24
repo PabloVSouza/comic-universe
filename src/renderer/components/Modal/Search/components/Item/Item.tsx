@@ -3,7 +3,7 @@ import ReactHtmlParser from 'react-html-parser'
 import classNames from 'classnames'
 
 import useSearchStore from 'store/useSearchStore'
-import useDashboard from 'store/dashboard'
+import useDashboardStore from 'store/useDashboardStore'
 
 import useLang from 'lang'
 
@@ -19,7 +19,7 @@ interface ComicListItem extends LiHTMLAttributes<unknown> {
 const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
   const texts = useLang()
 
-  const { list } = useDashboard()
+  const { list } = useDashboardStore()
 
   const existsInDB = !!list.find((comic) => comic.siteId === data.siteId)
 
@@ -79,7 +79,7 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
             onClick={addToList}
             disabled={existsInDB}
           >
-            {existsInDB ? 'downloaded' : texts.SearchComic.bookmarkComic}
+            {existsInDB ? texts.SearchComic.alreadyBookmarked : texts.SearchComic.bookmarkComic}
           </Button>
         </div>
       )}

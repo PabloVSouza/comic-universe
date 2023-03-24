@@ -26,7 +26,8 @@ export default class enUS implements Lang {
 
   SearchComic: SearchComicLang = {
     textPlaceholder: 'Type your Search',
-    bookmarkComic: 'Add to List',
+    bookmarkComic: 'Bookmark',
+    alreadyBookmarked: 'Bookmarked',
     availableChapters: 'Chapters Available',
     pagination: {
       previous: 'Previous',

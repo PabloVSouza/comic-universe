@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 import Image from 'components/Image'
 
-import usePersist from 'store/persist'
+import usePersistStore from 'store/usePersistStore'
 
 import style from './style.module.scss'
 
@@ -17,7 +17,7 @@ interface UsersListItem {
 
 const UsersListItem = ({ data, newUser }: UsersListItem): JSX.Element => {
   const navigate = useNavigate()
-  const { setCurrentUser } = usePersist()
+  const { setCurrentUser } = usePersistStore()
 
   const setUser = (): void => {
     if (data) {

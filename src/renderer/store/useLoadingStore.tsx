@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-interface useLoading {
+interface useLoadingStore {
   status: boolean
   message: string
   type: string
@@ -9,10 +9,10 @@ interface useLoading {
     current: number
     total: number
   }
-  setLoading: (data: useLoading) => void
+  setLoading: (data: useLoadingStore) => void
 }
 
-const useLoading = create<useLoading>((set) => ({
+const useLoadingStore = create<useLoadingStore>((set) => ({
   status: false,
   message: '',
   type: '',
@@ -25,10 +25,10 @@ const useLoading = create<useLoading>((set) => ({
   setLoading: (data): void => set((state) => ({ ...state, ...data }))
 }))
 
-export default useLoading
+export default useLoadingStore
 
 const { on } = window.Electron.ipcRenderer
 
-on('loading', (event, data) => {
-  useLoading.getState().setLoading(data)
+on('loading', (_event, data) => {
+  useLoadingStore.getState().setLoading(data)
 })

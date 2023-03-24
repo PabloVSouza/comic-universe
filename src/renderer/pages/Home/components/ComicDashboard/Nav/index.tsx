@@ -4,7 +4,7 @@ import Button from 'components/Button'
 
 import useLang from 'lang'
 
-import useDashboard from 'store/dashboard'
+import useDashboardStore from 'store/useDashboardStore'
 
 import style from './style.module.scss'
 
@@ -16,7 +16,7 @@ const DashboardNav = (): JSX.Element => {
 
   const texts = useLang()
 
-  const { activeComic, chapters, readProgress } = useDashboard()
+  const { activeComic, chapters, readProgress } = useDashboardStore()
 
   const calcTotalProgress = (): number => {
     let totalRead = 0
@@ -54,7 +54,7 @@ const DashboardNav = (): JSX.Element => {
           size="xxs"
           icon={downloadIcon}
           title={texts.Dashboard.downloadMore}
-          to={`download/${activeComic.id}`}
+          to={`download/${activeComic.siteId}`}
         />
         <Button
           theme="pure"

@@ -2,14 +2,14 @@ import { create } from 'zustand'
 
 const { invoke } = window.Electron.ipcRenderer
 
-interface useGlobal {
+interface useGlobalStore {
   appPath: string
   menuVisible: boolean
   toggleMenu: () => void
   getAppPath: () => Promise<void>
 }
 
-const useGlobal = create<useGlobal>((set) => ({
+const useGlobalStore = create<useGlobalStore>((set) => ({
   appPath: '',
   menuVisible: false,
 
@@ -21,7 +21,7 @@ const useGlobal = create<useGlobal>((set) => ({
   }
 }))
 
-export default useGlobal
+export default useGlobalStore
 
-const { getAppPath } = useGlobal.getState()
+const { getAppPath } = useGlobalStore.getState()
 getAppPath()

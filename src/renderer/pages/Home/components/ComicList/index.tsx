@@ -1,10 +1,10 @@
 import ComicListItem from './Item'
-import useDashboard from 'store/dashboard'
+import useDashboardStore from 'store/useDashboardStore'
 
 import style from './style.module.scss'
 
 const ComicList = (): JSX.Element => {
-  const { list } = useDashboard()
+  const { list } = useDashboardStore()
   return (
     <ul className={style.comicList}>
       {list.map((item) => (

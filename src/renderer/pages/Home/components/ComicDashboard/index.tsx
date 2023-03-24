@@ -4,12 +4,12 @@ import DashboardHeader from './Header'
 import DashboardNav from './Nav'
 import DashboardList from './List'
 
-import useDashboard from 'store/dashboard'
+import useDashboardStore from 'store/useDashboardStore'
 
 import style from './style.module.scss'
 
 const ComicDashboard = (): JSX.Element => {
-  const { getReadProgressDB, activeComic } = useDashboard()
+  const { getReadProgressDB, activeComic } = useDashboardStore()
 
   if (activeComic) {
     useMemo(() => {

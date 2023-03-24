@@ -5,8 +5,8 @@ import slugify from 'slugify'
 import Image from 'components/Image'
 import Modal from 'components/Modal'
 
-import useReader from 'store/reader'
-import useGlobal from 'store/global'
+import useReaderStore from 'store/useReaderStore'
+import useGlobalStore from 'store/useGlobalStore'
 
 import style from './style.module.scss'
 import ZoomWindow, { MousePos } from './components/ZoomWindow'
@@ -19,9 +19,9 @@ const Reader = (): JSX.Element => {
   const [mousePos, setMousePos] = useState<MousePos>({} as MousePos)
   const [zoomVisible, setZoomVisible] = useState(false)
 
-  const { appPath } = useGlobal((state) => state)
+  const { appPath } = useGlobalStore((state) => state)
   const { activeComic, chapter, chapters, page, pages, getChapterData, setChapter, changePage } =
-    useReader((state) => state)
+    useReaderStore()
 
   useMemo(() => {
     getChapterData(comicId, number)

@@ -26,6 +26,7 @@ interface RightNavLang {
 interface SearchComicLang {
   textPlaceholder: string
   bookmarkComic: string
+  alreadyBookmarked: string
   availableChapters: string
   pagination: {
     previous: string

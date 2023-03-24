@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
-interface usePersist {
+interface usePersistStore {
   theme: string
   lang: string
   currentUser: User
@@ -10,7 +10,7 @@ interface usePersist {
   setCurrentUser: (currentUser: User) => void
 }
 
-const usePersist = create<usePersist>()(
+const usePersistStore = create<usePersistStore>()(
   persist(
     (set, get) => ({
       theme: 'dark',
@@ -34,4 +34,4 @@ const usePersist = create<usePersist>()(
   )
 )
 
-export default usePersist
+export default usePersistStore

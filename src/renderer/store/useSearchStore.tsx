@@ -1,5 +1,5 @@
 import { create, StoreApi } from 'zustand'
-import useDashboard from './dashboard'
+import useDashboardStore from './useDashboardStore'
 
 const { invoke } = window.Electron.ipcRenderer
 
@@ -76,7 +76,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
 
     await invoke('dbInsertComic', { comic, chapters })
 
-    const { getListDB } = useDashboard.getState()
+    const { getListDB } = useDashboardStore.getState()
     getListDB()
   },
 

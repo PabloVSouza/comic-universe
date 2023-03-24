@@ -29,15 +29,17 @@ const Reader = (): JSX.Element => {
 
   const chapterIndex = chapters.findIndex((val) => val.number === chapter?.number)
 
-  const getPath = (page: string): string =>
-    `file:///${window.path.join(
-      appPath,
-      'downloads',
-      activeComic?.type,
-      slugify(activeComic?.name),
-      slugify(chapter?.number),
-      String(page)
-    )}`
+  const getPath = (page: Page): string =>
+    page.path.startsWith('http')
+      ? page.path
+      : `file:///${window.path.join(
+          appPath,
+          'downloads',
+          activeComic?.type,
+          slugify(activeComic?.name),
+          slugify(chapter?.number),
+          page.path
+        )}`
 
   const nextPage = async (): Promise<void> => {
     if (page < pages.length - 1) changePage(page + 1)
@@ -54,7 +56,7 @@ const Reader = (): JSX.Element => {
     }
   }
 
-  const handleKeys = (e): void => {
+  const handleKeys = (e: KeyboardEvent): void => {
     const keys = {
       ArrowLeft: (): void => {
         previousPage()
@@ -74,7 +76,7 @@ const Reader = (): JSX.Element => {
     }
   }
 
-  const defineMousePos = (e): void => {
+  const defineMousePos = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     setMousePos({ x: e.pageX, y: e.pageY })
   }
 
@@ -94,7 +96,7 @@ const Reader = (): JSX.Element => {
       <Modal modal="" />
       <div
         className={style.Reader}
-        onMouseMoveCapture={(e): void => defineMousePos(e)}
+        onMouseMoveCapture={defineMousePos}
         onContextMenu={(): void => setZoomVisible(!zoomVisible)}
       >
         {pages.length > 0 && (
@@ -106,7 +108,7 @@ const Reader = (): JSX.Element => {
         )}
         <div className={style.pages} style={position}>
           {pages?.map((currentPage) => (
-            <div key={currentPage} className={style.page}>
+            <div key={currentPage.filename} className={style.page}>
               <div className={style.buttons}>
                 <button
                   className={style.btnPrevious}
@@ -114,7 +116,7 @@ const Reader = (): JSX.Element => {
                 />
                 <button className={style.btnNext} onClick={(): Promise<void> => nextPage()} />
               </div>
-              <Image className={style.Image} src={getPath(currentPage)} />
+              <Image className={style.Image} pure src={getPath(currentPage)} />
             </div>
           ))}
         </div>

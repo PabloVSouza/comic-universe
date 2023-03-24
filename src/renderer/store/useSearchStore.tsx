@@ -1,5 +1,4 @@
 import { create, StoreApi } from 'zustand'
-import merge from 'lodash.merge'
 import useDashboard from './dashboard'
 
 const { invoke } = window.Electron.ipcRenderer
@@ -52,7 +51,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
 
     const index = list.findIndex((val) => val.siteId == siteId)
 
-    list[index] = await merge(list[index], data)
+    list[index] = { ...list[index], ...data }
 
     set((state: useSearchStore) => ({ ...state, list }))
 

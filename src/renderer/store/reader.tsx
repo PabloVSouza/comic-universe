@@ -6,14 +6,14 @@ const { invoke } = window.Electron.ipcRenderer
 interface useReader {
   chapter: Chapter
   page: number
-  pages: string[]
+  pages: Page[]
   chapters: Chapter[]
   activeComic: Comic
   getChapterData: (comicId?: string, number?: string) => Promise<void>
   changePage: (page: number) => Promise<void>
   setActiveComic: (activeComic: Comic) => void
   setChapters: (chapters: Chapter[]) => void
-  setPages: (pages: string[]) => void
+  setPages: (pages: Page[]) => void
   setChapter: (chapter: Chapter) => void
   setPage: (page: number) => void
 }

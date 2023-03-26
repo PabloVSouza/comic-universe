@@ -5,9 +5,11 @@ interface usePersistStore {
   theme: string
   lang: string
   currentUser: User
+  repo: string
   switchTheme: (theme?: string) => void
   changeLanguage: (lang?: string) => void
   setCurrentUser: (currentUser: User) => void
+  setRepo: (repo: string) => void
 }
 
 const usePersistStore = create<usePersistStore>()(
@@ -16,6 +18,7 @@ const usePersistStore = create<usePersistStore>()(
       theme: 'dark',
       lang: 'ptBR',
       currentUser: {} as User,
+      repo: 'hqnow',
 
       switchTheme: (theme): void =>
         set({ theme: theme || get().theme === 'dark' ? 'light' : 'dark' }),
@@ -25,7 +28,9 @@ const usePersistStore = create<usePersistStore>()(
           lang: lang || get().lang === 'ptBR' ? 'enUS' : 'ptBR'
         }),
 
-      setCurrentUser: (currentUser): void => set({ currentUser })
+      setCurrentUser: (currentUser): void => set({ currentUser }),
+
+      setRepo: (repo): void => set({ repo })
     }),
     {
       name: 'comic-universe',

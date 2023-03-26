@@ -12,7 +12,7 @@ import {
 import CreateDirectory from '../../../utils/CreateDirectory'
 import DownloadFile from '../../../utils/DownloadFile'
 
-export class FireMangasFetchComicRepository implements IFetchComicRepository {
+export class MangaLivreFetchComicRepository implements IFetchComicRepository {
   client: ApolloClient<NormalizedCacheObject>
   ipc: WebContents
   path: string

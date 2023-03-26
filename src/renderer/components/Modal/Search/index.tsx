@@ -5,16 +5,22 @@ import Window from 'components/Window'
 import SearchComicList from './components/List'
 import Select, { SingleValue } from 'react-select'
 import useSearchStore from 'store/useSearchStore'
+import usePersistStore from 'store/usePersistStore'
 import useLang from 'lang'
 import style from './style.module.scss'
 
 const ModalSearch = (): JSX.Element => {
   const [searchText, setSearchText] = useState('')
-  const { list, search, resetComic, repo, setRepo, getList } = useSearchStore()
+  const { list, search, resetComic, getList } = useSearchStore()
+  const { repo, setRepo } = usePersistStore()
 
   const texts = useLang()
 
-  const selectOptions = [{ value: 'hqnow', label: 'HQ Now' }]
+  const selectOptions = [
+    { value: 'hqnow', label: 'HQ Now' },
+    { value: 'firemangas', label: 'Fire Mangas' },
+    { value: 'mangalivre', label: 'Manga Livre' }
+  ]
 
   const handleChangeRepo = (
     option: SingleValue<{

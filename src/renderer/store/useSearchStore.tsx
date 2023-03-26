@@ -1,10 +1,10 @@
 import { create, StoreApi } from 'zustand'
 import useDashboardStore from './useDashboardStore'
+import usePersistStore from './usePersistStore'
 
 const { invoke } = window.Electron.ipcRenderer
 
 interface useSearchStore {
-  repo: string
   comic: Comic
   list: Comic[]
   chapters: Chapter[]
@@ -14,18 +14,16 @@ interface useSearchStore {
   getChapters: (siteId: string) => Promise<void>
   insertComic: () => Promise<void>
   setComic: (data: Comic) => void
-  setRepo: (repo: string) => void
   resetComic: () => void
 }
 
 const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
-  repo: 'hqnow',
   comic: {} as Comic,
   chapters: [],
   list: [],
 
   getList: async (): Promise<void> => {
-    const { repo } = useSearchStore.getState()
+    const { repo } = usePersistStore.getState()
     const list = await invoke('getList', { repo })
 
     return new Promise((resolve) => {
@@ -35,7 +33,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
   },
 
   search: async (search): Promise<void> => {
-    const { repo } = useSearchStore.getState()
+    const { repo } = usePersistStore.getState()
     const list = await invoke('search', { repo, data: { search } })
 
     return new Promise((resolve) => {
@@ -45,7 +43,8 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
   },
 
   getDetails: async (siteId): Promise<void> => {
-    const { repo, list } = useSearchStore.getState()
+    const { repo } = usePersistStore.getState()
+    const { list } = useSearchStore.getState()
 
     const data = await invoke('getDetails', { repo, data: { siteId } })
 
@@ -61,7 +60,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
   },
 
   getChapters: async (siteId): Promise<void> => {
-    const { repo } = useSearchStore.getState()
+    const { repo } = usePersistStore.getState()
 
     const chapters = await invoke('getChapters', { repo, data: { siteId } })
 
@@ -72,7 +71,8 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
   },
 
   insertComic: async (): Promise<void> => {
-    const { repo, comic, chapters } = useSearchStore.getState()
+    const { repo } = usePersistStore.getState()
+    const { comic, chapters } = useSearchStore.getState()
 
     await invoke('dbInsertComic', { comic: { ...comic, repo }, chapters })
 
@@ -81,8 +81,6 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
   },
 
   setComic: (comic) => set((state: useSearchStore) => ({ ...state, comic })),
-
-  setRepo: (repo) => set((state: useSearchStore) => ({ ...state, repo })),
 
   resetComic: () => set(() => ({ ...initialState(set) }))
 })

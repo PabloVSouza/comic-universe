@@ -11,7 +11,7 @@ const Router = (): ReactElement<RoutesProps> => {
       <Route path="/" element={<Home />}>
         <Route path="/*" element={<Navigate to="/" />} />
       </Route>
-      <Route path="/reader/:comicId/:number" element={<Reader />} />
+      <Route path="/reader/:comicId/:chapterId" element={<Reader />} />
       <Route path="/users" element={<Users />} />
     </Routes>
   )

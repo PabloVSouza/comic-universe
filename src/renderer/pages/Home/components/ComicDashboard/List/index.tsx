@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import DashboardListItem from './Item'
 
 import useDashboardStore from 'store/useDashboardStore'
@@ -7,11 +5,7 @@ import useDashboardStore from 'store/useDashboardStore'
 import style from './style.module.scss'
 
 const DashboardList = (): JSX.Element => {
-  const { activeComic, chapters, getChaptersDB } = useDashboardStore()
-
-  useMemo(() => {
-    getChaptersDB()
-  }, [activeComic])
+  const { chapters } = useDashboardStore()
 
   return (
     <ul className={style.DashboardList}>

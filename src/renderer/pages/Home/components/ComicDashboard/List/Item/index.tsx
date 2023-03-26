@@ -17,7 +17,7 @@ const DashboardListItem = ({ item }: { item: Chapter }): JSX.Element => {
 
   const texts = useLang()
 
-  const { comic, readProgress, getReadProgressDB, changeReadProgress } = useDashboardStore()
+  const { comic, readProgress, getReadProgressDB, setReadProgress } = useDashboardStore()
 
   const totalPages = item.pages.length - 1
 
@@ -28,11 +28,11 @@ const DashboardListItem = ({ item }: { item: Chapter }): JSX.Element => {
     : 0
 
   const openChapter = (): void => {
-    navigate(`/reader/${comic._id}/${item.number}`)
+    navigate(`/reader/${comic._id}/${item._id}`)
   }
 
   const handleReadProgress = async (page: number): Promise<void> => {
-    await changeReadProgress(item, page)
+    await setReadProgress(item, page)
     getReadProgressDB()
   }
 

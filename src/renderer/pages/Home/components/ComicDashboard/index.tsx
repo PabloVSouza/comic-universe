@@ -9,13 +9,7 @@ import useDashboardStore from 'store/useDashboardStore'
 import style from './style.module.scss'
 
 const ComicDashboard = (): JSX.Element => {
-  const { comic, getReadProgressDB } = useDashboardStore()
-
-  if (comic) {
-    useMemo(() => {
-      getReadProgressDB()
-    }, [comic])
-  }
+  const { comic } = useDashboardStore()
 
   return (
     <div className={style.comicDashboard}>

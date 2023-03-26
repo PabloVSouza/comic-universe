@@ -5,29 +5,48 @@ import slugify from 'slugify'
 import Image from 'components/Image'
 import Modal from 'components/Modal'
 
-import useReaderStore from 'store/useReaderStore'
 import useGlobalStore from 'store/useGlobalStore'
 
 import style from './style.module.scss'
 import ZoomWindow, { MousePos } from './components/ZoomWindow'
+import useDashboardStore from 'store/useDashboardStore'
 
 const Reader = (): JSX.Element => {
   const navigate = useNavigate()
 
-  const { comicId, number } = useParams()
+  const { comicId, chapterId } = useParams()
 
   const [mousePos, setMousePos] = useState<MousePos>({} as MousePos)
   const [zoomVisible, setZoomVisible] = useState(false)
+  const [page, setPage] = useState(0)
 
-  const { appPath } = useGlobalStore((state) => state)
-  const { activeComic, chapter, chapters, page, pages, getChapterData, setChapter, changePage } =
-    useReaderStore()
+  const { appPath } = useGlobalStore()
+  const { comic, chapters, list, readProgress, getReadProgressDB, setReadProgress, setComic } =
+    useDashboardStore()
 
   useMemo(() => {
-    getChapterData(comicId, number)
+    if (!comic._id) {
+      const foundComic = list.find((val) => val._id === comicId)
+      if (foundComic) setComic(foundComic)
+    }
   }, [])
 
-  const chapterIndex = chapters.findIndex((val) => val.number === chapter?.number)
+  const chapterIndex = chapters.findIndex((val) => val._id === chapterId)
+
+  const chapter = chapters[chapterIndex]
+
+  const pages = chapter?.pages
+
+  const currentProgress = readProgress.find((val) => val.chapterId === chapterId)
+
+  useMemo(() => {
+    if (page === 0 && currentProgress) setPage(currentProgress.page)
+  }, [])
+
+  useMemo(() => {
+    setReadProgress(chapter, page)
+    getReadProgressDB()
+  }, [page])
 
   const getPath = (page: Page): string =>
     page.path.startsWith('http')
@@ -35,24 +54,31 @@ const Reader = (): JSX.Element => {
       : `file:///${window.path.join(
           appPath,
           'downloads',
-          activeComic?.type,
-          slugify(activeComic?.name),
-          slugify(chapter?.number),
-          page.path
+          comic.repo,
+          slugify(comic.name),
+          slugify(chapter.number),
+          page.filename
         )}`
 
   const nextPage = async (): Promise<void> => {
-    if (page < pages.length - 1) changePage(page + 1)
+    if (page < pages.length - 1) setPage(page + 1)
     if (page === pages.length - 1) {
-      await getChapterData(comicId, chapters[chapterIndex + 1].number)
+      const nextChapter = chapters[chapterIndex + 1]
+      if (nextChapter) {
+        setPage(0)
+        navigate(`/reader/${comicId}/${nextChapter._id}`)
+      }
     }
   }
 
   const previousPage = async (): Promise<void> => {
-    if (page > 0) changePage(page - 1)
+    if (page > 0) setPage(page - 1)
     if (page === 0 && chapterIndex > 0) {
-      await getChapterData(comicId, chapters[chapterIndex - 1].number)
-      await changePage(chapters[chapterIndex - 1].pages.length - 1)
+      const previousChapter = chapters[chapterIndex - 1]
+      if (previousChapter) {
+        setPage(previousChapter.pages.length - 1)
+        navigate(`/reader/${comicId}/${previousChapter._id}`)
+      }
     }
   }
 
@@ -85,7 +111,7 @@ const Reader = (): JSX.Element => {
     return () => {
       document.removeEventListener('keydown', handleKeys)
     }
-  }, [chapters, page, pages, changePage, setChapter, chapterIndex])
+  }, [chapters, page, pages, setPage, chapterIndex])
 
   const position = {
     transform: `translateX(-${page * 100}%)`
@@ -99,7 +125,7 @@ const Reader = (): JSX.Element => {
         onMouseMoveCapture={defineMousePos}
         onContextMenu={(): void => setZoomVisible(!zoomVisible)}
       >
-        {pages.length > 0 && (
+        {pages?.length > 0 && (
           <ZoomWindow
             mousePos={mousePos}
             image={getPath(pages[page] ?? pages[0])}

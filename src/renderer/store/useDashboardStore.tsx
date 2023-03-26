@@ -10,7 +10,7 @@ interface useDashboardStore {
   getChaptersDB: () => Promise<void>
   getReadProgressDB: () => Promise<void>
   setReadProgress: (chapter: Chapter, page: number) => Promise<void>
-  setComic: (comic: Comic) => void
+  setComic: (comic: Comic) => Promise<void>
 }
 
 const useDashboardStore = create<useDashboardStore>((set) => ({
@@ -47,17 +47,16 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
 
   setReadProgress: async (chapter, page): Promise<void> => {
     await invoke('dbUpdateReadProgress', {
-      comicId: chapter.comicId,
       chapter,
       page
     })
   },
 
-  setComic: (comic): void => {
+  setComic: async (comic): Promise<void> => {
     set((state) => ({ ...state, comic }))
     const { getReadProgressDB, getChaptersDB } = useDashboardStore.getState()
-    getChaptersDB()
-    getReadProgressDB()
+    await getChaptersDB()
+    await getReadProgressDB()
   }
 }))
 

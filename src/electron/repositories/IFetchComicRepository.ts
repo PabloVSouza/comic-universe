@@ -9,7 +9,7 @@ export interface IFetchComicMethods {
   downloadChapter(input: {
     comic: Comic
     chapter: Chapter
-  }): Promise<{ cover: string; pageFiles: string[] }>
+  }): Promise<{ cover: string; pageFiles: Page[] }>
 }
 
 export interface IFetchComicRepository {

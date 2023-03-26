@@ -74,7 +74,7 @@ export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
       })
     },
 
-    dbGetReadProgress: async ({ search }): Promise<ReadProgress[]> => {
+    dbGetReadProgress: async (search): Promise<ReadProgress[]> => {
       return new Promise((resolve) => {
         this.db.ReadProgress.find(search, (_err: Error, res: ReadProgress[]) => {
           resolve(res)
@@ -82,26 +82,32 @@ export class NeDBDBInteractionsRepository implements IDBInteractionsRepository {
       })
     },
 
-    dbUpdateReadProgress: async ({ comicId, chapter, page }): Promise<void> => {
+    dbUpdateReadProgress: async ({ chapter, page }): Promise<void> => {
       return new Promise((resolve) => {
         this.db.ReadProgress.findOne(
           { chapterId: chapter._id },
           (_err, readProgress: ReadProgress) => {
             const data = {
-              comicId,
+              comicId: chapter.comicId,
               chapterId: chapter._id,
               totalPages: chapter.pages.length - 1,
               page
             } as ReadProgress
 
-            if (!readProgress)
+            if (!readProgress) {
               this.db.ReadProgress.insert(data, () => {
                 resolve()
               })
-
-            this.db.ReadProgress.update({ chapterId: chapter._id }, { $set: { page } }, {}, () => {
-              resolve()
-            })
+            } else {
+              this.db.ReadProgress.update(
+                { chapterId: chapter._id },
+                { $set: { page } },
+                {},
+                () => {
+                  resolve()
+                }
+              )
+            }
           }
         )
       })

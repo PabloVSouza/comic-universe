@@ -5,6 +5,7 @@ interface Chapter {
   number: string
   pages: Page[]
   date?: string
+  offline: boolean
   _id: string
   createdAt: {
     $$date: number

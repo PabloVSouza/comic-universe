@@ -43,7 +43,7 @@ const DashboardNav = (): JSX.Element => {
       if (progress && progress.page > 0) lastRead = chapter
     }
 
-    navigate(`reader/${comic._id}/${lastRead.number}`)
+    navigate(`reader/${comic._id}/${lastRead._id}`)
   }
 
   return (

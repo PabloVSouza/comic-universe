@@ -19,7 +19,7 @@ const DashboardListItem = ({ item }: { item: Chapter }): JSX.Element => {
 
   const { comic, readProgress, getReadProgressDB, setReadProgress } = useDashboardStore()
 
-  const totalPages = item.pages.length - 1
+  const totalPages = item.pages?.length - 1
 
   const chapterProgress = readProgress.find((val) => val.chapterId === item._id)
 

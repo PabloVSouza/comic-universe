@@ -8,14 +8,9 @@ const apiEvents = (win: BrowserWindow, path: string): void => {
       url: 'https://admin.hq-now.com/graphql',
       win
     }),
-    firemangas: FetchComicRepository('firemangas', {
-      path,
-      url: 'https://admin.hq-now.com/graphql',
-      win
-    }),
     mangalivre: FetchComicRepository('mangalivre', {
       path,
-      url: 'https://admin.hq-now.com/graphql',
+      url: 'https://mangalivre.net',
       win
     })
   }

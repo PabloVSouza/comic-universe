@@ -24,8 +24,8 @@ const DashboardNav = (): JSX.Element => {
 
     for (const chapter of chapters) {
       const chapterProgress = readProgress.find((val) => val.chapterId === chapter._id)
-      totalRead += chapterProgress ? chapterProgress.page : 0
-      totalPages += chapter.pages.length - 1
+      totalRead += chapterProgress ? chapterProgress.page ?? 0 : 0
+      totalPages += chapter.pages?.length - 1 ?? 0
     }
     const totalProgress = Math.round((100 / totalPages) * totalRead)
 

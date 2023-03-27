@@ -3,9 +3,9 @@ import { BrowserWindow } from 'electron'
 export interface IFetchComicMethods {
   getList(): Promise<Comic[]>
   search(input: { search: string }): Promise<Comic[]>
-  getDetails(input: { siteId: string }): Promise<Partial<Comic>>
+  getDetails(search: { [key: string]: string }): Promise<Partial<Comic>>
   getChapters(input: { siteId: string }): Promise<Chapter[]>
-  getPages?(input: { chapter: Chapter }): Promise<string[]>
+  getPages?(input: { releaseId: string; link: string }): Promise<Page[]>
   downloadChapter(input: {
     comic: Comic
     chapter: Chapter

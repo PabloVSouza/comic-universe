@@ -1,6 +1,8 @@
 interface Chapter {
   comicId: string
   siteId: string
+  siteLink?: string
+  releaseId?: string
   name?: string
   number: string
   pages: Page[]

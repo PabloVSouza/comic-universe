@@ -32,17 +32,17 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
     setComic(data)
   }
 
-  useMemo(() => {
-    if (!data.cover || !data.synopsis) {
-      getDetails(data.siteId)
-    }
-  }, [])
-
   const extended = comic.siteId === data.siteId
 
   const addToList = (): void => {
     insertComic()
   }
+
+  useMemo(() => {
+    if (!data.cover || !data.synopsis) {
+      getDetails({ siteId: data.siteId, siteLink: data.siteLink ?? '' })
+    }
+  }, [])
 
   return (
     <li
@@ -53,6 +53,7 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
         <div className={style.texts}>
           <h1 className={style.name}>{data.name}</h1>
           {!!data.publisher && <p className={style.publisher}>{data.publisher}</p>}
+          {!!data.author && <p className={style.author}>{data.author}</p>}
           {!!data.genres && (
             <p className={style.genre}>{!!data.genres && data.genres.join(', ')}</p>
           )}

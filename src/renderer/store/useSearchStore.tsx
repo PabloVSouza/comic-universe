@@ -10,7 +10,7 @@ interface useSearchStore {
   chapters: Chapter[]
   getList: () => Promise<void>
   search: (search: string) => Promise<void>
-  getDetails: (siteId: string) => Promise<void>
+  getDetails: (input: { [key: string]: string }) => Promise<void>
   getChapters: (siteId: string) => Promise<void>
   insertComic: () => Promise<void>
   setComic: (data: Comic) => void
@@ -42,11 +42,12 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
     })
   },
 
-  getDetails: async (siteId): Promise<void> => {
+  getDetails: async (search): Promise<void> => {
     const { repo } = usePersistStore.getState()
     const { list } = useSearchStore.getState()
+    const { siteId } = search
 
-    const data = await invoke('getDetails', { repo, data: { siteId } })
+    const data = await invoke('getDetails', { repo, data: search })
 
     const index = list.findIndex((val) => val.siteId == siteId)
 

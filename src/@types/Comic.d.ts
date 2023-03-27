@@ -5,9 +5,11 @@ interface Comic {
   cover: string
   repo: string
   author?: string
+  artist?: string
   publisher?: string
   status?: string
   genres?: string[]
+  siteLink?: string
   synopsis: string
   type: string
   _id: string

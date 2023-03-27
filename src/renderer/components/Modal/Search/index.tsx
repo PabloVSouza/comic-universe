@@ -18,7 +18,6 @@ const ModalSearch = (): JSX.Element => {
 
   const selectOptions = [
     { value: 'hqnow', label: 'HQ Now' },
-    { value: 'firemangas', label: 'Fire Mangas' },
     { value: 'mangalivre', label: 'Manga Livre' }
   ]
 

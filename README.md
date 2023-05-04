@@ -1,34 +1,27 @@
-# comic-universe-ts
+# Comic Universe
 
-An Electron application with React and TypeScript
+Electron and React app for downloading, reading and managing progress of different types of comics.
 
-## Recommended IDE Setup
+This project was originally called Manga Universe.
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+## Project Setup:
 
-## Project Setup
+### Install dependencies:
 
-### Install
-
-```bash
-$ npm install
+```
+pnpm install
 ```
 
-### Development
+### Development server:
 
-```bash
-$ npm run dev
+```
+pnpm dev
 ```
 
-### Build
+### Building for production:
 
-```bash
-# For windows
-$ npm run build:win
-
-# For macOS
-$ npm run build:mac
-
-# For Linux
-$ npm run build:linux
 ```
+pnpm build:$desired-platform (mac, win)
+```
+
+This app is for studies and experiments only. It should never be used for commercial purposes.

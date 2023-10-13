@@ -2,16 +2,23 @@ import { ipcMain, BrowserWindow } from 'electron'
 import FetchComicRepository from '../repositories/Implementations/FetchComic'
 
 const apiEvents = (win: BrowserWindow, path: string): void => {
+  const repoBasics = {
+    path,
+    win
+  }
+
   const fetchComicRepos = {
     hqnow: FetchComicRepository('hqnow', {
-      path,
-      url: 'https://admin.hq-now.com/graphql',
-      win
+      ...repoBasics,
+      url: 'https://admin.hq-now.com/graphql'
     }),
     mangalivre: FetchComicRepository('mangalivre', {
-      path,
-      url: 'https://mangalivre.net',
-      win
+      ...repoBasics,
+      url: 'https://mangalivre.net'
+    }),
+    lermanga: FetchComicRepository('lermanga', {
+      ...repoBasics,
+      url: 'https://lermanga.org'
     })
   }
 

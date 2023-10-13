@@ -22,7 +22,7 @@ const ComicListItem = ({ item }: { item: Comic }): JSX.Element => {
   return (
     <li
       className={classNames(style.comicListItem, active ? style.active : null)}
-      onClick={(): void => setComic(item)}
+      onClick={(): Promise<void> => setComic(item)}
     >
       <p className={style.name}>{item.name}</p>
       <Image className={style.cover} src={cover} />

@@ -2,6 +2,7 @@ import { IFetchComicRepository, IFetchComicRepositoryInit } from '../../IFetchCo
 
 import { HQNowFetchComicRepository } from './HQNowFetchComicRepository'
 import { MangaLivreFetchComicRepository } from './MangaLivreFetchComicRepository'
+import { LerMangaFetchComicRepository } from './LerMangaFetchComicRepository'
 
 interface Repos {
   [key: string]: new (data: IFetchComicRepositoryInit) => IFetchComicRepository
@@ -13,7 +14,8 @@ const FetchComicRepository = (
 ): IFetchComicRepository => {
   const repos: Repos = {
     hqnow: HQNowFetchComicRepository,
-    mangalivre: MangaLivreFetchComicRepository
+    mangalivre: MangaLivreFetchComicRepository,
+    lermanga: LerMangaFetchComicRepository
   }
 
   return new repos[repo](data)

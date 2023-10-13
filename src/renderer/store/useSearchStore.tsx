@@ -75,6 +75,13 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
     const { repo } = usePersistStore.getState()
     const { comic, chapters } = useSearchStore.getState()
 
+    for (const chapter of chapters) {
+      if (!chapter.pages) {
+        const pages = await invoke('getPages', { repo, data: { chapterLink: chapter.siteLink } })
+        chapter.pages = pages
+      }
+    }
+
     await invoke('dbInsertComic', { comic: { ...comic, repo }, chapters })
 
     const { getListDB } = useDashboardStore.getState()

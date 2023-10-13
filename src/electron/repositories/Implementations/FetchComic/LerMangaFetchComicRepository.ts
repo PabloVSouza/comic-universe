@@ -105,7 +105,8 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
 
       const res = {
         synopsis,
-        genres
+        genres,
+        offline: false
       } as Partial<Comic>
 
       return new Promise((resolve) => {
@@ -135,8 +136,8 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
       })
     },
 
-    getPages: async (input) => {
-      const fetchPage = await axios.get(input.chapterLink)
+    getPages: async ({ chapterLink }) => {
+      const fetchPage = await axios.get(chapterLink)
       const parsedPage = cheerio.load(fetchPage.data)
       const pagesRawBase64 = parsedPage('.heading-header').next().prop('src')
       let pages = []

@@ -8,6 +8,10 @@ const apiEvents = (win: BrowserWindow, path: string): void => {
   }
 
   const fetchComicRepos = {
+    lermanga: FetchComicRepository('lermanga', {
+      ...repoBasics,
+      url: 'https://lermanga.org'
+    }),
     hqnow: FetchComicRepository('hqnow', {
       ...repoBasics,
       url: 'https://admin.hq-now.com/graphql'
@@ -15,10 +19,6 @@ const apiEvents = (win: BrowserWindow, path: string): void => {
     mangalivre: FetchComicRepository('mangalivre', {
       ...repoBasics,
       url: 'https://mangalivre.net'
-    }),
-    lermanga: FetchComicRepository('lermanga', {
-      ...repoBasics,
-      url: 'https://lermanga.org'
     })
   }
 

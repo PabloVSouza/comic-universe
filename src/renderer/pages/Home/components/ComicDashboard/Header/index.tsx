@@ -1,4 +1,6 @@
 import slugify from 'slugify'
+import HtmlParser from 'react-html-parser'
+
 import Image from 'components/Image'
 
 import useDashboardStore from 'store/useDashboardStore'
@@ -30,7 +32,7 @@ const DashboardHeader = (): JSX.Element => {
           <p>{comic.status}</p>
         </div>
         <div className={style.synopsis}>
-          <p>{comic.synopsis}</p>
+          <p>{HtmlParser(comic.synopsis)}</p>
         </div>
       </div>
       <Image className={style.cover} src={cover} />

@@ -13,7 +13,7 @@ const ComicListItem = ({ item }: { item: Comic }): JSX.Element => {
   const { appPath } = useGlobalStore()
   const { comic, setComic } = useDashboardStore()
 
-  const active = comic._id === item._id
+  const active = comic.id === item.id
 
   const cover = item.cover.startsWith('http')
     ? item.cover

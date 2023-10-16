@@ -138,7 +138,7 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
 
       await CreateDirectory(chapterPath)
 
-      const cover = comic._id ? comic.cover : await DownloadFile(path, comic.cover)
+      const cover = comic.id ? comic.cover : await DownloadFile(path, comic.cover)
 
       const pageFiles: Page[] = []
 

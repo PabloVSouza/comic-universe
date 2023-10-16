@@ -39,16 +39,16 @@ const Reader = (): JSX.Element => {
     if (comicId && chapterId) await setInitialState(comicId, chapterId)
   }, [])
 
-  const chapterIndex = chapters.findIndex((val) => val._id === chapterId)
+  const chapterIndex = chapters.findIndex((val) => val.id === chapterId)
 
   const chapter = chapters[chapterIndex]
 
   const pages = chapter?.pages
 
   useMemo(() => {
-    if (chapter?._id && readProgress?.page !== page) {
+    if (chapter?.id && readProgress?.page !== page) {
       setReadProgressDB(chapter, page)
-      getReadProgressDB(chapter._id)
+      getReadProgressDB(chapter.id)
     }
   }, [page])
 
@@ -69,8 +69,8 @@ const Reader = (): JSX.Element => {
     if (page === pages.length - 1) {
       const nextChapter = chapters[chapterIndex + 1]
       if (nextChapter && comicId) {
-        setInitialState(comicId, nextChapter._id)
-        navigate(`/reader/${comicId}/${nextChapter._id}`)
+        setInitialState(comicId, nextChapter.id)
+        navigate(`/reader/${comicId}/${nextChapter.id}`)
       }
     }
   }
@@ -80,8 +80,8 @@ const Reader = (): JSX.Element => {
     if (page === 0 && chapterIndex > 0) {
       const previousChapter = chapters[chapterIndex - 1]
       if (previousChapter && comicId) {
-        setInitialState(comicId, previousChapter._id)
-        navigate(`/reader/${comicId}/${previousChapter._id}`)
+        setInitialState(comicId, previousChapter.id)
+        navigate(`/reader/${comicId}/${previousChapter.id}`)
       }
     }
   }

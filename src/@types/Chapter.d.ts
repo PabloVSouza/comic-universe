@@ -1,15 +1,12 @@
 interface Chapter {
-  comicId: string
+  id: int
+  comicId: number
   siteId: string
   siteLink?: string
   releaseId?: string
   name?: string
   number: string
-  pages: Page[]
+  pages?: string
   date?: string
   offline: boolean
-  _id: string
-  createdAt: {
-    $$date: number
-  }
 }

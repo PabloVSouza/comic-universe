@@ -8,7 +8,7 @@ const ComicList = (): JSX.Element => {
   return (
     <ul className={style.comicList}>
       {list.map((item) => (
-        <ComicListItem key={item._id} item={item} />
+        <ComicListItem key={item.id} item={item} />
       ))}
     </ul>
   )

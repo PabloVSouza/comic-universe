@@ -55,7 +55,7 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
           {!!data.publisher && <p className={style.publisher}>{data.publisher}</p>}
           {!!data.author && <p className={style.author}>{data.author}</p>}
           {!!data.genres && (
-            <p className={style.genre}>{!!data.genres && data.genres.join(', ')}</p>
+            <p className={style.genre}>{!!data.genres && JSON.parse(data.genres).join(', ')}</p>
           )}
           {!!data.status && <p className={style.status}>{data.status}</p>}
           {extended && (

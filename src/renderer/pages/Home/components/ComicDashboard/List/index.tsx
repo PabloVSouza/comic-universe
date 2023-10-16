@@ -10,7 +10,7 @@ const DashboardList = (): JSX.Element => {
   return (
     <ul className={style.DashboardList}>
       {chapters.map((item) => (
-        <DashboardListItem key={item._id} item={item} />
+        <DashboardListItem key={item.id} item={item} />
       ))}
     </ul>
   )

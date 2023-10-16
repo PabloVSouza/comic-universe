@@ -20,7 +20,7 @@ const useDownloadStore = create<useDownloadStore>()(
       },
 
       removeFromQueue: async (chapter): Promise<void> => {
-        set({ queue: get().queue.filter((item) => item._id !== chapter._id) })
+        set({ queue: get().queue.filter((item) => item.id !== chapter.id) })
       },
 
       downloadChapter: async (chapter): Promise<void> => {

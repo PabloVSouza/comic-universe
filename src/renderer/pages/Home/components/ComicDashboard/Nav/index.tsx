@@ -23,7 +23,7 @@ const DashboardNav = (): JSX.Element => {
     let totalPages = 0
 
     for (const chapter of chapters) {
-      const chapterProgress = readProgress.find((val) => val.chapterId === chapter._id)
+      const chapterProgress = readProgress.find((val) => val.chapterId === chapter.id)
       totalRead += chapterProgress ? chapterProgress.page ?? 0 : 0
       totalPages += chapter.pages?.length - 1 ?? 0
     }
@@ -38,12 +38,12 @@ const DashboardNav = (): JSX.Element => {
     let lastRead = chapters[0]
 
     for (const chapter of chapters) {
-      const progress = readProgress.find((val) => val.chapterId === chapter._id)
+      const progress = readProgress.find((val) => val.chapterId === chapter.id)
 
       if (progress && progress.page > 0) lastRead = chapter
     }
 
-    navigate(`reader/${comic._id}/${lastRead._id}`)
+    navigate(`reader/${comic.id}/${lastRead.id}`)
   }
 
   return (

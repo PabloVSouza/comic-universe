@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  output        = "../src/electron/lib/prisma/generated/client"
+  // output        = "../src/electron/lib/prisma/generated/client"
   binaryTargets = ["native", "darwin", "darwin-arm64"]
 }
 
@@ -9,7 +9,54 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Comic {
+  id           Int            @id @default(autoincrement())
+  siteId       String
+  name         String
+  cover        String
+  repo         String
+  author       String?
+  artist       String?
+  publisher    String?
+  status       String?
+  genres       String?
+  siteLink     String?
+  synopsis     String
+  type         String
+  chapters     Chapter[]
+  ReadProgress ReadProgress[]
+}
+
+model Chapter {
+  id           Int            @id @default(autoincrement())
+  comicId      Int
+  siteId       String
+  siteLink     String?
+  releaseId    String?
+  name         String?
+  number       String
+  pages        String?
+  date         String?
+  offline      Boolean        @default(false)
+  Comic        Comic          @relation(fields: [comicId], references: [id])
+  ReadProgress ReadProgress[]
+}
+
+model ReadProgress {
+  id         Int     @id @default(autoincrement())
+  chapterId  Int
+  comicId    Int
+  userId     Int
+  totalPages Int
+  page       Int
+  Chapter    Chapter @relation(fields: [chapterId], references: [id])
+  User       User    @relation(fields: [userId], references: [id])
+  Comic      Comic   @relation(fields: [comicId], references: [id])
+}
+
 model User {
-  id   Int    @id @default(autoincrement())
-  name String
+  id           Int            @id @default(autoincrement())
+  name         String
+  default      Boolean        @default(false)
+  ReadProgress ReadProgress[]
 }

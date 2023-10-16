@@ -23,13 +23,13 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
     const list = await invoke('dbGetAllComics')
     const { comic, setComic } = useDashboardStore.getState()
     set((state) => ({ ...state, list }))
-    if (list.length && !comic._id) setComic(list[0])
+    if (list.length && !comic.id) setComic(list[0])
   },
 
   getChaptersDB: async (): Promise<void> => {
     const { comic } = useDashboardStore.getState()
     const chapters = await invoke('dbGetChapters', {
-      comicId: comic._id
+      comicId: comic.id
     })
 
     set((state) => ({ ...state, chapters }))
@@ -39,7 +39,7 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
     const { comic } = useDashboardStore.getState()
 
     invoke('dbGetReadProgress', {
-      comicId: comic._id
+      comicId: comic.id
     }).then((res) => {
       set((state) => ({ ...state, readProgress: res }))
     })

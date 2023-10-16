@@ -64,7 +64,7 @@ export class PrismaConstants {
       this.platformToExecutables[this.platformName].queryEngine
     )
 
-    this.latestMigration = '20231016183216_test'
+    this.latestMigration = '20231016210533_first_official_migration'
     process.env.DATABASE_URL = this.dbUrl
   }
 }

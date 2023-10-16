@@ -1,4 +1,5 @@
 import { PrismaInitializer } from '../../../lib/prisma'
+import { PrismaClient } from '@prisma/client'
 import {
   IDBInteractionsRepository,
   IDBInteractionsMethods,
@@ -15,69 +16,52 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
 
   methods: IDBInteractionsMethods = {
     dbGetComic: async ({ id }): Promise<Comic> => {
-      const user = await this.db.user.findUnique({ where: id })
+      const comic = await this.db.comic.findUnique({ where: { id } })
       return new Promise((resolve) => {
-        resolve(user)
+        resolve(comic as Comic)
       })
     },
 
     dbGetAllComics: async (): Promise<Comic[]> => {
+      const comics = await this.db.comic.findMany()
       return new Promise((resolve) => {
-        this.db.Comic.find({}, (_err: Error, res: Comic[]) => {
-          resolve(res)
-        })
+        resolve(comics as Comic[])
       })
     },
 
     dbGetChapters: async ({ comicId }): Promise<Chapter[]> => {
+      const chapters = await this.db.chapter.findMany({ where: { comicId } })
       return new Promise((resolve) => {
-        this.db.Chapter.find({ comicId })
-          .sort({ createdAt: 1 })
-          .exec((_err, res) => {
-            resolve(res)
-          })
+        resolve(chapters as Chapter[])
       })
     },
 
     dbInsertComic: async ({ comic, chapters }): Promise<void> => {
-      if (!comic._id) {
-        this.db.Comic.insert(comic, async (_err, data) => {
-          const comicDB = data
+      if (!comic.id) {
+        const newComic = await this.db.comic.create({ data: comic })
 
-          for (const chapter of chapters) {
-            await this.methods.dbInsertChapter({ chapter: { ...chapter, comicId: comicDB._id } })
-          }
-          return new Promise((resolve) => {
-            resolve()
-          })
+        for (const chapter of chapters) {
+          await this.db.chapter.create({ data: { ...chapter, comicId: newComic.id } })
+        }
+
+        return new Promise((resolve) => {
+          resolve()
         })
       }
+    },
 
-      const chaptersDbList = await this.methods.dbGetChapters({ comicId: comic._id })
-
-      for (const chapter of chapters) {
-        if (!chaptersDbList.find((c) => c.siteId === chapter.siteId)) {
-          await this.methods.dbInsertChapter({ chapter: { ...chapter, comicId: comic._id } })
-        }
-      }
+    dbInsertChapter: async ({ comicId, chapter }): Promise<void> => {
+      await this.db.chapter.create({ data: { ...chapter, comicId } })
       return new Promise((resolve) => {
         resolve()
       })
     },
 
-    dbInsertChapter: async ({ chapter }): Promise<void> => {
-      return new Promise((resolve) => {
-        this.db.Chapter.insert(chapter, () => {
-          resolve()
-        })
-      })
-    },
-
     dbGetReadProgress: async (search): Promise<ReadProgress[]> => {
+      console.log(search)
+      const readProgress = await this.db.readProgress.findMany({ where: {} })
       return new Promise((resolve) => {
-        this.db.ReadProgress.find(search, (_err: Error, res: ReadProgress[]) => {
-          resolve(res)
-        })
+        resolve(readProgress as ReadProgress[])
       })
     },
 

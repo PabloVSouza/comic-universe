@@ -21,14 +21,14 @@ const DashboardListItem = ({ item }: { item: Chapter }): JSX.Element => {
 
   const totalPages = item.pages?.length - 1
 
-  const chapterProgress = readProgress.find((val) => val.chapterId === item._id)
+  const chapterProgress = readProgress.find((val) => val.chapterId === item.id)
 
   const percentage = chapterProgress
     ? Math.round((100 / chapterProgress.totalPages) * chapterProgress.page)
     : 0
 
   const openChapter = (): void => {
-    navigate(`/reader/${comic._id}/${item._id}`)
+    navigate(`/reader/${comic.id}/${item.id}`)
   }
 
   const handleReadProgress = async (page: number): Promise<void> => {

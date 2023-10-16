@@ -13,7 +13,7 @@ const ComicDashboard = (): JSX.Element => {
 
   return (
     <div className={style.comicDashboard}>
-      {!!comic._id && (
+      {!!comic.id && (
         <>
           <DashboardHeader />
           <DashboardNav />

@@ -7,7 +7,7 @@ const UsersList = ({ list }: { list: User[] }): JSX.Element => {
     <div className={style.UsersList}>
       <UsersListItem newUser />
       {list.map((item) => (
-        <UsersListItem key={item._id} data={item} />
+        <UsersListItem key={item.id} data={item} />
       ))}
     </div>
   )

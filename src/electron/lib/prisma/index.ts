@@ -1,5 +1,5 @@
 import { PrismaConstants, Migration } from './constants'
-import { PrismaClient } from './generated/client/index.js'
+import { PrismaClient } from '@prisma/client'
 import path from 'path'
 import fs from 'fs'
 import { fork } from 'child_process'
@@ -14,7 +14,7 @@ export class PrismaInitializer {
     this.constants = new PrismaConstants(appPath)
     this.prisma = this.initializePrisma()
     this.initializePrisma()
-    this.checkMigration()
+    this.runMigration()
   }
 
   private initializePrisma = (): PrismaClient => {
@@ -33,8 +33,8 @@ export class PrismaInitializer {
     })
   }
 
-  private checkMigration = async (): Promise<void> => {
-    let needsMigration
+  private runMigration = async (): Promise<void> => {
+    let needsMigration: boolean
     const dbExists = fs.existsSync(this.constants.dbPath)
     if (!dbExists) {
       needsMigration = true

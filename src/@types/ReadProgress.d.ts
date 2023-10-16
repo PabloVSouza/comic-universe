@@ -1,10 +1,7 @@
 interface ReadProgress {
-  comicId: string
-  chapterId: string
+  id: number
+  chapterId: number
+  comicId: number
   totalPages: number
   page: number
-  _id: string
-  createdAt: {
-    $$date: number
-  }
 }

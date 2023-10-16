@@ -48,7 +48,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
 
     if (!readProgress.length) {
       const { chapters, setReadProgressDB } = useReaderStore.getState()
-      const chapter = chapters.find((chapter) => chapter._id === chapterId)
+      const chapter = chapters.find((chapter) => chapter.id === chapterId)
       if (chapter) {
         await setReadProgressDB(chapter, 0)
 

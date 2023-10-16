@@ -47,7 +47,8 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
             siteId: comic.url,
             name: comic.title,
             cover: comic.thumb,
-            siteLink: comic.url
+            siteLink: comic.url,
+            type: 'manga'
           }
         ]
       }, [])
@@ -79,7 +80,8 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
             siteId: comic.url,
             name: comic.title,
             cover: comic.thumb,
-            siteLink: comic.url
+            siteLink: comic.url,
+            type: 'manga'
           }
         ]
       }, [])
@@ -99,14 +101,15 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
       const synopsisRaw = parsedData('.boxAnimeSobreLast p').html()
       const synopsis = synopsisRaw?.substring(synopsisRaw.indexOf(':') + 1)
 
-      const genres = parsedData('.genre-list li')
-        .map((_i, item) => parsedData(item).find('a').html()?.trim())
-        .toArray()
+      const genres = JSON.stringify(
+        parsedData('.genre-list li')
+          .map((_i, item) => parsedData(item).find('a').html()?.trim())
+          .toArray()
+      )
 
       const res = {
         synopsis,
-        genres,
-        offline: false
+        genres
       } as Partial<Comic>
 
       return new Promise((resolve) => {

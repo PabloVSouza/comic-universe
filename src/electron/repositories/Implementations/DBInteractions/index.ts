@@ -2,7 +2,6 @@ import {
   IDBInteractionsRepository,
   IDBInteractionsRepositoryInit
 } from '../../IDBInteractionsRepository'
-import { NeDBDBInteractionsRepository } from './NeDBDBInteractionsRepository'
 import { PrismaDBInteractionsRepository } from './PrismaDBInteractionRepository'
 
 interface Repos {
@@ -11,7 +10,6 @@ interface Repos {
 
 export class DBInteractionsRepository {
   private Repos: Repos = {
-    nedb: NeDBDBInteractionsRepository,
     prisma: PrismaDBInteractionsRepository
   }
 

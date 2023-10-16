@@ -43,6 +43,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
   },
 
   getDetails: async (search): Promise<void> => {
+    console.log('Oi')
     const { repo } = usePersistStore.getState()
     const { list } = useSearchStore.getState()
     const { siteId } = search
@@ -74,13 +75,6 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
   insertComic: async (): Promise<void> => {
     const { repo } = usePersistStore.getState()
     const { comic, chapters } = useSearchStore.getState()
-
-    for (const chapter of chapters) {
-      if (!chapter.pages) {
-        const pages = await invoke('getPages', { repo, data: { chapterLink: chapter.siteLink } })
-        chapter.pages = pages
-      }
-    }
 
     await invoke('dbInsertComic', { comic: { ...comic, repo }, chapters })
 

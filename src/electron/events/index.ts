@@ -11,7 +11,7 @@ export const createEvents = (window: BrowserWindow, path: string): void => {
 }
 
 export const removeEvents = (): void => {
-  // @ts-ignore (define in dts)
+  // @ts-ignore typing not defined by electron
   const events = Array.from(ipcMain._invokeHandlers.keys()) as string[]
   for (const event of events) {
     ipcMain.removeHandler(event)

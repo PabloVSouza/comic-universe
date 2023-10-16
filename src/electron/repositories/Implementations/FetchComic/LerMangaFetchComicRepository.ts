@@ -3,7 +3,6 @@ import slugify from 'slugify'
 import axios from 'axios'
 import qs from 'qs'
 import * as cheerio from 'cheerio'
-import { toJson } from 'really-relaxed-json'
 
 import {
   IFetchComicMethods,
@@ -97,7 +96,8 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
 
       const parsedData = cheerio.load(data)
 
-      const synopsis = parsedData('.boxAnimeSobreLast p').html()
+      const synopsisRaw = parsedData('.boxAnimeSobreLast p').html()
+      const synopsis = synopsisRaw?.substring(synopsisRaw.indexOf(':') + 1)
 
       const genres = parsedData('.genre-list li')
         .map((_i, item) => parsedData(item).find('a').html()?.trim())

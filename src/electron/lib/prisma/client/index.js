@@ -29,11 +29,11 @@ exports.Prisma = Prisma
 
 /**
  * Prisma Client JS version: 4.11.0
- * Query Engine version: 8fde8fef4033376662cad983758335009d522acb
+ * Query Engine version: ac9d7041ed77bcc8a8dbd2ab6616b39013829574
  */
 Prisma.prismaVersion = {
   client: "4.11.0",
-  engine: "8fde8fef4033376662cad983758335009d522acb"
+  engine: "ac9d7041ed77bcc8a8dbd2ab6616b39013829574"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -80,8 +80,8 @@ const regularDirname = hasDirname && fs.existsSync(path.join(__dirname, 'schema.
 
 // if the client has been bundled, we need to look for the folders
 const foundDirname = !regularDirname && findSync(process.cwd(), [
-    "src/electron/lib/prisma/generated",
-    "electron/lib/prisma/generated",
+    "src/electron/lib/prisma/client",
+    "electron/lib/prisma/client",
 ], ['d'], ['d'], 1)[0]
 
 const dirname = regularDirname || foundDirname || __dirname
@@ -93,19 +93,18 @@ const dirname = regularDirname || foundDirname || __dirname
 // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 function makeEnum(x) { return x; }
 
-exports.Prisma.SortOrder = makeEnum({
-  asc: 'asc',
-  desc: 'desc'
-});
-
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
 exports.Prisma.UserScalarFieldEnum = makeEnum({
   id: 'id',
-  name: 'name',
-  dateCreated: 'dateCreated'
+  name: 'name'
+});
+
+exports.Prisma.SortOrder = makeEnum({
+  asc: 'asc',
+  desc: 'desc'
 });
 
 
@@ -113,7 +112,7 @@ exports.Prisma.ModelName = makeEnum({
   User: 'User'
 });
 
-const dmmfString = "{\"datamodel\":{\"enums\":[],\"models\":[{\"name\":\"User\",\"dbName\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Int\",\"default\":{\"name\":\"autoincrement\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"dateCreated\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"DateTime\",\"default\":{\"name\":\"now\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}],\"types\":[]},\"mappings\":{\"modelOperations\":[{\"model\":\"User\",\"plural\":\"users\",\"findUnique\":\"findUniqueUser\",\"findUniqueOrThrow\":\"findUniqueUserOrThrow\",\"findFirst\":\"findFirstUser\",\"findFirstOrThrow\":\"findFirstUserOrThrow\",\"findMany\":\"findManyUser\",\"create\":\"createOneUser\",\"delete\":\"deleteOneUser\",\"update\":\"updateOneUser\",\"deleteMany\":\"deleteManyUser\",\"updateMany\":\"updateManyUser\",\"upsert\":\"upsertOneUser\",\"aggregate\":\"aggregateUser\",\"groupBy\":\"groupByUser\"}],\"otherOperations\":{\"read\":[],\"write\":[\"executeRaw\",\"queryRaw\"]}}}"
+const dmmfString = "{\"datamodel\":{\"enums\":[],\"models\":[{\"name\":\"User\",\"dbName\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Int\",\"default\":{\"name\":\"autoincrement\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}],\"types\":[]},\"mappings\":{\"modelOperations\":[{\"model\":\"User\",\"plural\":\"users\",\"findUnique\":\"findUniqueUser\",\"findUniqueOrThrow\":\"findUniqueUserOrThrow\",\"findFirst\":\"findFirstUser\",\"findFirstOrThrow\":\"findFirstUserOrThrow\",\"findMany\":\"findManyUser\",\"create\":\"createOneUser\",\"delete\":\"deleteOneUser\",\"update\":\"updateOneUser\",\"deleteMany\":\"deleteManyUser\",\"updateMany\":\"updateManyUser\",\"upsert\":\"upsertOneUser\",\"aggregate\":\"aggregateUser\",\"groupBy\":\"groupByUser\"}],\"otherOperations\":{\"read\":[],\"write\":[\"executeRaw\",\"queryRaw\"]}}}"
 const dmmf = JSON.parse(dmmfString)
 exports.Prisma.dmmf = JSON.parse(dmmfString)
 
@@ -128,27 +127,33 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/pablo/Projects/Pessoal/comic-universe/src/electron/lib/prisma/generated",
+      "value": "/Users/pablo/Projects/Pessoal/comic-universe/src/electron/lib/prisma/client",
       "fromEnvVar": null
     },
     "config": {
       "engineType": "library"
     },
-    "binaryTargets": [],
+    "binaryTargets": [
+      {
+        "fromEnvVar": null,
+        "value": "darwin-arm64",
+        "native": true
+      }
+    ],
     "previewFeatures": [],
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": "../../../../../.env",
+    "schemaEnvPath": "../../../../../.env"
   },
   "relativePath": "../../../../../prisma",
   "clientVersion": "4.11.0",
-  "engineVersion": "8fde8fef4033376662cad983758335009d522acb",
+  "engineVersion": "ac9d7041ed77bcc8a8dbd2ab6616b39013829574",
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
-  "dataProxy": false
+  "activeProvider": "sqlite"
 }
 config.dirname = dirname
 config.document = dmmf
@@ -169,6 +174,6 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
-path.join(process.cwd(), "src/electron/lib/prisma/generated/libquery_engine-darwin-arm64.dylib.node")
+path.join(process.cwd(), "src/electron/lib/prisma/client/libquery_engine-darwin-arm64.dylib.node")
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "src/electron/lib/prisma/generated/schema.prisma")
+path.join(process.cwd(), "src/electron/lib/prisma/client/schema.prisma")

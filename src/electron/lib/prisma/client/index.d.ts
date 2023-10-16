@@ -17,7 +17,6 @@ type UnwrapTuple<Tuple extends readonly unknown[]> = {
 export type User = {
   id: number
   name: string
-  dateCreated: Date
 }
 
 
@@ -191,7 +190,7 @@ export namespace Prisma {
 
   /**
    * Prisma Client JS version: 4.11.0
-   * Query Engine version: 8fde8fef4033376662cad983758335009d522acb
+   * Query Engine version: ac9d7041ed77bcc8a8dbd2ab6616b39013829574
    */
   export type PrismaVersion = {
     client: string
@@ -806,19 +805,16 @@ export namespace Prisma {
   export type UserMinAggregateOutputType = {
     id: number | null
     name: string | null
-    dateCreated: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
     id: number | null
     name: string | null
-    dateCreated: Date | null
   }
 
   export type UserCountAggregateOutputType = {
     id: number
     name: number
-    dateCreated: number
     _all: number
   }
 
@@ -834,19 +830,16 @@ export namespace Prisma {
   export type UserMinAggregateInputType = {
     id?: true
     name?: true
-    dateCreated?: true
   }
 
   export type UserMaxAggregateInputType = {
     id?: true
     name?: true
-    dateCreated?: true
   }
 
   export type UserCountAggregateInputType = {
     id?: true
     name?: true
-    dateCreated?: true
     _all?: true
   }
 
@@ -940,7 +933,6 @@ export namespace Prisma {
   export type UserGroupByOutputType = {
     id: number
     name: string
-    dateCreated: Date
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -965,7 +957,6 @@ export namespace Prisma {
   export type UserSelect = {
     id?: boolean
     name?: boolean
-    dateCreated?: boolean
   }
 
 
@@ -1661,14 +1652,6 @@ export namespace Prisma {
   // Based on
   // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 
-  export const SortOrder: {
-    asc: 'asc',
-    desc: 'desc'
-  };
-
-  export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
   export const TransactionIsolationLevel: {
     Serializable: 'Serializable'
   };
@@ -1678,13 +1661,44 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     id: 'id',
-    name: 'name',
-    dateCreated: 'dateCreated'
+    name: 'name'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const SortOrder: {
+    asc: 'asc',
+    desc: 'desc'
+  };
+
+  export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  /**
+   * Field references 
+   */
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'String'
+   */
+  export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
   /**
    * Deep Input Types
    */
@@ -1694,25 +1708,26 @@ export namespace Prisma {
     AND?: Enumerable<UserWhereInput>
     OR?: Enumerable<UserWhereInput>
     NOT?: Enumerable<UserWhereInput>
-    id?: IntFilter | number
-    name?: StringFilter | string
-    dateCreated?: DateTimeFilter | Date | string
+    id?: IntFilter<"User"> | number
+    name?: StringFilter<"User"> | string
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    dateCreated?: SortOrder
   }
 
-  export type UserWhereUniqueInput = {
+  export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-  }
+    AND?: Enumerable<UserWhereInput>
+    OR?: Enumerable<UserWhereInput>
+    NOT?: Enumerable<UserWhereInput>
+    name?: StringFilter<"User"> | string
+  }, "id">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    dateCreated?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -1724,84 +1739,65 @@ export namespace Prisma {
     AND?: Enumerable<UserScalarWhereWithAggregatesInput>
     OR?: Enumerable<UserScalarWhereWithAggregatesInput>
     NOT?: Enumerable<UserScalarWhereWithAggregatesInput>
-    id?: IntWithAggregatesFilter | number
-    name?: StringWithAggregatesFilter | string
-    dateCreated?: DateTimeWithAggregatesFilter | Date | string
+    id?: IntWithAggregatesFilter<"User"> | number
+    name?: StringWithAggregatesFilter<"User"> | string
   }
 
   export type UserCreateInput = {
     name: string
-    dateCreated?: Date | string
   }
 
   export type UserUncheckedCreateInput = {
     id?: number
     name: string
-    dateCreated?: Date | string
   }
 
   export type UserUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
-    dateCreated?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    dateCreated?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
-    dateCreated?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    dateCreated?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type IntFilter = {
-    equals?: number
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
     in?: Enumerable<number>
     notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntFilter | number
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type StringFilter = {
-    equals?: string
+  export type StringFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
     in?: Enumerable<string>
     notIn?: Enumerable<string>
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringFilter | string
-  }
-
-  export type DateTimeFilter = {
-    equals?: Date | string
-    in?: Enumerable<Date> | Enumerable<string>
-    notIn?: Enumerable<Date> | Enumerable<string>
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeFilter | Date | string
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringFilter<$PrismaModel> | string
   }
 
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    dateCreated?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -1811,72 +1807,52 @@ export namespace Prisma {
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    dateCreated?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    dateCreated?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
     id?: SortOrder
   }
 
-  export type IntWithAggregatesFilter = {
-    equals?: number
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
     in?: Enumerable<number>
     notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntWithAggregatesFilter | number
-    _count?: NestedIntFilter
-    _avg?: NestedFloatFilter
-    _sum?: NestedIntFilter
-    _min?: NestedIntFilter
-    _max?: NestedIntFilter
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type StringWithAggregatesFilter = {
-    equals?: string
+  export type StringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
     in?: Enumerable<string>
     notIn?: Enumerable<string>
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringWithAggregatesFilter | string
-    _count?: NestedIntFilter
-    _min?: NestedStringFilter
-    _max?: NestedStringFilter
-  }
-
-  export type DateTimeWithAggregatesFilter = {
-    equals?: Date | string
-    in?: Enumerable<Date> | Enumerable<string>
-    notIn?: Enumerable<Date> | Enumerable<string>
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeWithAggregatesFilter | Date | string
-    _count?: NestedIntFilter
-    _min?: NestedDateTimeFilter
-    _max?: NestedDateTimeFilter
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
-  }
-
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -1887,98 +1863,73 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type NestedIntFilter = {
-    equals?: number
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
     in?: Enumerable<number>
     notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntFilter | number
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type NestedStringFilter = {
-    equals?: string
+  export type NestedStringFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
     in?: Enumerable<string>
     notIn?: Enumerable<string>
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringFilter | string
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedDateTimeFilter = {
-    equals?: Date | string
-    in?: Enumerable<Date> | Enumerable<string>
-    notIn?: Enumerable<Date> | Enumerable<string>
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeFilter | Date | string
-  }
-
-  export type NestedIntWithAggregatesFilter = {
-    equals?: number
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
     in?: Enumerable<number>
     notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntWithAggregatesFilter | number
-    _count?: NestedIntFilter
-    _avg?: NestedFloatFilter
-    _sum?: NestedIntFilter
-    _min?: NestedIntFilter
-    _max?: NestedIntFilter
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type NestedFloatFilter = {
-    equals?: number
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: Enumerable<number>
     notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedFloatFilter | number
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedStringWithAggregatesFilter = {
-    equals?: string
+  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
     in?: Enumerable<string>
     notIn?: Enumerable<string>
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringWithAggregatesFilter | string
-    _count?: NestedIntFilter
-    _min?: NestedStringFilter
-    _max?: NestedStringFilter
-  }
-
-  export type NestedDateTimeWithAggregatesFilter = {
-    equals?: Date | string
-    in?: Enumerable<Date> | Enumerable<string>
-    notIn?: Enumerable<Date> | Enumerable<string>
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeWithAggregatesFilter | Date | string
-    _count?: NestedIntFilter
-    _min?: NestedDateTimeFilter
-    _max?: NestedDateTimeFilter
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
 

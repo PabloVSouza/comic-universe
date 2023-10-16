@@ -40,6 +40,7 @@
     "lodash.pick": "^4.4.0",
     "nedb": "^1.8.0",
     "node-html-parser": "^6.1.5",
+    "prisma": "^5.4.2",
     "qs": "^6.11.1",
     "react-html-parser": "^2.0.2",
     "react-paginate": "^8.1.4",
@@ -48,7 +49,9 @@
     "react-simple-img": "^3.0.0",
     "really-relaxed-json": "^0.3.2",
     "sass": "^1.59.3",
+    "sequelize": "^6.33.0",
     "slugify": "^1.6.5",
+    "sqlite3": "^5.1.6",
     "zustand": "^4.3.6"
   },
   "devDependencies": {

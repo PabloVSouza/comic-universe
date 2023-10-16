@@ -2,7 +2,7 @@ import { ipcMain, BrowserWindow } from 'electron'
 import { DBInteractionsRepository } from '../repositories/Implementations/DBInteractions'
 
 const dbEvents = (win: BrowserWindow, path: string): void => {
-  const db = new DBInteractionsRepository('nedb', { path, win })
+  const db = new DBInteractionsRepository('prisma', { path, win })
 
   const properties = Object.getOwnPropertyNames(db.repo.methods)
 

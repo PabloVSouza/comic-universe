@@ -3,7 +3,6 @@ import {
   IDBInteractionsRepositoryInit
 } from '../../IDBInteractionsRepository'
 import { NeDBDBInteractionsRepository } from './NeDBDBInteractionsRepository'
-import { SequelizeDBInteractionsRepository } from './SequelizeDBInteractionsRepository'
 import { PrismaDBInteractionsRepository } from './PrismaDBInteractionRepository'
 
 interface Repos {
@@ -13,7 +12,6 @@ interface Repos {
 export class DBInteractionsRepository {
   private Repos: Repos = {
     nedb: NeDBDBInteractionsRepository,
-    sequelize: SequelizeDBInteractionsRepository,
     prisma: PrismaDBInteractionsRepository
   }
 

@@ -24,7 +24,7 @@
     "@apollo/client": "^3.7.10",
     "@electron-toolkit/preload": "^1.0.3",
     "@electron-toolkit/utils": "^1.0.2",
-    "@prisma/client": "^4.11.0",
+    "@prisma/client": "5.4.2",
     "@types/lodash.debounce": "^4.0.7",
     "@types/qs": "^6.9.7",
     "@types/react-html-parser": "^2.0.2",
@@ -49,9 +49,7 @@
     "react-simple-img": "^3.0.0",
     "really-relaxed-json": "^0.3.2",
     "sass": "^1.59.3",
-    "sequelize": "^6.33.0",
     "slugify": "^1.6.5",
-    "sqlite3": "^5.1.6",
     "zustand": "^4.3.6"
   },
   "devDependencies": {
@@ -68,7 +66,7 @@
     "@typescript-eslint/parser": "^5.54.1",
     "@vitejs/plugin-react": "^3.1.0",
     "electron": "^22.3.2",
-    "electron-builder": "^23.6.0",
+    "electron-builder": "^24.6.4",
     "electron-vite": "^1.0.20",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.7.0",

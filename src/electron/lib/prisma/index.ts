@@ -1,5 +1,5 @@
 import { PrismaConstants, Migration } from './constants'
-import { PrismaClient } from './client'
+import { PrismaClient } from './generated/client/index.js'
 import path from 'path'
 import fs from 'fs'
 import { fork } from 'child_process'

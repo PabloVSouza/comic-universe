@@ -1,6 +1,4 @@
 import { PrismaInitializer } from '../../../lib/prisma'
-import { PrismaClient } from '../../../lib/prisma/client'
-
 import {
   IDBInteractionsRepository,
   IDBInteractionsMethods,

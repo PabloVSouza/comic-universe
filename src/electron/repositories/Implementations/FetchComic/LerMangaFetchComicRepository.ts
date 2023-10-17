@@ -25,7 +25,7 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
   }
 
   methods: IFetchComicMethods = {
-    getList: async (): Promise<Comic[]> => {
+    getList: async (): Promise<ComicInterface[]> => {
       const searchString = qs.stringify({
         action: 'wp-manga-search-manga',
         title: 'Boruto'
@@ -58,7 +58,7 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
       })
     },
 
-    search: async ({ search }): Promise<Comic[]> => {
+    search: async ({ search }): Promise<ComicInterface[]> => {
       const searchString = qs.stringify({
         action: 'wp-manga-search-manga',
         title: search
@@ -91,7 +91,7 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
       })
     },
 
-    getDetails: async (search): Promise<Partial<Comic>> => {
+    getDetails: async (search): Promise<Partial<ComicInterface>> => {
       const { siteLink } = search
 
       const { data } = await axios.get(siteLink)
@@ -110,14 +110,14 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
       const res = {
         synopsis,
         genres
-      } as Partial<Comic>
+      } as Partial<ComicInterface>
 
       return new Promise((resolve) => {
         resolve(res)
       })
     },
 
-    getChapters: async ({ siteId }): Promise<Chapter[]> => {
+    getChapters: async ({ siteId }): Promise<ChapterInterface[]> => {
       const { data } = await axios.get(siteId)
 
       const parsedData = cheerio.load(data)
@@ -130,7 +130,7 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
               number: parsedData(val).prop('data-id-cap'),
               siteLink: parsedData(val).find('a').prop('href'),
               date: parsedData(val).find('small').children('small').text()
-            } as Chapter)
+            } as ChapterInterface)
         )
         .toArray()
 

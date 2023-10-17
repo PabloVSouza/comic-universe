@@ -29,7 +29,7 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
   }
 
   methods: IFetchComicMethods = {
-    getList: async (): Promise<Comic[]> => {
+    getList: async (): Promise<ComicInterface[]> => {
       const query = {
         query: gql`
           query {
@@ -46,11 +46,11 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
       const { data } = await this.client.query(query)
 
       return new Promise((resolve) => {
-        resolve(data.getAllHqs as Comic[])
+        resolve(data.getAllHqs as ComicInterface[])
       })
     },
 
-    search: async ({ search }): Promise<Comic[]> => {
+    search: async ({ search }): Promise<ComicInterface[]> => {
       const query = {
         query: gql`
           query getHqsByName($search: String!) {
@@ -68,11 +68,11 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
       const { data } = await this.client.query(query)
 
       return new Promise((resolve) => {
-        resolve(data.getHqsByName as Comic[])
+        resolve(data.getHqsByName as ComicInterface[])
       })
     },
 
-    getDetails: async (search): Promise<Partial<Comic>> => {
+    getDetails: async (search): Promise<Partial<ComicInterface>> => {
       const { siteId } = search
       const { data } = await this.client.query({
         query: gql`
@@ -97,7 +97,7 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
       })
     },
 
-    getChapters: async ({ siteId }): Promise<Chapter[]> => {
+    getChapters: async ({ siteId }): Promise<ChapterInterface[]> => {
       const query = {
         query: gql`
           query getChaptersByHqId($id: Int!) {
@@ -118,7 +118,7 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
       const { data } = await this.client.query(query)
       const res = data.getChaptersByHqId.reduce((acc, chapter) => {
         return [...acc, { ...chapter, offline: false }]
-      }, []) as Chapter[]
+      }, []) as ChapterInterface[]
 
       return new Promise((resolve) => {
         resolve(res)

@@ -56,9 +56,6 @@ dependencies:
   lodash.pick:
     specifier: ^4.4.0
     version: 4.4.0
-  node-html-parser:
-    specifier: ^6.1.5
-    version: 6.1.10
   prisma:
     specifier: ^5.4.2
     version: 5.4.2
@@ -80,9 +77,6 @@ dependencies:
   react-simple-img:
     specifier: ^3.0.0
     version: 3.0.0(react-dom@18.2.0)(react@18.2.0)
-  really-relaxed-json:
-    specifier: ^0.3.2
-    version: 0.3.2
   sass:
     specifier: ^1.59.3
     version: 1.69.3
@@ -2948,11 +2942,6 @@ packages:
     resolution: {integrity: sha512-qdSAmqLF6209RFj4VVItywPMbm3vWylknmB3nvNiUIs72xAimcM8nVYxYr7ncvZq5qzk9MKIZR8ijqD/1QuYjQ==}
     engines: {node: '>= 0.4.0'}
 
-  /he@1.2.0:
-    resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
-    hasBin: true
-    dev: false
-
   /hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
     dependencies:
@@ -3594,13 +3583,6 @@ packages:
       whatwg-url: 5.0.0
     dev: false
 
-  /node-html-parser@6.1.10:
-    resolution: {integrity: sha512-6/uWdWxjQWQ7tMcFK2wWlrflsQUzh1HsEzlIf2j5+TtzfhT2yUvg3DwZYAmjEHeR3uX74ko7exjHW69J0tOzIg==}
-    dependencies:
-      css-select: 5.1.0
-      he: 1.2.0
-    dev: false
-
   /node-releases@2.0.13:
     resolution: {integrity: sha512-uYr7J37ae/ORWdZeQ1xxMJe3NtdmqMC/JZK+geofDrkLUApKRHPd18/TxtBOJ4A0/+uUIliorNrfYV6s1b02eQ==}
     dev: true
@@ -4028,10 +4010,6 @@ packages:
     engines: {node: '>=8.10.0'}
     dependencies:
       picomatch: 2.3.1
-
-  /really-relaxed-json@0.3.2:
-    resolution: {integrity: sha512-dWDnjzCnOyjfY26IHMEomqE5D3btCs5D7I8iSAeqPs+Jxm1m6W/jwn0cxlXW8u24RD29bi5llLOEVN87JUrqag==}
-    dev: false
 
   /reflect.getprototypeof@1.0.4:
     resolution: {integrity: sha512-ECkTw8TmJwW60lOTR+ZkODISW6RQ8+2CL3COqtiJKLd6MmB45hN51HprHFziKLGkAuTGQhBb91V8cy+KHlaCjw==}

@@ -6,7 +6,7 @@ settings:
 
 dependencies:
   '@apollo/client':
-    specifier: ^3.7.10
+    specifier: ^3.8.6
     version: 3.8.6(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
   '@electron-toolkit/preload':
     specifier: ^1.0.3
@@ -17,17 +17,8 @@ dependencies:
   '@prisma/client':
     specifier: 5.4.2
     version: 5.4.2(prisma@5.4.2)
-  '@types/lodash.debounce':
-    specifier: ^4.0.7
-    version: 4.0.7
-  '@types/qs':
-    specifier: ^6.9.7
-    version: 6.9.8
-  '@types/react-html-parser':
-    specifier: ^2.0.2
-    version: 2.0.3
   axios:
-    specifier: ^1.3.4
+    specifier: ^1.5.1
     version: 1.5.1
   cheerio:
     specifier: 1.0.0-rc.12
@@ -36,13 +27,13 @@ dependencies:
     specifier: ^2.3.2
     version: 2.3.2
   cross-fetch:
-    specifier: ^3.1.5
+    specifier: ^3.1.8
     version: 3.1.8
   electron-updater:
     specifier: ^5.3.0
     version: 5.3.0
   graphql:
-    specifier: ^16.6.0
+    specifier: ^16.8.1
     version: 16.8.1
   lodash.debounce:
     specifier: ^4.0.8
@@ -60,31 +51,31 @@ dependencies:
     specifier: ^5.4.2
     version: 5.4.2
   qs:
-    specifier: ^6.11.1
+    specifier: ^6.11.2
     version: 6.11.2
   react-html-parser:
     specifier: ^2.0.2
     version: 2.0.2(react@18.2.0)
   react-paginate:
-    specifier: ^8.1.4
+    specifier: ^8.2.0
     version: 8.2.0(react@18.2.0)
   react-router-dom:
-    specifier: ^6.9.0
+    specifier: ^6.17.0
     version: 6.17.0(react-dom@18.2.0)(react@18.2.0)
   react-select:
-    specifier: ^5.7.0
+    specifier: ^5.7.7
     version: 5.7.7(@types/react@18.2.28)(react-dom@18.2.0)(react@18.2.0)
   react-simple-img:
     specifier: ^3.0.0
     version: 3.0.0(react-dom@18.2.0)(react@18.2.0)
   sass:
-    specifier: ^1.59.3
-    version: 1.69.3
+    specifier: ^1.69.4
+    version: 1.69.4
   slugify:
-    specifier: ^1.6.5
+    specifier: ^1.6.6
     version: 1.6.6
   zustand:
-    specifier: ^4.3.6
+    specifier: ^4.4.3
     version: 4.4.3(@types/react@18.2.28)(react@18.2.0)
 
 devDependencies:
@@ -92,8 +83,11 @@ devDependencies:
     specifier: ^1.0.1
     version: 1.0.1(@types/node@16.18.14)
   '@electron/notarize':
-    specifier: ^1.2.3
+    specifier: ^1.2.4
     version: 1.2.4
+  '@types/lodash.debounce':
+    specifier: ^4.0.7
+    version: 4.0.7
   '@types/lodash.merge':
     specifier: ^4.6.7
     version: 4.6.7
@@ -104,49 +98,55 @@ devDependencies:
     specifier: ^4.4.7
     version: 4.4.7
   '@types/nedb':
-    specifier: ^1.8.13
+    specifier: ^1.8.14
     version: 1.8.14
   '@types/node':
     specifier: 16.18.14
     version: 16.18.14
+  '@types/qs':
+    specifier: ^6.9.8
+    version: 6.9.8
   '@types/react':
     specifier: ^18.2.28
     version: 18.2.28
   '@types/react-dom':
     specifier: 18.0.10
     version: 18.0.10
+  '@types/react-html-parser':
+    specifier: ^2.0.3
+    version: 2.0.3
   '@typescript-eslint/eslint-plugin':
-    specifier: ^5.54.1
+    specifier: ^5.62.0
     version: 5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.51.0)(typescript@4.9.5)
   '@typescript-eslint/parser':
-    specifier: ^5.54.1
+    specifier: ^5.62.0
     version: 5.62.0(eslint@8.51.0)(typescript@4.9.5)
   '@vitejs/plugin-react':
     specifier: ^3.1.0
     version: 3.1.0(vite@4.4.11)
   electron:
-    specifier: ^22.3.2
+    specifier: ^22.3.27
     version: 22.3.27
   electron-builder:
     specifier: ^24.6.4
     version: 24.6.4
   electron-vite:
-    specifier: ^1.0.20
+    specifier: ^1.0.28
     version: 1.0.28(vite@4.4.11)
   eslint:
-    specifier: ^8.36.0
+    specifier: ^8.51.0
     version: 8.51.0
   eslint-config-prettier:
-    specifier: ^8.7.0
+    specifier: ^8.10.0
     version: 8.10.0(eslint@8.51.0)
   eslint-plugin-prettier:
     specifier: ^4.2.1
     version: 4.2.1(eslint-config-prettier@8.10.0)(eslint@8.51.0)(prettier@2.8.8)
   eslint-plugin-react:
-    specifier: ^7.32.2
+    specifier: ^7.33.2
     version: 7.33.2(eslint@8.51.0)
   prettier:
-    specifier: ^2.8.4
+    specifier: ^2.8.8
     version: 2.8.8
   react:
     specifier: ^18.2.0
@@ -158,8 +158,8 @@ devDependencies:
     specifier: ^4.9.5
     version: 4.9.5
   vite:
-    specifier: ^4.1.4
-    version: 4.4.11(@types/node@16.18.14)(sass@1.69.3)
+    specifier: ^4.4.11
+    version: 4.4.11(@types/node@16.18.14)(sass@1.69.4)
 
 packages:
 
@@ -177,7 +177,7 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       '@jridgewell/gen-mapping': 0.3.3
-      '@jridgewell/trace-mapping': 0.3.19
+      '@jridgewell/trace-mapping': 0.3.20
     dev: true
 
   /@apollo/client@3.8.6(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0):
@@ -257,7 +257,7 @@ packages:
     dependencies:
       '@babel/types': 7.23.0
       '@jridgewell/gen-mapping': 0.3.3
-      '@jridgewell/trace-mapping': 0.3.19
+      '@jridgewell/trace-mapping': 0.3.20
       jsesc: 2.5.2
     dev: true
 
@@ -928,7 +928,7 @@ packages:
     dependencies:
       '@jridgewell/set-array': 1.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
-      '@jridgewell/trace-mapping': 0.3.19
+      '@jridgewell/trace-mapping': 0.3.20
     dev: true
 
   /@jridgewell/resolve-uri@3.1.1:
@@ -945,8 +945,8 @@ packages:
     resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}
     dev: true
 
-  /@jridgewell/trace-mapping@0.3.19:
-    resolution: {integrity: sha512-kf37QtfW+Hwx/buWGMPcR60iF9ziHa6r/CZJIHbmcm4+0qrXiVdxegAH0F6yddEVQ7zdkjcGCgCzUu+BcbhQxw==}
+  /@jridgewell/trace-mapping@0.3.20:
+    resolution: {integrity: sha512-R8LcPeWZol2zR8mmH3JeKQ6QRCFb7XgUhV9ZlGhHLGyg4wpPiPZNQOOWhFZhxKw8u//yTbNGI42Bx/3paXEQ+Q==}
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
@@ -1053,7 +1053,7 @@ packages:
     resolution: {integrity: sha512-+meWABJKjLLh/pLjgZB6tbdbw0J63Yrre89l8ROzaPRwAAYjJ2cTC10lJbnrbsFqhGLIR7FI/Jk1jgwmZMPk6Q==}
     dependencies:
       domhandler: 2.4.2
-    dev: false
+    dev: true
 
   /@types/fs-extra@9.0.13:
     resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
@@ -1067,7 +1067,7 @@ packages:
       '@types/domutils': 1.7.6
       '@types/node': 16.18.14
       domhandler: 2.4.2
-    dev: false
+    dev: true
 
   /@types/http-cache-semantics@4.0.2:
     resolution: {integrity: sha512-FD+nQWA2zJjh4L9+pFXqWOi0Hs1ryBCfI+985NjluQ1p8EYtoLvjLOKidXBtZ4/IcxDX4o8/E8qDS3540tNliw==}
@@ -1085,7 +1085,7 @@ packages:
     resolution: {integrity: sha512-X1T4wMZ+gT000M2/91SYj0d/7JfeNZ9PeeOldSNoE/lunLeQXKvkmIumI29IaKMotU/ln/McOIvgzZcQ/3TrSA==}
     dependencies:
       '@types/lodash': 4.14.199
-    dev: false
+    dev: true
 
   /@types/lodash.merge@4.6.7:
     resolution: {integrity: sha512-OwxUJ9E50gw3LnAefSHJPHaBLGEKmQBQ7CZe/xflHkyy/wH2zVyEIAKReHvVrrn7zKdF58p16We9kMfh7v0RRQ==}
@@ -1107,6 +1107,7 @@ packages:
 
   /@types/lodash@4.14.199:
     resolution: {integrity: sha512-Vrjz5N5Ia4SEzWWgIVwnHNEnb1UE1XMkvY5DGXrAeOGE9imk0hgTHh5GyDjLDJi9OTCn9oo9dXH1uToK1VRfrg==}
+    dev: true
 
   /@types/ms@0.7.32:
     resolution: {integrity: sha512-xPSg0jm4mqgEkNhowKgZFBNtwoEwF6gJ4Dhww+GFpm3IgtNseHQZ5IqdNwnquZEoANxyDAKDRAdVo4Z72VvD/g==}
@@ -1139,7 +1140,7 @@ packages:
 
   /@types/qs@6.9.8:
     resolution: {integrity: sha512-u95svzDlTysU5xecFNTgfFG5RUWu1A9P0VzgpcIiGZA9iraHOdSzcxMxQ55DyeRaGCSxQi7LxXDI4rzq/MYfdg==}
-    dev: false
+    dev: true
 
   /@types/react-dom@18.0.10:
     resolution: {integrity: sha512-E42GW/JA4Qv15wQdqJq8DL4JhNpB3prJgjgapN3qJT9K2zO5IIAQh4VXvCEDupoqAwnz0cY4RlXeC/ajX5SFHg==}
@@ -1152,7 +1153,7 @@ packages:
     dependencies:
       '@types/htmlparser2': 3.10.5
       '@types/react': 18.2.28
-    dev: false
+    dev: true
 
   /@types/react-transition-group@4.4.7:
     resolution: {integrity: sha512-ICCyBl5mvyqYp8Qeq9B5G/fyBSRC0zx3XM3sCC6KkcMsNeAHqXBKkmat4GqdJET5jtYUpZXrxI5flve5qhi2Eg==}
@@ -1332,7 +1333,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.22.5(@babel/core@7.23.2)
       magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.4.11(@types/node@16.18.14)(sass@1.69.3)
+      vite: 4.4.11(@types/node@16.18.14)(sass@1.69.4)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1656,7 +1657,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001549
-      electron-to-chromium: 1.4.556
+      electron-to-chromium: 1.4.557
       node-releases: 2.0.13
       update-browserslist-db: 1.0.13(browserslist@4.22.1)
     dev: true
@@ -2109,7 +2110,6 @@ packages:
 
   /domelementtype@1.3.1:
     resolution: {integrity: sha512-BSKB+TSpMpFI/HOxCNr1O8aMOTZ8hT3pM3GQ0w/mWRmkhEDSFJkkyzz4XQsBV44BChwGkrDfMyjVD0eA2aFV3w==}
-    dev: false
 
   /domelementtype@2.3.0:
     resolution: {integrity: sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==}
@@ -2119,7 +2119,6 @@ packages:
     resolution: {integrity: sha512-JiK04h0Ht5u/80fdLMCEmV4zkNh2BcoMFBmZ/91WtYZ8qVXSKjiw7fXMgFPnHcSZgOo3XdinHvmnDUeMf5R4wA==}
     dependencies:
       domelementtype: 1.3.1
-    dev: false
 
   /domhandler@5.0.3:
     resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
@@ -2194,8 +2193,8 @@ packages:
       - supports-color
     dev: true
 
-  /electron-to-chromium@1.4.556:
-    resolution: {integrity: sha512-6RPN0hHfzDU8D56E72YkDvnLw5Cj2NMXZGg3UkgyoHxjVhG99KZpsKgBWMmTy0Ei89xwan+rbRsVB9yzATmYzQ==}
+  /electron-to-chromium@1.4.557:
+    resolution: {integrity: sha512-6x0zsxyMXpnMJnHrondrD3SuAeKcwij9S+83j2qHAQPXbGTDDfgImzzwgGlzrIcXbHQ42tkG4qA6U860cImNhw==}
     dev: true
 
   /electron-updater@5.3.0:
@@ -2231,7 +2230,7 @@ packages:
       esbuild: 0.18.20
       magic-string: 0.30.5
       picocolors: 1.0.0
-      vite: 4.4.11(@types/node@16.18.14)(sass@1.69.3)
+      vite: 4.4.11(@types/node@16.18.14)(sass@1.69.4)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4164,8 +4163,8 @@ packages:
       truncate-utf8-bytes: 1.0.2
     dev: true
 
-  /sass@1.69.3:
-    resolution: {integrity: sha512-X99+a2iGdXkdWn1akFPs0ZmelUzyAQfvqYc2P/MPTrJRuIRoTffGzT9W9nFqG00S+c8hXzVmgxhUuHFdrwxkhQ==}
+  /sass@1.69.4:
+    resolution: {integrity: sha512-+qEreVhqAy8o++aQfCJwp0sklr2xyEzkm9Pp/Igu9wNPoe7EZEQ8X/MBvvXggI2ql607cxKg/RKOwDj6pp2XDA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
@@ -4478,6 +4477,7 @@ packages:
 
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+    requiresBuild: true
     dev: false
 
   /tsutils@3.21.0(typescript@4.9.5):
@@ -4632,7 +4632,7 @@ packages:
     dev: true
     optional: true
 
-  /vite@4.4.11(@types/node@16.18.14)(sass@1.69.3):
+  /vite@4.4.11(@types/node@16.18.14)(sass@1.69.4):
     resolution: {integrity: sha512-ksNZJlkcU9b0lBwAGZGGaZHCMqHsc8OpgtoYhsQ4/I2v5cnpmmmqe5pM4nv/4Hn6G/2GhTdj0DhZh2e+Er1q5A==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -4664,7 +4664,7 @@ packages:
       esbuild: 0.18.20
       postcss: 8.4.31
       rollup: 3.29.4
-      sass: 1.69.3
+      sass: 1.69.4
     optionalDependencies:
       fsevents: 2.3.3
     dev: true

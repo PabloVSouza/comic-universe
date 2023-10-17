@@ -2,7 +2,6 @@ import { ReactNode } from 'react'
 import { HashRouter } from 'react-router-dom'
 import ReactDOM from 'react-dom/client'
 import Routes from 'routes'
-import Loading from 'components/Loading'
 import usePersistStore from 'store/usePersistStore'
 
 import style from 'scss/main/style.module.scss'
@@ -22,7 +21,6 @@ const Main = ({ children }: Props): JSX.Element => {
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <HashRouter>
     <Main>
-      <Loading />
       <Routes />
     </Main>
   </HashRouter>

@@ -1,4 +1,5 @@
 import path from 'path'
+import { app } from 'electron'
 
 export interface Migration {
   id: string
@@ -54,7 +55,7 @@ export class PrismaConstants {
     this.platformName = getPlatformName()
     this.dbPath = `${this.path}/db/database.db`
     this.dbUrl = `file:${this.dbPath}`
-    this.extraResourcesPath = appPath.replace('app.asar', '')
+    this.extraResourcesPath = app.getAppPath().replace('app.asar', '')
     this.mePath = path.join(
       this.extraResourcesPath,
       this.platformToExecutables[this.platformName].migrationEngine

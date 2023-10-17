@@ -14,7 +14,7 @@ export class PrismaInitializer {
     this.constants = new PrismaConstants(appPath)
     this.prisma = this.initializePrisma()
     this.initializePrisma()
-    this.runMigration()
+    // this.runMigration()
   }
 
   private initializePrisma = (): PrismaClient => {
@@ -33,8 +33,10 @@ export class PrismaInitializer {
     })
   }
 
+  // @ts-ignore test
   private runMigration = async (): Promise<void> => {
     let needsMigration: boolean
+    console.log(this.constants)
     const dbExists = fs.existsSync(this.constants.dbPath)
     if (!dbExists) {
       needsMigration = true

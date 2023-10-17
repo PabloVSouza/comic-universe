@@ -51,7 +51,7 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
     >
       <div className={style.content}>
         <div className={style.texts}>
-          <h1 className={style.name}>{data.name}</h1>
+          <h1 className={style.name}>{ReactHtmlParser(data.name)}</h1>
           {!!data.publisher && <p className={style.publisher}>{data.publisher}</p>}
           {!!data.author && <p className={style.author}>{data.author}</p>}
           {!!data.genres && (

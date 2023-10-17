@@ -27,9 +27,10 @@ const DashboardHeader = (): JSX.Element => {
     <div className={style.DashboardHeader}>
       <div className={style.texts}>
         <div className={style.title}>
-          <h1>{comic.name}</h1>
-          <p>{comic.publisher}</p>
-          <p>{comic.status}</p>
+          <h1>{HtmlParser(comic.name)}</h1>
+          {!!comic.publisher && <p>{comic.publisher}</p>}
+          {!!comic.status && <p>{comic.status}</p>}
+          {!!comic.genres && <p>{!!comic.genres && JSON.parse(comic.genres).join(', ')}</p>}
         </div>
         <div className={style.synopsis}>
           <p>{HtmlParser(comic.synopsis)}</p>

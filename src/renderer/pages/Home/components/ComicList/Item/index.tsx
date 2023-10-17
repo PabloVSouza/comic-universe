@@ -1,5 +1,6 @@
 import slugify from 'slugify'
 import classNames from 'classnames'
+import ReactHtmlParser from 'react-html-parser'
 
 import Image from 'components/Image'
 import useGlobalStore from 'store/useGlobalStore'
@@ -24,7 +25,7 @@ const ComicListItem = ({ item }: { item: ComicInterface }): JSX.Element => {
       className={classNames(style.comicListItem, active ? style.active : null)}
       onClick={(): Promise<void> => setComic(item)}
     >
-      <p className={style.name}>{item.name}</p>
+      <p className={style.name}>{ReactHtmlParser(item.name)}</p>
       <Image className={style.cover} src={cover} />
     </li>
   )

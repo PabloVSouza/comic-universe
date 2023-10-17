@@ -1,7 +1,6 @@
 import { IFetchComicRepository, IFetchComicRepositoryInit } from '../../IFetchComicRepository'
 
 import { HQNowFetchComicRepository } from './HQNowFetchComicRepository'
-import { MangaLivreFetchComicRepository } from './MangaLivreFetchComicRepository'
 import { LerMangaFetchComicRepository } from './LerMangaFetchComicRepository'
 
 interface Repos {
@@ -14,7 +13,6 @@ const FetchComicRepository = (
 ): IFetchComicRepository => {
   const repos: Repos = {
     hqnow: HQNowFetchComicRepository,
-    mangalivre: MangaLivreFetchComicRepository,
     lermanga: LerMangaFetchComicRepository
   }
 

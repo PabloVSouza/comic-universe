@@ -15,10 +15,6 @@ const apiEvents = (win: BrowserWindow, path: string): void => {
     hqnow: FetchComicRepository('hqnow', {
       ...repoBasics,
       url: 'https://admin.hq-now.com/graphql'
-    }),
-    mangalivre: FetchComicRepository('mangalivre', {
-      ...repoBasics,
-      url: 'https://mangalivre.net'
     })
   }
 

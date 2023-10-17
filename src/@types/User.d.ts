@@ -1,7 +1,6 @@
-interface User {
+interface UserInterface {
+  id: number
   name: string
-  _id: string
-  createdAt: {
-    $$date: number
-  }
+  default: boolean
+  ReadProgress: ReadProgress[]
 }

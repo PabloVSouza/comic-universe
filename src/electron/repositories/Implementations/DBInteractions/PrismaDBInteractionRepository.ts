@@ -1,5 +1,5 @@
 import { PrismaInitializer } from '../../../lib/prisma'
-import { PrismaClient } from '@prisma/client'
+import { Chapter, Comic, PrismaClient } from '@prisma/client'
 import {
   IDBInteractionsRepository,
   IDBInteractionsMethods,
@@ -15,33 +15,35 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
   }
 
   methods: IDBInteractionsMethods = {
-    dbGetComic: async ({ id }): Promise<Comic> => {
+    dbGetComic: async ({ id }): Promise<ComicInterface> => {
       const comic = await this.db.comic.findUnique({ where: { id } })
       return new Promise((resolve) => {
-        resolve(comic as Comic)
+        resolve(comic as ComicInterface)
       })
     },
 
-    dbGetAllComics: async (): Promise<Comic[]> => {
-      const comics = await this.db.comic.findMany()
+    dbGetAllComics: async (): Promise<ComicInterface[]> => {
+      const comics = (await this.db.comic.findMany()) as ComicInterface[]
       return new Promise((resolve) => {
-        resolve(comics as Comic[])
+        resolve(comics)
       })
     },
 
-    dbGetChapters: async ({ comicId }): Promise<Chapter[]> => {
+    dbGetChapters: async ({ comicId }): Promise<ChapterInterface[]> => {
       const chapters = await this.db.chapter.findMany({ where: { comicId } })
       return new Promise((resolve) => {
-        resolve(chapters as Chapter[])
+        resolve(chapters as ChapterInterface[])
       })
     },
 
     dbInsertComic: async ({ comic, chapters }): Promise<void> => {
       if (!comic.id) {
-        const newComic = await this.db.comic.create({ data: comic })
+        const newComic = await this.db.comic.create({
+          data: comic as Comic
+        })
 
         for (const chapter of chapters) {
-          await this.db.chapter.create({ data: { ...chapter, comicId: newComic.id } })
+          await this.db.chapter.create({ data: { ...chapter, comicId: newComic.id } as Chapter })
         }
 
         return new Promise((resolve) => {
@@ -51,49 +53,45 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
     },
 
     dbInsertChapter: async ({ comicId, chapter }): Promise<void> => {
-      await this.db.chapter.create({ data: { ...chapter, comicId } })
+      await this.db.chapter.create({ data: { ...chapter, comicId } as Chapter })
       return new Promise((resolve) => {
         resolve()
       })
     },
 
-    dbGetReadProgress: async (search): Promise<ReadProgress[]> => {
-      console.log(search)
-      const readProgress = await this.db.readProgress.findMany({ where: {} })
+    dbGetReadProgress: async (search): Promise<ReadProgressInterface[]> => {
+      //@ts-ignore Multiple ways of searching
+      const readProgress = await this.db.readProgress.findMany({ where: search })
       return new Promise((resolve) => {
-        resolve(readProgress as ReadProgress[])
+        resolve(readProgress as ReadProgressInterface[])
       })
     },
 
-    dbUpdateReadProgress: async ({ chapter, page }): Promise<void> => {
-      return new Promise((resolve) => {
-        this.db.ReadProgress.findOne(
-          { chapterId: chapter._id },
-          (_err, readProgress: ReadProgress) => {
-            const data = {
-              comicId: chapter.comicId,
-              chapterId: chapter._id,
-              totalPages: chapter.pages.length - 1,
-              page
-            } as ReadProgress
+    dbUpdateReadProgress: async ({ chapter, comicId, page, userId }): Promise<void> => {
+      const chapterId = chapter.id
+      const totalPages = JSON.parse(chapter.pages).length
 
-            if (!readProgress) {
-              this.db.ReadProgress.insert(data, () => {
-                resolve()
-              })
-            } else {
-              this.db.ReadProgress.update(
-                { chapterId: chapter._id },
-                { $set: { page } },
-                {},
-                () => {
-                  resolve()
-                }
-              )
-            }
-          }
-        )
+      const data = {
+        chapterId,
+        userId,
+        page,
+        comicId,
+        totalPages
+      }
+
+      const readProgress = await this.db.readProgress.updateMany({
+        where: {
+          userId,
+          chapterId
+        },
+        data
       })
+
+      if (!readProgress) {
+        await this.db.readProgress.create({ data })
+      }
+
+      return new Promise((resolve) => resolve())
     }
   }
 }

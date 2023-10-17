@@ -1,15 +1,16 @@
 import { BrowserWindow } from 'electron'
 
 export type IDBInteractionsMethods = {
-  dbGetComic: (input: { id: number }) => Promise<Comic> | null
-  dbGetAllComics: () => Promise<Comic[]>
-  dbGetChapters: (input: { comicId: number }) => Promise<Chapter[]>
-  dbInsertComic: (input: { comic: Comic; chapters: Chapter[] }) => Promise<void>
-  dbInsertChapter: (input: { comicId: string; chapter: Chapter }) => Promise<void>
-  dbGetReadProgress: (input: { search: String }) => Promise<ReadProgress[]>
+  dbGetComic: (input: { id: number }) => Promise<ComicInterface> | null
+  dbGetAllComics: () => Promise<ComicInterface[]>
+  dbGetChapters: (input: { comicId: number }) => Promise<ChapterInterface[]>
+  dbInsertComic: (input: { comic: ComicInterface; chapters: ChapterInterface[] }) => Promise<void>
+  dbInsertChapter: (input: { comicId: number; chapter: ChapterInterface }) => Promise<void>
+  dbGetReadProgress: (input: { search: string }) => Promise<ReadProgressInterface[]>
   dbUpdateReadProgress: (input: {
     comicId: number
-    chapter: Chapter
+    userId: number
+    chapter: ChapterInterface
     page: number
   }) => Promise<void>
 }

@@ -1,16 +1,17 @@
-interface Comic {
+interface ComicInterface {
+  id: number
   siteId: string
   name: string
-  chapters?: Chapter[]
   cover: string
   repo: string
-  author?: string
-  artist?: string
-  publisher?: string
-  status?: string
-  genres?: string
-  siteLink?: string
+  author?: string | null
+  artist?: string | null
+  publisher?: string | null
+  status?: string | null
+  genres?: string | null
+  siteLink: string
   synopsis: string
   type: string
-  id: int
+  chapters: Chapter[]
+  ReadProgress: ReadProgress[]
 }

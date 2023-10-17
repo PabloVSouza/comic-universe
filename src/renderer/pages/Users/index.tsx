@@ -7,7 +7,7 @@ import style from './style.module.scss'
 
 const Users = (): JSX.Element => {
   const lang = useLang()
-  const list = [] as User[]
+  const list = [] as UserInterface[]
 
   return (
     <Window className={style.Users} contentClassName={style.Content}>

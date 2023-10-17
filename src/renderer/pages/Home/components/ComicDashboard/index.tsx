@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import DashboardHeader from './Header'
 import DashboardNav from './Nav'
 import DashboardList from './List'

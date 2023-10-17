@@ -2,19 +2,19 @@ import { create } from 'zustand'
 const { invoke } = window.Electron.ipcRenderer
 
 interface useDashboardStore {
-  comic: Comic
-  chapters: Chapter[]
-  list: Comic[]
-  readProgress: ReadProgress[]
+  comic: ComicInterface
+  chapters: ChapterInterface[]
+  list: ComicInterface[]
+  readProgress: ReadProgressInterface[]
   getListDB: () => Promise<void>
   getChaptersDB: () => Promise<void>
   getReadProgressDB: () => Promise<void>
-  setReadProgress: (chapter: Chapter, page: number) => Promise<void>
-  setComic: (comic: Comic) => Promise<void>
+  setReadProgress: (chapter: ChapterInterface, page: number) => Promise<void>
+  setComic: (comic: ComicInterface) => Promise<void>
 }
 
 const useDashboardStore = create<useDashboardStore>((set) => ({
-  comic: {} as Comic,
+  comic: {} as ComicInterface,
   chapters: [],
   list: [],
   readProgress: [],

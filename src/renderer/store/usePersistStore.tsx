@@ -4,11 +4,11 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 interface usePersistStore {
   theme: string
   lang: string
-  currentUser: User
+  currentUser: UserInterface
   repo: string
   switchTheme: (theme?: string) => void
   changeLanguage: (lang?: string) => void
-  setCurrentUser: (currentUser: User) => void
+  setCurrentUser: (currentUser: UserInterface) => void
   setRepo: (repo: string) => void
 }
 
@@ -17,7 +17,7 @@ const usePersistStore = create<usePersistStore>()(
     (set, get) => ({
       theme: 'dark',
       lang: 'ptBR',
-      currentUser: {} as User,
+      currentUser: {} as UserInterface,
       repo: 'hqnow',
 
       switchTheme: (theme): void =>

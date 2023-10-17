@@ -1,5 +1,5 @@
 import { WebContents } from 'electron'
-import slugify from 'slugify'
+// import slugify from 'slugify'
 import axios from 'axios'
 import qs from 'qs'
 import * as cheerio from 'cheerio'
@@ -10,8 +10,8 @@ import {
   IFetchComicRepositoryInit
 } from '../../IFetchComicRepository'
 
-import CreateDirectory from '../../../utils/CreateDirectory'
-import DownloadFile from '../../../utils/DownloadFile'
+// import CreateDirectory from '../../../utils/CreateDirectory'
+// import DownloadFile from '../../../utils/DownloadFile'
 
 export class LerMangaFetchComicRepository implements IFetchComicRepository {
   ipc: WebContents
@@ -150,40 +150,6 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
         pages = JSON.parse(pagesRaw.substring(pagesRaw.indexOf('[')))
       }
       return pages
-    },
-
-    downloadChapter: async ({ comic, chapter }): Promise<{ cover: string; pageFiles: Page[] }> => {
-      this.ipc.send('loading', {
-        status: true,
-        message: chapter.number,
-        progress: { current: 0, total: chapter.pages.length }
-      })
-
-      const path = `${this.path}/${slugify(comic.name)}/`
-
-      const chapterPath = path + `${chapter.number}/`
-
-      await CreateDirectory(chapterPath)
-
-      const cover = comic._id ? comic.cover : await DownloadFile(path, comic.cover)
-
-      const pageFiles: Page[] = []
-
-      for (const [i, page] of chapter.pages.entries()) {
-        await DownloadFile(chapterPath, page.path)
-        pageFiles.push(page)
-        this.ipc.send('loading', {
-          status: true,
-          message: chapter.number,
-          progress: { current: i + 1, total: chapter.pages.length }
-        })
-      }
-
-      this.ipc.send('loading', { status: false })
-
-      return new Promise((resolve) => {
-        resolve({ cover, pageFiles })
-      })
     }
   }
 }

@@ -11,7 +11,7 @@ import plusIcon from 'assets/plus.svg'
 import userIcon from 'assets/user.svg'
 
 interface UsersListItem {
-  data?: User
+  data?: UserInterface
   newUser?: boolean
 }
 

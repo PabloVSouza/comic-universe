@@ -117,7 +117,7 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
 
       const { data } = await this.client.query(query)
       const res = data.getChaptersByHqId.reduce((acc, chapter) => {
-        return [...acc, { ...chapter, offline: false }]
+        return [...acc, { ...chapter, offline: false, pages: JSON.stringify(chapter.pages) }]
       }, []) as ChapterInterface[]
 
       return new Promise((resolve) => {
@@ -142,7 +142,7 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
 
       const pageFiles: Page[] = []
 
-      for (const [i, page] of chapter.pages.entries()) {
+      for (const [i, page] of JSON.parse(chapter.pages).entries()) {
         await DownloadFile(chapterPath, page.path)
         pageFiles.push(page)
         this.ipc.send('loading', {

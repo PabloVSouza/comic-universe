@@ -5,20 +5,20 @@ import usePersistStore from './usePersistStore'
 const { invoke } = window.Electron.ipcRenderer
 
 interface useSearchStore {
-  comic: Comic
-  list: Comic[]
-  chapters: Chapter[]
+  comic: ComicInterface
+  list: ComicInterface[]
+  chapters: ChapterInterface[]
   getList: () => Promise<void>
   search: (search: string) => Promise<void>
   getDetails: (input: { [key: string]: string }) => Promise<void>
   getChapters: (siteId: string) => Promise<void>
   insertComic: () => Promise<void>
-  setComic: (data: Comic) => void
+  setComic: (data: ComicInterface) => void
   resetComic: () => void
 }
 
 const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
-  comic: {} as Comic,
+  comic: {} as ComicInterface,
   chapters: [],
   list: [],
 

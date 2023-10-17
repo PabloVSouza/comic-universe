@@ -13,7 +13,7 @@ import Button from 'components/Button'
 import style from './style.module.scss'
 
 interface ComicListItem extends LiHTMLAttributes<unknown> {
-  data: Comic
+  data: ComicInterface
 }
 
 const ComicListItem = ({ data }: ComicListItem): JSX.Element => {

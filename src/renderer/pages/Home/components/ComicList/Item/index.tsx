@@ -9,7 +9,7 @@ import style from './style.module.scss'
 
 const { path } = window
 
-const ComicListItem = ({ item }: { item: Comic }): JSX.Element => {
+const ComicListItem = ({ item }: { item: ComicInterface }): JSX.Element => {
   const { appPath } = useGlobalStore()
   const { comic, setComic } = useDashboardStore()
 

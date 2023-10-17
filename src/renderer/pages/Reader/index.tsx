@@ -15,7 +15,8 @@ import useDashboardStore from 'store/useDashboardStore'
 const Reader = (): JSX.Element => {
   const navigate = useNavigate()
 
-  const { comicId, chapterId } = useParams()
+  const comicId = Number(useParams().comicId)
+  const chapterId = Number(useParams().chapterId)
 
   const [mousePos, setMousePos] = useState<MousePos>({} as MousePos)
   const [zoomVisible, setZoomVisible] = useState(false)
@@ -36,14 +37,14 @@ const Reader = (): JSX.Element => {
   const { comic, getReadProgressDB: getReadProgressDashboard } = useDashboardStore()
 
   useMemo(async () => {
-    if (comicId && chapterId) await setInitialState(comicId, chapterId)
+    if (comicId && chapterId) await setInitialState(Number(comicId), chapterId)
   }, [])
 
   const chapterIndex = chapters.findIndex((val) => val.id === chapterId)
 
   const chapter = chapters[chapterIndex]
 
-  const pages = chapter?.pages
+  const pages = JSON.parse(chapter?.pages)
 
   useMemo(() => {
     if (chapter?.id && readProgress?.page !== page) {

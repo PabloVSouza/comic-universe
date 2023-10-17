@@ -3,20 +3,20 @@ import { create, StoreApi } from 'zustand'
 const { invoke } = window.Electron.ipcRenderer
 
 interface useReaderStore {
-  chapters: Chapter[]
-  readProgress: ReadProgress
+  chapters: ChapterInterface[]
+  readProgress: ReadProgressInterface
   page: number
-  getChaptersDB: (comicId: string) => Promise<void>
-  getReadProgressDB: (chapterId: string) => Promise<void>
-  setInitialState: (comicId: string, chapterId: string) => Promise<void>
-  setReadProgressDB: (chapter: Chapter, page: number) => Promise<void>
+  getChaptersDB: (comicId: number) => Promise<void>
+  getReadProgressDB: (chapterId: number) => Promise<void>
+  setInitialState: (comicId: number, chapterId: number) => Promise<void>
+  setReadProgressDB: (chapter: ChapterInterface, page: number) => Promise<void>
   setPage: (page: number) => void
   resetReader: () => void
 }
 
 const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
   chapters: [],
-  readProgress: {} as ReadProgress,
+  readProgress: {} as ReadProgressInterface,
   page: 0,
 
   setInitialState: async (comicId, chapterId): Promise<void> => {

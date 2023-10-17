@@ -7,7 +7,7 @@ import useLang from 'lang'
 import style from './style.module.scss'
 
 interface SearchComicList {
-  list: Comic[]
+  list: ComicInterface[]
   itemsPerPage?: number
 }
 

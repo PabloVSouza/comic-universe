@@ -12,7 +12,7 @@ import style from './style.module.scss'
 import closedBook from 'assets/closed-book-icon.svg'
 import bookStack from 'assets/book-stack.svg'
 
-const DashboardListItem = ({ item }: { item: Chapter }): JSX.Element => {
+const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element => {
   const navigate = useNavigate()
 
   const texts = useLang()

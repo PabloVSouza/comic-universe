@@ -1,13 +1,13 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
-const { invoke } = window.Electron.ipcRenderer
+// const { invoke } = window.Electron.ipcRenderer
 
 interface useDownloadStore {
-  queue: Chapter[]
-  addToQueue: (chapter: Chapter) => Promise<void>
-  removeFromQueue: (chapter: Chapter) => Promise<void>
-  downloadChapter: (chapter: Chapter) => Promise<void>
+  queue: ChapterInterface[]
+  addToQueue: (chapter: ChapterInterface) => Promise<void>
+  removeFromQueue: (chapter: ChapterInterface) => Promise<void>
+  downloadChapter: (chapter: ChapterInterface) => Promise<void>
 }
 
 const useDownloadStore = create<useDownloadStore>()(
@@ -23,7 +23,7 @@ const useDownloadStore = create<useDownloadStore>()(
         set({ queue: get().queue.filter((item) => item.id !== chapter.id) })
       },
 
-      downloadChapter: async (chapter): Promise<void> => {
+      downloadChapter: async (): Promise<void> => {
         return
       }
     }),

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import slugify from 'slugify'
 
 import Image from 'components/Image'
-import Modal from 'components/Modal'
+import Modal from 'pages/Modal'
 
 import useGlobalStore from 'store/useGlobalStore'
 

@@ -45,10 +45,8 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
 
       const { data } = await this.client.query(query)
 
-      const formattedData = data.getAllHqs.map((val) => ({ ...val, siteId: String(val.siteId) }))
-
       return new Promise((resolve) => {
-        resolve(formattedData as ComicInterface[])
+        resolve(data.getAllHqs as ComicInterface[])
       })
     },
 
@@ -89,10 +87,10 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
       })
 
       const res = {
-        ...data.getHqsById[0]
+        ...data.getHqsById[0],
+        siteId: String(siteId),
+        type: 'hq'
       }
-
-      res.type = 'hq'
 
       return new Promise((resolve) => {
         resolve(res)

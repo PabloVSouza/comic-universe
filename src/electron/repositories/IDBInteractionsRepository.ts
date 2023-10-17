@@ -5,7 +5,11 @@ export type IDBInteractionsMethods = {
   dbGetAllComics: () => Promise<ComicInterface[]>
   dbGetAllChaptersNoPage: () => Promise<ChapterInterface[]>
   dbGetChapters: (input: { comicId: number }) => Promise<ChapterInterface[]>
-  dbInsertComic: (input: { comic: ComicInterface; chapters: ChapterInterface[] }) => Promise<void>
+  dbInsertComic: (input: {
+    comic: ComicInterface
+    chapters: ChapterInterface[]
+    repo: string
+  }) => Promise<void>
   dbInsertChapter: (input: { comicId: number; chapter: ChapterInterface }) => Promise<void>
   dbUpdateChapter: (input: { chapter: ChapterInterface }) => Promise<ChapterInterface>
   dbGetReadProgress: (input: { search: string }) => Promise<ReadProgressInterface[]>

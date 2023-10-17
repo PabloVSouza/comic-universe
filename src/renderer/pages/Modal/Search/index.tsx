@@ -8,10 +8,11 @@ import useSearchStore from 'store/useSearchStore'
 import usePersistStore from 'store/usePersistStore'
 import useLang from 'lang'
 import style from './style.module.scss'
+import Loading from 'components/Loading'
 
 const ModalSearch = (): JSX.Element => {
   const [searchText, setSearchText] = useState('')
-  const { list, search, resetComic, getList } = useSearchStore()
+  const { list, loading, search, resetComic, getList } = useSearchStore()
   const { repo, setRepo } = usePersistStore()
 
   const texts = useLang()
@@ -28,6 +29,7 @@ const ModalSearch = (): JSX.Element => {
     }>
   ): void => {
     if (option) setRepo(option.value)
+    getList()
   }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -57,6 +59,7 @@ const ModalSearch = (): JSX.Element => {
       className={style.searchComic}
       contentClassName={style.content}
     >
+      <Loading isLoading={loading} />
       <div className={style.searchInput}>
         <div className={classNames(style.inputBlock, style.inputSelect)}>
           <Select

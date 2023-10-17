@@ -33,6 +33,7 @@ model Chapter {
   siteId       String
   siteLink     String?
   releaseId    String?
+  repo         String
   name         String?
   number       String
   pages        String?

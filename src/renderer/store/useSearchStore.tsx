@@ -8,12 +8,14 @@ interface useSearchStore {
   comic: ComicInterface
   list: ComicInterface[]
   chapters: ChapterInterface[]
+  loading: boolean
   getList: () => Promise<void>
   search: (search: string) => Promise<void>
   getDetails: (input: { [key: string]: string }) => Promise<void>
   getChapters: (siteId: string) => Promise<void>
   insertComic: () => Promise<void>
   setComic: (data: ComicInterface) => void
+  setLoading: (status: boolean) => void
   resetComic: () => void
 }
 
@@ -21,23 +23,31 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
   comic: {} as ComicInterface,
   chapters: [],
   list: [],
+  loading: false,
 
   getList: async (): Promise<void> => {
     const { repo } = usePersistStore.getState()
+    const { setLoading } = useSearchStore.getState()
+    setLoading(true)
     const list = await invoke('getList', { repo })
 
     return new Promise((resolve) => {
       set((state: useSearchStore) => ({ ...state, list }))
+      setLoading(false)
       resolve()
     })
   },
 
   search: async (search): Promise<void> => {
     const { repo } = usePersistStore.getState()
+    const { setLoading } = useSearchStore.getState()
+    setLoading(true)
     const list = await invoke('search', { repo, data: { search } })
 
     return new Promise((resolve) => {
       set((state: useSearchStore) => ({ ...state, list }))
+      setLoading(false)
+
       resolve()
     })
   },
@@ -75,11 +85,13 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
     const { repo } = usePersistStore.getState()
     const { comic, chapters } = useSearchStore.getState()
 
-    await invoke('dbInsertComic', { comic: { ...comic, repo }, chapters })
+    await invoke('dbInsertComic', { comic, chapters, repo })
 
     const { getListDB } = useDashboardStore.getState()
     getListDB()
   },
+
+  setLoading: (status) => set((state: useSearchStore) => ({ ...state, loading: status })),
 
   setComic: (comic) => set((state: useSearchStore) => ({ ...state, comic })),
 

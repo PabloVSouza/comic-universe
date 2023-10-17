@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import usePersistStore from './usePersistStore'
 
 const { invoke } = window.Electron.ipcRenderer
 
@@ -27,11 +26,11 @@ const useDownloadStore = create<useDownloadStore>()(
       },
 
       getChapterPages: async (chapter): Promise<void> => {
-        const { repo } = usePersistStore.getState()
-
         const { removeFromQueue } = useDownloadStore.getState()
 
         const { siteLink } = chapter
+
+        const { repo } = chapter
 
         console.log(`Getting Chapter ${chapter.number} on Link ${chapter.siteLink}`)
 

@@ -43,7 +43,6 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
   },
 
   getDetails: async (search): Promise<void> => {
-    console.log('Oi')
     const { repo } = usePersistStore.getState()
     const { list } = useSearchStore.getState()
     const { siteId } = search

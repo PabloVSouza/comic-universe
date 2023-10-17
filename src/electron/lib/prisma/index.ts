@@ -55,7 +55,6 @@ export class PrismaInitializer {
           'prisma',
           'schema.prisma'
         )
-
         await this.runPrismaCommand({
           command: ['migrate', 'deploy', '--schema', schemaPath],
           dbUrl: this.constants.dbUrl

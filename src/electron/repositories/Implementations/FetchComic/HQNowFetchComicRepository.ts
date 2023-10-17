@@ -45,8 +45,10 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
 
       const { data } = await this.client.query(query)
 
+      const formattedData = data.getAllHqs.map((val) => ({ ...val, siteId: String(val.siteId) }))
+
       return new Promise((resolve) => {
-        resolve(data.getAllHqs as ComicInterface[])
+        resolve(formattedData as ComicInterface[])
       })
     },
 
@@ -117,7 +119,15 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
 
       const { data } = await this.client.query(query)
       const res = data.getChaptersByHqId.reduce((acc, chapter) => {
-        return [...acc, { ...chapter, offline: false, pages: JSON.stringify(chapter.pages) }]
+        return [
+          ...acc,
+          {
+            ...chapter,
+            siteId: String(siteId),
+            offline: false,
+            pages: JSON.stringify(chapter.pages)
+          }
+        ]
       }, []) as ChapterInterface[]
 
       return new Promise((resolve) => {

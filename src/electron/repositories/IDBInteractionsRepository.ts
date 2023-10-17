@@ -3,9 +3,11 @@ import { BrowserWindow } from 'electron'
 export type IDBInteractionsMethods = {
   dbGetComic: (input: { id: number }) => Promise<ComicInterface> | null
   dbGetAllComics: () => Promise<ComicInterface[]>
+  dbGetAllChaptersNoPage: () => Promise<ChapterInterface[]>
   dbGetChapters: (input: { comicId: number }) => Promise<ChapterInterface[]>
   dbInsertComic: (input: { comic: ComicInterface; chapters: ChapterInterface[] }) => Promise<void>
   dbInsertChapter: (input: { comicId: number; chapter: ChapterInterface }) => Promise<void>
+  dbUpdateChapter: (input: { chapter: ChapterInterface }) => Promise<ChapterInterface>
   dbGetReadProgress: (input: { search: string }) => Promise<ReadProgressInterface[]>
   dbUpdateReadProgress: (input: {
     comicId: number

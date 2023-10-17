@@ -19,7 +19,11 @@ const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element =>
 
   const { comic, readProgress, getReadProgressDB, setReadProgress } = useDashboardStore()
 
-  const totalPages = item.pages?.length - 1
+  const pages = item.pages ? (JSON.parse(item.pages) as Page[]) : ([] as Page[])
+
+  const disabled = !item.pages
+
+  const totalPages = pages.length - 1
 
   const chapterProgress = readProgress.find((val) => val.chapterId === item.id)
 
@@ -27,8 +31,10 @@ const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element =>
     ? Math.round((100 / chapterProgress.totalPages) * chapterProgress.page)
     : 0
 
-  const openChapter = (): void => {
-    navigate(`/reader/${comic.id}/${item.id}`)
+  const openChapter = async (): Promise<void> => {
+    if (pages) {
+      navigate(`/reader/${comic.id}/${item.id}`)
+    }
   }
 
   const handleReadProgress = async (page: number): Promise<void> => {
@@ -37,7 +43,10 @@ const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element =>
   }
 
   return (
-    <li className={style.DashboardListItem} onDoubleClick={(): void => openChapter()}>
+    <li
+      className={classNames(style.DashboardListItem, disabled ? style.disabled : null)}
+      onDoubleClick={(): Promise<void> => openChapter()}
+    >
       <div className={classNames(style.listItem, style.number)}>
         <p>{item.number}</p>
       </div>

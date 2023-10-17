@@ -4,8 +4,6 @@ import { join } from 'path'
 import { createEvents, removeEvents } from '../events'
 
 const CreateMainWindow = (): BrowserWindow => {
-  console.log(app.getAppPath())
-
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,

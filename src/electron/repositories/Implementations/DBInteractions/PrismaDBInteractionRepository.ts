@@ -29,6 +29,15 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
       })
     },
 
+    dbGetAllChaptersNoPage: async (): Promise<ChapterInterface[]> => {
+      const chapters = (await this.db.chapter.findMany({
+        where: { pages: null }
+      })) as ChapterInterface[]
+      return new Promise((resolve) => {
+        resolve(chapters)
+      })
+    },
+
     dbGetChapters: async ({ comicId }): Promise<ChapterInterface[]> => {
       const chapters = await this.db.chapter.findMany({ where: { comicId } })
       return new Promise((resolve) => {
@@ -37,25 +46,34 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
     },
 
     dbInsertComic: async ({ comic, chapters }): Promise<void> => {
-      if (!comic.id) {
-        const newComic = await this.db.comic.create({
-          data: comic as Comic
-        })
+      const newComic = await this.db.comic.create({
+        data: comic as Comic
+      })
 
-        for (const chapter of chapters) {
-          await this.db.chapter.create({ data: { ...chapter, comicId: newComic.id } as Chapter })
-        }
-
-        return new Promise((resolve) => {
-          resolve()
-        })
+      for (const chapter of chapters) {
+        await this.db.chapter.create({ data: { ...chapter, comicId: newComic.id } as Chapter })
       }
+
+      return new Promise((resolve) => {
+        resolve()
+      })
     },
 
     dbInsertChapter: async ({ comicId, chapter }): Promise<void> => {
       await this.db.chapter.create({ data: { ...chapter, comicId } as Chapter })
       return new Promise((resolve) => {
         resolve()
+      })
+    },
+
+    dbUpdateChapter: async ({ chapter }): Promise<ChapterInterface> => {
+      const updatedChapter = (await this.db.chapter.update({
+        where: { id: chapter.id },
+        data: chapter as Chapter
+      })) as ChapterInterface
+
+      return new Promise((resolve) => {
+        resolve(updatedChapter)
       })
     },
 

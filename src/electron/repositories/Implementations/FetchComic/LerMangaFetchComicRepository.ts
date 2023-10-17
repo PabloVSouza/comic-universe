@@ -28,7 +28,7 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
     getList: async (): Promise<ComicInterface[]> => {
       const searchString = qs.stringify({
         action: 'wp-manga-search-manga',
-        title: 'Boruto'
+        title: 'A'
       })
 
       const { data } = await axios({
@@ -109,7 +109,8 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
 
       const res = {
         synopsis,
-        genres
+        genres,
+        type: 'manga'
       } as Partial<ComicInterface>
 
       return new Promise((resolve) => {
@@ -139,17 +140,25 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
       })
     },
 
-    getPages: async ({ chapterLink }) => {
-      const fetchPage = await axios.get(chapterLink)
+    getPages: async ({ siteLink }) => {
+      const fetchPage = await axios.get(siteLink)
       const parsedPage = cheerio.load(fetchPage.data)
       const pagesRawBase64 = parsedPage('.heading-header').next().prop('src')
-      let pages = []
+      let pages = [] as string[]
       if (pagesRawBase64) {
         const base64String = pagesRawBase64.substring(pagesRawBase64.indexOf(',') + 1)
         const pagesRaw = Buffer.from(base64String, 'base64').toString()
         pages = JSON.parse(pagesRaw.substring(pagesRaw.indexOf('[')))
       }
-      return pages
+
+      const formattedPages = pages.map((page) => {
+        const filename = page.substring(page.lastIndexOf('/') + 1)
+        const path = page
+
+        return { filename, path }
+      })
+
+      return formattedPages
     }
   }
 }

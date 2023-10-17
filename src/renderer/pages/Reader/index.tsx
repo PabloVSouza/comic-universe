@@ -44,7 +44,7 @@ const Reader = (): JSX.Element => {
 
   const chapter = chapters[chapterIndex]
 
-  const pages = JSON.parse(chapter?.pages)
+  const pages = chapter?.pages ? JSON.parse(chapter.pages) : []
 
   useMemo(() => {
     if (chapter?.id && readProgress?.page !== page) {

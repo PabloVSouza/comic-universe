@@ -23,7 +23,9 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
     },
 
     dbGetAllComics: async (): Promise<ComicInterface[]> => {
-      const comics = (await this.db.comic.findMany()) as ComicInterface[]
+      const comics = (await this.db.comic.findMany({
+        include: { chapters: true }
+      })) as ComicInterface[]
       return new Promise((resolve) => {
         resolve(comics)
       })

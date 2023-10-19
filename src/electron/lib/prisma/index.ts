@@ -1,6 +1,5 @@
 import { PrismaConstants, Migration } from './constants'
 import { PrismaClient } from '@prisma/client'
-import { is } from '@electron-toolkit/utils'
 import path from 'path'
 import fs from 'fs'
 import CreateDirectory from '../../utils/CreateDirectory'

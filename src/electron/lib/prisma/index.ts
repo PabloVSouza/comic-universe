@@ -44,7 +44,7 @@ export class PrismaInitializer {
     }
   }
 
-  // @ts-ignore test
+  // @ts-ignore Not using yet
   private runMigration = async (): Promise<void> => {
     let needsMigration: boolean
     console.log(this.constants)

@@ -25,19 +25,22 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
   },
 
   getChapterPages: async (chapter): Promise<void> => {
-    const { removeFromQueue } = useDownloadStore.getState()
+    const { removeFromQueue, getChapterPages } = useDownloadStore.getState()
 
     const { siteLink } = chapter
 
     const { repo } = chapter
 
-    console.log(`Getting Chapter ${chapter.number} on Link ${chapter.siteLink}`)
-
     const pages = JSON.stringify(await invoke('getPages', { repo, data: { siteLink } }))
 
-    await invoke('dbUpdateChapter', { chapter: { ...chapter, pages } })
+    if (pages.length === 0) {
+      console.log('Trying again the chapter ' + chapter.number)
+      await getChapterPages(chapter)
+    } else {
+      await invoke('dbUpdateChapter', { chapter: { ...chapter, pages } })
 
-    await removeFromQueue(chapter)
+      await removeFromQueue(chapter)
+    }
 
     return
   },
@@ -57,7 +60,7 @@ const queueManager = (): void => {
         isCleaning = true
         console.log('Cleaning Queue')
         for (const item of queue) {
-          await getChapterPages(item)
+          getChapterPages(item)
         }
         isCleaning = false
         console.log('Queue Cleaned!')

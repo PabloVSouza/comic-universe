@@ -1,5 +1,6 @@
 import path from 'path'
 import { app } from 'electron'
+import { is } from '@electron-toolkit/utils'
 
 export interface Migration {
   id: string
@@ -22,24 +23,7 @@ export class PrismaConstants {
   public platformName: string
   public latestMigration: string
 
-  public platformToExecutables = {
-    win32: {
-      migrationEngine: 'node_modules/@prisma/engines/migration-engine-windows.exe',
-      queryEngine: 'node_modules/@prisma/engines/query_engine-windows.dll.node'
-    },
-    linux: {
-      migrationEngine: 'node_modules/@prisma/engines/migration-engine-debian-openssl-1.1.x',
-      queryEngine: 'node_modules/@prisma/engines/libquery_engine-debian-openssl-1.1.x.so.node'
-    },
-    darwin: {
-      migrationEngine: 'node_modules/@prisma/engines/migration-engine-darwin',
-      queryEngine: 'node_modules/@prisma/engines/libquery_engine-darwin.dylib.node'
-    },
-    darwinArm64: {
-      migrationEngine: 'node_modules/@prisma/engines/migration-engine-darwin-arm64',
-      queryEngine: 'node_modules/@prisma/engines/libquery_engine-darwin-arm64.dylib.node'
-    }
-  }
+  public platformToExecutables = {}
 
   constructor(appPath: string) {
     function getPlatformName(): string {
@@ -50,22 +34,41 @@ export class PrismaConstants {
 
       return process.platform
     }
-
     this.path = appPath
+
+    this.platformToExecutables = {
+      win32: {
+        migrationEngine: `/db/@prisma/engines/migration-engine-windows.exe`,
+        queryEngine: `node_modules/.prisma/client/query_engine-windows.dll.node`
+      },
+      linux: {
+        migrationEngine: `/db/@prisma/engines/migration-engine-debian-openssl-1.1.x`,
+        queryEngine: `node_modules/.prisma/client/libquery_engine-debian-openssl-1.1.x.so.node`
+      },
+      darwin: {
+        migrationEngine: `/db/@prisma/engines/migration-engine-darwin`,
+        queryEngine: `node_modules/.prisma/client/libquery_engine-darwin.dylib.node`
+      },
+      darwinArm64: {
+        migrationEngine: `/db/@prisma/engines/migration-engine-darwin-arm64`,
+        queryEngine: `node_modules/.prisma/client/libquery_engine-darwin-arm64.dylib.node`
+      }
+    }
+
     this.platformName = getPlatformName()
     this.dbPath = `${this.path}/db/database.db`
     this.dbUrl = `file:${this.dbPath}`
-    this.extraResourcesPath = app.getAppPath().replace('app.asar', '')
+    this.extraResourcesPath = appPath
     this.mePath = path.join(
       this.extraResourcesPath,
       this.platformToExecutables[this.platformName].migrationEngine
     )
     this.qePath = path.join(
-      this.extraResourcesPath,
+      !is.dev ? path.join(app.getAppPath().replace('app.asar', ''), `app.asar.unpacked`) : '',
       this.platformToExecutables[this.platformName].queryEngine
     )
 
-    this.latestMigration = '20231016210533_first_official_migration'
+    this.latestMigration = '20231018232641_'
     process.env.DATABASE_URL = this.dbUrl
   }
 }

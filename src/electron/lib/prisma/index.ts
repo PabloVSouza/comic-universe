@@ -12,12 +12,15 @@ export class PrismaInitializer {
   constructor(appPath: string) {
     this.appPath = appPath
     this.constants = new PrismaConstants(appPath)
+    console.log(this.constants)
     this.prisma = this.initializePrisma()
     this.initializePrisma()
     // this.runMigration()
   }
 
   private initializePrisma = (): PrismaClient => {
+    if (this.constants.platformName === 'darwin')
+      process.env.PRISMA_CLI_BINARY_TARGETS = 'darwin,darwin-arm64'
     return new PrismaClient({
       datasources: {
         db: {

@@ -9,7 +9,7 @@ This project was originally called Manga Universe.
 ### Install dependencies:
 
 ```
-pnpm install
+yarn
 ```
 
 ### Development server:
@@ -21,7 +21,7 @@ pnpm dev
 ### Building for production:
 
 ```
-pnpm build:$desired-platform (mac, win)
+yarn build:$desired-platform (mac, win)
 ```
 
 This app is for studies and experiments only. It should never be used for commercial purposes.

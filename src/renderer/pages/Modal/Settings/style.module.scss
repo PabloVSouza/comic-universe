@@ -1,0 +1,24 @@
+.Settings {
+  width: 600px;
+  height: 400px;
+  max-width: 1000px;
+  background: var(--modalBackground);
+  padding: 20px;
+
+  .content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+
+    .options {
+      width: 100%;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

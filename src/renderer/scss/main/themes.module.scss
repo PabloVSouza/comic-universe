@@ -1,6 +1,6 @@
 .light {
   --colorText: #{$black};
-  --colorTextHightlight: #{$black};
+  --colorTextHighlight: #{$black};
   --modalBackground: #{rgba($white-darker, 0.7)};
   --colorHighlight: #{$white-transparent};
   --colorHover: #{$white};
@@ -9,7 +9,7 @@
 
 .dark {
   --colorText: #{$white};
-  --colorTextHightlight: #{$black};
+  --colorTextHighlight: #{$black};
   --modalBackground: #{rgba($black-lighter, 0.7)};
   --colorHighlight: #{rgba($white-darker, 0.8)};
   --colorHover: #{$white};

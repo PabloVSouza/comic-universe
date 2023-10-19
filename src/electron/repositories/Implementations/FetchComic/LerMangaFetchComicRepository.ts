@@ -144,12 +144,20 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
       const fetchPage = await axios.get(siteLink)
       const parsedPage = cheerio.load(fetchPage.data)
       const pagesRawBase64 = parsedPage('.heading-header').next().prop('src')
-      let pages = [] as string[]
-      if (pagesRawBase64) {
-        const base64String = pagesRawBase64.substring(pagesRawBase64.indexOf(',') + 1)
-        const pagesRaw = Buffer.from(base64String, 'base64').toString()
-        pages = JSON.parse(pagesRaw.substring(pagesRaw.indexOf('[')))
+
+      function base64Decrypt(data: string): string {
+        const base64String = data.substring(data.indexOf(',') + 1)
+        return Buffer.from(base64String, 'base64').toString()
       }
+
+      const pagesRaw =
+        (pagesRawBase64
+          ? base64Decrypt(pagesRawBase64)
+          : parsedPage('.heading-header').next().html()) ?? ''
+
+      const pages = JSON.parse(
+        pagesRaw.substring(pagesRaw.indexOf('['), pagesRaw.indexOf(']') + 1)
+      ) as string[]
 
       const formattedPages = pages.map((page) => {
         const filename = page.substring(page.lastIndexOf('/') + 1)

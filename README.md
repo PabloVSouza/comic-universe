@@ -15,7 +15,7 @@ yarn
 ### Development server:
 
 ```
-pnpm dev
+yarn dev
 ```
 
 ### Building for production:

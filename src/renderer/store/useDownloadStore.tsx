@@ -1,6 +1,4 @@
 import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-
 const { invoke } = window.Electron.ipcRenderer
 
 interface useDownloadStore {
@@ -11,48 +9,43 @@ interface useDownloadStore {
   downloadChapter: (chapter: ChapterInterface) => Promise<void>
 }
 
-const useDownloadStore = create<useDownloadStore>()(
-  persist(
-    (set, get) => ({
-      queue: [],
+const useDownloadStore = create<useDownloadStore>((set) => ({
+  queue: [],
 
-      addToQueue: async (chapter): Promise<void> => {
-        const { queue } = useDownloadStore.getState()
-        if (!queue.find((item) => item.id === chapter.id)) set({ queue: [...get().queue, chapter] })
-      },
+  addToQueue: async (chapter): Promise<void> => {
+    const { queue } = useDownloadStore.getState()
+    if (!queue.find((item) => item.id === chapter.id))
+      set((state: useDownloadStore) => ({ queue: [...state.queue, chapter] }))
+  },
 
-      removeFromQueue: async (chapter): Promise<void> => {
-        set({ queue: get().queue.filter((item) => item.id !== chapter.id) })
-      },
+  removeFromQueue: async (chapter): Promise<void> => {
+    set((state: useDownloadStore) => ({
+      queue: state.queue.filter((item) => item.id !== chapter.id)
+    }))
+  },
 
-      getChapterPages: async (chapter): Promise<void> => {
-        const { removeFromQueue } = useDownloadStore.getState()
+  getChapterPages: async (chapter): Promise<void> => {
+    const { removeFromQueue } = useDownloadStore.getState()
 
-        const { siteLink } = chapter
+    const { siteLink } = chapter
 
-        const { repo } = chapter
+    const { repo } = chapter
 
-        console.log(`Getting Chapter ${chapter.number} on Link ${chapter.siteLink}`)
+    console.log(`Getting Chapter ${chapter.number} on Link ${chapter.siteLink}`)
 
-        const pages = JSON.stringify(await invoke('getPages', { repo, data: { siteLink } }))
+    const pages = JSON.stringify(await invoke('getPages', { repo, data: { siteLink } }))
 
-        await invoke('dbUpdateChapter', { chapter: { ...chapter, pages } })
+    await invoke('dbUpdateChapter', { chapter: { ...chapter, pages } })
 
-        await removeFromQueue(chapter)
+    await removeFromQueue(chapter)
 
-        return
-      },
+    return
+  },
 
-      downloadChapter: async (): Promise<void> => {
-        return
-      }
-    }),
-    {
-      name: 'download-store',
-      storage: createJSONStorage(() => localStorage)
-    }
-  )
-)
+  downloadChapter: async (): Promise<void> => {
+    return
+  }
+}))
 
 const queueManager = (): void => {
   let isCleaning = false

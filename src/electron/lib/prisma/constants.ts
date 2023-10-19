@@ -15,7 +15,9 @@ export interface Migration {
 
 export class PrismaConstants {
   private path: string
+  public importPath: string
   public dbPath: string
+  public sourceDBPath: string
   public dbUrl: string
   public mePath: string
   public qePath: string
@@ -63,10 +65,17 @@ export class PrismaConstants {
       this.extraResourcesPath,
       this.platformToExecutables[this.platformName].migrationEngine
     )
+
+    this.importPath = !is.dev
+      ? path.join(app.getAppPath().replace('app.asar', ''), `app.asar.unpacked`)
+      : ''
+
     this.qePath = path.join(
-      !is.dev ? path.join(app.getAppPath().replace('app.asar', ''), `app.asar.unpacked`) : '',
+      this.importPath,
       this.platformToExecutables[this.platformName].queryEngine
     )
+
+    this.sourceDBPath = path.join(this.importPath, 'prisma', 'database.db')
 
     this.latestMigration = '20231018232641_'
     process.env.DATABASE_URL = this.dbUrl

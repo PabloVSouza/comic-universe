@@ -1,7 +1,9 @@
 import { PrismaConstants, Migration } from './constants'
 import { PrismaClient } from '@prisma/client'
+import { is } from '@electron-toolkit/utils'
 import path from 'path'
 import fs from 'fs'
+import CreateDirectory from '../../utils/CreateDirectory'
 import { fork } from 'child_process'
 
 export class PrismaInitializer {
@@ -12,10 +14,9 @@ export class PrismaInitializer {
   constructor(appPath: string) {
     this.appPath = appPath
     this.constants = new PrismaConstants(appPath)
-    console.log(this.constants)
-    this.prisma = this.initializePrisma()
-    this.initializePrisma()
+    this.prepareDB()
     // this.runMigration()
+    this.prisma = this.initializePrisma()
   }
 
   private initializePrisma = (): PrismaClient => {
@@ -34,6 +35,14 @@ export class PrismaInitializer {
         }
       }
     })
+  }
+
+  private prepareDB = (): void => {
+    const dbExists = fs.existsSync(this.constants.dbPath)
+    if (!dbExists) {
+      CreateDirectory(path.join(this.appPath, 'db'))
+      fs.copyFileSync(this.constants.sourceDBPath, this.constants.dbPath)
+    }
   }
 
   // @ts-ignore test

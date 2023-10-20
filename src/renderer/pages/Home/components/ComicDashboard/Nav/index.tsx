@@ -16,7 +16,9 @@ const DashboardNav = (): JSX.Element => {
 
   const texts = useLang()
 
-  const { comic, chapters, readProgress } = useDashboardStore()
+  const { comic, readProgress } = useDashboardStore()
+
+  const { chapters } = comic
 
   const calcTotalProgress = (): number => {
     let totalRead = 0

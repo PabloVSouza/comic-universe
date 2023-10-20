@@ -5,11 +5,11 @@ import useDashboardStore from 'store/useDashboardStore'
 import style from './style.module.scss'
 
 const DashboardList = (): JSX.Element => {
-  const { chapters } = useDashboardStore()
+  const { comic } = useDashboardStore()
 
   return (
     <ul className={style.DashboardList}>
-      {chapters.map((item) => (
+      {comic.chapters.map((item) => (
         <DashboardListItem key={item.id} item={item} />
       ))}
     </ul>

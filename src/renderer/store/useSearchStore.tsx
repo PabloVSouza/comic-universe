@@ -100,8 +100,4 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
 
 const useSearchStore = create<useSearchStore>((set) => initialState(set))
 
-const state = useSearchStore.getState()
-
-state.getList()
-
 export default useSearchStore

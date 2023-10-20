@@ -1,15 +1,15 @@
-import slugify from 'slugify'
 import classNames from 'classnames'
+import slugify from 'slugify'
 import ReactHtmlParser from 'react-html-parser'
 
 import ProgressBar from 'components/ProgressBar/Index'
 import Image from 'components/Image'
 
-import useGlobalStore from 'store/useGlobalStore'
 import useDashboardStore from 'store/useDashboardStore'
+import useDownloadStore from 'store/useDownloadStore'
+import useGlobalStore from 'store/useGlobalStore'
 
 import style from './style.module.scss'
-import useDownloadStore from 'store/useDownloadStore'
 
 const { path } = window
 
@@ -18,12 +18,16 @@ const ComicListItem = ({ item }: { item: ComicInterface }): JSX.Element => {
   const { comic, setComic } = useDashboardStore()
   const { queue } = useDownloadStore()
 
-  const active = comic.id === item.id
-
   const inQueue = queue.filter((value) => value.comicId == item.id).length ?? 0
+  const active = comic.id === item.id
   const isDownloading = !!inQueue
+
   const totalChapters = item.chapters.length
   const downloadProgress = (inQueue - totalChapters) * -1
+
+  const handleClick = (): void => {
+    if (!isDownloading) setComic(item)
+  }
 
   const cover = item.cover.startsWith('http')
     ? item.cover
@@ -31,8 +35,12 @@ const ComicListItem = ({ item }: { item: ComicInterface }): JSX.Element => {
 
   return (
     <li
-      className={classNames(style.comicListItem, active ? style.active : null)}
-      onClick={(): Promise<void> => setComic(item)}
+      className={classNames(
+        style.comicListItem,
+        !isDownloading ? style.regular : '',
+        active ? style.active : null
+      )}
+      onClick={(): void => handleClick()}
     >
       {isDownloading ? (
         <ProgressBar total={totalChapters} current={downloadProgress} showPercentage />

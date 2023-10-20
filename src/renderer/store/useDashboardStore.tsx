@@ -4,11 +4,9 @@ import useDownloadStore from './useDownloadStore'
 
 interface useDashboardStore {
   comic: ComicInterface
-  chapters: ChapterInterface[]
   list: ComicInterface[]
   readProgress: ReadProgressInterface[]
   getListDB: () => Promise<void>
-  getChaptersDB: () => Promise<void>
   getReadProgressDB: () => Promise<void>
   setReadProgress: (chapter: ChapterInterface, page: number) => Promise<void>
   setComic: (comic: ComicInterface) => Promise<void>
@@ -16,7 +14,6 @@ interface useDashboardStore {
 
 const useDashboardStore = create<useDashboardStore>((set) => ({
   comic: {} as ComicInterface,
-  chapters: [],
   list: [],
   readProgress: [],
 
@@ -33,15 +30,6 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
     const { comic, setComic } = useDashboardStore.getState()
     set((state) => ({ ...state, list }))
     if (list.length && !comic.id) setComic(list[0])
-  },
-
-  getChaptersDB: async (): Promise<void> => {
-    const { comic } = useDashboardStore.getState()
-    const chapters = await invoke('dbGetChapters', {
-      comicId: comic.id
-    })
-
-    set((state) => ({ ...state, chapters }))
   },
 
   getReadProgressDB: async (): Promise<void> => {
@@ -63,8 +51,7 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
 
   setComic: async (comic): Promise<void> => {
     set((state) => ({ ...state, comic }))
-    const { getReadProgressDB, getChaptersDB } = useDashboardStore.getState()
-    await getChaptersDB()
+    const { getReadProgressDB } = useDashboardStore.getState()
     await getReadProgressDB()
   }
 }))

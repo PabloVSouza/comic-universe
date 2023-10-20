@@ -47,8 +47,8 @@ const ModalSearch = (): JSX.Element => {
   })
 
   useMemo(() => {
-    if (searchText.length > 0) search(searchText)
-    if (searchText.length === 0) getList()
+    if (searchText.length) search(searchText)
+    if (!searchText.length) getList()
   }, [searchText])
 
   return (

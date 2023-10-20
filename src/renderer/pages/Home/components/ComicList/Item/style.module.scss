@@ -7,12 +7,14 @@
   align-items: center;
   justify-content: center;
   background: var(--colorBackground);
-  cursor: pointer;
 
-  &:hover,
-  &.active {
-    background: var(--colorHover);
-    color: var(--colorTextHighlight);
+  &.regular {
+    cursor: pointer;
+    &:hover,
+    &.active {
+      background: var(--colorHover);
+      color: var(--colorTextHighlight);
+    }
   }
 
   .name {

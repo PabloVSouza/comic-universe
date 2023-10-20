@@ -1,6 +1,6 @@
 import { WebContents } from 'electron'
 // import slugify from 'slugify'
-import axios from 'axios'
+import axios, { Axios } from 'axios'
 import qs from 'qs'
 import * as cheerio from 'cheerio'
 
@@ -17,46 +17,24 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
   ipc: WebContents
   path: string
   url: string
+  axios: Axios
 
   constructor(data: IFetchComicRepositoryInit) {
     this.ipc = data.win.webContents
     this.path = data.path
     this.url = data.url
+    this.axios = new Axios({
+      baseURL: this.url,
+      timeout: 15000,
+      headers: {
+        'content-type': 'application/json, text/javascript, */*; q=0.01',
+        'x-requested-with': 'XMLHttpRequest'
+      }
+    })
   }
 
   methods: IFetchComicMethods = {
-    getList: async (): Promise<ComicInterface[]> => {
-      const searchString = qs.stringify({
-        action: 'wp-manga-search-manga',
-        title: 'A'
-      })
-
-      const { data } = await axios({
-        method: 'get',
-        url: `${this.url}/wp-admin/admin-ajax.php?${searchString}`,
-        headers: {
-          'content-type': 'application/json, text/javascript, */*; q=0.01',
-          'x-requested-with': 'XMLHttpRequest'
-        }
-      })
-
-      const res = data.data.slice(1).reduce((previousComic, comic) => {
-        return [
-          ...previousComic,
-          {
-            siteId: comic.url,
-            name: comic.title,
-            cover: comic.thumb,
-            siteLink: comic.url,
-            type: 'manga'
-          }
-        ]
-      }, [])
-
-      return new Promise((resolve) => {
-        resolve(res)
-      })
-    },
+    getList: async (): Promise<ComicInterface[]> => this.methods.search({ search: 'A' }),
 
     search: async ({ search }): Promise<ComicInterface[]> => {
       const searchString = qs.stringify({
@@ -64,27 +42,29 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
         title: search
       })
 
-      const { data } = await axios({
-        method: 'get',
-        url: `${this.url}/wp-admin/admin-ajax.php?${searchString}`,
-        headers: {
-          'content-type': 'application/json, text/javascript, */*; q=0.01',
-          'x-requested-with': 'XMLHttpRequest'
-        }
-      })
+      let res: ComicInterface[]
 
-      const res = data.data.slice(1).reduce((previousComic, comic) => {
-        return [
-          ...previousComic,
-          {
-            siteId: comic.url,
-            name: comic.title,
-            cover: comic.thumb,
-            siteLink: comic.url,
-            type: 'manga'
-          }
-        ]
-      }, [])
+      try {
+        const { data } = await this.axios.get(`${this.url}/wp-admin/admin-ajax.php?${searchString}`)
+
+        const list = JSON.parse(data).data
+
+        res = list.slice(1).reduce((previousComic, comic) => {
+          return [
+            ...previousComic,
+            {
+              siteId: comic.url,
+              name: comic.title,
+              cover: comic.thumb,
+              siteLink: comic.url,
+              type: 'manga'
+            }
+          ]
+        }, [])
+      } catch (e) {
+        console.log(e)
+        res = []
+      }
 
       return new Promise((resolve) => {
         resolve(res)
@@ -94,7 +74,7 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
     getDetails: async (search): Promise<Partial<ComicInterface>> => {
       const { siteLink } = search
 
-      const { data } = await axios.get(siteLink)
+      const { data } = await this.axios.get(siteLink)
 
       const parsedData = cheerio.load(data)
 
@@ -136,37 +116,45 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
         .toArray()
 
       return new Promise((resolve) => {
-        resolve(chaptersList.reverse())
+        resolve(chaptersList)
       })
     },
 
     getPages: async ({ siteLink }) => {
-      const fetchPage = await axios.get(siteLink)
-      const parsedPage = cheerio.load(fetchPage.data)
-      const pagesRawBase64 = parsedPage('.heading-header').next().prop('src')
-
       function base64Decrypt(data: string): string {
         const base64String = data.substring(data.indexOf(',') + 1)
         return Buffer.from(base64String, 'base64').toString()
       }
 
-      const pagesRaw =
-        (pagesRawBase64
-          ? base64Decrypt(pagesRawBase64)
-          : parsedPage('.heading-header').next().html()) ?? ''
+      let response: { filename: string; path: string }[]
 
-      const pages = JSON.parse(
-        pagesRaw.substring(pagesRaw.indexOf('['), pagesRaw.indexOf(']') + 1)
-      ) as string[]
+      try {
+        const fetchPage = await this.axios.get(siteLink)
+        const parsedPage = cheerio.load(fetchPage.data)
+        const pagesRawBase64 = parsedPage('.heading-header').next().prop('src')
+        const pagesRaw =
+          (pagesRawBase64
+            ? base64Decrypt(pagesRawBase64)
+            : parsedPage('.heading-header').next().html()) ?? ''
 
-      const formattedPages = pages.map((page) => {
-        const filename = page.substring(page.lastIndexOf('/') + 1)
-        const path = page
+        const pages = JSON.parse(
+          pagesRaw.substring(pagesRaw.indexOf('['), pagesRaw.indexOf(']') + 1)
+        ) as string[]
 
-        return { filename, path }
+        response = pages.map((page) => {
+          const filename = page.substring(page.lastIndexOf('/') + 1)
+          const path = page
+
+          return { filename, path }
+        })
+      } catch (e) {
+        console.log(e)
+        response = []
+      }
+
+      return new Promise((resolve) => {
+        resolve(response)
       })
-
-      return formattedPages
     }
   }
 }

@@ -116,7 +116,7 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
         .toArray()
 
       return new Promise((resolve) => {
-        resolve(chaptersList)
+        resolve(chaptersList.reverse())
       })
     },
 

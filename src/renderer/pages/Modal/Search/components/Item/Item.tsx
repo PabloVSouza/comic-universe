@@ -1,4 +1,5 @@
 import { LiHTMLAttributes, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import ReactHtmlParser from 'react-html-parser'
 import classNames from 'classnames'
 
@@ -19,6 +20,8 @@ interface ComicListItem extends LiHTMLAttributes<unknown> {
 const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
   const texts = useLang()
 
+  const navigate = useNavigate()
+
   const { list } = useDashboardStore()
 
   const existsInDB = !!list.find((comic) => comic.siteId === data.siteId)
@@ -36,6 +39,7 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
 
   const addToList = (): void => {
     insertComic()
+    navigate('/')
   }
 
   useMemo(() => {

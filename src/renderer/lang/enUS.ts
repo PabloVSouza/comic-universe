@@ -1,4 +1,8 @@
 export default class enUS implements Lang {
+  General: GenerlLang = {
+    inDevelopment: 'Function in development'
+  }
+
   Dashboard: DashboardLang = {
     setComplete: 'Mark as Read',
     resetProgress: 'Mark as Unread',
@@ -38,18 +42,18 @@ export default class enUS implements Lang {
   Settings: SettingsLang = {
     title: 'App Settings',
     pages: {
-      header: 'Troca de páginas',
+      header: 'Change Pages',
       pageDirectionOptions: {
-        leftToRight: 'Esquerda para Direita',
-        rightToLeft: 'Direita para Esquerda'
+        leftToRight: 'Left to Right',
+        rightToLeft: 'Right to Left'
       }
     },
     wallpaper: {
-      header: 'Selecione o Papel de Parede',
-      wallpaperMode: 'Modo do Papel de Parede',
-      uploadWallpaper: 'Envie um Papel de Parede'
+      header: 'Select Wallpaper',
+      wallpaperMode: 'Wallpaper Behaviour',
+      uploadWallpaper: 'Send a Wallpaper'
     },
-    selectLanguage: 'Selecione o Idioma do App'
+    selectLanguage: 'Select the App Language'
   }
 
   Users: UsersLang = {

@@ -46,7 +46,7 @@ const DashboardNav = (): JSX.Element => {
           size="xxs"
           icon={downloadIcon}
           title={texts.Dashboard.downloadMore}
-          to={`download/${comic.siteId}`}
+          to={`/?modal=message&text=${texts.General.inDevelopment}`}
         />
         <Button
           theme="pure"

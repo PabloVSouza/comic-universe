@@ -7,6 +7,7 @@
   align-items: center;
   justify-content: center;
   background: var(--colorBackground);
+  position: relative;
 
   &.regular {
     cursor: pointer;
@@ -32,5 +33,17 @@
     aspect-ratio: 10/16;
     object-fit: cover;
     object-position: 50% 50%;
+  }
+
+  .progress {
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .downloadImage {
+      position: absolute;
+      height: 50%;
+    }
   }
 }

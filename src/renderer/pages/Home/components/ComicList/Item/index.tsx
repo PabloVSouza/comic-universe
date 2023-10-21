@@ -5,6 +5,8 @@ import ReactHtmlParser from 'react-html-parser'
 import ProgressBar from 'components/ProgressBar/Index'
 import Image from 'components/Image'
 
+import loadingImage from 'assets/OldLoading.gif'
+
 import useDashboardStore from 'store/useDashboardStore'
 import useDownloadStore from 'store/useDownloadStore'
 import useGlobalStore from 'store/useGlobalStore'
@@ -43,7 +45,12 @@ const ComicListItem = ({ item }: { item: ComicInterface }): JSX.Element => {
       onClick={(): void => handleClick()}
     >
       {isDownloading ? (
-        <ProgressBar total={totalChapters} current={downloadProgress} showPercentage />
+        <>
+          <div className={style.progress}>
+            <ProgressBar total={totalChapters} current={downloadProgress} />
+            <Image className={style.downloadImage} src={loadingImage} />
+          </div>
+        </>
       ) : (
         <p className={style.name}>{ReactHtmlParser(item.name)}</p>
       )}

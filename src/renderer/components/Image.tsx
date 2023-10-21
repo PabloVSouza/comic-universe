@@ -1,7 +1,7 @@
-import { CSSProperties } from 'react'
-import { Props, SimpleImg } from 'react-simple-img'
+import { CSSProperties, ImgHTMLAttributes } from 'react'
+import { SimpleImg } from 'react-simple-img'
 
-interface Image extends Props {
+interface Image extends ImgHTMLAttributes<unknown> {
   placeholder?: string
   pure?: boolean
   svg?: boolean

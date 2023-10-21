@@ -23,7 +23,7 @@ export type IDBInteractionsMethods = {
 
   //Users
   dbGetAllUsers: () => Promise<UserInterface[]>
-  dbUpdatecUser: (input: { user: UserInterface }) => Promise<UserInterface>
+  dbUpdateUser: (input: { user: UserInterface }) => Promise<UserInterface>
   dbDeleteUser: (input: { id: number }) => Promise<void>
 }
 

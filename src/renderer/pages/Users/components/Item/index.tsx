@@ -28,7 +28,10 @@ const UsersListItem = ({ data, newUser }: UsersListItem): JSX.Element => {
 
   if (newUser)
     return (
-      <div className={classNames(style.UsersListItem, style.newUser)}>
+      <div
+        className={classNames(style.UsersListItem, style.newUser)}
+        onClick={(): void => navigate('/users/new')}
+      >
         <Image className={style.background} svg src={plusIcon} />
       </div>
     )

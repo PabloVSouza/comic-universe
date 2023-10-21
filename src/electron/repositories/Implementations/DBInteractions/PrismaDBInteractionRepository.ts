@@ -122,7 +122,7 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
       })
     },
 
-    dbUpdatecUser: async ({ user }): Promise<UserInterface> => {
+    dbUpdateUser: async ({ user }): Promise<UserInterface> => {
       const userData = user as User
 
       const newData = user.id

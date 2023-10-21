@@ -11,13 +11,15 @@ import style from './style.module.scss'
 
 import closedBook from 'assets/closed-book-icon.svg'
 import bookStack from 'assets/book-stack.svg'
+import useReaderStore from 'store/useReaderStore'
 
 const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element => {
   const navigate = useNavigate()
 
   const texts = useLang()
 
-  const { comic, readProgress, getReadProgressDB, setReadProgress } = useDashboardStore()
+  const { comic, setComic } = useDashboardStore()
+  const { setReadProgressDB } = useReaderStore()
 
   const pages = item.pages ? (JSON.parse(item.pages) as Page[]) : ([] as Page[])
 
@@ -25,7 +27,7 @@ const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element =>
 
   const totalPages = pages.length - 1
 
-  const chapterProgress = readProgress.find((val) => val.chapterId === item.id)
+  const chapterProgress = item.ReadProgress[0]
 
   const percentage = chapterProgress
     ? Math.round((100 / chapterProgress.totalPages) * chapterProgress.page)
@@ -38,8 +40,18 @@ const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element =>
   }
 
   const handleReadProgress = async (page: number): Promise<void> => {
-    await setReadProgress(item, page)
-    getReadProgressDB()
+    const ReadProgress = item.ReadProgress[0]
+
+    await setReadProgressDB({
+      ...ReadProgress,
+      chapterId: item.id,
+      comicId: comic.id,
+      userId: 1,
+      totalPages,
+      page
+    })
+
+    await setComic(comic.id)
   }
 
   return (

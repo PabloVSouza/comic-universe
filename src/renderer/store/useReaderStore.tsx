@@ -1,77 +1,70 @@
 import { create, StoreApi } from 'zustand'
+import useDashboardStore from './useDashboardStore'
 
 const { invoke } = window.Electron.ipcRenderer
 
 interface useReaderStore {
-  chapters: ChapterInterface[]
   readProgress: ReadProgressInterface
-  page: number
-  getChaptersDB: (comicId: number) => Promise<void>
-  getReadProgressDB: (chapterId: number) => Promise<void>
+  chapterIndex: number
   setInitialState: (comicId: number, chapterId: number) => Promise<void>
-  setReadProgressDB: (chapter: ChapterInterface, page: number) => Promise<void>
-  setPage: (page: number) => void
+  setChapterIndex: (chapterIndex: number) => Promise<void>
+  setReadProgress: (readProgress: ReadProgressInterface) => Promise<void>
+  setReadProgressDB: (readProgress: ReadProgressInterface) => Promise<void>
   resetReader: () => void
 }
 
 const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
-  chapters: [],
   readProgress: {} as ReadProgressInterface,
-  page: 0,
+  chapterIndex: 0,
 
   setInitialState: async (comicId, chapterId): Promise<void> => {
-    const { getChaptersDB, getReadProgressDB } = useReaderStore.getState()
+    const { setChapterIndex, setReadProgress, setReadProgressDB, setInitialState } =
+      useReaderStore.getState()
+    const { comic, setComic } = useDashboardStore.getState()
 
-    await getChaptersDB(comicId)
-    await getReadProgressDB(chapterId)
+    if (!comic.id) {
+      await setComic(comicId)
+      await setInitialState(comicId, chapterId)
+    } else {
+      const chapterIndex = comic.chapters.findIndex((val: ChapterInterface) => val.id === chapterId)
 
-    const { readProgress, setPage } = useReaderStore.getState()
+      await setChapterIndex(chapterIndex)
 
-    readProgress.page !== 0 ? setPage(readProgress.page) : setPage(0)
-    return new Promise((resolve) => resolve())
-  },
+      const chapter = comic.chapters[chapterIndex]
 
-  getChaptersDB: async (comicId): Promise<void> => {
-    const chapters = await invoke('dbGetChapters', {
-      comicId
-    })
+      const totalPages = JSON.parse(chapter.pages).length - 1
 
-    set((state: useReaderStore) => ({ ...state, chapters }))
-
-    return new Promise((resolve) => resolve())
-  },
-
-  getReadProgressDB: async (chapterId): Promise<void> => {
-    let readProgress = await invoke('dbGetReadProgress', {
-      chapterId
-    })
-
-    if (!readProgress.length) {
-      const { chapters, setReadProgressDB } = useReaderStore.getState()
-      const chapter = chapters.find((chapter) => chapter.id === chapterId)
-      if (chapter) {
-        await setReadProgressDB(chapter, 0)
-
-        readProgress = await invoke('dbGetReadProgress', {
-          chapterId
-        })
+      if (chapter.ReadProgress.length) {
+        await setReadProgress(chapter.ReadProgress[0])
+      } else {
+        const newReadProgress = {
+          chapterId,
+          comicId: comic.id,
+          page: 0,
+          userId: 1,
+          totalPages
+        }
+        await setReadProgressDB(newReadProgress)
+        await setComic(comic.id)
+        await setInitialState(comic.id, chapterId)
       }
     }
 
-    set((state: useReaderStore) => ({ ...state, readProgress: readProgress[0] }))
-
     return new Promise((resolve) => resolve())
   },
 
-  setReadProgressDB: async (chapter, page): Promise<void> => {
-    await invoke('dbUpdateReadProgress', {
-      chapter,
-      page
-    })
+  setChapterIndex: async (chapterIndex): Promise<void> => {
+    set((state: useReaderStore) => ({ ...state, chapterIndex }))
+    return new Promise((resolve) => resolve())
   },
 
-  setPage: (page): void => {
-    set((state: useReaderStore) => ({ ...state, page }))
+  setReadProgress: async (readProgress): Promise<void> => {
+    set((state: useReaderStore) => ({ ...state, readProgress }))
+    return new Promise((resolve) => resolve())
+  },
+
+  setReadProgressDB: async (readProgress): Promise<void> => {
+    await invoke('dbUpdateReadProgress', { readProgress })
   },
 
   resetReader: (): void => set(() => initialState(set))

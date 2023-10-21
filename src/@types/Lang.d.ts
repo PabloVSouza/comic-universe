@@ -1,3 +1,7 @@
+interface GenerlLang {
+  inDevelopment: string
+}
+
 interface DashboardLang {
   setComplete: string
   resetProgress: string
@@ -60,6 +64,7 @@ interface UsersLang {
 }
 
 interface Lang {
+  General: GenerlLang
   Dashboard: DashboardLang
   DownloadComic: DownloadComicLang
   RightNav: RightNavLang

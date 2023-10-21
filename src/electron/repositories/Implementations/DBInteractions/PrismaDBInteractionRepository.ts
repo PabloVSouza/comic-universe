@@ -22,6 +22,20 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
       })
     },
 
+    dbGetComicComplete: async ({ id }): Promise<ComicInterface> => {
+      const comic = await this.db.comic.findUnique({
+        where: { id },
+        include: {
+          chapters: {
+            include: { ReadProgress: true }
+          }
+        }
+      })
+      return new Promise((resolve) => {
+        resolve(comic as ComicInterface)
+      })
+    },
+
     dbGetAllComics: async (): Promise<ComicInterface[]> => {
       const comics = (await this.db.comic.findMany({
         include: { chapters: true }
@@ -89,29 +103,10 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
       })
     },
 
-    dbUpdateReadProgress: async ({ chapter, comicId, page, userId }): Promise<void> => {
-      const chapterId = chapter.id
-      const totalPages = JSON.parse(chapter.pages).length
-
-      const data = {
-        chapterId,
-        userId,
-        page,
-        comicId,
-        totalPages
-      }
-
-      const readProgress = await this.db.readProgress.updateMany({
-        where: {
-          userId,
-          chapterId
-        },
-        data
-      })
-
-      if (!readProgress) {
-        await this.db.readProgress.create({ data })
-      }
+    dbUpdateReadProgress: async ({ readProgress }): Promise<void> => {
+      if (!readProgress.id) await this.db.readProgress.create({ data: readProgress })
+      if (readProgress.id)
+        await this.db.readProgress.update({ where: { id: readProgress.id }, data: readProgress })
 
       return new Promise((resolve) => resolve())
     }

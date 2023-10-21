@@ -1,4 +1,8 @@
 export default class ptBR implements Lang {
+  General: GenerlLang = {
+    inDevelopment: 'Função em desenvolvimento'
+  }
+
   Dashboard: DashboardLang = {
     setComplete: 'Definir como Lido',
     resetProgress: 'Remover Progresso',

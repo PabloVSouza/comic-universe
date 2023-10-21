@@ -1,7 +1,11 @@
 import { useNavigate } from 'react-router-dom'
+import { confirmAlert } from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
+
 import classNames from 'classnames'
 
 import Image from 'components/Image'
+import useLang from 'lang'
 
 import usePersistStore from 'store/usePersistStore'
 
@@ -10,6 +14,8 @@ import style from './style.module.scss'
 import plusIcon from 'assets/plus.svg'
 import userIcon from 'assets/user.svg'
 import deleteIcon from 'assets/trash.svg'
+import useUsersStore from 'store/useUsersStore'
+import useDashboardStore from 'store/useDashboardStore'
 
 interface UsersListItem {
   data?: UserInterface
@@ -18,16 +24,39 @@ interface UsersListItem {
 
 const UsersListItem = ({ data, newUser }: UsersListItem): JSX.Element => {
   const navigate = useNavigate()
-  const { setCurrentUser } = usePersistStore()
+  const lang = useLang()
 
-  const setUser = (): void => {
+  const { setCurrentUser } = usePersistStore()
+  const { deleteUser } = useUsersStore()
+  const { getListDB } = useDashboardStore()
+
+  const setUser = async (): Promise<void> => {
     if (data) {
       setCurrentUser(data)
+      await getListDB()
       navigate('/')
     }
   }
 
-  const deleteUser = async (): Promise<void> => {
+  const id = data?.id ?? 0
+
+  const handleDeleteUser = async (): Promise<void> => {
+    if (id) {
+      confirmAlert({
+        title: lang.Users.deleteUser.deleteUserTitle,
+        message: lang.Users.deleteUser.deleteUserMessage,
+        buttons: [
+          {
+            label: lang.Users.deleteUser.confirmDeleteButton,
+            onClick: async () => await deleteUser(id)
+          },
+          {
+            label: lang.Users.deleteUser.cancelDeleteButton
+          }
+        ]
+      })
+      // await deleteUser(data.id)
+    }
     return new Promise((resolve) => resolve())
   }
 
@@ -42,10 +71,12 @@ const UsersListItem = ({ data, newUser }: UsersListItem): JSX.Element => {
     )
 
   return (
-    <div className={style.UsersListItem} onClick={(): void => setUser()}>
+    <div className={style.UsersListItem}>
       <Image className={style.background} svg src={userIcon} />
-      <p className={style.name}>{data?.name}</p>
-      <div className={style.deleteButton} onClick={(): Promise<void> => deleteUser()}>
+      <div onClick={(): Promise<void> => setUser()} className={style.selectButton}>
+        <p className={style.name}>{data?.name}</p>
+      </div>
+      <div className={style.deleteButton} onClick={(): Promise<void> => handleDeleteUser()}>
         <Image className={style.deleteImage} svg src={deleteIcon} />
       </div>
     </div>

@@ -3,7 +3,7 @@ import { BrowserWindow } from 'electron'
 export type IDBInteractionsMethods = {
   //Comics
   dbGetComic: (input: { id: number }) => Promise<ComicInterface>
-  dbGetComicComplete: (input: { id: number }) => Promise<ComicInterface>
+  dbGetComicComplete: (input: { id: number; userId: number }) => Promise<ComicInterface>
   dbGetAllComics: () => Promise<ComicInterface[]>
   dbInsertComic: (input: {
     comic: ComicInterface

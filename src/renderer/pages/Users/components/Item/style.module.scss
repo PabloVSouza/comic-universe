@@ -15,16 +15,23 @@
     background: $white-transparent;
   }
 
-  .name {
-    background: rgba($white-darker, 0.9);
-    color: $black;
+  .selectButton {
     width: 100%;
-    text-align: center;
-    padding: 5px 0;
+    height: 80%;
+    position: absolute;
+    top: 0;
     z-index: 2;
-    position: relative;
-    margin-top: 30px;
+    .name {
+      background: rgba($white-darker, 0.9);
+      color: $black;
+      width: 100%;
+      text-align: center;
+      padding: 5px 0;
+      position: absolute;
+      bottom: 0;
+    }
   }
+
 
   .background {
     width: 100%;
@@ -38,8 +45,8 @@
   .deleteButton {
     position: absolute;
     width: 100%;
-    height: 20px;
-    top: 78px;
+    height: 20%;
+    bottom: 0;
     z-index: 1;
     text-align: center;
     padding: 2px;

@@ -1,5 +1,6 @@
 import { create, StoreApi } from 'zustand'
 import useDashboardStore from './useDashboardStore'
+import usePersistStore from './usePersistStore'
 
 const { invoke } = window.Electron.ipcRenderer
 
@@ -37,11 +38,13 @@ const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
       if (chapter.ReadProgress.length) {
         await setReadProgress(chapter.ReadProgress[0])
       } else {
+        const { currentUser } = usePersistStore.getState()
+
         const newReadProgress = {
           chapterId,
           comicId: comic.id,
           page: 0,
-          userId: 1,
+          userId: currentUser.id ?? 0,
           totalPages
         }
         await setReadProgressDB(newReadProgress)

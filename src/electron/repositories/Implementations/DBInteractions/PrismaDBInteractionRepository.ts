@@ -23,15 +23,16 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
       })
     },
 
-    dbGetComicComplete: async ({ id }): Promise<ComicInterface> => {
+    dbGetComicComplete: async ({ id, userId }): Promise<ComicInterface> => {
       const comic = await this.db.comic.findUnique({
         where: { id },
         include: {
           chapters: {
-            include: { ReadProgress: true }
+            include: { ReadProgress: { where: { userId } } }
           }
         }
       })
+
       return new Promise((resolve) => {
         resolve(comic as ComicInterface)
       })
@@ -135,6 +136,7 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
     },
 
     dbDeleteUser: async ({ id }): Promise<void> => {
+      await this.db.readProgress.deleteMany({ where: { userId: id } })
       await this.db.user.delete({ where: { id } })
       return new Promise((resolve) => {
         resolve()

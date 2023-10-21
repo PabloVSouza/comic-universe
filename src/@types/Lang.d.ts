@@ -61,6 +61,12 @@ interface UsersLang {
   saveButton: string
   cancelButton: string
   namePlaceholder: string
+  deleteUser: {
+    deleteUserTitle
+    deleteUserMessage: string
+    confirmDeleteButton: string
+    cancelDeleteButton: string
+  }
 }
 
 interface Lang {

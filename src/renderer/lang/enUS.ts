@@ -61,6 +61,12 @@ export default class enUS implements Lang {
     createButton: 'Create new User',
     saveButton: 'Save Info',
     cancelButton: 'Cancel',
-    namePlaceholder: 'User Name'
+    namePlaceholder: 'User Name',
+    deleteUser: {
+      deleteUserTitle: 'Delete this User?',
+      deleteUserMessage: 'All the read progress will be lost!',
+      confirmDeleteButton: 'Yes',
+      cancelDeleteButton: 'No'
+    }
   }
 }

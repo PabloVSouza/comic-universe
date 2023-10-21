@@ -10,8 +10,6 @@ import ZoomWindow, { MousePos } from './components/ZoomWindow'
 import useReaderStore from 'store/useReaderStore'
 import useDashboardStore from 'store/useDashboardStore'
 
-import loadingImage from 'assets/OldLoading.gif'
-
 const Reader = (): JSX.Element => {
   const navigate = useNavigate()
 
@@ -73,14 +71,14 @@ const Reader = (): JSX.Element => {
 
   const previousPage = async (): Promise<void> => {
     const { page, totalPages } = readProgress
-    if (totalPages >= page) {
+    if (totalPages >= page && page !== 0) {
       const newReadProgress = { ...readProgress, page: page - 1 } as ReadProgressInterface
       await setReadProgress(newReadProgress)
       await setReadProgressDB(newReadProgress)
     }
     if (page === 0) {
       if (chapterIndex === 0) navigate('/')
-      if (chapterIndex <= comic.chapters.length - 1)
+      if (chapterIndex <= comic.chapters.length - 1 && chapterIndex !== 0)
         navigate(`/reader/${comicId}/${comic.chapters[chapterIndex - 1].id}`)
     }
   }
@@ -127,8 +125,6 @@ const Reader = (): JSX.Element => {
     }
   }, [])
 
-  const imgStyling = style.Image
-  console.log(imgStyling)
   return (
     <>
       <div

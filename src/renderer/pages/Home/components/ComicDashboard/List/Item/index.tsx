@@ -40,8 +40,18 @@ const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element =>
   }
 
   const handleReadProgress = async (page: number): Promise<void> => {
-    await setReadProgress(item, page)
-    getReadProgressDB()
+    const ReadProgress = item.ReadProgress[0]
+
+    await setReadProgressDB({
+      ...ReadProgress,
+      chapterId: item.id,
+      comicId: comic.id,
+      userId: 1,
+      totalPages,
+      page
+    })
+
+    await setComic(comic.id)
   }
 
   return (

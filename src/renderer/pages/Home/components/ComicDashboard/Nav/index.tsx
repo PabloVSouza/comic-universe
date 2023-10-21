@@ -16,34 +16,24 @@ const DashboardNav = (): JSX.Element => {
 
   const texts = useLang()
 
-  const { comic, readProgress } = useDashboardStore()
+  const { comic } = useDashboardStore()
 
   const { chapters } = comic
 
-  const calcTotalProgress = (): number => {
-    let totalRead = 0
-    let totalPages = 0
+  const totalPages = chapters.reduce((prev, cur) => {
+    return prev + (JSON.parse(cur.pages).length - 1)
+  }, 0)
 
-    for (const chapter of chapters) {
-      const chapterProgress = readProgress.find((val) => val.chapterId === chapter.id)
-      totalRead += chapterProgress ? chapterProgress.page ?? 0 : 0
-      totalPages += chapter.pages?.length - 1 ?? 0
-    }
-    const totalProgress = Math.round((100 / totalPages) * totalRead)
+  const totalRead = chapters.reduce((prev, cur) => {
+    return cur.ReadProgress.length ? prev + cur.ReadProgress[0].page : prev
+  }, 0)
 
-    return Number.isNaN(totalProgress) ? 0 : totalProgress
-  }
-
-  const totalPercent = calcTotalProgress()
+  const totalProgress = Math.round((100 / totalPages) * totalRead)
 
   const continueReading = (): void => {
-    let lastRead = chapters[0]
-
-    for (const chapter of chapters) {
-      const progress = readProgress.find((val) => val.chapterId === chapter.id)
-
-      if (progress && progress.page > 0) lastRead = chapter
-    }
+    const lastRead = chapters.reduce((prev, cur) => {
+      return cur.ReadProgress.length && cur.ReadProgress[0].page > 0 ? cur : prev
+    }, chapters[0])
 
     navigate(`reader/${comic.id}/${lastRead.id}`)
   }
@@ -68,9 +58,9 @@ const DashboardNav = (): JSX.Element => {
       </div>
       <div className={style.progressBar}>
         <p>
-          {totalPercent}% {texts.Dashboard.read}
+          {totalProgress}% {texts.Dashboard.read}
         </p>
-        <div style={{ width: `${totalPercent}%` }} />
+        <div style={{ width: `${totalProgress}%` }} />
       </div>
     </div>
   )

@@ -9,6 +9,7 @@ import style from './style.module.scss'
 
 import plusIcon from 'assets/plus.svg'
 import userIcon from 'assets/user.svg'
+import deleteIcon from 'assets/trash.svg'
 
 interface UsersListItem {
   data?: UserInterface
@@ -26,6 +27,10 @@ const UsersListItem = ({ data, newUser }: UsersListItem): JSX.Element => {
     }
   }
 
+  const deleteUser = async (): Promise<void> => {
+    return new Promise((resolve) => resolve())
+  }
+
   if (newUser)
     return (
       <div
@@ -40,6 +45,9 @@ const UsersListItem = ({ data, newUser }: UsersListItem): JSX.Element => {
     <div className={style.UsersListItem} onClick={(): void => setUser()}>
       <Image className={style.background} svg src={userIcon} />
       <p className={style.name}>{data?.name}</p>
+      <div className={style.deleteButton} onClick={(): Promise<void> => deleteUser()}>
+        <Image className={style.deleteImage} svg src={deleteIcon} />
+      </div>
     </div>
   )
 }

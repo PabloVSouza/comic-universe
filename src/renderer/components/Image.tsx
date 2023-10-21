@@ -7,7 +7,7 @@ interface Image extends ImgHTMLAttributes<unknown> {
   svg?: boolean
 }
 
-const Image = ({ placeholder, pure, src, svg, ...props }: Partial<Image>): JSX.Element => {
+const Image = ({ pure, src, svg, ...props }: Partial<Image>): JSX.Element => {
   let Comp: typeof SimpleImg | string
   Comp = SimpleImg
   if (pure) Comp = 'img'
@@ -21,16 +21,15 @@ const Image = ({ placeholder, pure, src, svg, ...props }: Partial<Image>): JSX.E
     WebkitMaskOrigin: 'content-box'
   } as CSSProperties
 
-  if (src)
-    return (
-      <Comp
-        key={src}
-        placeholder={placeholder || (!pure ? false : '')}
-        src={src}
-        style={svg ? iconStyle : undefined}
-        {...props}
-      />
-    )
+  const customProps = {
+    key: src,
+    src,
+    style: svg ? iconStyle : undefined,
+    ...props
+  }
+
+  //ts-ignore Fix later
+  if (src) return <Comp {...customProps} />
   return <></>
 }
 

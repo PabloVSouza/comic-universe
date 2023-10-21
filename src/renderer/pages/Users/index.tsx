@@ -67,7 +67,9 @@ const Users = (): JSX.Element => {
       ) : (
         <>
           <h1 className={style.header}>{lang.Users.header}</h1>
-          <UsersList list={users} />
+          <div className={style.body}>
+            <UsersList list={users} />
+          </div>
         </>
       )}
     </Window>

@@ -1,7 +1,10 @@
 .UsersList {
   overflow: auto;
   display: flex;
-  max-width: 100%;
+  width: 100%;
+  flex-wrap: wrap;
   gap: 10px;
-  padding: 20px 10px;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
 }

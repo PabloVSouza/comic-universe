@@ -5,6 +5,8 @@
   --colorHighlight: #{$white-transparent};
   --colorHover: #{$white};
   --colorBackground: #{$white-transparent};
+  --colorUserProfile: transparent;
+  --colorUserProfileHover: 
 }
 
 .dark {
@@ -14,4 +16,5 @@
   --colorHighlight: #{rgba($white-darker, 0.8)};
   --colorHover: #{$white};
   --colorBackground: #{$black-transparent};
+  --colorUserProfile: #{rgba($white, 0.5)};
 }

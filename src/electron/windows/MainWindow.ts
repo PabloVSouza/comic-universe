@@ -3,7 +3,7 @@ import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
 import { createEvents, removeEvents } from '../events'
 
-const CreateMainWindow = (): BrowserWindow => {
+const CreateMainWindow = async (): Promise<BrowserWindow> => {
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
@@ -20,8 +20,14 @@ const CreateMainWindow = (): BrowserWindow => {
 
   createEvents(mainWindow, app.getPath('userData'))
 
+  let firstLogin = false
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+    if (!firstLogin) {
+      mainWindow.webContents.send('changeUrl', '/users')
+      firstLogin = true
+    }
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

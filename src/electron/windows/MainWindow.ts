@@ -9,6 +9,7 @@ const CreateMainWindow = (): BrowserWindow => {
     height: 670,
     show: false,
     autoHideMenuBar: true,
+    // frame: false,
     webPreferences: {
       webSecurity: false,
       preload: join(__dirname, '../preload/index.js'),

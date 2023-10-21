@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom'
 import slugify from 'slugify'
 
 import Image from 'components/Image'
-import Modal from 'pages/Modal'
 
 import useGlobalStore from 'store/useGlobalStore'
 
@@ -15,7 +14,6 @@ import useDashboardStore from 'store/useDashboardStore'
 const Reader = (): JSX.Element => {
   const navigate = useNavigate()
 
-  const comicId = Number(useParams().comicId)
   const chapterId = Number(useParams().chapterId)
 
   const [mousePos, setMousePos] = useState<MousePos>({} as MousePos)
@@ -24,34 +22,26 @@ const Reader = (): JSX.Element => {
   const { appPath } = useGlobalStore()
 
   const {
-    page,
-    chapters,
+    chapterIndex,
     readProgress,
+    resetReader,
+    setChapterIndex,
     setInitialState,
-    setReadProgressDB,
-    getReadProgressDB,
-    setPage,
-    resetReader
+    setReadProgress,
+    setReadProgressDB
   } = useReaderStore()
 
-  const { comic, getReadProgressDB: getReadProgressDashboard } = useDashboardStore()
-
-  useMemo(async () => {
-    if (comicId && chapterId) await setInitialState(Number(comicId), chapterId)
+  useEffect(() => {
+    setInitialState(chapterId)
   }, [])
 
-  const chapterIndex = chapters.findIndex((val) => val.id === chapterId)
+  const { comic, setComic } = useDashboardStore()
 
-  const chapter = chapters[chapterIndex]
+  const chapter = comic.chapters[chapterIndex] as ChapterInterface
 
-  const pages = chapter?.pages ? JSON.parse(chapter.pages) : []
+  const pages = JSON.parse(chapter.pages) as Page[]
 
-  useMemo(() => {
-    if (chapter?.id && readProgress?.page !== page) {
-      setReadProgressDB(chapter, page)
-      getReadProgressDB(chapter.id)
-    }
-  }, [page])
+  useMemo(async () => {}, [])
 
   const getPath = (page: Page): string =>
     !chapter.offline
@@ -65,27 +55,9 @@ const Reader = (): JSX.Element => {
           page.filename
         )}`
 
-  const nextPage = async (): Promise<void> => {
-    if (page < pages.length - 1) setPage(page + 1)
-    if (page === pages.length - 1) {
-      const nextChapter = chapters[chapterIndex + 1]
-      if (nextChapter && comicId) {
-        setInitialState(comicId, nextChapter.id)
-        navigate(`/reader/${comicId}/${nextChapter.id}`)
-      }
-    }
-  }
+  const nextPage = async (): Promise<void> => {}
 
-  const previousPage = async (): Promise<void> => {
-    if (page > 0) setPage(page - 1)
-    if (page === 0 && chapterIndex > 0) {
-      const previousChapter = chapters[chapterIndex - 1]
-      if (previousChapter && comicId) {
-        setInitialState(comicId, previousChapter.id)
-        navigate(`/reader/${comicId}/${previousChapter.id}`)
-      }
-    }
-  }
+  const previousPage = async (): Promise<void> => {}
 
   const handleKeys = (e: KeyboardEvent): void => {
     const keys = {
@@ -98,6 +70,7 @@ const Reader = (): JSX.Element => {
       },
 
       Escape: (): void => {
+        setComic(comic)
         navigate('/')
       }
     }
@@ -112,7 +85,7 @@ const Reader = (): JSX.Element => {
   }
 
   const position = {
-    transform: `translateX(-${page * 100}%)`
+    transform: `translateX(-${readProgress.page * 100}%)`
   }
 
   useEffect(() => {
@@ -120,18 +93,16 @@ const Reader = (): JSX.Element => {
     return () => {
       document.removeEventListener('keydown', handleKeys)
     }
-  }, [chapters, page, pages, setPage, chapterIndex])
+  }, [])
 
   useEffect(() => {
     return () => {
-      getReadProgressDashboard()
       resetReader()
     }
   }, [])
 
   return (
     <>
-      <Modal modal="" />
       <div
         className={style.Reader}
         onMouseMoveCapture={defineMousePos}
@@ -140,7 +111,7 @@ const Reader = (): JSX.Element => {
         {pages?.length > 0 && (
           <ZoomWindow
             mousePos={mousePos}
-            image={getPath(pages[page] ?? pages[0])}
+            image={getPath(pages[readProgress.page] ?? pages[0])}
             visible={zoomVisible}
           />
         )}

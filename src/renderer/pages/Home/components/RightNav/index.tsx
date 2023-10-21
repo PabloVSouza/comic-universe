@@ -33,7 +33,7 @@ const RightNav = (): JSX.Element => {
     {
       label: texts.RightNav.settings,
       icon: settingsIcon,
-      onClick: (): void => navigate(`/?modal=message&text=${texts.General.inDevelopment}`)
+      onClick: (): void => navigate('/?modal=settings')
     },
     {
       label: texts.RightNav.darkMode,
@@ -43,7 +43,7 @@ const RightNav = (): JSX.Element => {
     {
       label: texts.RightNav.changeUser,
       icon: userIcon,
-      onClick: (): void => navigate(`/?modal=message&text=${texts.General.inDevelopment}`)
+      onClick: (): void => navigate('/users')
     }
   ]
 

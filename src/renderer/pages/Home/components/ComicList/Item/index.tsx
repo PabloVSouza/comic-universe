@@ -26,7 +26,7 @@ const ComicListItem = ({ item }: { item: ComicInterface }): JSX.Element => {
   const downloadProgress = (inQueue - totalChapters) * -1
 
   const handleClick = (): void => {
-    if (!isDownloading) setComic(item)
+    if (!isDownloading) setComic(item.id)
   }
 
   const cover = item.cover.startsWith('http')

@@ -6,7 +6,7 @@ const { invoke } = window.Electron.ipcRenderer
 interface useReaderStore {
   readProgress: ReadProgressInterface
   chapterIndex: number
-  setInitialState: (chapterId: number) => Promise<void>
+  setInitialState: (comicId: number, chapterId: number) => Promise<void>
   setChapterIndex: (chapterIndex: number) => Promise<void>
   setReadProgress: (readProgress: ReadProgressInterface) => Promise<void>
   setReadProgressDB: (readProgress: ReadProgressInterface) => Promise<void>
@@ -17,32 +17,37 @@ const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
   readProgress: {} as ReadProgressInterface,
   chapterIndex: 0,
 
-  setInitialState: async (chapterId): Promise<void> => {
+  setInitialState: async (comicId, chapterId): Promise<void> => {
     const { setChapterIndex, setReadProgress, setReadProgressDB, setInitialState } =
       useReaderStore.getState()
     const { comic, setComic } = useDashboardStore.getState()
 
-    const chapterIndex = comic.chapters.findIndex((val: ChapterInterface) => val.id === chapterId)
-
-    await setChapterIndex(chapterIndex)
-
-    const chapter = comic.chapters[chapterIndex]
-
-    const totalPages = JSON.parse(chapter.pages).length - 1
-
-    if (chapter.ReadProgress.length) {
-      await setReadProgress(chapter.ReadProgress[0])
+    if (!comic.id) {
+      await setComic(comicId)
+      await setInitialState(comicId, chapterId)
     } else {
-      const newReadProgress = {
-        chapterId,
-        comicId: comic.id,
-        page: 0,
-        userId: 1,
-        totalPages
+      const chapterIndex = comic.chapters.findIndex((val: ChapterInterface) => val.id === chapterId)
+
+      await setChapterIndex(chapterIndex)
+
+      const chapter = comic.chapters[chapterIndex]
+
+      const totalPages = JSON.parse(chapter.pages).length - 1
+
+      if (chapter.ReadProgress.length) {
+        await setReadProgress(chapter.ReadProgress[0])
+      } else {
+        const newReadProgress = {
+          chapterId,
+          comicId: comic.id,
+          page: 0,
+          userId: 1,
+          totalPages
+        }
+        await setReadProgressDB(newReadProgress)
+        await setComic(comic.id)
+        await setInitialState(comic.id, chapterId)
       }
-      await setReadProgressDB(newReadProgress)
-      await setComic(comic)
-      await setInitialState(chapterId)
     }
 
     return new Promise((resolve) => resolve())

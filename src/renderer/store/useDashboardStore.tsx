@@ -6,7 +6,7 @@ interface useDashboardStore {
   comic: ComicInterface
   list: ComicInterface[]
   getListDB: () => Promise<void>
-  setComic: (comic: ComicInterface) => Promise<void>
+  setComic: (id: number) => Promise<void>
 }
 
 const useDashboardStore = create<useDashboardStore>((set) => ({
@@ -26,11 +26,11 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
 
     const { comic, setComic } = useDashboardStore.getState()
     set((state) => ({ ...state, list }))
-    if (list.length && !comic.id) setComic(list[0])
+    if (list.length && !comic.id) setComic(list[0].id)
   },
 
-  setComic: async (comic): Promise<void> => {
-    const completeComic = await invoke('dbGetComicComplete', { id: comic.id })
+  setComic: async (id): Promise<void> => {
+    const completeComic = await invoke('dbGetComicComplete', { id })
     set((state) => ({ ...state, comic: completeComic }))
   }
 }))

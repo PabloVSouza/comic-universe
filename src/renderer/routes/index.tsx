@@ -12,7 +12,9 @@ const Router = (): ReactElement<RoutesProps> => {
         <Route path="/*" element={<Navigate to="/" />} />
       </Route>
       <Route path="/reader/:comicId/:chapterId" element={<Reader />} />
-      <Route path="/users" element={<Users />} />
+      <Route path="/users" element={<Users />}>
+        <Route path="/users/:newUser" element={<Users />} />
+      </Route>
     </Routes>
   )
 }

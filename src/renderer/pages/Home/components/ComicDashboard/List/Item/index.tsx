@@ -12,6 +12,7 @@ import style from './style.module.scss'
 import closedBook from 'assets/closed-book-icon.svg'
 import bookStack from 'assets/book-stack.svg'
 import useReaderStore from 'store/useReaderStore'
+import usePersistStore from 'store/usePersistStore'
 
 const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element => {
   const navigate = useNavigate()
@@ -20,6 +21,7 @@ const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element =>
 
   const { comic, setComic } = useDashboardStore()
   const { setReadProgressDB } = useReaderStore()
+  const { currentUser } = usePersistStore()
 
   const pages = item.pages ? (JSON.parse(item.pages) as Page[]) : ([] as Page[])
 
@@ -46,7 +48,7 @@ const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element =>
       ...ReadProgress,
       chapterId: item.id,
       comicId: comic.id,
-      userId: 1,
+      userId: currentUser.id,
       totalPages,
       page
     })

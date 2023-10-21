@@ -1,5 +1,5 @@
 import { PrismaInitializer } from '../../../lib/prisma'
-import { Chapter, Comic, PrismaClient } from '@prisma/client'
+import { Chapter, Comic, PrismaClient, User } from '@prisma/client'
 import {
   IDBInteractionsRepository,
   IDBInteractionsMethods,
@@ -15,6 +15,7 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
   }
 
   methods: IDBInteractionsMethods = {
+    //Comics
     dbGetComic: async ({ id }): Promise<ComicInterface> => {
       const comic = await this.db.comic.findUnique({ where: { id } })
       return new Promise((resolve) => {
@@ -22,15 +23,16 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
       })
     },
 
-    dbGetComicComplete: async ({ id }): Promise<ComicInterface> => {
+    dbGetComicComplete: async ({ id, userId }): Promise<ComicInterface> => {
       const comic = await this.db.comic.findUnique({
         where: { id },
         include: {
           chapters: {
-            include: { ReadProgress: true }
+            include: { ReadProgress: { where: { userId } } }
           }
         }
       })
+
       return new Promise((resolve) => {
         resolve(comic as ComicInterface)
       })
@@ -42,22 +44,6 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
       })) as ComicInterface[]
       return new Promise((resolve) => {
         resolve(comics)
-      })
-    },
-
-    dbGetAllChaptersNoPage: async (): Promise<ChapterInterface[]> => {
-      const chapters = (await this.db.chapter.findMany({
-        where: { pages: null }
-      })) as ChapterInterface[]
-      return new Promise((resolve) => {
-        resolve(chapters)
-      })
-    },
-
-    dbGetChapters: async ({ comicId }): Promise<ChapterInterface[]> => {
-      const chapters = await this.db.chapter.findMany({ where: { comicId } })
-      return new Promise((resolve) => {
-        resolve(chapters as ChapterInterface[])
       })
     },
 
@@ -74,6 +60,23 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
 
       return new Promise((resolve) => {
         resolve()
+      })
+    },
+
+    //Chapters
+    dbGetAllChaptersNoPage: async (): Promise<ChapterInterface[]> => {
+      const chapters = (await this.db.chapter.findMany({
+        where: { pages: null }
+      })) as ChapterInterface[]
+      return new Promise((resolve) => {
+        resolve(chapters)
+      })
+    },
+
+    dbGetChapters: async ({ comicId }): Promise<ChapterInterface[]> => {
+      const chapters = await this.db.chapter.findMany({ where: { comicId } })
+      return new Promise((resolve) => {
+        resolve(chapters as ChapterInterface[])
       })
     },
 
@@ -95,6 +98,7 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
       })
     },
 
+    //Read Progress
     dbGetReadProgress: async (search): Promise<ReadProgressInterface[]> => {
       //@ts-ignore Multiple ways of searching
       const readProgress = await this.db.readProgress.findMany({ where: search })
@@ -109,6 +113,34 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
         await this.db.readProgress.update({ where: { id: readProgress.id }, data: readProgress })
 
       return new Promise((resolve) => resolve())
+    },
+
+    //Users
+    dbGetAllUsers: async (): Promise<UserInterface[]> => {
+      const users = await this.db.user.findMany()
+      return new Promise((resolve) => {
+        resolve(users as UserInterface[])
+      })
+    },
+
+    dbUpdateUser: async ({ user }): Promise<UserInterface> => {
+      const userData = user as User
+
+      const newData = user.id
+        ? await this.db.user.update({ where: { id: user.id }, data: userData })
+        : await this.db.user.create({ data: userData })
+
+      return new Promise((resolve) => {
+        resolve(newData)
+      })
+    },
+
+    dbDeleteUser: async ({ id }): Promise<void> => {
+      await this.db.readProgress.deleteMany({ where: { userId: id } })
+      await this.db.user.delete({ where: { id } })
+      return new Promise((resolve) => {
+        resolve()
+      })
     }
   }
 }

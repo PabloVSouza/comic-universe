@@ -1,7 +1,7 @@
-import { CSSProperties } from 'react'
-import { Props, SimpleImg } from 'react-simple-img'
+import { CSSProperties, ImgHTMLAttributes } from 'react'
+import { SimpleImg } from 'react-simple-img'
 
-interface Image extends Props {
+interface Image extends ImgHTMLAttributes<unknown> {
   placeholder?: string
   pure?: boolean
   svg?: boolean
@@ -25,7 +25,7 @@ const Image = ({ placeholder, pure, src, svg, ...props }: Partial<Image>): JSX.E
     return (
       <Comp
         key={src}
-        placeholder={placeholder || (!pure ? false : '')}
+        placeholder={placeholder ?? (false || (!pure ? false : ''))}
         src={src}
         style={svg ? iconStyle : undefined}
         {...props}

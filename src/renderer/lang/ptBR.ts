@@ -61,6 +61,12 @@ export default class ptBR implements Lang {
     createButton: 'Criar Usuário',
     saveButton: 'Salvar Usuário',
     cancelButton: 'Cancelar',
-    namePlaceholder: 'Nome do Usuário'
+    namePlaceholder: 'Nome do Usuário',
+    deleteUser: {
+      deleteUserTitle: 'Apagar este usuário?',
+      deleteUserMessage: 'Todo o progresso de leitura será perdido!',
+      confirmDeleteButton: 'Sim',
+      cancelDeleteButton: 'Não'
+    }
   }
 }

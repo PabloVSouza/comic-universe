@@ -1,6 +1,6 @@
 interface UserInterface {
-  id: number
+  id?: number
   name: string
-  default: boolean
-  ReadProgress: ReadProgress[]
+  default?: boolean
+  ReadProgress?: ReadProgress[]
 }

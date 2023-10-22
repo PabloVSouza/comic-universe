@@ -21,7 +21,7 @@ const DashboardNav = (): JSX.Element => {
   const { chapters } = comic
 
   const totalPages = chapters.reduce((prev, cur) => {
-    return cur.pages ? prev + (JSON.parse(cur.pages).length - 1) : prev
+    return cur.pages ? prev + JSON.parse(cur.pages).length : prev
   }, 0)
 
   const totalRead = chapters.reduce((prev, cur) => {

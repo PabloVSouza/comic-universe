@@ -8,6 +8,10 @@ interface DashboardLang {
   read: string
   continueReading: string
   downloadMore: string
+  newChapter: {
+    noNewChapterMessage: string
+    noNewChapterConfirm: string
+  }
 }
 
 interface DownloadComicLang {

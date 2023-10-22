@@ -8,7 +8,11 @@ export default class enUS implements Lang {
     resetProgress: 'Mark as Unread',
     read: 'Read',
     continueReading: 'Continue Reading',
-    downloadMore: 'Download More'
+    downloadMore: 'Download More',
+    newChapter: {
+      noNewChapterMessage: 'We could not find new chapters',
+      noNewChapterConfirm: 'Ok'
+    }
   }
 
   DownloadComic: DownloadComicLang = {

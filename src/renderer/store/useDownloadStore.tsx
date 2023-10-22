@@ -1,5 +1,9 @@
 import { create } from 'zustand'
 import useDashboardStore from './useDashboardStore'
+import { confirmAlert } from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css'
+import useLang from 'lang'
+
 const { invoke } = window.Electron.ipcRenderer
 
 interface useDownloadStore {
@@ -38,9 +42,21 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
         return [...acc, { ...cur, comicId: comic.id, repo: comic.repo }]
       }, [])
 
-    await invoke('dbInsertChapters', { chapters: newChapters })
+    if (newChapters.length) {
+      await invoke('dbInsertChapters', { chapters: newChapters })
 
-    await getListDB()
+      await getListDB()
+    } else {
+      const lang = useLang()
+      confirmAlert({
+        message: lang.Dashboard.newChapter.noNewChapterMessage,
+        buttons: [
+          {
+            label: lang.Dashboard.newChapter.noNewChapterConfirm
+          }
+        ]
+      })
+    }
 
     return new Promise((resolve) => resolve())
   },

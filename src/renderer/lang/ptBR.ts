@@ -8,7 +8,11 @@ export default class ptBR implements Lang {
     resetProgress: 'Remover Progresso',
     read: 'Lido',
     continueReading: 'Continuar de onde Parou',
-    downloadMore: 'Baixar mais Capítulos'
+    downloadMore: 'Baixar mais Capítulos',
+    newChapter: {
+      noNewChapterMessage: 'Não existem novos capítulos',
+      noNewChapterConfirm: 'Ok'
+    }
   }
 
   DownloadComic: DownloadComicLang = {

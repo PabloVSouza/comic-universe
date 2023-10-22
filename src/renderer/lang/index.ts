@@ -4,7 +4,7 @@ import ptBR from './ptBR'
 import enUS from './enUS'
 
 const useLang = (): Lang => {
-  const { lang } = usePersistStore()
+  const { lang } = usePersistStore.getState()
 
   const langList = {
     ptBR,

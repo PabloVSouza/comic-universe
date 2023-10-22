@@ -55,7 +55,6 @@ const UsersListItem = ({ data, newUser }: UsersListItem): JSX.Element => {
           }
         ]
       })
-      // await deleteUser(data.id)
     }
     return new Promise((resolve) => resolve())
   }

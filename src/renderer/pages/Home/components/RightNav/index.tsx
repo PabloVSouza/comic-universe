@@ -33,7 +33,7 @@ const RightNav = (): JSX.Element => {
     {
       label: texts.RightNav.settings,
       icon: settingsIcon,
-      onClick: (): void => navigate('/?modal=settings')
+      onClick: (): void => navigate(`/?modal=message&text=${texts.General.inDevelopment}`)
     },
     {
       label: texts.RightNav.darkMode,

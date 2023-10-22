@@ -25,9 +25,7 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
       chapter.pages ? null : addToQueue(chapter)
     }
 
-    const { setComic } = useDashboardStore.getState()
     set((state) => ({ ...state, list }))
-    if (list.length) setComic(list[0].id)
   },
 
   setComic: async (id): Promise<void> => {

@@ -16,12 +16,12 @@ const DashboardNav = (): JSX.Element => {
 
   const texts = useLang()
 
-  const { comic } = useDashboardStore()
+  const { comic, getNewChapters } = useDashboardStore()
 
   const { chapters } = comic
 
   const totalPages = chapters.reduce((prev, cur) => {
-    return prev + (JSON.parse(cur.pages).length - 1)
+    return cur.pages ? prev + (JSON.parse(cur.pages).length - 1) : prev
   }, 0)
 
   const totalRead = chapters.reduce((prev, cur) => {
@@ -46,14 +46,14 @@ const DashboardNav = (): JSX.Element => {
           size="xxs"
           icon={downloadIcon}
           title={texts.Dashboard.downloadMore}
-          to={`/?modal=message&text=${texts.General.inDevelopment}`}
+          onClick={getNewChapters}
         />
         <Button
           theme="pure"
           size="xxs"
           icon={comicBook}
           title={texts.Dashboard.continueReading}
-          onClick={(): void => continueReading()}
+          onClick={continueReading}
         />
       </div>
       <div className={style.progressBar}>

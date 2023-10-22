@@ -8,6 +8,7 @@ interface useDashboardStore {
   list: ComicInterface[]
   getListDB: () => Promise<void>
   setComic: (id: number) => Promise<void>
+  getNewChapters: () => Promise<void>
 }
 
 const useDashboardStore = create<useDashboardStore>((set) => ({
@@ -35,6 +36,24 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
       const completeComic = await invoke('dbGetComicComplete', { id, userId })
       set((state) => ({ ...state, comic: completeComic }))
     }
+  },
+
+  getNewChapters: async (): Promise<void> => {
+    const { comic, getListDB } = useDashboardStore.getState()
+
+    const { repo, siteId } = comic
+    const chapters = await invoke('getChapters', { repo, data: { siteId } })
+    const newChapters = chapters.reduce((acc, cur) => {
+      return comic.chapters.findIndex((val) => val.siteId === cur.siteId)
+        ? [...acc, { ...cur, comicId: comic.id, repo: comic.repo }]
+        : [...acc]
+    }, [])
+
+    await invoke('dbInsertChapters', { chapters: newChapters })
+
+    await getListDB()
+
+    return new Promise((resolve) => resolve())
   }
 }))
 

@@ -49,7 +49,7 @@ const queueManager = (): void => {
 
   const queueCleaner = async (): Promise<void> => {
     const { queue, getChapterPages, removeFromQueue } = useDownloadStore.getState()
-    const { getListDB } = useDashboardStore.getState()
+    const { getListDB, setComic } = useDashboardStore.getState()
 
     const notInProgress = queue.filter((e) => !inProgress.includes(e))
 
@@ -60,7 +60,9 @@ const queueManager = (): void => {
         getChapterPages(chapter).then(async (result) => {
           inProgress = inProgress.filter((e) => e.id !== chapter.id)
           if (result) {
-            await removeFromQueue(chapter)
+            await removeFromQueue(chapter).then(() => {
+              setComic(chapter.comicId)
+            })
           }
         })
       }

@@ -80,8 +80,10 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
       })
     },
 
-    dbInsertChapter: async ({ comicId, chapter }): Promise<void> => {
-      await this.db.chapter.create({ data: { ...chapter, comicId } as Chapter })
+    dbInsertChapters: async ({ chapters }): Promise<void> => {
+      for (const chapter of chapters) {
+        await this.db.chapter.create({ data: chapter as Chapter })
+      }
       return new Promise((resolve) => {
         resolve()
       })

@@ -27,7 +27,7 @@ const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element =>
 
   const disabled = !item.pages
 
-  const totalPages = pages.length - 1
+  const totalPages = pages.length
 
   const chapterProgress = item.ReadProgress[0]
 

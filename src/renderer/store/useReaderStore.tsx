@@ -33,7 +33,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
 
       const chapter = comic.chapters[chapterIndex]
 
-      const totalPages = JSON.parse(chapter.pages).length - 1
+      const totalPages = JSON.parse(chapter.pages).length
 
       if (chapter.ReadProgress.length) {
         await setReadProgress(chapter.ReadProgress[0])
@@ -43,7 +43,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
         const newReadProgress = {
           chapterId,
           comicId: comic.id,
-          page: 0,
+          page: 1,
           userId: currentUser.id ?? 0,
           totalPages
         }

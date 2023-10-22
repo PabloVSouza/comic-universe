@@ -14,7 +14,7 @@ export type IDBInteractionsMethods = {
   //Chapters
   dbGetAllChaptersNoPage: () => Promise<ChapterInterface[]>
   dbGetChapters: (input: { comicId: number }) => Promise<ChapterInterface[]>
-  dbInsertChapter: (input: { comicId: number; chapter: ChapterInterface }) => Promise<void>
+  dbInsertChapters: (input: { chapters: ChapterInterface[] }) => Promise<void>
   dbUpdateChapter: (input: { chapter: ChapterInterface }) => Promise<ChapterInterface>
 
   //Read Progress

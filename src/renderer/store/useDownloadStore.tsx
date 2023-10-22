@@ -8,6 +8,7 @@ interface useDownloadStore {
   removeFromQueue: (chapter: ChapterInterface) => Promise<void>
   getChapterPages: (chapter: ChapterInterface) => Promise<boolean>
   downloadChapter: (chapter: ChapterInterface) => Promise<void>
+  getNewChapters: () => Promise<void>
 }
 
 const useDownloadStore = create<useDownloadStore>((set) => ({
@@ -23,6 +24,25 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
     set((state: useDownloadStore) => ({
       queue: state.queue.filter((item) => item.id !== chapter.id)
     }))
+  },
+
+  getNewChapters: async (): Promise<void> => {
+    const { comic, getListDB } = useDashboardStore.getState()
+
+    const { repo, siteId } = comic
+    const chapters = await invoke('getChapters', { repo, data: { siteId } })
+
+    const newChapters = chapters
+      .filter((val) => comic.chapters.findIndex((chapter) => val.siteId === chapter.siteId) < 0)
+      .reduce((acc, cur) => {
+        return [...acc, { ...cur, comicId: comic.id, repo: comic.repo }]
+      }, [])
+
+    await invoke('dbInsertChapters', { chapters: newChapters })
+
+    await getListDB()
+
+    return new Promise((resolve) => resolve())
   },
 
   getChapterPages: async (chapter): Promise<boolean> => {
@@ -49,7 +69,7 @@ const queueManager = (): void => {
 
   const queueCleaner = async (): Promise<void> => {
     const { queue, getChapterPages, removeFromQueue } = useDownloadStore.getState()
-    const { getListDB } = useDashboardStore.getState()
+    const { getListDB, setComic } = useDashboardStore.getState()
 
     const notInProgress = queue.filter((e) => !inProgress.includes(e))
 
@@ -60,7 +80,9 @@ const queueManager = (): void => {
         getChapterPages(chapter).then(async (result) => {
           inProgress = inProgress.filter((e) => e.id !== chapter.id)
           if (result) {
-            await removeFromQueue(chapter)
+            await removeFromQueue(chapter).then(() => {
+              setComic(chapter.comicId)
+            })
           }
         })
       }

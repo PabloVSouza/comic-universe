@@ -29,11 +29,20 @@ const Reader = (): JSX.Element => {
     setReadProgress,
     setReadProgressDB
   } = useReaderStore()
+
   const { comic, setComic } = useDashboardStore()
 
   useEffect(() => {
     setInitialState(comicId, chapterId)
   }, [chapterId])
+
+  useEffect(() => {
+    if (readProgress.page === 0) {
+      const newReadProgress = { ...readProgress, page: 1 } as ReadProgressInterface
+      setReadProgress(newReadProgress)
+      setReadProgressDB(newReadProgress)
+    }
+  }, [readProgress])
 
   let chapter: ChapterInterface | undefined
   let pages: Page[] | undefined
@@ -57,13 +66,18 @@ const Reader = (): JSX.Element => {
 
   const nextPage = async (): Promise<void> => {
     const { page, totalPages } = readProgress
+
     if (page < totalPages) {
       const newReadProgress = { ...readProgress, page: page + 1 } as ReadProgressInterface
       await setReadProgress(newReadProgress)
       await setReadProgressDB(newReadProgress)
     }
     if (page === totalPages) {
-      if (chapterIndex === comic.chapters.length - 1) navigate('/')
+      console.log({ chapterIndex, length: comic.chapters.length })
+      if (chapterIndex === comic.chapters.length - 1) {
+        await setComic(comic.id)
+        navigate('/')
+      }
       if (chapterIndex < comic.chapters.length - 1)
         navigate(`/reader/${comicId}/${comic.chapters[chapterIndex + 1].id}`)
     }
@@ -71,13 +85,16 @@ const Reader = (): JSX.Element => {
 
   const previousPage = async (): Promise<void> => {
     const { page, totalPages } = readProgress
-    if (totalPages >= page && page !== 0) {
+    if (totalPages >= page && page !== 1) {
       const newReadProgress = { ...readProgress, page: page - 1 } as ReadProgressInterface
       await setReadProgress(newReadProgress)
       await setReadProgressDB(newReadProgress)
     }
-    if (page === 0) {
-      if (chapterIndex === 0) navigate('/')
+    if (page === 1) {
+      if (chapterIndex === 0) {
+        await setComic(comic.id)
+        navigate('/')
+      }
       if (chapterIndex <= comic.chapters.length - 1 && chapterIndex !== 0)
         navigate(`/reader/${comicId}/${comic.chapters[chapterIndex - 1].id}`)
     }
@@ -109,7 +126,7 @@ const Reader = (): JSX.Element => {
   }
 
   const position = {
-    transform: `translateX(-${readProgress.page * 100}%)`
+    transform: `translateX(-${(readProgress.page - 1) * 100}%)`
   }
 
   useEffect(() => {

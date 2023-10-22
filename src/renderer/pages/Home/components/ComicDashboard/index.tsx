@@ -14,7 +14,7 @@ import style from './style.module.scss'
 const ComicDashboard = (): JSX.Element => {
   const navigate = useNavigate()
 
-  const { comic } = useDashboardStore()
+  const { comic, list, setComic } = useDashboardStore()
   const { queue } = useDownloadStore()
   const { currentUser } = usePersistStore()
 
@@ -23,6 +23,12 @@ const ComicDashboard = (): JSX.Element => {
   }, [])
 
   const isDownloading = !!queue.find((item) => item.comicId === comic.id)
+
+  useEffect(() => {
+    if (!comic.id && list.length && !queue.find((item) => item.comicId === list[0].id)) {
+      setComic(list[0].id)
+    }
+  }, [queue, list])
 
   return (
     <div className={style.comicDashboard}>

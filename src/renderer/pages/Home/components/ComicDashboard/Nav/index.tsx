@@ -5,6 +5,7 @@ import Button from 'components/Button'
 import useLang from 'lang'
 
 import useDashboardStore from 'store/useDashboardStore'
+import useDownloadStore from 'store/useDownloadStore'
 
 import style from './style.module.scss'
 
@@ -16,7 +17,8 @@ const DashboardNav = (): JSX.Element => {
 
   const texts = useLang()
 
-  const { comic, getNewChapters } = useDashboardStore()
+  const { comic } = useDashboardStore()
+  const { getNewChapters } = useDownloadStore()
 
   const { chapters } = comic
 

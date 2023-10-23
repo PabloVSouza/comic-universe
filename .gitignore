@@ -2,5 +2,6 @@ node_modules
 dist
 out
 *.log*
+*.db
 **/.DS_Store
 

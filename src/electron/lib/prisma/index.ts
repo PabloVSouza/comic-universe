@@ -36,14 +36,6 @@ export class PrismaInitializer {
     })
   }
 
-  // private prepareDB = (): void => {
-  //   const dbExists = fs.existsSync(this.constants.dbPath)
-  //   if (!dbExists) {
-  //     CreateDirectory(path.join(this.appPath, 'db'))
-  //     // fs.copyFileSync(this.constants.sourceDBPath, this.constants.dbPath)
-  //   }
-  // }
-
   // @ts-ignore Not using yet
   private runMigration = async (): Promise<void> => {
     let needsMigration: boolean
@@ -67,6 +59,8 @@ export class PrismaInitializer {
           dbUrl: this.constants.dbUrl
         })
       }
+
+      this.prisma = this.initializePrisma()
     }
   }
 

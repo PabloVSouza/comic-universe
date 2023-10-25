@@ -2,20 +2,19 @@ import { PrismaConstants, Migration } from './constants'
 import { PrismaClient } from '@prisma/client'
 import path from 'path'
 import fs from 'fs'
-// import CreateDirectory from '../../utils/CreateDirectory'
+import CreateDirectory from '../../utils/CreateDirectory'
 import { fork } from 'child_process'
 
 export class PrismaInitializer {
   public prisma: PrismaClient
-  // private appPath: string
+  private appPath: string
   private constants: PrismaConstants
 
   constructor(appPath: string) {
-    // this.appPath = appPath
+    this.appPath = appPath
     this.constants = new PrismaConstants(appPath)
-    // this.prepareDB()
-    this.runMigration()
     this.prisma = this.initializePrisma()
+    this.prepareDb()
   }
 
   private initializePrisma = (): PrismaClient => {
@@ -36,32 +35,34 @@ export class PrismaInitializer {
     })
   }
 
-  // @ts-ignore Not using yet
-  private runMigration = async (): Promise<void> => {
-    let needsMigration: boolean
+  private prepareDb = async (): Promise<void> => {
     const dbExists = fs.existsSync(this.constants.dbPath)
     if (!dbExists) {
+      CreateDirectory(path.join(this.appPath, 'db'))
       fs.closeSync(fs.openSync(this.constants.dbPath, 'w'))
-      this.runMigration()
-    } else {
-      try {
-        const latest: Migration[] = await this.prisma
-          .$queryRaw`select * from _prisma_migrations order by finished_at`
-        needsMigration =
-          latest[latest.length - 1]?.migration_name !== this.constants.latestMigration
-      } catch (e) {
-        needsMigration = true
-      }
-
-      if (needsMigration) {
-        await this.runPrismaCommand({
-          command: ['migrate', 'deploy', '--schema', this.constants.schemaPath],
-          dbUrl: this.constants.dbUrl
-        })
-      }
-
-      this.prisma = this.initializePrisma()
     }
+    await this.runMigration()
+  }
+
+  private runMigration = async (): Promise<void> => {
+    let needsMigration: boolean
+
+    try {
+      const latest: Migration[] = await this.prisma
+        .$queryRaw`select * from _prisma_migrations order by finished_at`
+      needsMigration = latest[latest.length - 1]?.migration_name !== this.constants.latestMigration
+    } catch (e) {
+      needsMigration = true
+    }
+
+    if (needsMigration) {
+      await this.runPrismaCommand({
+        command: ['migrate', 'deploy', '--schema', this.constants.schemaPath],
+        dbUrl: this.constants.dbUrl
+      })
+    }
+
+    this.prisma = this.initializePrisma()
   }
 
   public runPrismaCommand = async ({

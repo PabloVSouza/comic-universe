@@ -29,6 +29,7 @@ interface RightNavLang {
   settings: string
   darkMode: string
   changeUser: string
+  closeApp: string
 }
 
 interface SearchComicLang {

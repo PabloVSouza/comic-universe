@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+const { invoke } = window.Electron.ipcRenderer
 
 import classNames from 'classnames'
 
@@ -16,6 +17,7 @@ import infoIcon from 'assets/info.svg'
 import settingsIcon from 'assets/settings.svg'
 import darkmodeIcon from 'assets/darkmode.svg'
 import userIcon from 'assets/user.svg'
+import exitIcon from 'assets/exit-door.svg'
 
 const RightNav = (): JSX.Element => {
   const { menuVisible, toggleMenu } = useGlobalStore()
@@ -23,6 +25,10 @@ const RightNav = (): JSX.Element => {
 
   const navigate = useNavigate()
   const texts = useLang()
+
+  const closeApp = (): void => {
+    invoke('closeWindow')
+  }
 
   const options = [
     {
@@ -44,6 +50,11 @@ const RightNav = (): JSX.Element => {
       label: texts.RightNav.changeUser,
       icon: userIcon,
       onClick: (): void => navigate('/users')
+    },
+    {
+      label: texts.RightNav.closeApp,
+      icon: exitIcon,
+      onClick: closeApp
     }
   ]
 

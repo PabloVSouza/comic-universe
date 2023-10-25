@@ -29,7 +29,8 @@ export default class ptBR implements Lang {
     about: 'Sobre este App',
     settings: 'Configurações',
     darkMode: 'Modo Noturno',
-    changeUser: 'Trocar de Usuário'
+    changeUser: 'Trocar de Usuário',
+    closeApp: 'Fechar Aplicativo'
   }
 
   SearchComic: SearchComicLang = {

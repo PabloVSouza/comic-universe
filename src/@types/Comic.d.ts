@@ -11,6 +11,7 @@ interface ComicInterface {
   genres?: string | null
   siteLink: string
   synopsis: string
+  year?: string
   type: string
   chapters: Chapter[]
   ReadProgress: ReadProgress[]

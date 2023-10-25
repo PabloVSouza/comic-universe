@@ -41,8 +41,8 @@ export class PrismaInitializer {
     let needsMigration: boolean
     const dbExists = fs.existsSync(this.constants.dbPath)
     if (!dbExists) {
-      needsMigration = true
       fs.closeSync(fs.openSync(this.constants.dbPath, 'w'))
+      this.runMigration()
     } else {
       try {
         const latest: Migration[] = await this.prisma

@@ -24,6 +24,7 @@ export class PrismaConstants {
   public extraResourcesPath: string
   public platformName: string
   public latestMigration: string
+  public schemaPath: string
 
   public platformToExecutables = {}
 
@@ -40,19 +41,19 @@ export class PrismaConstants {
 
     this.platformToExecutables = {
       win32: {
-        migrationEngine: `/db/@prisma/engines/migration-engine-windows.exe`,
+        migrationEngine: `node_modules/@prisma/engines/schema-engine-windows.exe`,
         queryEngine: `node_modules/.prisma/client/query_engine-windows.dll.node`
       },
       linux: {
-        migrationEngine: `/db/@prisma/engines/migration-engine-debian-openssl-1.1.x`,
+        migrationEngine: `node_modules/@prisma/engines/schema-engine-debian-openssl-1.1.x`,
         queryEngine: `node_modules/.prisma/client/libquery_engine-debian-openssl-1.1.x.so.node`
       },
       darwin: {
-        migrationEngine: `/db/@prisma/engines/migration-engine-darwin`,
+        migrationEngine: `node_modules/@prisma/engines/schema-engine-darwin`,
         queryEngine: `node_modules/.prisma/client/libquery_engine-darwin.dylib.node`
       },
       darwinArm64: {
-        migrationEngine: `/db/@prisma/engines/migration-engine-darwin-arm64`,
+        migrationEngine: `node_modules/@prisma/engines/schema-engine-darwin-arm64`,
         queryEngine: `node_modules/.prisma/client/libquery_engine-darwin-arm64.dylib.node`
       }
     }
@@ -60,26 +61,27 @@ export class PrismaConstants {
     this.platformName = getPlatformName()
     this.dbPath = `${this.path}/db/database.db`
     this.dbUrl = is.dev
-      ? 'file:../database.db'
+      ? 'file:../database.db?socket_timeout=10&connection_limit=1'
       : `file:${this.dbPath}?socket_timeout=10&connection_limit=1`
     this.extraResourcesPath = appPath
-    this.mePath = path.join(
-      this.extraResourcesPath,
-      this.platformToExecutables[this.platformName].migrationEngine
-    )
 
     this.importPath = !is.dev
       ? path.join(app.getAppPath().replace('app.asar', ''), `app.asar.unpacked`)
       : ''
-
+    this.mePath = path.join(
+      this.importPath,
+      this.platformToExecutables[this.platformName].migrationEngine
+    )
     this.qePath = path.join(
       this.importPath,
       this.platformToExecutables[this.platformName].queryEngine
     )
 
+    this.schemaPath = path.join(this.importPath, 'prisma', 'schema.prisma')
+
     this.sourceDBPath = path.join(this.importPath, 'prisma', 'database.db')
 
-    this.latestMigration = '20231018232641_'
+    this.latestMigration = '20231025184053_added_languages'
     process.env.DATABASE_URL = this.dbUrl
   }
 }

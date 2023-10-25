@@ -2,19 +2,19 @@ import { PrismaConstants, Migration } from './constants'
 import { PrismaClient } from '@prisma/client'
 import path from 'path'
 import fs from 'fs'
-import CreateDirectory from '../../utils/CreateDirectory'
+// import CreateDirectory from '../../utils/CreateDirectory'
 import { fork } from 'child_process'
 
 export class PrismaInitializer {
   public prisma: PrismaClient
-  private appPath: string
+  // private appPath: string
   private constants: PrismaConstants
 
   constructor(appPath: string) {
-    this.appPath = appPath
+    // this.appPath = appPath
     this.constants = new PrismaConstants(appPath)
-    this.prepareDB()
-    // this.runMigration()
+    // this.prepareDB()
+    this.runMigration()
     this.prisma = this.initializePrisma()
   }
 
@@ -36,18 +36,17 @@ export class PrismaInitializer {
     })
   }
 
-  private prepareDB = (): void => {
-    const dbExists = fs.existsSync(this.constants.dbPath)
-    if (!dbExists) {
-      CreateDirectory(path.join(this.appPath, 'db'))
-      fs.copyFileSync(this.constants.sourceDBPath, this.constants.dbPath)
-    }
-  }
+  // private prepareDB = (): void => {
+  //   const dbExists = fs.existsSync(this.constants.dbPath)
+  //   if (!dbExists) {
+  //     CreateDirectory(path.join(this.appPath, 'db'))
+  //     // fs.copyFileSync(this.constants.sourceDBPath, this.constants.dbPath)
+  //   }
+  // }
 
   // @ts-ignore Not using yet
   private runMigration = async (): Promise<void> => {
     let needsMigration: boolean
-    console.log(this.constants)
     const dbExists = fs.existsSync(this.constants.dbPath)
     if (!dbExists) {
       needsMigration = true
@@ -63,13 +62,8 @@ export class PrismaInitializer {
       }
 
       if (needsMigration) {
-        const schemaPath = path.join(
-          this.appPath.replace('app.asar', 'app.asar.unpacked'),
-          'prisma',
-          'schema.prisma'
-        )
         await this.runPrismaCommand({
-          command: ['migrate', 'deploy', '--schema', schemaPath],
+          command: ['migrate', 'deploy', '--schema', this.constants.schemaPath],
           dbUrl: this.constants.dbUrl
         })
       }
@@ -82,19 +76,48 @@ export class PrismaInitializer {
   }: {
     command: string[]
     dbUrl: string
-  }): Promise<void> => {
+  }): Promise<number | void> => {
     const prismaPath = path.resolve(__dirname, '..', '..', 'node_modules/prisma/build/index.js')
 
-    fork(prismaPath, command, {
-      env: {
-        ...process.env,
-        DATABASE_URL: dbUrl,
-        PRISMA_MIGRATION_ENGINE_BINARY: this.constants.mePath,
-        PRISMA_QUERY_ENGINE_LIBRARY: this.constants.qePath,
-        PRISMA_FMT_BINARY: this.constants.qePath,
-        PRISMA_INTROSPECTION_ENGINE_BINARY: this.constants.qePath
-      },
-      stdio: 'pipe'
-    })
+    try {
+      const exitCode = await new Promise((resolve) => {
+        const child = fork(prismaPath, command, {
+          env: {
+            ...process.env,
+            DATABASE_URL: dbUrl,
+            PRISMA_SCHEMA_ENGINE_BINARY: this.constants.mePath,
+            PRISMA_QUERY_ENGINE_LIBRARY: this.constants.qePath,
+            PRISMA_FMT_BINARY: this.constants.qePath,
+            PRISMA_INTROSPECTION_ENGINE_BINARY: this.constants.qePath
+          },
+          stdio: 'pipe'
+        })
+
+        child.on('message', (msg) => {
+          console.log(msg)
+        })
+
+        child.on('error', (err) => {
+          console.log('Child process got error:', err)
+        })
+
+        child.on('close', (code) => {
+          resolve(code)
+        })
+
+        child.stdout?.on('data', function (data) {
+          console.log('prisma: ', data.toString())
+        })
+
+        child.stderr?.on('data', function (data) {
+          console.log('prisma: ', data.toString())
+        })
+      })
+      if (exitCode !== 0) throw Error(`command ${command} failed with exit code ${exitCode}`)
+      return exitCode
+    } catch (e) {
+      console.log(e)
+      throw e
+    }
   }
 }

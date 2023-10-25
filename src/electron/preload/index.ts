@@ -11,6 +11,8 @@ const initializePreload = async (): Promise<void> => {
 
   const appPath = await electronAPI.ipcRenderer.invoke('getAppPath')
 
+  const isDev = await electronAPI.ipcRenderer.invoke('getIsDev')
+
   const appData = { version, description, repository, license, author, appPath }
 
   if (process.contextIsolated) {
@@ -19,6 +21,7 @@ const initializePreload = async (): Promise<void> => {
       contextBridge.exposeInMainWorld('api', api)
       contextBridge.exposeInMainWorld('path', path)
       contextBridge.exposeInMainWorld('app', appData)
+      contextBridge.exposeInMainWorld('isDev', isDev)
     } catch (error) {
       console.error(error)
     }
@@ -31,6 +34,8 @@ const initializePreload = async (): Promise<void> => {
     window.app = appData
     // @ts-ignore (define in dts)
     window.path = path
+    // @ts-ignore (define in dts)
+    window.isDev = isDev
   }
 }
 

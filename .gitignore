@@ -3,5 +3,6 @@ dist
 out
 *.log*
 *.db
+*.db-journal
 **/.DS_Store
 

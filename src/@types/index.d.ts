@@ -16,5 +16,6 @@ declare global {
       path: string
     }
     db: IDBInteractionsRepository
+    isDev: boolean
   }
 }

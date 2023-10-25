@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+const { isDev } = window
 
 interface usePersistStore {
   theme: string
@@ -33,7 +34,7 @@ const usePersistStore = create<usePersistStore>()(
       setRepo: (repo): void => set({ repo })
     }),
     {
-      name: 'comic-universe',
+      name: isDev ? 'comic-universe-dev' : 'comic-universe',
       storage: createJSONStorage(() => localStorage)
     }
   )

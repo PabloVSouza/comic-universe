@@ -1,3 +1,4 @@
+const { invoke } = window.Electron.ipcRenderer
 import Button from 'components/Button'
 
 import style from './style.module.scss'
@@ -8,8 +9,13 @@ import useGlobalStore from 'store/useGlobalStore'
 const TopBar = (): JSX.Element => {
   const { toggleMenu, menuVisible } = useGlobalStore((state) => state)
 
+  const maximizeWindow = (): void => {
+    invoke('maximizeWindow')
+  }
+
   return (
     <div className={style.topBar}>
+      <div className={style.draggableArea} onDoubleClick={maximizeWindow} />
       <div className={style.groupLeft}>
         <Button
           className={style.button}

@@ -16,7 +16,8 @@ files:
 asarUnpack:
   - resources/*
   - node_modules/.prisma/**/*
-  - prisma/database.db
+  - node_modules/@prisma/**/*
+  - prisma/**/*
 afterSign: build/notarize.js
 win:
   executableName: comic-universe

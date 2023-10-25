@@ -20,6 +20,7 @@ model Comic {
   status       String?
   genres       String?
   siteLink     String?
+  year         String?
   synopsis     String
   type         String
   chapters     Chapter[]
@@ -38,6 +39,7 @@ model Chapter {
   pages        String?
   date         String?
   offline      Boolean        @default(false)
+  language     String?
   Comic        Comic          @relation(fields: [comicId], references: [id])
   ReadProgress ReadProgress[]
 }

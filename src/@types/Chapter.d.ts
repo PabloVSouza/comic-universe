@@ -9,6 +9,7 @@ interface ChapterInterface {
   pages: string
   date: string
   repo: string
+  language?: string
   offline: boolean
   Comic: Comic
   ReadProgress: ReadProgress[]

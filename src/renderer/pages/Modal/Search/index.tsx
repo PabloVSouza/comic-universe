@@ -37,7 +37,7 @@ const ModalSearch = (): JSX.Element => {
   }
 
   const debouncedResults = useMemo(() => {
-    return debounce(handleSearch, 500)
+    return debounce(handleSearch, 1500)
   }, [])
 
   useEffect(() => {

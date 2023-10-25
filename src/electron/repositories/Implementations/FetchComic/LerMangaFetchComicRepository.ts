@@ -1,5 +1,4 @@
 import { WebContents } from 'electron'
-// import slugify from 'slugify'
 import axios, { Axios } from 'axios'
 import qs from 'qs'
 import * as cheerio from 'cheerio'
@@ -9,9 +8,6 @@ import {
   IFetchComicRepository,
   IFetchComicRepositoryInit
 } from '../../IFetchComicRepository'
-
-// import CreateDirectory from '../../../utils/CreateDirectory'
-// import DownloadFile from '../../../utils/DownloadFile'
 
 export class LerMangaFetchComicRepository implements IFetchComicRepository {
   ipc: WebContents
@@ -111,7 +107,7 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
               number: parsedData(val).prop('data-id-cap'),
               siteLink: parsedData(val).find('a').prop('href'),
               date: parsedData(val).find('small').children('small').text()
-            } as ChapterInterface)
+            }) as ChapterInterface
         )
         .toArray()
 

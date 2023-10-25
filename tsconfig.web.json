@@ -18,6 +18,7 @@
       "routes/*": ["./routes/*"],
       "scss/*": ["./scss/*"],
       "store/*": ["./store/*"],
+      "utils/*": ["./utils/*"],
       "@types/*": ["./@types/*"]
     }
   }

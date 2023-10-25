@@ -11,7 +11,7 @@ const useLang = (): Lang => {
     enUS
   }
 
-  return new langList[lang]()
+  return new langList['enUS']()
 }
 
 export default useLang

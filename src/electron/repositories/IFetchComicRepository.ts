@@ -4,7 +4,7 @@ export interface IFetchComicMethods {
   getList(): Promise<ComicInterface[]>
   search(input: { search: string }): Promise<ComicInterface[]>
   getDetails(search: { [key: string]: string }): Promise<Partial<ComicInterface>>
-  getChapters(input: { siteId: string }): Promise<ChapterInterface[]>
+  getChapters(input: { siteId: string; language: string }): Promise<ChapterInterface[]>
   getPages?(input: { siteLink: string }): Promise<Page[]>
   downloadChapter?(input: {
     comic: ComicInterface

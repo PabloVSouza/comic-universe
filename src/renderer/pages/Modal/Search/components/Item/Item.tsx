@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import ReactHtmlParser from 'react-html-parser'
 import classNames from 'classnames'
 
+import capitalize from 'utils/Capitalize'
+
 import useSearchStore from 'store/useSearchStore'
 import useDashboardStore from 'store/useDashboardStore'
 
@@ -57,11 +59,14 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
         <div className={style.texts}>
           <h1 className={style.name}>{ReactHtmlParser(data.name)}</h1>
           {!!data.publisher && <p className={style.publisher}>{data.publisher}</p>}
-          {!!data.author && <p className={style.author}>{data.author}</p>}
+          {!!data.status && <p className={style.status}>{capitalize(data.status)}</p>}
+          <p>
+            {!!data.author && <p className={style.author}>{data.author}</p>}
+            {!!data.artist && <p className={style.artist}>{data.artist}</p>}
+          </p>
           {!!data.genres && (
             <p className={style.genre}>{!!data.genres && JSON.parse(data.genres).join(', ')}</p>
           )}
-          {!!data.status && <p className={style.status}>{data.status}</p>}
           {extended && (
             <>
               <div className={style.chapters}>

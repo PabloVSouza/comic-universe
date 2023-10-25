@@ -10,6 +10,14 @@
   &:hover {
     background: var(--colorHover);
     color: var(--colorTextHighlight);
+    .content {
+      .texts {
+        .author,
+        .artist {
+          border: 1px solid var(--colorTextHighlight);
+        }
+      }
+    }
   }
 
   .content {
@@ -29,6 +37,14 @@
         text-align: center;
         width: 100%;
       }
+      .author,
+      .artist {
+        display: inline-block;
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid var(--colorText);
+        border-radius: $radius-default;
+      }
       .publisher {
         white-space: nowrap;
         font-size: 10px;
@@ -40,6 +56,11 @@
       }
       .status {
         text-align: center;
+        background: $green-transparent;
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: $radius-default;
+        margin: 10px 0;
       }
       .chapters {
         margin: 20px 0;
@@ -94,5 +115,14 @@
   &:hover {
     background: var(--colorBackground);
     color: var(--colorText);
+
+    .content {
+      .texts {
+        .author,
+        .artist {
+          border: 1px solid var(--colorText);
+        }
+      }
+    }
   }
 }

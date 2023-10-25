@@ -1,4 +1,6 @@
 export default class enUS implements Lang {
+  langName: string = 'en'
+
   General: GenerlLang = {
     inDevelopment: 'Function in development'
   }

@@ -74,6 +74,7 @@ interface UsersLang {
 }
 
 interface Lang {
+  langName: string
   General: GenerlLang
   Dashboard: DashboardLang
   DownloadComic: DownloadComicLang

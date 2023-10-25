@@ -1,6 +1,7 @@
 import { create, StoreApi } from 'zustand'
 import useDashboardStore from './useDashboardStore'
 import usePersistStore from './usePersistStore'
+import useLang from 'lang'
 
 const { invoke } = window.Electron.ipcRenderer
 
@@ -29,7 +30,10 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
     const { repo } = usePersistStore.getState()
     const { setLoading } = useSearchStore.getState()
     setLoading(true)
-    const list = await invoke('getList', { repo })
+
+    const lang = useLang()
+
+    const list = await invoke('getList', { repo, data: { language: lang.langName } })
 
     return new Promise((resolve) => {
       set((state: useSearchStore) => ({ ...state, list }))
@@ -42,7 +46,10 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
     const { repo } = usePersistStore.getState()
     const { setLoading } = useSearchStore.getState()
     setLoading(true)
-    const list = await invoke('search', { repo, data: { search } })
+
+    const lang = useLang()
+
+    const list = await invoke('search', { repo, data: { search, language: lang.langName } })
 
     return new Promise((resolve) => {
       set((state: useSearchStore) => ({ ...state, list }))
@@ -57,7 +64,9 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
     const { list } = useSearchStore.getState()
     const { siteId } = search
 
-    const data = await invoke('getDetails', { repo, data: search })
+    const lang = useLang()
+
+    const data = await invoke('getDetails', { repo, data: { ...search, language: lang.langName } })
 
     const index = list.findIndex((val) => val.siteId == siteId)
 
@@ -73,7 +82,12 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
   getChapters: async (siteId): Promise<void> => {
     const { repo } = usePersistStore.getState()
 
-    const chapters = await invoke('getChapters', { repo, data: { siteId } })
+    const lang = useLang()
+
+    const chapters = await invoke('getChapters', {
+      repo,
+      data: { siteId, language: lang.langName }
+    })
 
     return new Promise((resolve) => {
       set((state: useSearchStore) => ({ ...state, chapters }))

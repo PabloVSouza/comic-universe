@@ -1,4 +1,6 @@
 export default class ptBR implements Lang {
+  langName: string = 'pt-br'
+
   General: GenerlLang = {
     inDevelopment: 'Função em desenvolvimento'
   }

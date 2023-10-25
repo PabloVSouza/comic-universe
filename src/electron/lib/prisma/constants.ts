@@ -60,7 +60,7 @@ export class PrismaConstants {
     this.platformName = getPlatformName()
     this.dbPath = `${this.path}/db/database.db`
     this.dbUrl = is.dev
-      ? 'file:../database.db'
+      ? 'file:../database.db?socket_timeout=10&connection_limit=1'
       : `file:${this.dbPath}?socket_timeout=10&connection_limit=1`
     this.extraResourcesPath = appPath
     this.mePath = path.join(

@@ -4,6 +4,6 @@ out
 *.log*
 *.db
 *.db-journal
-*.env
+.env
 **/.DS_Store
 

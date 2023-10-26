@@ -1,3 +1,3 @@
-provider: generic
-url: https://example.com/auto-updates
+provider: github
+url: https://github.com/pablovsouza/comic-universe
 updaterCacheDirName: comic-universe-updater

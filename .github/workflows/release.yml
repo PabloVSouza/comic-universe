@@ -39,6 +39,7 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v1
+        permissions: write-all
         with:
           draft: true
           files: |

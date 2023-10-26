@@ -42,9 +42,6 @@ jobs:
         with:
           permissions: write-all
           draft: true
-          env:
-            GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-            GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           files: |
             dist/*.exe
             dist/*.zip
@@ -56,3 +53,6 @@ jobs:
             dist/*.tar.gz
             dist/*.yml
             dist/*.blockmap
+          env:
+            GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+            GH_TOKEN: { { secrets.ACCESS_TOKEN } }

@@ -152,7 +152,7 @@ const Reader = (): JSX.Element => {
         {!!pages?.length && (
           <ZoomWindow
             mousePos={mousePos}
-            image={getPath(pages[readProgress.page] ?? pages[0])}
+            image={getPath(pages[readProgress.page - 1])}
             visible={zoomVisible}
           />
         )}

@@ -31,11 +31,11 @@ jobs:
 
       - name: build-mac
         if: matrix.os == 'macos-latest'
-        run: npm run build:mac
+        run: yarn run build:mac
 
       - name: build-win
         if: matrix.os == 'windows-latest'
-        run: npm run build:win
+        run: yarn run build:win
 
       - name: release
         uses: softprops/action-gh-release@v1

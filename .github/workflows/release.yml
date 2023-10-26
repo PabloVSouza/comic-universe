@@ -23,7 +23,7 @@ jobs:
           node-version: 18
 
       - name: Install Dependencies
-        run: npm install --force
+        run: yarn
 
       - name: build-linux
         if: matrix.os == 'ubuntu-latest'

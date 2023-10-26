@@ -39,8 +39,8 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v1
+        permissions: write-all
         with:
-          permissions: write-all
           draft: true
           files: |
             dist/*.exe
@@ -54,4 +54,4 @@ jobs:
             dist/*.yml
             dist/*.blockmap
         env:
-          GH_TOKEN: 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
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}

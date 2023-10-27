@@ -1,4 +1,4 @@
-import Window from 'components/Window'
+import Window from 'components/Window/Window'
 import style from './style.module.scss'
 
 const ModalMessage = ({ text, ...props }: { text: string }): JSX.Element => {

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import style from './style.module.scss'
-import Button from 'components/Button'
+import Button from 'components/Button/Button'
 import classNames from 'classnames'
 
 interface Window {

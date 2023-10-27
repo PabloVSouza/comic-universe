@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
-import DashboardHeader from './Header'
-import DashboardNav from './Nav'
-import DashboardList from './List'
+import DashboardHeader from './HomeDashboardHeader/HomeDashboardHeader'
+import DashboardNav from './HomeDashboardNavBar/HomeDashboardNavBar'
+import DashboardList from './HomeDashboardComicList/HomeDashboardComicList'
 
 import useDashboardStore from 'store/useDashboardStore'
 import useDownloadStore from 'store/useDownloadStore'
@@ -11,7 +11,7 @@ import usePersistStore from 'store/usePersistStore'
 
 import style from './style.module.scss'
 
-const ComicDashboard = (): JSX.Element => {
+const HomeDashboard = (): JSX.Element => {
   const navigate = useNavigate()
 
   const { comic, list, setComic } = useDashboardStore()
@@ -43,4 +43,4 @@ const ComicDashboard = (): JSX.Element => {
   )
 }
 
-export default ComicDashboard
+export default HomeDashboard

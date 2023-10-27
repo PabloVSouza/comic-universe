@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom'
 
-import Cover from 'components/Cover'
+import Cover from 'components/Cover/Cover'
 import ModalSearch from './Search'
 import ModalAbout from './About'
 import ModalSettings from './Settings'

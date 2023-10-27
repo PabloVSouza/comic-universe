@@ -1,14 +1,14 @@
 import { useState, useMemo, useEffect } from 'react'
 import debounce from 'lodash.debounce'
 import classNames from 'classnames'
-import Window from 'components/Window'
+import Window from 'components/Window/Window'
 import SearchComicList from './components/List'
 import Select, { SingleValue } from 'react-select'
 import useSearchStore from 'store/useSearchStore'
 import usePersistStore from 'store/usePersistStore'
 import useLang from 'lang'
 import style from './style.module.scss'
-import Loading from 'components/Loading'
+import Loading from 'components/LoadingOverlay/LoadingOverlay'
 
 const ModalSearch = (): JSX.Element => {
   const [searchText, setSearchText] = useState('')

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
-import Button from 'components/Button'
+import Button from 'components/Button/Button'
 
 import useLang from 'lang'
 
@@ -12,7 +12,7 @@ import style from './style.module.scss'
 import downloadIcon from 'assets/download-icon-2.svg'
 import comicBook from 'assets/comic-book.svg'
 
-const DashboardNav = (): JSX.Element => {
+const HomeDashboardNavBar = (): JSX.Element => {
   const navigate = useNavigate()
 
   const texts = useLang()
@@ -68,4 +68,4 @@ const DashboardNav = (): JSX.Element => {
   )
 }
 
-export default DashboardNav
+export default HomeDashboardNavBar

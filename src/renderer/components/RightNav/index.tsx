@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 
 import classNames from 'classnames'
 
-import Cover from 'components/Cover'
+import Cover from 'components/Cover/Cover'
 
 import useLang from 'lang'
 

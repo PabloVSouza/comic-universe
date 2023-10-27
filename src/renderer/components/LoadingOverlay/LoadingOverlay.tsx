@@ -1,4 +1,4 @@
-import Cover from 'components/Cover'
+import Cover from 'components/Cover/Cover'
 import Image from 'components/Image'
 
 import style from './style.module.scss'
@@ -14,7 +14,7 @@ interface Loading {
   }
 }
 
-const Loading = ({ isLoading, message, progress }: Loading): JSX.Element => {
+const LoadingOverlay = ({ isLoading, message, progress }: Loading): JSX.Element => {
   const totalProgress = progress ? Math.round((100 / progress.total) * progress.current) : 0
   return (
     <Cover visible={isLoading} index="999">
@@ -34,4 +34,4 @@ const Loading = ({ isLoading, message, progress }: Loading): JSX.Element => {
   )
 }
 
-export default Loading
+export default LoadingOverlay

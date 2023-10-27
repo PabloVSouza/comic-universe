@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 import useLang from 'lang'
 
-import Button from 'components/Button'
+import Button from 'components/Button/Button'
 
 import useDashboardStore from 'store/useDashboardStore'
 
@@ -14,7 +14,7 @@ import bookStack from 'assets/book-stack.svg'
 import useReaderStore from 'store/useReaderStore'
 import usePersistStore from 'store/usePersistStore'
 
-const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element => {
+const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.Element => {
   const navigate = useNavigate()
 
   const texts = useLang()
@@ -92,4 +92,4 @@ const DashboardListItem = ({ item }: { item: ChapterInterface }): JSX.Element =>
   )
 }
 
-export default DashboardListItem
+export default HomeDashboardComicListItem

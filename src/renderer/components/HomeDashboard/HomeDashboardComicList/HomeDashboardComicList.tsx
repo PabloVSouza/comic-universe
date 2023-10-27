@@ -1,10 +1,10 @@
-import DashboardListItem from './Item'
+import DashboardListItem from './HomeComicListItem/HomeDashboardListItem'
 
 import useDashboardStore from 'store/useDashboardStore'
 
 import style from './style.module.scss'
 
-const DashboardList = (): JSX.Element => {
+const HomeDashboardComicList = (): JSX.Element => {
   const { comic } = useDashboardStore()
 
   return (
@@ -16,4 +16,4 @@ const DashboardList = (): JSX.Element => {
   )
 }
 
-export default DashboardList
+export default HomeDashboardComicList

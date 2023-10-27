@@ -9,7 +9,7 @@ import useDashboardStore from 'store/useDashboardStore'
 import useLang from 'lang'
 
 import Image from 'components/Image'
-import Button from 'components/Button'
+import Button from 'components/Button/Button'
 
 import style from './style.module.scss'
 

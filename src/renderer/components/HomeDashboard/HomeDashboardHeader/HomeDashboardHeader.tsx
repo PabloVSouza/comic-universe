@@ -8,7 +8,7 @@ import useGlobalStore from 'store/useGlobalStore'
 
 import style from './style.module.scss'
 
-const DashboardHeader = (): JSX.Element => {
+const HomeDashboardHeader = (): JSX.Element => {
   const { appPath } = useGlobalStore()
 
   const { comic } = useDashboardStore()
@@ -41,4 +41,4 @@ const DashboardHeader = (): JSX.Element => {
   )
 }
 
-export default DashboardHeader
+export default HomeDashboardHeader

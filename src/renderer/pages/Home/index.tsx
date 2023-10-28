@@ -1,10 +1,10 @@
 import { useSearchParams } from 'react-router-dom'
 
 import Window from 'components/Window/Window'
-import TopBar from '../../components/TopBar'
-import ComicList from '../../components/ComicList'
+import TopBar from '../../components/HomeTopBar/HomeTopBar'
+import ComicList from '../../components/HomeComicList/HomeComicList'
 import ComicDashboard from '../../components/HomeDashboard/HomeDashboard'
-import RightNav from '../../components/RightNav'
+import RightNav from '../../components/UserNav/UserNav'
 import Modal from 'pages/Modal'
 
 import style from './style.module.scss'

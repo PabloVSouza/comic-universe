@@ -5,7 +5,7 @@ import style from './style.module.scss'
 import downloadIcon from 'assets/download-icon.svg'
 import useGlobalStore from 'store/useGlobalStore'
 
-const TopBar = (): JSX.Element => {
+const HomeTopBar = (): JSX.Element => {
   const { toggleMenu, menuVisible } = useGlobalStore((state) => state)
 
   return (
@@ -32,4 +32,4 @@ const TopBar = (): JSX.Element => {
   )
 }
 
-export default TopBar
+export default HomeTopBar

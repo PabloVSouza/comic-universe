@@ -1,9 +1,9 @@
-import ComicListItem from './Item'
+import ComicListItem from './HomeComicListItem/HomeComicListItem'
 import useDashboardStore from 'store/useDashboardStore'
 
 import style from './style.module.scss'
 
-const ComicList = (): JSX.Element => {
+const HomeComicList = (): JSX.Element => {
   const { list } = useDashboardStore()
   return (
     <ul className={style.comicList}>
@@ -14,4 +14,4 @@ const ComicList = (): JSX.Element => {
   )
 }
 
-export default ComicList
+export default HomeComicList

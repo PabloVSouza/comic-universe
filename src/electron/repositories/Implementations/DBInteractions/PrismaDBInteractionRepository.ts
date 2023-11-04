@@ -1,4 +1,6 @@
-import { PrismaInitializer } from '../../../lib/prisma'
+import { is } from '@electron-toolkit/utils'
+import path from 'path'
+import { PrismaInitializer } from 'prisma-packaged'
 import { Chapter, Comic, PrismaClient, User } from '@prisma/client'
 import {
   IDBInteractionsRepository,
@@ -10,8 +12,15 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
   private db: PrismaClient
 
   constructor(private data: IDBInteractionsRepositoryInit) {
-    const prismaInitializer = new PrismaInitializer(this.data.path)
+    const cnnParams = '?socket_timeout=10&connection_limit=1'
+    const prodDb = `file:${path.join(this.data.path, 'db', 'database.db')}${cnnParams}`
+    const devDb = `file:../database.db${cnnParams}`
+
+    const dbPath = is.dev ? devDb : prodDb
+
+    const prismaInitializer = new PrismaInitializer(dbPath, '20231025184053_added_languages')
     this.db = prismaInitializer.prisma
+    prismaInitializer.runMigration()
   }
 
   methods: IDBInteractionsMethods = {

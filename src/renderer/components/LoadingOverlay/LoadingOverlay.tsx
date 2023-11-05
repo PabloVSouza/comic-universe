@@ -21,14 +21,14 @@ const LoadingOverlay = ({ isLoading, message, progress }: Loading): JSX.Element 
       {message ? (
         <div className={style.message}>
           <h1>{message}</h1>
-          <Image pure src={imgLoading} alt="" />
+          <Image src={imgLoading} alt="" />
           <div className={style.progressBar}>
             <p>{totalProgress}%</p>
             <div className={style.bar} style={{ width: `${totalProgress}%` }} />
           </div>
         </div>
       ) : (
-        <Image pure src={imgLoading} alt="" />
+        <Image src={imgLoading} alt="" />
       )}
     </Cover>
   )

@@ -3,7 +3,7 @@ import slugify from 'slugify'
 import ReactHtmlParser from 'react-html-parser'
 
 import ProgressBar from 'components/ProgressBar/ProgressBar'
-import Image from 'components/Image'
+import Image from 'components/Image/Image'
 
 import loadingImage from 'assets/OldLoading.gif'
 

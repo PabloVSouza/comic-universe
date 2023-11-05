@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import classNames from 'classnames'
-import Image from 'components/Image'
+import Image from 'components/Image/Image'
 
 import style from './ZoomWindow.module.scss'
 
@@ -27,7 +27,7 @@ interface ZoomPosition {
   height: string
 }
 
-const ZoomWindow = ({ mousePos, image, visible }: ZoomWindow): JSX.Element => {
+const ReaderZoomWindow = ({ mousePos, image, visible }: ZoomWindow): JSX.Element => {
   const windowRef = useRef(null)
 
   const [zoomFactor, setZoomFactor] = useState(2)
@@ -82,4 +82,4 @@ const ZoomWindow = ({ mousePos, image, visible }: ZoomWindow): JSX.Element => {
   )
 }
 
-export default ZoomWindow
+export default ReaderZoomWindow

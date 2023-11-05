@@ -49,18 +49,13 @@ const Image = ({
   }
 
   if (lazy) {
-    const onClick = (): void => {
-      setIsLoading(isLoading ? 0 : 1)
-    }
-
     const placeHolderProps = {
       ...props,
       src: placeholderSrc,
       alt: 'Image Placeholder',
       className: placeholderClassName,
       style: placeholderStyle,
-      ref: placeholderRef,
-      onClick
+      ref: placeholderRef
     }
 
     const lazyImageProps = {
@@ -68,8 +63,7 @@ const Image = ({
       style,
       src,
       className,
-      alt,
-      onClick
+      alt
     }
 
     const loadingProps = {

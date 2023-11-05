@@ -1,7 +1,7 @@
 import slugify from 'slugify'
 import HtmlParser from 'react-html-parser'
 
-import Image from 'components/Image'
+import Image from 'components/Image/Image'
 
 import useDashboardStore from 'store/useDashboardStore'
 import useGlobalStore from 'store/useGlobalStore'

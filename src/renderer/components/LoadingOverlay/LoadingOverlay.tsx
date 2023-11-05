@@ -1,5 +1,5 @@
 import Cover from 'components/Cover/Cover'
-import Image from 'components/Image'
+import Image from 'components/Image/Image'
 
 import style from './style.module.scss'
 

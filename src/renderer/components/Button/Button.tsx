@@ -1,6 +1,6 @@
 import { ReactElement, ButtonHTMLAttributes, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Image from 'components/Image'
+import Image from 'components/Image/Image'
 import classNames from 'classnames'
 
 import style from './style.module.scss'

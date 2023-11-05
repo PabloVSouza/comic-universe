@@ -1,5 +1,5 @@
 import Window from 'components/Window/Window'
-import Image from 'components/Image'
+import Image from 'components/Image/Image'
 
 import style from './style.module.scss'
 

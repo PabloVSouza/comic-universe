@@ -4,7 +4,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
 import classNames from 'classnames'
 
-import Image from 'components/Image'
+import Image from 'components/Image/Image'
 import useLang from 'lang'
 
 import usePersistStore from 'store/usePersistStore'

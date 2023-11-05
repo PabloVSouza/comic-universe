@@ -14,7 +14,7 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
   constructor(private data: IDBInteractionsRepositoryInit) {
     const cnnParams = '?socket_timeout=10&connection_limit=1'
     const prodDb = `file:${path.join(this.data.path, 'db', 'database.db')}${cnnParams}`
-    const devDb = `file:../database.db${cnnParams}`
+    const devDb = `file:./database.db${cnnParams}`
 
     const dbPath = is.dev ? devDb : prodDb
 

@@ -10,6 +10,8 @@ import ZoomWindow, { MousePos } from './components/ZoomWindow'
 import useReaderStore from 'store/useReaderStore'
 import useDashboardStore from 'store/useDashboardStore'
 
+import oldLoading from 'assets/OldLoading.gif'
+
 const Reader = (): JSX.Element => {
   const navigate = useNavigate()
 
@@ -159,14 +161,20 @@ const Reader = (): JSX.Element => {
         <div className={style.pages} style={position}>
           {pages?.map((currentPage) => (
             <div key={currentPage.path} className={style.page}>
-              <div className={style.buttons}>
+              {/* <div className={style.buttons}>
                 <button
                   className={style.btnPrevious}
                   onClick={(): Promise<void> => previousPage()}
                 />
                 <button className={style.btnNext} onClick={(): Promise<void> => nextPage()} />
-              </div>
-              <Image className={style.Image} src={getPath(currentPage)} />
+              </div> */}
+              <Image
+                className={style.Image}
+                src={getPath(currentPage)}
+                lazy
+                placeholderSrc={oldLoading}
+                placeholderClassName={style.ImageLoading}
+              />
             </div>
           ))}
         </div>

@@ -34,6 +34,7 @@ export default defineConfig({
         assets: resolve('src/renderer/assets'),
         components: resolve('src/renderer/components'),
         lang: resolve('src/renderer/lang'),
+        hooks: resolve('src/renderer/hooks'),
         pages: resolve('src/renderer/pages'),
         routes: resolve('src/renderer/routes'),
         scss: resolve('src/renderer/scss'),

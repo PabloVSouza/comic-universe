@@ -4754,12 +4754,7 @@ react-select@^5.7.7:
     react-transition-group "^4.3.0"
     use-isomorphic-layout-effect "^1.1.2"
 
-react-simple-img@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/react-simple-img/-/react-simple-img-3.0.0.tgz#e56dc2f318e9fab3fe5d95a429afd799d1a90448"
-  integrity sha512-I0sG/GgY9c+04BgWf1YRlipWBQxR3oG2s/bagU8EO7zals3/Vkfk1PJMeYh/wHfjxJtUmal+y7HWEBm4MzXVsQ==
-
-react-transition-group@^4.3.0:
+react-transition-group@^4.3.0, react-transition-group@^4.4.5:
   version "4.4.5"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.5.tgz#e53d4e3f3344da8521489fbef8f2581d42becdd1"
   integrity sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==

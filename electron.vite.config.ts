@@ -23,7 +23,7 @@ export default defineConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "@/scss/style.scss";`
+          additionalData: `@import "@/scss/style.scss"; @import "@/scss/base/fonts/roboto/roboto.scss";`
         }
       }
     },

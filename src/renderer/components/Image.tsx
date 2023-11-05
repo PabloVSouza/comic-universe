@@ -1,14 +1,20 @@
-import { CSSProperties, ImgHTMLAttributes } from 'react'
-import { SimpleImg } from 'react-simple-img'
+import { ReactElement, ImgHTMLAttributes } from 'react'
+import { SimpleImg, Props } from 'react-simple-img'
 
-interface Image extends ImgHTMLAttributes<unknown> {
-  placeholder?: string
+type TImageComponent = {
+  src: string
   pure?: boolean
   svg?: boolean
+  className?: string
 }
 
-const Image = ({ placeholder, pure, src, svg, ...props }: Partial<Image>): JSX.Element => {
+type TImageProps =
+  | (TImageComponent & ImgHTMLAttributes<HTMLImageElement>)
+  | (TImageComponent & Props)
+
+const Image = ({ pure, src, svg, className, ...props }: Partial<TImageProps>): ReactElement => {
   let Comp: typeof SimpleImg | string
+
   Comp = SimpleImg
   if (pure) Comp = 'img'
   if (svg) Comp = 'div'
@@ -19,17 +25,13 @@ const Image = ({ placeholder, pure, src, svg, ...props }: Partial<Image>): JSX.E
     WebkitMaskPosition: 'center',
     WebkitMaskRepeat: 'no-repeat',
     WebkitMaskOrigin: 'content-box'
-  } as CSSProperties
+  }
 
   if (src)
     return (
-      <Comp
-        key={src}
-        placeholder={placeholder ?? (false || (!pure ? false : ''))}
-        src={src}
-        style={svg ? iconStyle : undefined}
-        {...props}
-      />
+      <div className={className} {...props}>
+        <Comp src={src} style={svg ? iconStyle : undefined} />
+      </div>
     )
   return <></>
 }

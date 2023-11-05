@@ -29,7 +29,7 @@
   }
   .cover {
     flex-shrink: 0;
-    height: 100%;
+    height: 100% !important;
     aspect-ratio: 10/16;
     object-fit: cover;
     object-position: 50% 50%;

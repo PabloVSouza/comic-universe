@@ -35,7 +35,9 @@
     }
   }
   .cover {
-    height: 100%;
-    object-fit: fill;
+    height: 100% !important;
+    img {
+      object-fit: fill;
+    }
   }
 }

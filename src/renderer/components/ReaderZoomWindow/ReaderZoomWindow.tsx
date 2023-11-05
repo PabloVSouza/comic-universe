@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import classNames from 'classnames'
 import Image from 'components/Image/Image'
 
-import style from './ZoomWindow.module.scss'
+import style from './ReaderZoomWindow.module.scss'
 
 export interface MousePos {
   x: number

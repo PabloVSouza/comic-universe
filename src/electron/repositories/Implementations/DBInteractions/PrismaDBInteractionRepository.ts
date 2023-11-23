@@ -19,6 +19,7 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
     const dbPath = is.dev ? devDb : prodDb
 
     const prismaInitializer = new PrismaInitializer(dbPath, '20231025184053_added_languages')
+    console.log(prismaInitializer.dbUrl)
     this.db = prismaInitializer.prisma
     prismaInitializer.runMigration()
   }

@@ -1,21 +1,19 @@
-import { ReactElement, ButtonHTMLAttributes, ReactNode } from 'react'
+import { ReactElement } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Image from 'components/Image/Image'
 import classNames from 'classnames'
-
-import style from './style.module.scss'
+import style from './Button.module.scss'
 
 type TButton = {
-  active: boolean
-  className: string
-  children: ReactNode
-  color: string
-  icon: string
-  onClick: () => void
-  size: string
-  theme: string
-  to: string
-} & ButtonHTMLAttributes<HTMLButtonElement>
+  active?: boolean
+  className?: string
+  children?: React.ReactNode
+  color?: 'white' | 'black' | 'green' | 'red' | 'blue' | 'yellow'
+  icon?: string
+  onClick?: () => void
+  size?: 'xxs' | 'xs' | 's' | 'm' | 'l' | 'xl'
+  theme?: 'pure' | 'burger' | 'resize' | 'close' | 'minimize'
+  to?: string
+} & React.ComponentProps<'button'>
 
 const Button = ({
   active,
@@ -28,8 +26,9 @@ const Button = ({
   theme,
   to,
   ...props
-}: Partial<TButton>): ReactElement => {
+}: TButton): ReactElement => {
   const navigate = useNavigate()
+
   const handleClick = (): void => {
     if (onClick) onClick()
     if (to) navigate(to)
@@ -46,6 +45,8 @@ const Button = ({
     )
   }
 
+  const iconStyleProps = { style: icon ? { WebkitMaskImage: `url(${icon})` } : undefined }
+
   const customProps = {
     onClick: () => handleClick(),
     ...classProps,
@@ -54,7 +55,7 @@ const Button = ({
 
   return (
     <button {...customProps}>
-      <Image className={style.icon} src={icon} svg />
+      <div className={style.icon} {...iconStyleProps} />
       {children}
     </button>
   )

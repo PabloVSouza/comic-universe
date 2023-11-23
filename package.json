@@ -25,6 +25,7 @@
     "@apollo/client": "^3.8.7",
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^2.0.1",
+    "@electron/asar": "^3.2.7",
     "@prisma/client": "5.5.2",
     "axios": "^1.6.0",
     "cheerio": "1.0.0-rc.12",

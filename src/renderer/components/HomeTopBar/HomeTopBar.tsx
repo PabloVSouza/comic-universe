@@ -24,7 +24,7 @@ const HomeTopBar = (): JSX.Element => {
           className={style.button}
           size="xs"
           active={menuVisible}
-          theme="burguer"
+          theme="burger"
           onClick={(): void => toggleMenu()}
         />
       </div>

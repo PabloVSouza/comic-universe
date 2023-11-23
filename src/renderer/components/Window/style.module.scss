@@ -19,6 +19,12 @@
     background: var(--colorBackground);
     flex-shrink: 0;
   }
+  .buttonArea {
+    width: 100%;
+    height: 30px;
+    top: 0;
+    position: absolute;
+  }
 
   .content {
     flex-grow: 1;

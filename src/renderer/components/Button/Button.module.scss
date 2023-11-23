@@ -1,13 +1,8 @@
-$bgWhite: rgb(255, 255, 255);
-$green: rgba(0, 255, 0, 0.4);
 .Button {
   cursor: pointer;
   position: relative;
   overflow: hidden;
-
-  img {
-    height: 100%;
-  }
+  -webkit-app-region: no-drag;
 
   //sizes
   &.size-xxs {
@@ -87,14 +82,7 @@ $green: rgba(0, 255, 0, 0.4);
     aspect-ratio: 1/1;
     padding: 5px;
     border-radius: $radius-default;
-
-    .icon {
-      height: 100%;
-      width: 100%;
-      aspect-ratio: 1/1;
-      background: var(--colorText);
-      opacity: 0.8;
-    }
+    height: 100%;
 
     &:hover {
       background: var(--colorHover);
@@ -121,8 +109,6 @@ $green: rgba(0, 255, 0, 0.4);
       background: var(--colorText);
       border-radius: 5px;
       position: relative;
-      -webkit-mask-image: unset !important;
-      mask-image: unset !important;
 
       &::before,
       &::after {
@@ -170,18 +156,29 @@ $green: rgba(0, 255, 0, 0.4);
     }
   }
 
-  &.closeButton {
-    $closeButtonDefaultBorder: 1px solid var(--colorBackground);
-
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 7;
-    width: 40px;
+  &.resize {
+    width: 30px;
     height: 30px;
+    background: none;
+    border-bottom-right-radius: $radius-default;
+    color: var(--colorText);
+    border: none;
+
+    &::after {
+      content: '>';
+    }
+    &:hover {
+      color: var(--colorTextHighlight);
+      background: var(--colorHover);
+    }
+  }
+
+  &.close {
+    $closeButtonDefaultBorder: 1px solid var(--windowBackground);
+    width: 40px;
+    height: 100%;
     border: none;
     border-radius: unset;
-    border-bottom-left-radius: $radius-default;
     color: var(--colorText);
     background-color: $red-transparent;
     &::after {
@@ -193,43 +190,22 @@ $green: rgba(0, 255, 0, 0.4);
     }
   }
 
-  &.roundedSquare,
-  &.roundedRectangle {
+  &.minimize {
+    $closeButtonDefaultBorder: 1px solid var(--windowBackground);
+    width: 40px;
+    height: 30px;
     border: none;
-    box-shadow: 5px 5px 9px -7px rgba(0, 0, 0, 0.6);
-    background: $white-transparent;
-    border-radius: $radius-default;
-
-    img {
-      height: 100%;
+    border-radius: unset;
+    color: var(--colorText);
+    background-color: $yellow-transparent;
+    &::after {
+      content: '-----';
+      letter-spacing: -1px;
     }
 
     &:hover {
-      background-color: $white;
-    }
-  }
-
-  &.roundedSquare {
-    padding: 5px;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-
-    img {
-      width: 100%;
-    }
-  }
-
-  &.roundedRectangle {
-    padding: 10px;
-    aspect-ratio: unset;
-    height: 45px;
-    img {
-      margin-left: 10px;
-      height: 100%;
-      // position: absolute;
-      background-color: $bgWhite;
-      // right: 0;
-      padding: 10px;
+      background-color: $yellow;
+      color: var(--colorTextHighlight);
     }
   }
 }

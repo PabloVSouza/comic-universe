@@ -72,11 +72,9 @@ const Image = ({
       onLoad: (): void => setIsLoading(0)
     }
 
-    const addEndListener = (node, done): void => {
+    const addEndListener = (node: HTMLElement, done: () => void): void => {
       node.addEventListener('transitionend', done, false)
     }
-
-    console.log(styling)
 
     return (
       <>

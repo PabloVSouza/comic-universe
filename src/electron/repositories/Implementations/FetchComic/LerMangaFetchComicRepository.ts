@@ -55,7 +55,6 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
           .map((_id, val) => {
             const comicData = parsedData(val).children('.film-poster')
 
-            console.log(comicData.toString())
             const name = parsedData(val).find('.film-name').children('a').contents().toString()
             const siteId = comicData.find('.film-poster-ahref').prop('href')
             const siteLink = siteId

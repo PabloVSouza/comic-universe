@@ -38,29 +38,41 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
 
     search: async ({ search }): Promise<ComicInterface[]> => {
       const searchString = qs.stringify({
-        action: 'wp-manga-search-manga',
-        title: search
+        s: search
       })
 
       let res: ComicInterface[]
 
       try {
-        const { data } = await this.axios.get(`${this.url}/wp-admin/admin-ajax.php?${searchString}`)
+        console.log(`${this.url}/?${searchString}`)
+        const { data } = await this.axios.get(`${this.url}/?${searchString}`)
 
-        const list = JSON.parse(data).data
+        const parsedData = cheerio.load(data)
 
-        res = list.slice(1).reduce((previousComic, comic) => {
-          return [
-            ...previousComic,
-            {
-              siteId: comic.url,
-              name: comic.title,
-              cover: comic.thumb,
-              siteLink: comic.url,
-              type: 'manga'
+        const resultElements = parsedData('.flw-item')
+
+        const list = resultElements
+          .map((_id, val) => {
+            const comicData = parsedData(val).children('.film-poster')
+
+            console.log(comicData.toString())
+            const name = parsedData(val).find('.film-name').children('a').contents().toString()
+            const siteId = comicData.find('.film-poster-ahref').prop('href')
+            const siteLink = siteId
+            const cover = comicData.find('.film-poster-img').prop('src')
+            const type = 'manga'
+
+            return {
+              name,
+              siteId,
+              siteLink,
+              cover,
+              type
             }
-          ]
-        }, [])
+          })
+          .toArray()
+
+        res = list as ComicInterface[]
       } catch (e) {
         console.log(e)
         res = []
@@ -111,7 +123,7 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
               number: parsedData(val).prop('data-id-cap'),
               siteLink: parsedData(val).find('a').prop('href'),
               date: parsedData(val).find('small').children('small').text()
-            } as ChapterInterface)
+            }) as ChapterInterface
         )
         .toArray()
 

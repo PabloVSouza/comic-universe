@@ -44,7 +44,6 @@ export class LerMangaFetchComicRepository implements IFetchComicRepository {
       let res: ComicInterface[]
 
       try {
-        console.log(`${this.url}/?${searchString}`)
         const { data } = await this.axios.get(`${this.url}/?${searchString}`)
 
         const parsedData = cheerio.load(data)

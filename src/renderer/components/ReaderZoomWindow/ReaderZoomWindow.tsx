@@ -77,7 +77,7 @@ const ReaderZoomWindow = ({ mousePos, image, visible }: ZoomWindow): JSX.Element
       style={windowPosition()}
       ref={windowRef}
     >
-      <Image src={image} className={style.zoomedImage} style={zoomPosition()} lazy />
+      <Image src={image} className={style.zoomedImage} style={zoomPosition()} />
     </div>
   )
 }

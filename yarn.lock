@@ -3996,11 +3996,12 @@ prettier@^3.0.3:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.1.0.tgz#c6d16474a5f764ea1a4a373c593b779697744d5e"
   integrity sha512-TQLvXjq5IAibjh8EpBIkNKxO749UEWABoiIZehEPiY4GNpVdhaFKqSTu+QrlU6D2dPAfubRmtJTi4K4YkQ5eXw==
 
-prisma-packaged@^0.8.7:
-  version "0.8.7"
-  resolved "https://registry.yarnpkg.com/prisma-packaged/-/prisma-packaged-0.8.7.tgz#2e5026f8cd6477cd19af19a7989ad34ee785ea71"
-  integrity sha512-Nsrw1eIq6oylrUDRPy5uxeHFKtnHUP1DmsgPYd7lZwkfIyU3NUpI+Ufw0uftYiD3qFrV15FBOzqdfdqjGbRUNA==
+prisma-packaged@^0.8.8:
+  version "0.8.8"
+  resolved "https://registry.yarnpkg.com/prisma-packaged/-/prisma-packaged-0.8.8.tgz#6b684889ad6c0dfc8a05ae49a6fd487686d94a0c"
+  integrity sha512-3fpayfNFImaA+64kRjAnpqN3sLzfzA7jaOOulgATsqqIBY9FfsUKfKipsAYjgFbj43S+xZkfT1LfDPpCO4FVAg==
   dependencies:
+    "@electron/asar" "^3.2.7"
     copyfiles "^2.4.1"
     express "^4.18.2"
     tsc "^2.0.4"

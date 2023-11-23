@@ -35,7 +35,7 @@
     "graphql": "^16.8.1",
     "lodash.debounce": "^4.0.8",
     "prisma": "^5.5.2",
-    "prisma-packaged": "^0.8.7",
+    "prisma-packaged": "^0.8.8",
     "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-confirm-alert": "^3.0.6",

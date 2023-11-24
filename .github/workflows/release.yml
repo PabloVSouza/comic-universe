@@ -2,16 +2,16 @@ name: Build/release Electron app
 
 on:
   push:
-    tags:
-      - v*.*.*
+    branches: staging
 
 jobs:
   release:
     runs-on: ${{ matrix.os }}
+    permissions: write-all
 
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
       - name: Check out Git repository
@@ -39,7 +39,6 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v1
-        permissions: write-all
         with:
           draft: true
           files: |

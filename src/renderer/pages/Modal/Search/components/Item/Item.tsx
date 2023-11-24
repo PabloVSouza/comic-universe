@@ -8,8 +8,8 @@ import useDashboardStore from 'store/useDashboardStore'
 
 import useLang from 'lang'
 
-import Image from 'components/Image'
-import Button from 'components/Button'
+import Image from 'components/Image/Image'
+import Button from 'components/Button/Button'
 
 import style from './style.module.scss'
 

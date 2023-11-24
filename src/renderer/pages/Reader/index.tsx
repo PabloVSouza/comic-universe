@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import slugify from 'slugify'
-import Image from 'components/Image'
+import Image from 'components/Image/Image'
 
 import useGlobalStore from 'store/useGlobalStore'
 
 import style from './style.module.scss'
-import ZoomWindow, { MousePos } from './components/ZoomWindow'
+import ReaderZoomWindow, { MousePos } from '../../components/ReaderZoomWindow/ReaderZoomWindow'
 import useReaderStore from 'store/useReaderStore'
 import useDashboardStore from 'store/useDashboardStore'
+
+import oldLoading from 'assets/OldLoading.gif'
 
 const Reader = (): JSX.Element => {
   const navigate = useNavigate()
@@ -150,7 +152,7 @@ const Reader = (): JSX.Element => {
         onContextMenu={(): void => setZoomVisible(!zoomVisible)}
       >
         {!!pages?.length && (
-          <ZoomWindow
+          <ReaderZoomWindow
             mousePos={mousePos}
             image={getPath(pages[readProgress.page - 1])}
             visible={zoomVisible}
@@ -166,7 +168,13 @@ const Reader = (): JSX.Element => {
                 />
                 <button className={style.btnNext} onClick={(): Promise<void> => nextPage()} />
               </div>
-              <Image className={style.Image} src={getPath(currentPage)} />
+              <Image
+                className={style.Image}
+                src={getPath(currentPage)}
+                lazy
+                placeholderSrc={oldLoading}
+                placeholderClassName={style.ImageLoading}
+              />
             </div>
           ))}
         </div>

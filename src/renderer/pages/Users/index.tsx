@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
-import Window from 'components/Window'
-import Button from 'components/Button'
-import UsersList from './components/UsersList'
+import Window from 'components/Window/Window'
+import Button from 'components/Button/Button'
+import UsersList from '../../components/UserList/UsersList'
 
 import useLang from 'lang'
 

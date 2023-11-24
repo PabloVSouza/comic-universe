@@ -2,12 +2,12 @@ name: Build/release Electron app
 
 on:
   push:
-    tags:
-      - v*.*.*
+    branches: staging
 
 jobs:
   release:
     runs-on: ${{ matrix.os }}
+    permissions: write-all
 
     strategy:
       matrix:
@@ -40,7 +40,6 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         with:
-          permissions: write-all
           draft: true
           files: |
             dist/*.exe

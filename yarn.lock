@@ -697,17 +697,17 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-"@prisma/client@5.5.2":
-  version "5.5.2"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-5.5.2.tgz#ce6389e7ad9e9cf0fc2a7c6a0032ad2e12a9fd61"
-  integrity sha512-54XkqR8M+fxbzYqe+bIXimYnkkcGqgOh0dn0yWtIk6CQT4IUCAvNFNcQZwk2KqaLU+/1PHTSWrcHtx4XjluR5w==
+"@prisma/client@5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-5.6.0.tgz#1c15932250d5658fe0127e62faf4ecd96a877259"
+  integrity sha512-mUDefQFa1wWqk4+JhKPYq8BdVoFk9NFMBXUI8jAkBfQTtgx8WPx02U2HB/XbAz3GSUJpeJOKJQtNvaAIDs6sug==
   dependencies:
-    "@prisma/engines-version" "5.5.1-1.aebc046ce8b88ebbcb45efe31cbe7d06fd6abc0a"
+    "@prisma/engines-version" "5.6.0-32.e95e739751f42d8ca026f6b910f5a2dc5adeaeee"
 
-"@prisma/engines-version@5.5.1-1.aebc046ce8b88ebbcb45efe31cbe7d06fd6abc0a":
-  version "5.5.1-1.aebc046ce8b88ebbcb45efe31cbe7d06fd6abc0a"
-  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-5.5.1-1.aebc046ce8b88ebbcb45efe31cbe7d06fd6abc0a.tgz#35cd59ed65ee1f9e333f4865ec86a4432c4d0a9c"
-  integrity sha512-O+qHFnZvAyOFk1tUco2/VdiqS0ym42a3+6CYLScllmnpbyiTplgyLt2rK/B9BTjYkSHjrgMhkG47S0oqzdIckA==
+"@prisma/engines-version@5.6.0-32.e95e739751f42d8ca026f6b910f5a2dc5adeaeee":
+  version "5.6.0-32.e95e739751f42d8ca026f6b910f5a2dc5adeaeee"
+  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-5.6.0-32.e95e739751f42d8ca026f6b910f5a2dc5adeaeee.tgz#57b003ab5e1ea1523b5cdd7f06b24ebcf5c7fd8c"
+  integrity sha512-UoFgbV1awGL/3wXuUK3GDaX2SolqczeeJ5b4FVec9tzeGbSWJboPSbT0psSrmgYAKiKnkOPFSLlH6+b+IyOwAw==
 
 "@prisma/engines@5.6.0":
   version "5.6.0"
@@ -850,9 +850,9 @@
   integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
 
 "@types/node@*":
-  version "20.9.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.9.4.tgz#cc8f970e869c26834bdb7ed480b30ede622d74c7"
-  integrity sha512-wmyg8HUhcn6ACjsn8oKYjkN/zUzQeNtMy44weTJSM6p4MMzEOuKbA3OjJ267uPCOW7Xex9dyrNTful8XTQYoDA==
+  version "20.9.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.9.5.tgz#bb441014bcb91c63742b0e1fe25b902f5d581faa"
+  integrity sha512-Uq2xbNq0chGg+/WQEU0LJTSs/1nKxz6u1iemLcGomkSnKokbW1fbLqc3HOqCf2JP7KjlL4QkS7oZZTrOQHQYgQ==
   dependencies:
     undici-types "~5.26.4"
 
@@ -864,9 +864,9 @@
     undici-types "~5.26.4"
 
 "@types/node@^18.11.18":
-  version "18.18.12"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.18.12.tgz#0c40e52e5ff2569386b160f6f6bb019ff1361cb4"
-  integrity sha512-G7slVfkwOm7g8VqcEF1/5SXiMjP3Tbt+pXDU3r/qhlM2KkGm786DUD4xyMA2QzEElFrv/KZV9gjygv4LnkpbMQ==
+  version "18.18.13"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.18.13.tgz#ae0f76c0bfe79d8fad0f910b78ae3e59b333c6e8"
+  integrity sha512-vXYZGRrSCreZmq1rEjMRLXJhiy8MrIeVasx+PCVlP414N7CJLHnMf+juVvjdprHyH+XRy3zKZLHeNueOpJCn0g==
   dependencies:
     undici-types "~5.26.4"
 
@@ -2072,9 +2072,9 @@ electron-publish@24.5.0:
     mime "^2.5.2"
 
 electron-to-chromium@^1.4.535:
-  version "1.4.592"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.592.tgz#1ffd49ba3da3da3077ea20014b066c910d50c913"
-  integrity sha512-D3NOkROIlF+d5ixnz7pAf3Lu/AuWpd6AYgI9O67GQXMXTcCP1gJQRotOq35eQy5Sb4hez33XH1YdTtILA7Udww==
+  version "1.4.593"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.593.tgz#f71b157f7382f3d3a164f73ff2da772d4b3fd984"
+  integrity sha512-c7+Hhj87zWmdpmjDONbvNKNo24tvmD4mjal1+qqTYTrlF0/sNpAcDlU0Ki84ftA/5yj3BF2QhSGEC0Rky6larg==
 
 electron-updater@^6.1.4:
   version "6.1.4"
@@ -3996,10 +3996,10 @@ prettier@^3.0.3:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.1.0.tgz#c6d16474a5f764ea1a4a373c593b779697744d5e"
   integrity sha512-TQLvXjq5IAibjh8EpBIkNKxO749UEWABoiIZehEPiY4GNpVdhaFKqSTu+QrlU6D2dPAfubRmtJTi4K4YkQ5eXw==
 
-prisma-packaged@^0.8.8:
-  version "0.8.8"
-  resolved "https://registry.yarnpkg.com/prisma-packaged/-/prisma-packaged-0.8.8.tgz#6b684889ad6c0dfc8a05ae49a6fd487686d94a0c"
-  integrity sha512-3fpayfNFImaA+64kRjAnpqN3sLzfzA7jaOOulgATsqqIBY9FfsUKfKipsAYjgFbj43S+xZkfT1LfDPpCO4FVAg==
+prisma-packaged@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/prisma-packaged/-/prisma-packaged-0.9.0.tgz#4ca7f0db09b115d738a72ee597011cdacabc91be"
+  integrity sha512-jKTNMM4DB6VD5vWGV6tmSRbhtDzTokZvPTGGQCt51UO9GRdRoHuZJH1r162yN+PZayor8PKUUq9ohQCPlX073g==
   dependencies:
     "@electron/asar" "^3.2.7"
     copyfiles "^2.4.1"
@@ -4008,7 +4008,7 @@ prisma-packaged@^0.8.8:
     tsconfig-paths "^4.2.0"
     typescript "^5.2.2"
 
-prisma@^5.5.2:
+prisma@^5.6.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/prisma/-/prisma-5.6.0.tgz#ae2c27fdfb4d53be7f7dafb50d6b8b7f55c93aa5"
   integrity sha512-EEaccku4ZGshdr2cthYHhf7iyvCcXqwJDvnoQRAJg5ge2Tzpv0e2BaMCp+CbbDUwoVTzwgOap9Zp+d4jFa2O9A==

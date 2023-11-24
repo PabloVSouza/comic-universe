@@ -8,6 +8,8 @@ jobs:
   release:
     runs-on: ${{ matrix.os }}
     permissions: write-all
+    env:
+      GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
     strategy:
       matrix:
@@ -52,5 +54,3 @@ jobs:
             dist/*.tar.gz
             dist/*.yml
             dist/*.blockmap
-        env:
-          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}

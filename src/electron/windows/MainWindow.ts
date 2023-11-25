@@ -19,6 +19,8 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     icon: join(__dirname, '../../../resources/icon.png')
   })
 
+  mainWindow.webContents.openDevTools()
+
   createEvents(mainWindow, app.getPath('userData'))
 
   let firstLogin = false

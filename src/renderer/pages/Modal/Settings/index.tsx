@@ -1,4 +1,4 @@
-import Window from 'components/Window'
+import Window from 'components/Window/Window'
 import useLang from 'lang'
 import style from './style.module.scss'
 

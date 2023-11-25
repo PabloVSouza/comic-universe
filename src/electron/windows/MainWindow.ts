@@ -2,6 +2,7 @@ import { shell, BrowserWindow, app } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
 import { createEvents, removeEvents } from '../events'
+import { autoUpdater } from 'electron-updater'
 
 const CreateMainWindow = async (): Promise<BrowserWindow> => {
   const mainWindow = new BrowserWindow({
@@ -24,6 +25,10 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+    if (!is.dev) autoUpdater.checkForUpdatesAndNotify()
+
+    if (is.dev) mainWindow.webContents.openDevTools()
+
     if (!firstLogin) {
       mainWindow.webContents.send('changeUrl', '/users')
       firstLogin = true

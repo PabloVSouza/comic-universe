@@ -12,8 +12,9 @@
     "baseUrl": "src/renderer",
     "paths": {
       "assets/*": ["./assets/*"],
-      "electron/*":["./electron/*"],
       "components/*": ["./components/*"],
+      "electron/*":["./electron/*"],
+      "hooks/*": [".hooks/*"],
       "pages/*": ["./pages/*"],
       "routes/*": ["./routes/*"],
       "scss/*": ["./scss/*"],

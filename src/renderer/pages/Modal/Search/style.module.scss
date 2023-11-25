@@ -15,72 +15,6 @@
       align-items: center;
       justify-content: center;
 
-      .inputSelect {
-        outline: none;
-        margin-right: 1px;
-        height: 100%;
-        width: 180px;
-        border-radius: $radius-default 0 0 $radius-default;
-        [class$='-control'] {
-          padding: 0 10px 0 20px;
-          width: 100%;
-          height: 100%;
-        }
-
-        [class$='-menu'] {
-          animation: fade--in $transition-default;
-          width: 100%;
-          display: flex;
-          padding-top: 1px;
-          background: var(--colorBackground);
-          [class$='-MenuList2'] {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            gap: 5px;
-            border-radius: 0 0 $radius-default $radius-default;
-            [class$='-option'] {
-              background: var(--colorBackground);
-              width: 100%;
-              height: 40px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-
-              &:hover {
-                background: var(--colorHover);
-                color: var(--colorTextHighlight);
-              }
-            }
-          }
-        }
-
-        @keyframes fade--in {
-          0% {
-            height: 0;
-            opacity: 0;
-          }
-
-          100% {
-            height: auto;
-            opacity: 1;
-          }
-        }
-
-        &:hover {
-          background: var(--colorHover);
-          [class$='-control'] {
-            color: var(--colorTextHighlight);
-          }
-        }
-
-        &,
-        * {
-          cursor: pointer;
-          transition: $transition-default;
-        }
-      }
-
       .inputText {
         flex-grow: 1;
         padding: 0 20px;
@@ -109,6 +43,10 @@
           background-color: var(--colorText);
           opacity: 0.5;
         }
+      }
+
+      .inputSelect {
+        border-radius: $radius-default 0 0 $radius-default;
       }
 
       .inputBlock {

@@ -10,6 +10,7 @@ const HomeTopBar = (): JSX.Element => {
 
   return (
     <div className={style.topBar}>
+      <div className={style.draggableArea} />
       <div className={style.groupLeft}>
         <Button
           className={style.button}

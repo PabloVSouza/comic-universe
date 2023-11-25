@@ -1,6 +1,6 @@
 {
   "name": "comic-universe",
-  "version": "v0.9.5",
+  "version": "v0.9.6",
   "description": "Open Source App made using Electron and React for downloading and reading comics from web sources provided by the user. This app was created for study purposes only and should never be sold or used for anything commercial",
   "main": "./out/main/index.js",
   "author": "Pablo Souza",
@@ -65,7 +65,7 @@
     "electron-builder": "^24.6.4",
     "electron-vite": "^1.0.28",
     "eslint": "^8.53.0",
-    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-prettier": "^9.0.1",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-react": "^7.33.2",
     "prettier": "^3.0.3",

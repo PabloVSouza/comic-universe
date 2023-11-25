@@ -27,6 +27,8 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     mainWindow.show()
     if (!is.dev) autoUpdater.checkForUpdatesAndNotify()
 
+    if (is.dev) mainWindow.webContents.openDevTools()
+
     if (!firstLogin) {
       mainWindow.webContents.send('changeUrl', '/users')
       firstLogin = true

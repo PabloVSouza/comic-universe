@@ -2,13 +2,14 @@ import { useState, useMemo, useEffect } from 'react'
 import debounce from 'lodash.debounce'
 import classNames from 'classnames'
 import Window from 'components/Window/Window'
-import SearchComicList from './components/List'
-import Select, { SingleValue } from 'react-select'
+import SearchComicList from 'components/SearchComicList/SearchComicList'
+import Select from 'components/Select'
 import useSearchStore from 'store/useSearchStore'
 import usePersistStore from 'store/usePersistStore'
 import useLang from 'lang'
 import style from './style.module.scss'
 import Loading from 'components/LoadingOverlay/LoadingOverlay'
+import { SingleValue } from 'react-select'
 
 const ModalSearch = (): JSX.Element => {
   const [searchText, setSearchText] = useState('')
@@ -22,12 +23,13 @@ const ModalSearch = (): JSX.Element => {
     { value: 'lermanga', label: 'Ler Mangá' }
   ]
 
-  const handleChangeRepo = (
+  type TOption = {
     option: SingleValue<{
       value: string
       label: string
     }>
-  ): void => {
+  }
+  const handleChangeRepo = ({ option }: TOption): void => {
     if (option) setRepo(option.value)
     getList()
   }
@@ -63,12 +65,9 @@ const ModalSearch = (): JSX.Element => {
       <div className={style.searchInput}>
         <div className={classNames(style.inputBlock, style.inputSelect)}>
           <Select
-            className={style.select}
             defaultValue={selectOptions.find((val) => val.value === repo)}
             options={selectOptions}
-            onChange={handleChangeRepo}
-            unstyled
-            isSearchable={false}
+            onChange={(e) => handleChangeRepo(e as TOption)}
           />
         </div>
         <div className={classNames(style.inputBlock, style.inputText)}>

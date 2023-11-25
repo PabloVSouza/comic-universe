@@ -11,13 +11,13 @@ import useLang from 'lang'
 import Image from 'components/Image/Image'
 import Button from 'components/Button/Button'
 
-import style from './style.module.scss'
+import style from './SearchComicListItem.module.scss'
 
 interface ComicListItem extends LiHTMLAttributes<unknown> {
   data: ComicInterface
 }
 
-const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
+const SearchComicListItem = ({ data }: ComicListItem): JSX.Element => {
   const texts = useLang()
 
   const navigate = useNavigate()
@@ -50,7 +50,7 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
 
   return (
     <li
-      className={classNames(style.comicListItem, !!extended && style.extended)}
+      className={classNames(style.SearchComicListItem, !!extended && style.extended)}
       onClick={setActive}
     >
       <div className={style.content}>
@@ -92,4 +92,4 @@ const ComicListItem = ({ data }: ComicListItem): JSX.Element => {
   )
 }
 
-export default ComicListItem
+export default SearchComicListItem

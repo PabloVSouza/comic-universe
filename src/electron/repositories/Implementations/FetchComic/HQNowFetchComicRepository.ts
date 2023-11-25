@@ -29,26 +29,7 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
   }
 
   methods: IFetchComicMethods = {
-    getList: async (): Promise<ComicInterface[]> => {
-      const query = {
-        query: gql`
-          query {
-            getAllHqs {
-              siteId: id
-              name
-              synopsis
-              status
-            }
-          }
-        `
-      }
-
-      const { data } = await this.client.query(query)
-
-      return new Promise((resolve) => {
-        resolve(data.getAllHqs as ComicInterface[])
-      })
-    },
+    getList: async (): Promise<ComicInterface[]> => this.methods.search({ search: 'A' }),
 
     search: async ({ search }): Promise<ComicInterface[]> => {
       const query = {
@@ -65,11 +46,16 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
         variables: { search }
       }
 
-      const { data } = await this.client.query(query)
-
-      return new Promise((resolve) => {
-        resolve(data.getHqsByName as ComicInterface[])
-      })
+      try {
+        const { data } = await this.client.query(query)
+        return new Promise((resolve) => {
+          resolve(data.getHqsByName as ComicInterface[])
+        })
+      } catch (_e) {
+        return new Promise((resolve) => {
+          resolve([])
+        })
+      }
     },
 
     getDetails: async (search): Promise<Partial<ComicInterface>> => {

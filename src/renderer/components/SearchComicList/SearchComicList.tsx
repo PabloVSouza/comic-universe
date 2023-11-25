@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import ReactPaginate from 'react-paginate'
 
-import ComicListItem from './Item/Item'
+import SearchComicListItem from './SearchComicListItem/SearchComicListItem'
 import useLang from 'lang'
 
-import style from './style.module.scss'
+import style from './SearchComicList.module.scss'
 
 interface SearchComicList {
   list: ComicInterface[]
@@ -25,10 +25,10 @@ const SearchComicList = ({ list, itemsPerPage = 10 }: SearchComicList): JSX.Elem
   }
 
   return (
-    <div className={style.searchComicList}>
+    <div className={style.SearchComicList}>
       <ul className={style.list}>
         {currentItems.map((comic) => {
-          return <ComicListItem data={comic} id={comic.siteId} key={comic.siteId} />
+          return <SearchComicListItem data={comic} id={comic.siteId} key={comic.siteId} />
         })}
       </ul>
 

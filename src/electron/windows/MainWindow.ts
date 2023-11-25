@@ -19,8 +19,6 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     icon: join(__dirname, '../../../resources/icon.png')
   })
 
-  mainWindow.webContents.openDevTools()
-
   createEvents(mainWindow, app.getPath('userData'))
 
   let firstLogin = false
@@ -28,6 +26,8 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
     if (!is.dev) autoUpdater.checkForUpdatesAndNotify()
+
+    if (is.dev) mainWindow.webContents.openDevTools()
 
     if (!firstLogin) {
       mainWindow.webContents.send('changeUrl', '/users')

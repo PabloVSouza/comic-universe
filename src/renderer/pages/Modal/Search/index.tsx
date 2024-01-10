@@ -23,14 +23,13 @@ const ModalSearch = (): JSX.Element => {
     { value: 'lermanga', label: 'Ler Mangá' }
   ]
 
-  type TOption = {
-    option: SingleValue<{
-      value: string
-      label: string
-    }>
-  }
-  const handleChangeRepo = ({ option }: TOption): void => {
-    if (option) setRepo(option.value)
+  type TOption = SingleValue<{
+    value: string
+    label: string
+  }>
+
+  const handleChangeRepo = (e: TOption): void => {
+    if (e) setRepo(e.value)
     getList()
   }
 

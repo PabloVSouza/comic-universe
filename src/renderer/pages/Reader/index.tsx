@@ -56,7 +56,7 @@ const Reader = (): JSX.Element => {
 
   const getPath = (page: Page): string =>
     !chapter?.offline
-      ? page.path
+      ? page?.path ?? ''
       : `file:///${window.path.join(
           appPath,
           'downloads',

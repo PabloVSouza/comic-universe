@@ -75,7 +75,6 @@ const Reader = (): JSX.Element => {
       await setReadProgressDB(newReadProgress)
     }
     if (page === totalPages) {
-      console.log({ chapterIndex, length: comic.chapters.length })
       if (chapterIndex === comic.chapters.length - 1) {
         await setComic(comic.id)
         navigate('/')
@@ -154,7 +153,7 @@ const Reader = (): JSX.Element => {
         {!!pages?.length && (
           <ReaderZoomWindow
             mousePos={mousePos}
-            image={getPath(pages[readProgress.page - 1])}
+            image={getPath(pages[readProgress.page - 1]) ?? ''}
             visible={zoomVisible}
           />
         )}

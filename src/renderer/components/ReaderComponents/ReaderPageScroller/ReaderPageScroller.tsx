@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ReaderZoomWindow, { MousePos } from '../ReaderZoomWindow/ReaderZoomWindow'
 import useReaderStore from 'store/useReaderStore'
@@ -35,6 +35,12 @@ const ReaderPageSlider = ({ comicId }: { comicId: number }): JSX.Element => {
     }
   }, [readProgress])
 
+  useEffect(() => {
+    console.log(readProgress)
+    if (readProgress.id) {
+      navigate(`#page_${readProgress.page}`)
+    }
+  }, [readProgress, navigate])
   const nextPage = async (): Promise<void> => {
     const { page, totalPages } = readProgress
 
@@ -95,9 +101,9 @@ const ReaderPageSlider = ({ comicId }: { comicId: number }): JSX.Element => {
     setMousePos({ x: e.pageX, y: e.pageY })
   }
 
-  const position = {
-    transform: `translateX(-${(readProgress.page - 1) * 100}%)`
-  }
+  // const position = {
+  //   transform: `translateX(-${(readProgress.page - 1) * 100}%)`
+  // }
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeys)
@@ -111,6 +117,9 @@ const ReaderPageSlider = ({ comicId }: { comicId: number }): JSX.Element => {
       className={style.ReaderPageScroller}
       onMouseMoveCapture={defineMousePos}
       onContextMenu={(): void => setZoomVisible(!zoomVisible)}
+      onClick={() => {
+        window.location = '#page_2'
+      }}
     >
       {!!pages?.length && (
         <ReaderZoomWindow
@@ -119,13 +128,9 @@ const ReaderPageSlider = ({ comicId }: { comicId: number }): JSX.Element => {
           visible={zoomVisible}
         />
       )}
-      <div className={style.pages} style={position}>
-        {pages?.map((currentPage) => (
-          <div key={currentPage.path} className={style.page}>
-            <div className={style.buttons}>
-              <button className={style.btnPrevious} onClick={(): Promise<void> => previousPage()} />
-              <button className={style.btnNext} onClick={(): Promise<void> => nextPage()} />
-            </div>
+      <div className={style.pages}>
+        {pages?.map((currentPage, key) => (
+          <div key={currentPage.path} className={style.page} id={`page_${key}`}>
             <Image
               className={style.Image}
               src={getPath(currentPage)}

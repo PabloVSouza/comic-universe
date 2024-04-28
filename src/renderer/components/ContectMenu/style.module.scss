@@ -4,7 +4,6 @@
   background: $black-transparent;
   color: $white;
   top: 0;
-  transition: opacity 0.1s ease;
   list-style: none;
   border-radius: $radius-default;
   box-shadow: $shadow-default;
@@ -12,6 +11,7 @@
   visibility: hidden;
   overflow: hidden;
   backdrop-filter: $blur-default;
+  transition: none;
 
   li {
     padding: 1rem;

@@ -55,6 +55,11 @@ export const ContextMenu = ({ options }: TContextMenu) => {
     }
   }
 
+  const handleAction = (option: TContextOptions) => {
+    option.action()
+    setVisible(false)
+  }
+
   useEffect(() => {
     if (visible) {
       document.addEventListener('mousedown', handleMouse)
@@ -71,7 +76,7 @@ export const ContextMenu = ({ options }: TContextMenu) => {
       ref={ref}
     >
       {options.map((option) => (
-        <li key={option.title} onClick={option.action}>
+        <li key={option.title} onClick={() => handleAction(option)}>
           <p>{option.title}</p>
           {!!option.icon && <Image className={style.icon} src={option.icon} svg />}
         </li>

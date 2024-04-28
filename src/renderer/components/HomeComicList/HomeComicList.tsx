@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { confirmAlert } from 'react-confirm-alert'
 import ComicListItem from './HomeComicListItem/HomeComicListItem'
 import useDashboardStore from 'store/useDashboardStore'
 import { ContextMenu, openContextMenu, TContextOptions } from 'components/ContectMenu/ContextMenu'
+
 import deleteIcon from 'assets/trash.svg'
 
 import style from './style.module.scss'
@@ -10,6 +12,7 @@ const HomeComicList = (): JSX.Element => {
   const { list } = useDashboardStore()
 
   const [currentCtxItem, setCurrentCtxItem] = useState({} as ComicInterface)
+  const { deleteComic } = useDashboardStore()
 
   const handleRightClick = (e: React.MouseEvent, item: ComicInterface) => {
     const position = {
@@ -24,7 +27,20 @@ const HomeComicList = (): JSX.Element => {
       title: 'Delete Comic',
       icon: deleteIcon,
       action: () => {
-        console.log(currentCtxItem)
+        confirmAlert({
+          message: 'Do you really want to Delete?',
+          buttons: [
+            {
+              label: 'Cancel'
+            },
+            {
+              label: 'Confirm',
+              onClick: () => {
+                deleteComic(currentCtxItem)
+              }
+            }
+          ]
+        })
       }
     }
   ] as TContextOptions[]

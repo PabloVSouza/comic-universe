@@ -12,6 +12,14 @@ interface DashboardLang {
     noNewChapterMessage: string
     noNewChapterConfirm: string
   }
+  contextMenu: {
+    deleteComic: {
+      title: string
+      confirmMessage: string
+      confirmOk: string
+      confirmCancel: string
+    }
+  }
 }
 
 interface DownloadComicLang {

@@ -12,6 +12,14 @@ export default class ptBR implements Lang {
     newChapter: {
       noNewChapterMessage: 'Não existem novos capítulos',
       noNewChapterConfirm: 'Ok'
+    },
+    contextMenu: {
+      deleteComic: {
+        title: 'Apagar Quadrinho',
+        confirmMessage: 'Deseja mesmo apagar? (Todo o progresso de leitura será apagado!)',
+        confirmOk: 'Confirmar',
+        confirmCancel: 'Cancelar'
+      }
     }
   }
 

@@ -3,6 +3,7 @@ import { confirmAlert } from 'react-confirm-alert'
 import ComicListItem from './HomeComicListItem/HomeComicListItem'
 import useDashboardStore from 'store/useDashboardStore'
 import { ContextMenu, openContextMenu, TContextOptions } from 'components/ContectMenu/ContextMenu'
+import useLang from 'lang'
 
 import deleteIcon from 'assets/trash.svg'
 
@@ -10,6 +11,7 @@ import style from './style.module.scss'
 
 const HomeComicList = (): JSX.Element => {
   const { list } = useDashboardStore()
+  const lang = useLang()
 
   const [currentCtxItem, setCurrentCtxItem] = useState({} as ComicInterface)
   const { deleteComic } = useDashboardStore()
@@ -24,17 +26,17 @@ const HomeComicList = (): JSX.Element => {
   }
   const ctxOptions = [
     {
-      title: 'Delete Comic',
+      title: lang.Dashboard.contextMenu.deleteComic.title,
       icon: deleteIcon,
       action: () => {
         confirmAlert({
-          message: 'Do you really want to Delete?',
+          message: lang.Dashboard.contextMenu.deleteComic.confirmMessage,
           buttons: [
             {
-              label: 'Cancel'
+              label: lang.Dashboard.contextMenu.deleteComic.confirmCancel
             },
             {
-              label: 'Confirm',
+              label: lang.Dashboard.contextMenu.deleteComic.confirmOk,
               onClick: () => {
                 deleteComic(currentCtxItem)
               }

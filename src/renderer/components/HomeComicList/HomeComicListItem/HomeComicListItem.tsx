@@ -1,11 +1,13 @@
 import classNames from 'classnames'
 import slugify from 'slugify'
 import ReactHtmlParser from 'react-html-parser'
+import { useState } from 'react'
 
 import ProgressBar from 'components/ProgressBar/ProgressBar'
 import Image from 'components/Image/Image'
 
 import loadingImage from 'assets/OldLoading.gif'
+import deleteIcon from 'assets/trash.svg'
 
 import useDashboardStore from 'store/useDashboardStore'
 import useDownloadStore from 'store/useDownloadStore'
@@ -20,6 +22,8 @@ const ComicListItem = ({ item }: { item: ComicInterface }): JSX.Element => {
   const { comic, setComic } = useDashboardStore()
   const { queue } = useDownloadStore()
 
+  const [deleteVisible, setDeleteVisible] = useState(false)
+
   const inQueue = queue.filter((value) => value.comicId == item.id).length ?? 0
   const active = comic.id === item.id
   const isDownloading = !!inQueue
@@ -29,6 +33,10 @@ const ComicListItem = ({ item }: { item: ComicInterface }): JSX.Element => {
 
   const handleClick = (): void => {
     if (!isDownloading) setComic(item.id)
+  }
+
+  const handleRightClick = () => {
+    setDeleteVisible(true)
   }
 
   const cover = item.cover.startsWith('http')
@@ -42,7 +50,8 @@ const ComicListItem = ({ item }: { item: ComicInterface }): JSX.Element => {
         !isDownloading ? style.regular : '',
         active ? style.active : null
       )}
-      onClick={(): void => handleClick()}
+      onClick={handleClick}
+      onContextMenu={handleRightClick}
     >
       {isDownloading ? (
         <>
@@ -52,7 +61,12 @@ const ComicListItem = ({ item }: { item: ComicInterface }): JSX.Element => {
           </div>
         </>
       ) : (
-        <p className={style.name}>{ReactHtmlParser(item.name)}</p>
+        <>
+          <p className={style.name}>{ReactHtmlParser(item.name)}</p>
+          <div className={classNames(style.deleteButton, deleteVisible ? style.active : null)}>
+            <Image className={style.deleteImage} svg src={deleteIcon} />
+          </div>
+        </>
       )}
       <Image className={style.cover} src={cover} />
     </li>

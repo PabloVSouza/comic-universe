@@ -10,6 +10,7 @@ export type IDBInteractionsMethods = {
     chapters: ChapterInterface[]
     repo: string
   }) => Promise<void>
+  dbDeleteComic: (input: { comic: ComicInterface }) => Promise<void>
 
   //Chapters
   dbGetAllChaptersNoPage: () => Promise<ChapterInterface[]>

@@ -19,7 +19,6 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
     const dbPath = is.dev ? devDb : prodDb
 
     const prismaInitializer = new PrismaInitializer(dbPath, '20231025184053_added_languages')
-    console.log(dbPath)
     this.db = prismaInitializer.prisma
     prismaInitializer.runMigration()
   }
@@ -71,6 +70,25 @@ export class PrismaDBInteractionsRepository implements IDBInteractionsRepository
       return new Promise((resolve) => {
         resolve()
       })
+    },
+
+    dbDeleteComic: async ({ comic }): Promise<void> => {
+      const comicId = comic.id
+      await this.db.readProgress.deleteMany({
+        where: { comicId }
+      })
+
+      await this.db.chapter.deleteMany({
+        where: { comicId }
+      })
+
+      await this.db.comic.delete({
+        where: {
+          id: comicId
+        }
+      })
+
+      return new Promise((resolve) => resolve())
     },
 
     //Chapters

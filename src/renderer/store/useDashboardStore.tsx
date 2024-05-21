@@ -8,6 +8,7 @@ interface useDashboardStore {
   list: ComicInterface[]
   getListDB: () => Promise<void>
   setComic: (id: number) => Promise<void>
+  deleteComic: (comic: ComicInterface) => Promise<void>
 }
 
 const useDashboardStore = create<useDashboardStore>((set) => ({
@@ -35,6 +36,12 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
       const completeComic = await invoke('dbGetComicComplete', { id, userId })
       set((state) => ({ ...state, comic: completeComic }))
     }
+  },
+
+  deleteComic: async (comic): Promise<void> => {
+    const { getListDB } = useDashboardStore.getState()
+    await invoke('dbDeleteComic', { comic })
+    getListDB()
   }
 }))
 

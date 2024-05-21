@@ -12,6 +12,14 @@ export default class enUS implements Lang {
     newChapter: {
       noNewChapterMessage: 'We could not find new chapters',
       noNewChapterConfirm: 'Ok'
+    },
+    contextMenu: {
+      deleteComic: {
+        title: 'Delete Comic',
+        confirmMessage: 'Do you really want to delete? (All the read progress will be lost!)',
+        confirmOk: 'Confirm',
+        confirmCancel: 'Cancel'
+      }
     }
   }
 

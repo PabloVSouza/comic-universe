@@ -15,7 +15,10 @@ import style from './style.module.scss'
 
 const { path } = window
 
-const ComicListItem = ({ item }: { item: ComicInterface }): JSX.Element => {
+const ComicListItem = ({
+  item,
+  ...props
+}: { item: ComicInterface } & Partial<React.LiHTMLAttributes<HTMLLIElement>>): JSX.Element => {
   const { appPath } = useGlobalStore()
   const { comic, setComic } = useDashboardStore()
   const { queue } = useDownloadStore()
@@ -42,7 +45,8 @@ const ComicListItem = ({ item }: { item: ComicInterface }): JSX.Element => {
         !isDownloading ? style.regular : '',
         active ? style.active : null
       )}
-      onClick={(): void => handleClick()}
+      onClick={handleClick}
+      {...props}
     >
       {isDownloading ? (
         <>

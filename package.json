@@ -18,7 +18,7 @@
     "prisma:generate": "npx prisma generate",
     "postinstall": "electron-builder install-app-deps",
     "build:win": "npm run prisma:generate && npm run build && electron-builder --win --config",
-    "build:mac": "npm run prisma:generate && electron-vite build && electron-builder --mac --config",
+    "build:mac": "npm run prisma:generate && electron-vite build && electron-builder --mac --universal --config",
     "build:linux": "npm run prisma:generate && electron-vite build && electron-builder --linux --config"
   },
   "dependencies": {

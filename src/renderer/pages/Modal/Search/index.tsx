@@ -10,18 +10,15 @@ import useLang from 'lang'
 import style from './style.module.scss'
 import Loading from 'components/LoadingOverlay/LoadingOverlay'
 import { SingleValue } from 'react-select'
+import useGlobalStore from 'store/useGlobalStore'
 
 const ModalSearch = (): JSX.Element => {
   const [searchText, setSearchText] = useState('')
   const { list, loading, search, resetComic, getList } = useSearchStore()
   const { repo, setRepo } = usePersistStore()
+  const { repoList } = useGlobalStore()
 
   const texts = useLang()
-
-  const selectOptions = [
-    { value: 'hqnow', label: 'HQ Now' },
-    { value: 'lermanga', label: 'Ler Mangá' }
-  ]
 
   type TOption = SingleValue<{
     value: string
@@ -64,8 +61,8 @@ const ModalSearch = (): JSX.Element => {
       <div className={style.searchInput}>
         <div className={classNames(style.inputBlock, style.inputSelect)}>
           <Select
-            defaultValue={selectOptions.find((val) => val.value === repo)}
-            options={selectOptions}
+            defaultValue={repoList.find((val) => val?.value === repo)}
+            options={repoList}
             onChange={(e) => handleChangeRepo(e as TOption)}
           />
         </div>

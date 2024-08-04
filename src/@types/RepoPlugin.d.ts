@@ -1,6 +1,4 @@
-import { BrowserWindow } from 'electron'
-
-export interface IFetchComicMethods {
+export interface IRepoPluginMethods {
   getList(): Promise<ComicInterface[]>
   search(input: { search: string }): Promise<ComicInterface[]>
   getDetails(search: { [key: string]: string }): Promise<Partial<ComicInterface>>
@@ -12,12 +10,18 @@ export interface IFetchComicMethods {
   }): Promise<{ cover: string; pageFiles: Page[] }>
 }
 
-export interface IFetchComicRepository {
-  methods: IFetchComicMethods
+export interface IRepoPluginRepository {
+  RepoName: string
+  RepoUrl: string
+  RepoTag: string
+  methods: IRepoPluginMethods
 }
 
-export interface IFetchComicRepositoryInit {
+export interface IRepoPluginRepositoryConstruct {
+  new (): IRepoPluginRepository
+}
+
+export interface IRepoPluginRepositoryInit {
   path: string
   url: string
-  win: BrowserWindow
 }

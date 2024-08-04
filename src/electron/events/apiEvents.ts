@@ -1,28 +1,20 @@
-import { ipcMain, BrowserWindow } from 'electron'
-import FetchComicRepository from '../repositories/Implementations/FetchComic'
+import { ipcMain } from 'electron'
+import RepoPluginLoader from '../RepoPluginsLoader'
 
-const apiEvents = (win: BrowserWindow, path: string): void => {
-  const repoBasics = {
-    path,
-    win
-  }
+const apiEvents = (): void => {
+  const repoPlugin = new RepoPluginLoader()
 
-  const fetchComicRepos = {
-    hqnow: FetchComicRepository('hqnow', {
-      ...repoBasics,
-      url: 'https://admin.hq-now.com/graphql'
-    })
-  }
+  repoPlugin.GetPluginList().then(() => {
+    const firstRepo = Object.getOwnPropertyNames(repoPlugin.repoList)[0]
 
-  const firstRepo = Object.getOwnPropertyNames(fetchComicRepos)[0]
+    const properties = Object.getOwnPropertyNames(repoPlugin.repoList[firstRepo].methods)
 
-  const properties = Object.getOwnPropertyNames(fetchComicRepos[firstRepo].methods)
-
-  for (const method of properties) {
-    ipcMain.handle(method, async (_event, { repo, data }) =>
-      fetchComicRepos[repo].methods[method](data)
-    )
-  }
+    for (const method of properties) {
+      ipcMain.handle(method, async (_event, { repo, data }) =>
+        repoPlugin.repoList[repo].methods[method](data)
+      )
+    }
+  })
 }
 
 export default apiEvents

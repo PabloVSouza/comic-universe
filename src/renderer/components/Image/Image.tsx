@@ -30,6 +30,7 @@ const Image = ({
     src,
     alt,
     style,
+    referrerPolicy:'no-referrer' as React.HTMLAttributeReferrerPolicy,
     ...props
   }
 

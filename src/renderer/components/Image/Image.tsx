@@ -90,7 +90,7 @@ const Image = ({
               exitActive: styling.exitActive
             }}
           >
-            {isLoading ? <img {...placeHolderProps} /> : <img {...lazyImageProps} />}
+            {!!isLoading ? <img {...placeHolderProps} /> : <img {...lazyImageProps} />}
           </CSSTransition>
         </SwitchTransition>
         <img {...loadingProps} />

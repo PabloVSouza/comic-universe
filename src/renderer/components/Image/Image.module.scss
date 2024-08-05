@@ -6,6 +6,11 @@
   opacity: 1;
 }
 
+.enterActive,
+.exitActive {
+  transition: opacity $transition-default;
+}
+
 .enterActive {
   opacity: 1;
 }

@@ -6,7 +6,9 @@ import Image from 'components/Image/Image'
 import useGlobalStore from 'store/useGlobalStore'
 
 import style from './style.module.scss'
-import ReaderZoomWindow, { MousePos } from '../../components/ReaderZoomWindow/ReaderZoomWindow'
+import ReaderZoomWindow, {
+  MousePos
+} from '../../components/ReaderComponents/ReaderZoomWindow/ReaderZoomWindow'
 import useReaderStore from 'store/useReaderStore'
 import useDashboardStore from 'store/useDashboardStore'
 
@@ -56,7 +58,7 @@ const Reader = (): JSX.Element => {
 
   const getPath = (page: Page): string =>
     !chapter?.offline
-      ? page?.path ?? ''
+      ? (page?.path ?? '')
       : `file:///${window.path.join(
           appPath,
           'downloads',

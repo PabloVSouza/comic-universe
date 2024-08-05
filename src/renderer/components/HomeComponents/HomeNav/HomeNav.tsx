@@ -19,7 +19,7 @@ import settingsIcon from 'assets/settings.svg'
 import darkmodeIcon from 'assets/darkmode.svg'
 import userIcon from 'assets/user.svg'
 
-const RightNav = (): JSX.Element => {
+const HomeNav = (): JSX.Element => {
   const { menuVisible, toggleMenu } = useGlobalStore()
   const { switchTheme } = usePersistStore()
 
@@ -28,22 +28,22 @@ const RightNav = (): JSX.Element => {
 
   const options = [
     {
-      label: texts.RightNav.about,
+      label: texts.HomeNav.about,
       icon: infoIcon,
       onClick: (): void => openWindow({ component: 'About', props: {} })
     },
     {
-      label: texts.RightNav.settings,
+      label: texts.HomeNav.settings,
       icon: settingsIcon,
       onClick: () => openWindow({ component: 'Settings', props: {} })
     },
     {
-      label: texts.RightNav.darkMode,
+      label: texts.HomeNav.darkMode,
       icon: darkmodeIcon,
       onClick: (): void => switchTheme()
     },
     {
-      label: texts.RightNav.changeUser,
+      label: texts.HomeNav.changeUser,
       icon: userIcon,
       onClick: (): void => navigate('/users')
     }
@@ -57,7 +57,7 @@ const RightNav = (): JSX.Element => {
   return (
     <Cover
       visible={menuVisible}
-      className={classNames(style.RightNav, menuVisible ? style.visible : null)}
+      className={classNames(style.HomeNav, menuVisible ? style.visible : null)}
     >
       <ul>
         {options.map((option) => (
@@ -71,4 +71,4 @@ const RightNav = (): JSX.Element => {
   )
 }
 
-export default RightNav
+export default HomeNav

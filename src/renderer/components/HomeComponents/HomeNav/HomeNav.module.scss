@@ -1,5 +1,6 @@
 .HomeNav {
   z-index: 2;
+  -webkit-app-region: no-drag;
 
   &.visible {
     ul {

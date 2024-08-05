@@ -20,10 +20,11 @@ import exitIcon from 'assets/exit-door.svg'
 
 const HomeNav = (): JSX.Element => {
   const { menuVisible, toggleMenu } = useGlobalStore()
-  const { switchTheme } = usePersistStore()
+  const { switchTheme, currentUser } = usePersistStore()
 
   const navigate = useNavigate()
   const texts = useLang()
+  const activeUser = !!currentUser.id
 
   const closeApp = (): void => {
     invoke('closeWindow')
@@ -49,13 +50,18 @@ const HomeNav = (): JSX.Element => {
       label: texts.HomeNav.changeUser,
       icon: userIcon,
       onClick: (): void => navigate('/users')
-    },
+    }
+  ]
+
+  const closeOption = [
     {
       label: texts.HomeNav.closeApp,
       icon: exitIcon,
       onClick: closeApp
     }
   ]
+
+  const finalMenuOptions = activeUser ? [...options, ...closeOption] : closeOption
 
   const handleClick = (onClick: () => void): void => {
     toggleMenu()
@@ -68,7 +74,7 @@ const HomeNav = (): JSX.Element => {
       className={classNames(style.HomeNav, menuVisible ? style.visible : null)}
     >
       <ul>
-        {options.map((option) => (
+        {finalMenuOptions.map((option) => (
           <li onClick={(): void => handleClick(option.onClick)} key={option.label}>
             <div className={style.icon} style={{ WebkitMaskImage: `url(${option.icon})` }} />
             <p>{option.label}</p>

@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
-import DashboardHeader from './HomeDashboardHeader/HomeDashboardHeader'
-import DashboardNav from './HomeDashboardNavBar/HomeDashboardNavBar'
-import DashboardList from './HomeDashboardComicList/HomeDashboardComicList'
+import HomeDashboardHeader from './HomeDashboardHeader/HomeDashboardHeader'
+import HomeDashboardNav from './HomeDashboardNavBar/HomeDashboardNavBar'
+import HomeDashboardList from './HomeDashboardComicList/HomeDashboardComicList'
 
 import useDashboardStore from 'store/useDashboardStore'
 import useDownloadStore from 'store/useDownloadStore'
@@ -34,9 +34,9 @@ const HomeDashboard = (): JSX.Element => {
     <div className={style.HomeDashboard}>
       {!!comic.id && !isDownloading && (
         <>
-          <DashboardHeader />
-          <DashboardNav />
-          <DashboardList />
+          <HomeDashboardHeader />
+          <HomeDashboardNav />
+          <HomeDashboardList />
         </>
       )}
     </div>

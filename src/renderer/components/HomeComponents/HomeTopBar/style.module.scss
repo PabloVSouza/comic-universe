@@ -28,8 +28,9 @@
     }
   }
   .groupRight {
+    margin-left: auto;
     .button {
-      z-index: 3;
+      z-index: 101;
     }
   }
 }

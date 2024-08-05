@@ -10,6 +10,7 @@
     "composite": true,
     "types": ["electron-vite/node"],
     "baseUrl": "src/eletron",
+    "resolveJsonModule": true,
     "paths": {
       "lib/*": ["./lib/*"],
       "utils/*":["./utils/*"],

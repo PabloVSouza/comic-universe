@@ -9,7 +9,7 @@ const HomeTopBar = (): JSX.Element => {
   const { toggleMenu, menuVisible } = useGlobalStore((state) => state)
 
   return (
-    <div className={style.topBar}>
+    <div className={style.HomeNav}>
       <div className={style.groupLeft}>
         <Button
           className={style.button}

@@ -1,4 +1,4 @@
-import style from './style.module.scss'
+import style from './ProgressBar.module.scss'
 
 const ProgressBar = ({
   current,
@@ -12,7 +12,7 @@ const ProgressBar = ({
   const percentage = Math.round((100 / total) * current)
 
   return (
-    <div className={style.progressBar}>
+    <div className={style.ProgressBar}>
       {showPercentage && <p>{percentage}%</p>}
       <div className={style.bar} style={{ width: `${percentage}%` }} />
     </div>

@@ -78,7 +78,6 @@ const SearchComicListItem = ({ data }: ComicListItem): JSX.Element => {
       {extended && (
         <div className={style.buttonArea}>
           <Button
-            theme="roundedRectangle"
             size="xl"
             color={existsInDB ? 'white' : 'green'}
             onClick={addToList}

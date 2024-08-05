@@ -1,6 +1,6 @@
 import UsersListItem from '../UserListItem/UserListItem'
 
-import style from './style.module.scss'
+import style from './UsersList.module.scss'
 
 const UsersList = ({ list }: { list: UserInterface[] }): JSX.Element => {
   return (

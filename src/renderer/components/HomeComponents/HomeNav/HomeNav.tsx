@@ -12,7 +12,7 @@ import useGlobalStore from 'store/useGlobalStore'
 
 import usePersistStore from 'store/usePersistStore'
 
-import style from './style.module.scss'
+import style from './HomeNav.module.scss'
 
 import infoIcon from 'assets/info.svg'
 import settingsIcon from 'assets/settings.svg'

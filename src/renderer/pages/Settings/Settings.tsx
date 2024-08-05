@@ -1,14 +1,11 @@
 import { ReactElement, useState } from 'react'
 import style from './Settings.module.scss'
 
-const Settings = ({ cliente }: { cliente: string }): ReactElement => {
+const Settings = (): ReactElement => {
   const [number, setNumber] = useState(0)
 
   return (
     <>
-      <h1>{cliente}</h1>
-      <div className={style.FormArea}></div>
-      <div className={style.FormArea}></div>
       <h3>Settings</h3>
       <p>{number}</p>
       <button onClick={(): void => setNumber(number + 1)}>Increase</button>
@@ -25,7 +22,7 @@ const windowSettings = {
     minimizable: false,
     maximizable: true,
     resizable: true,
-    title: 'Cadastro de Clientes'
+    title: 'App Settings'
   },
   initialStatus: {
     startPosition: 'center'

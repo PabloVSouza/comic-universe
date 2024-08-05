@@ -9,7 +9,6 @@ import style from 'scss/main/style.module.scss'
 import themes from 'scss/main/themes.module.scss'
 
 import classNames from 'classnames'
-import WindowManager from 'components/WindowManager'
 
 interface Props {
   children: ReactNode
@@ -32,9 +31,7 @@ const Main = ({ children }: Props): JSX.Element => {
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <HashRouter>
     <Main>
-      <WindowManager>
-        <Routes />
-      </WindowManager>
+      <Routes />
     </Main>
   </HashRouter>
 )

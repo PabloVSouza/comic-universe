@@ -82,6 +82,7 @@ const windowSettings = {
     className: style.Users,
     contentClassName: style.Content,
     maximizable: true,
+    unique: true,
     title: 'Users'
   },
   initialStatus: {

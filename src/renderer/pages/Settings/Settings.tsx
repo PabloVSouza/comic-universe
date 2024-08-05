@@ -19,6 +19,7 @@ const windowSettings = {
     titleBar: true,
     closeable: true,
     unique: true,
+    movable: true,
     title: 'App Settings'
   },
   initialStatus: {

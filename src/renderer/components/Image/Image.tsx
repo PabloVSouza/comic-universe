@@ -1,6 +1,6 @@
 import { ReactElement, useRef, useState, ImgHTMLAttributes, CSSProperties } from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
-import styling from './style.module.scss'
+import styling from './Image.module.scss'
 
 type ImageProps = {
   placeholderSrc?: string
@@ -30,7 +30,7 @@ const Image = ({
     src,
     alt,
     style,
-    referrerPolicy:'no-referrer' as React.HTMLAttributeReferrerPolicy,
+    referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
     ...props
   }
 

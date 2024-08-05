@@ -18,10 +18,7 @@ const windowSettings = {
     className: style.Settings,
     titleBar: true,
     closeable: true,
-    movable: false,
-    minimizable: false,
-    maximizable: true,
-    resizable: true,
+    unique: true,
     title: 'App Settings'
   },
   initialStatus: {

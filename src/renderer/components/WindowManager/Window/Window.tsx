@@ -9,6 +9,7 @@ const Window = ({
   children,
   closeable,
   className,
+  contentClassName,
   id,
   maximizable,
   minimizable,
@@ -16,6 +17,7 @@ const Window = ({
   title,
   titleBar,
   movable,
+  unique,
   ...props
 }: TWindowProps): ReactElement => {
   const refWindow = useRef<HTMLDivElement>(null)

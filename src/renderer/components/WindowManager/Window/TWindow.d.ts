@@ -52,5 +52,6 @@ type TWindowProps = {
   movable?: boolean
   title?: string
   titleBar?: boolean
+  unique?: boolean
   initialStatus?: TWindowStatus
 } & React.ComponentProps<'div'>

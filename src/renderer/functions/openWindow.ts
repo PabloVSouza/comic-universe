@@ -9,21 +9,27 @@ const openWindow = ({
   component: string
   props: { [key: string]: unknown }
 }): void => {
-  const { addWindow } = useWindowManagerStore.getState()
+  const { addWindow, currentWindows } = useWindowManagerStore.getState()
 
   if (PageList[component]) {
     const { windowProps, windowStatus, initialStatus } = PageList[component] as TWindow
 
-    const window = {
-      id: randomUUID(),
-      component: PageList[component][component],
-      componentProps: props,
-      windowProps,
-      windowStatus: windowStatus ?? {},
-      initialStatus
-    } as TWindow
+    const alreadyExist = currentWindows.find((window) => window.component.name === component)
 
-    addWindow(window)
+    const shouldCreate = !(alreadyExist && windowProps.unique)
+
+    if (shouldCreate) {
+      const window = {
+        id: randomUUID(),
+        component: PageList[component][component],
+        componentProps: props,
+        windowProps,
+        windowStatus: windowStatus ?? {},
+        initialStatus
+      } as TWindow
+
+      addWindow(window)
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-import Window from 'components/Window/Window'
+import Window from 'components/WindowManager/Window'
 import TopBar from 'components/HomeComponents/HomeTopBar/HomeTopBar'
 import ComicList from 'components/HomeComponents/HomeComicList/HomeComicList'
 import ComicDashboard from 'components/HomeComponents/HomeDashboard/HomeDashboard'

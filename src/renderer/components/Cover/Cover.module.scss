@@ -10,6 +10,9 @@
   left: 0;
   background-color: $black-transparent;
   opacity: 0;
+  transition:
+    opacity $transition-default,
+    visibility $transition-default;
 
   &.visible {
     opacity: 1;

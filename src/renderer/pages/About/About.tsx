@@ -29,12 +29,7 @@ const About = (): JSX.Element => {
 const windowSettings = {
   windowProps: {
     className: style.About,
-    titleBar: true,
     closeable: true,
-    movable: false,
-    minimizable: false,
-    maximizable: true,
-    resizable: false,
     title: 'About This App'
   },
   initialStatus: {

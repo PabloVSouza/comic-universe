@@ -43,9 +43,9 @@
         height: 100%;
         padding: 10px;
         aspect-ratio: 1/1;
-        -webkit-mask-size: contain;
-        -webkit-mask-origin: content-box;
-        -webkit-mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-origin: content-box;
+        mask-repeat: no-repeat;
       }
 
       &:hover {

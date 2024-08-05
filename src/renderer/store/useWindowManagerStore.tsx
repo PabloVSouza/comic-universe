@@ -31,7 +31,7 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
       state.currentWindows.push(window)
       state.portalsRef[window.id] = Portals.createHtmlPortalNode({
         attributes: {
-          class: window.windowProps.contentClass ?? ''
+          class: window.windowProps.contentClassName ?? ''
         }
       })
       return { ...state }

@@ -81,12 +81,7 @@ const windowSettings = {
   windowProps: {
     className: style.Users,
     contentClassName: style.Content,
-    titleBar: false,
-    closeable: false,
-    movable: false,
-    minimizable: false,
     maximizable: true,
-    resizable: false,
     title: 'Users'
   },
   initialStatus: {

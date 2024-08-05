@@ -33,7 +33,7 @@ export default class enUS implements Lang {
     }
   }
 
-  RightNav: RightNavLang = {
+  HomeNav: HomeNavLang = {
     about: 'About This App',
     settings: 'Settings',
     darkMode: 'Dark Mode',

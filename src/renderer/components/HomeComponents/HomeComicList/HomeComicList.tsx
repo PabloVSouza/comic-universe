@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
-import ComicListItem from './HomeComicListItem/HomeComicListItem'
+import ComicListItem from '../HomeComicListItem/HomeComicListItem'
 import useDashboardStore from 'store/useDashboardStore'
 import { ContextMenu, openContextMenu, TContextOptions } from 'components/ContextMenu/ContextMenu'
 import useLang from 'lang'

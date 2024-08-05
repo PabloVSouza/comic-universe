@@ -1,4 +1,4 @@
-import UsersListItem from './UserListItem/UserListItem'
+import UsersListItem from '../UserListItem/UserListItem'
 
 import style from './style.module.scss'
 

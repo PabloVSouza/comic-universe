@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ReactPaginate from 'react-paginate'
 
-import SearchComicListItem from './SearchComicListItem/SearchComicListItem'
+import SearchComicListItem from '../SearchComicListItem/SearchComicListItem'
 import useLang from 'lang'
 
 import style from './SearchComicList.module.scss'

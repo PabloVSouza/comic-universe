@@ -1,4 +1,4 @@
-import DashboardListItem from './HomeComicListItem/HomeDashboardListItem'
+import DashboardListItem from '../HomeComicListItem/HomeDashboardListItem'
 
 import useDashboardStore from 'store/useDashboardStore'
 

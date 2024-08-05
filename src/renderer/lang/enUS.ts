@@ -37,7 +37,8 @@ export default class enUS implements Lang {
     about: 'About This App',
     settings: 'Settings',
     darkMode: 'Dark Mode',
-    changeUser: 'Change User'
+    changeUser: 'Change User',
+    closeApp: 'Fechar App'
   }
 
   SearchComic: SearchComicLang = {

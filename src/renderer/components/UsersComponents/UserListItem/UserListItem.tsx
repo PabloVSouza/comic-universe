@@ -21,9 +21,10 @@ import useWindowManagerStore from 'store/useWindowManagerStore'
 interface UsersListItem {
   data?: UserInterface
   newUser?: boolean
+  newUserAction?: () => void
 }
 
-const UsersListItem = ({ data, newUser }: UsersListItem): JSX.Element => {
+const UsersListItem = ({ data, newUser, newUserAction }: UsersListItem): JSX.Element => {
   const navigate = useNavigate()
   const lang = useLang()
 
@@ -70,10 +71,7 @@ const UsersListItem = ({ data, newUser }: UsersListItem): JSX.Element => {
 
   if (newUser)
     return (
-      <div
-        className={classNames(style.UsersListItem, style.newUser)}
-        onClick={(): void => navigate('/users/new')}
-      >
+      <div className={classNames(style.UsersListItem, style.newUser)} onClick={newUserAction}>
         <Image className={style.background} svg src={plusIcon} />
       </div>
     )

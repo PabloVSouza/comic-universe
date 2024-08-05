@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
 import openWindow from 'functions/openWindow'
 
 import Button from 'components/Button/Button'
@@ -14,18 +13,18 @@ import cancelIcon from 'assets/cancel.svg'
 
 import style from './Users.module.scss'
 
-const Init = (): void => {
+const Init = (): JSX.Element => {
   useEffect(() => {
     openWindow({ component: 'Users', props: {} })
   }, [])
+
+  return <></>
 }
 
 const Users = (): JSX.Element => {
-  const params = useParams()
-  const navigate = useNavigate()
-  const newUser = !!params.newUser
-
   const { updateUser } = useUsersStore()
+
+  const [newUser, setNewUser] = useState(false)
 
   const [username, setUserName] = useState('')
 
@@ -34,7 +33,7 @@ const Users = (): JSX.Element => {
 
   const createUser = async (): Promise<void> => {
     await updateUser({ name: username })
-    navigate('/users')
+    setNewUser(false)
   }
 
   useEffect(() => {
@@ -57,7 +56,7 @@ const Users = (): JSX.Element => {
               theme="pure"
               size="xs"
               title={lang.Users.cancelButton}
-              to="/users"
+              onClick={() => setNewUser(false)}
             />
             <Button
               icon={confirmIcon}
@@ -71,7 +70,7 @@ const Users = (): JSX.Element => {
       ) : (
         <>
           <h1 className={style.header}>{lang.Users.header}</h1>
-          <UsersList list={users} />
+          <UsersList list={users} newUserAction={() => setNewUser(true)} />
         </>
       )}
     </>

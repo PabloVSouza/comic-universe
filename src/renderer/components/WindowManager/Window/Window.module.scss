@@ -6,7 +6,7 @@
   overflow: hidden;
   box-shadow: $shadow-default;
   transform: translate3d(0, 0, 0);
-  background: var(--colorWindowBackground);
+  background: var(--modalBackground);
   color: var(--colorText);
   z-index: 10;
 

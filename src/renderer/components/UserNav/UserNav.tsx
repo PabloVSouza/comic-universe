@@ -30,7 +30,7 @@ const RightNav = (): JSX.Element => {
     {
       label: texts.RightNav.about,
       icon: infoIcon,
-      onClick: (): void => navigate('/?modal=about')
+      onClick: (): void => openWindow({ component: 'About', props: {} })
     },
     {
       label: texts.RightNav.settings,

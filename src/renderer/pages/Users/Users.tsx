@@ -80,7 +80,7 @@ const Users = (): JSX.Element => {
 const windowSettings = {
   windowProps: {
     className: style.Users,
-    contentClass: style.Content,
+    contentClassName: style.Content,
     titleBar: false,
     closeable: false,
     movable: false,

@@ -83,6 +83,14 @@
     padding: 5px;
     border-radius: $radius-default;
 
+    .icon {
+      height: 100%;
+      width: 100%;
+      aspect-ratio: 1/1;
+      background: var(--colorText);
+      opacity: 0.8;
+    }
+
     &:hover {
       background: var(--colorHover);
     }

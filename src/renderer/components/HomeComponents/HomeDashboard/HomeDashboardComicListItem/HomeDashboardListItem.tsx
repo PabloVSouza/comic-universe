@@ -7,7 +7,7 @@ import Button from 'components/Button/Button'
 
 import useDashboardStore from 'store/useDashboardStore'
 
-import style from './style.module.scss'
+import style from './HomeDashboardListItem.module.scss'
 
 import closedBook from 'assets/closed-book-icon.svg'
 import bookStack from 'assets/book-stack.svg'
@@ -58,7 +58,7 @@ const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.E
 
   return (
     <li
-      className={classNames(style.DashboardListItem, disabled ? style.disabled : null)}
+      className={classNames(style.HomeDashboardListItem, disabled ? style.disabled : null)}
       onDoubleClick={(): Promise<void> => openChapter()}
     >
       <div className={classNames(style.listItem, style.number)}>

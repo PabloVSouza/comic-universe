@@ -11,7 +11,7 @@ import useDashboardStore from 'store/useDashboardStore'
 import useDownloadStore from 'store/useDownloadStore'
 import useGlobalStore from 'store/useGlobalStore'
 
-import style from './style.module.scss'
+import style from './HomeComicListItem.module.scss'
 
 const { path } = window
 
@@ -41,7 +41,7 @@ const ComicListItem = ({
   return (
     <li
       className={classNames(
-        style.comicListItem,
+        style.HomeComicListItem,
         !isDownloading ? style.regular : '',
         active ? style.active : null
       )}

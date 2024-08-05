@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { useEffect, useRef } from 'react'
 import classNames from 'classnames'
-import style from './style.module.scss'
+import style from './ContextMenu.module.scss'
 import Image from 'components/Image/Image'
 
 export type TContextOptions = {

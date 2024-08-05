@@ -1,5 +1,6 @@
 import { ReactElement } from 'react'
-import Router from 'routes/index'
+import { useNavigate } from 'react-router-dom'
+import Image from 'components/Image'
 import classNames from 'classnames'
 import style from './Button.module.scss'
 
@@ -27,9 +28,11 @@ const Button = ({
   to,
   ...props
 }: TButton): ReactElement => {
+  const navigate = useNavigate()
+
   const handleClick = (): void => {
     if (onClick) onClick()
-    if (to) Router.navigate(to)
+    if (to) navigate(to)
   }
 
   const classProps = {
@@ -43,8 +46,6 @@ const Button = ({
     )
   }
 
-  const iconStyleProps = { style: icon ? { WebkitMaskImage: `url(${icon})` } : undefined }
-
   const customProps = {
     onClick: () => handleClick(),
     ...classProps,
@@ -53,7 +54,7 @@ const Button = ({
 
   return (
     <button {...customProps}>
-      <div className={style.icon} {...iconStyleProps} />
+      {icon ? <Image className={style.icon} src={icon} svg /> : <div className={style.icon} />}
       {children}
     </button>
   )

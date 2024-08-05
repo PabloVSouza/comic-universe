@@ -15,10 +15,7 @@
 
   .groupLeft {
     .button {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      height: 100%;
-      aspect-ratio: 1/1;
+      border-radius: unset;
     }
   }
   .groupRight {

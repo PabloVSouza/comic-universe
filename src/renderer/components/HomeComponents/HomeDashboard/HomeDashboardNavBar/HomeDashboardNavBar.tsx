@@ -7,7 +7,7 @@ import useLang from 'lang'
 import useDashboardStore from 'store/useDashboardStore'
 import useDownloadStore from 'store/useDownloadStore'
 
-import style from './style.module.scss'
+import style from './HomeDashboardNavBar.module.scss'
 
 import downloadIcon from 'assets/download-icon-2.svg'
 import comicBook from 'assets/comic-book.svg'
@@ -41,7 +41,7 @@ const HomeDashboardNavBar = (): JSX.Element => {
   }
 
   return (
-    <div className={style.DashboardNav}>
+    <div className={style.HomeDashboardNavBar}>
       <div className={style.buttons}>
         <Button
           theme="pure"

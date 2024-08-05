@@ -3,6 +3,7 @@
   position: relative;
   overflow: hidden;
   -webkit-app-region: no-drag;
+  transition: all $transition-default;
 
   //sizes
   &.size-xxs {

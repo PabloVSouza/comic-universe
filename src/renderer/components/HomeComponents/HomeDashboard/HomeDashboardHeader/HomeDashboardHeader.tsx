@@ -6,7 +6,7 @@ import Image from 'components/Image/Image'
 import useDashboardStore from 'store/useDashboardStore'
 import useGlobalStore from 'store/useGlobalStore'
 
-import style from './style.module.scss'
+import style from './HomeDashboardHeader.module.scss'
 
 const HomeDashboardHeader = (): JSX.Element => {
   const { appPath } = useGlobalStore()
@@ -24,7 +24,7 @@ const HomeDashboardHeader = (): JSX.Element => {
       )}`
 
   return (
-    <div className={style.DashboardHeader}>
+    <div className={style.HomeDashboardHeader}>
       <div className={style.texts}>
         <div className={style.title}>
           <h1>{HtmlParser(comic.name)}</h1>

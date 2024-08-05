@@ -13,7 +13,7 @@
       :root {
         --color-1: #090604; /* Original color for the first path */
         --color-2: #fbfbfb; /* Original color for the second path */
-        --color-3: #f5c713; /* Original color for the third path */
+        --color-3: #b9b9b9; /* Original color for the third path */
       }
     </style>
   </defs>

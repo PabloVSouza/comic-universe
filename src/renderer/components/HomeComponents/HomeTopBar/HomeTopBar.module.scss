@@ -4,6 +4,7 @@
   display: flex;
   justify-content: space-between;
   background: var(--colorBackground);
+  position: relative;
 
   .draggableArea {
     position: absolute;
@@ -11,6 +12,27 @@
     height: 100%;
     z-index: 0;
     -webkit-app-region: drag;
+  }
+
+  .logoImage {
+    height: 100%;
+    aspect-ratio: 1/1;
+    transform: scale(250%);
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    position: absolute;
+    z-index: 3;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity $transition-default,
+      visibility $transition-default;
+  }
+
+  .logoImageVisible {
+    opacity: 1;
+    visibility: inherit;
   }
 
   .groupLeft,

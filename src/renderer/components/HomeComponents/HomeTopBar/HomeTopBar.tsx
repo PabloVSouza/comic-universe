@@ -1,7 +1,10 @@
+import classNames from 'classnames'
 import Button from 'components/Button/Button'
+import Image from 'components/Image'
 
-import style from './style.module.scss'
+import style from './HomeTopBar.module.scss'
 
+import logo from 'assets/logo-gray.svg'
 import downloadIcon from 'assets/download-icon.svg'
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistStore from 'store/usePersistStore'
@@ -26,6 +29,12 @@ const HomeTopBar = (): JSX.Element => {
           />
         </div>
       )}
+
+      <Image
+        src={logo}
+        className={classNames(style.logoImage, userActive ? style.logoImageVisible : null)}
+      />
+
       <div className={style.groupRight}>
         <Button
           className={style.button}

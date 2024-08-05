@@ -7,6 +7,7 @@
   .pages {
     height: 100%;
     display: flex;
+    transition: transform $transition-default;
 
     .page {
       flex-shrink: 0;

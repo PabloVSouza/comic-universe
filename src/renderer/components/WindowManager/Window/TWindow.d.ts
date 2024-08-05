@@ -45,6 +45,7 @@ type TWindowProps = {
   children?: React.ReactNode
   closeable?: boolean
   className?: string
+  contentClass?: string
   maximizable?: boolean
   minimizable?: boolean
   resizable?: boolean

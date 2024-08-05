@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useRef, MutableRefObject } from 'react'
 import debounce from 'lodash.debounce'
 import classNames from 'classnames'
-import Window from 'components/Window/Window'
+import Window from 'components/WindowManager/Window'
 import SearchComicList from 'components/SearchComponents/SearchComicList/SearchComicList'
 import Select from 'components/Select'
 import useSearchStore from 'store/useSearchStore'

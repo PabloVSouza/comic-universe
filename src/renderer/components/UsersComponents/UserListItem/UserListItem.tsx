@@ -16,6 +16,7 @@ import userIcon from 'assets/user.svg'
 import deleteIcon from 'assets/trash.svg'
 import useUsersStore from 'store/useUsersStore'
 import useDashboardStore from 'store/useDashboardStore'
+import useWindowManagerStore from 'store/useWindowManagerStore'
 
 interface UsersListItem {
   data?: UserInterface
@@ -29,10 +30,18 @@ const UsersListItem = ({ data, newUser }: UsersListItem): JSX.Element => {
   const { setCurrentUser } = usePersistStore()
   const { deleteUser } = useUsersStore()
   const { getListDB } = useDashboardStore()
+  const { currentWindows, removeWindow } = useWindowManagerStore()
+
+  const closeUserWindow = () => {
+    for (const window of currentWindows) {
+      removeWindow(window.id)
+    }
+  }
 
   const setUser = async (): Promise<void> => {
     if (data) {
       setCurrentUser(data)
+      closeUserWindow()
       await getListDB()
       navigate('/')
     }

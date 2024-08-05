@@ -1,4 +1,3 @@
-import Window from 'components/Window/Window'
 import Image from 'components/Image/Image'
 
 import style from './About.module.scss'

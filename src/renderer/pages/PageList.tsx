@@ -5,5 +5,5 @@ import Users from './Users'
 export default {
   About,
   Settings,
-  Users
+  Users,
 }

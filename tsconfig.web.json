@@ -16,6 +16,7 @@
       "electron/*":["./electron/*"],
       "hooks/*": [".hooks/*"],
       "pages/*": ["./pages/*"],
+      "functions/*": ["./functions/*"],
       "routes/*": ["./routes/*"],
       "scss/*": ["./scss/*"],
       "store/*": ["./store/*"],

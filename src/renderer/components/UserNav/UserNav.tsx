@@ -4,6 +4,8 @@ import classNames from 'classnames'
 
 import Cover from 'components/Cover/Cover'
 
+import openWindow from 'functions/openWindow'
+
 import useLang from 'lang'
 
 import useGlobalStore from 'store/useGlobalStore'
@@ -33,7 +35,7 @@ const RightNav = (): JSX.Element => {
     {
       label: texts.RightNav.settings,
       icon: settingsIcon,
-      onClick: (): void => navigate(`/?modal=message&text=${texts.General.inDevelopment}`)
+      onClick: () => openWindow({ component: 'Settings', props: {} })
     },
     {
       label: texts.RightNav.darkMode,

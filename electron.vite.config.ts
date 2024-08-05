@@ -39,6 +39,7 @@ export default defineConfig({
         lang: resolve('src/renderer/lang'),
         hooks: resolve('src/renderer/hooks'),
         pages: resolve('src/renderer/pages'),
+        functions: resolve('src/renderer/functions'),
         routes: resolve('src/renderer/routes'),
         scss: resolve('src/renderer/scss'),
         store: resolve('src/renderer/store')

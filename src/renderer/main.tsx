@@ -30,11 +30,11 @@ const Main = ({ children }: Props): JSX.Element => {
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <HashRouter>
-    <Main>
-      <WindowManager>
+  <WindowManager>
+    <HashRouter>
+      <Main>
         <Routes />
-      </WindowManager>
-    </Main>
-  </HashRouter>
+      </Main>
+    </HashRouter>
+  </WindowManager>
 )

@@ -21,8 +21,8 @@ const windowSettings = {
     className: style.Settings,
     titleBar: true,
     closeable: true,
-    movable: true,
-    minimizable: true,
+    movable: false,
+    minimizable: false,
     maximizable: true,
     resizable: true,
     title: 'Cadastro de Clientes'

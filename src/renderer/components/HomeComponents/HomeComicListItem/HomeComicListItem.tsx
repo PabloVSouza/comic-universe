@@ -5,7 +5,7 @@ import ReactHtmlParser from 'react-html-parser'
 import ProgressBar from 'components/ProgressBar/ProgressBar'
 import Image from 'components/Image/Image'
 
-import loadingImage from 'assets/OldLoading.gif'
+import loadingImage from 'assets/loading.svg'
 
 import useDashboardStore from 'store/useDashboardStore'
 import useDownloadStore from 'store/useDownloadStore'

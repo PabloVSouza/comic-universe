@@ -55,6 +55,8 @@
     }
 
     .cover {
+      transition: height $transition-default;
+
       height: 200px;
       flex-shrink: 0;
       max-height: 500px;

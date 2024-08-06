@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import openWindow from 'functions/openWindow'
 
 import Button from 'components/Button/Button'
 import UsersList from '../../components/UsersComponents/UserList/UsersList'
@@ -12,14 +11,6 @@ import confirmIcon from 'assets/confirm.svg'
 import cancelIcon from 'assets/cancel.svg'
 
 import style from './Users.module.scss'
-
-const Init = (): JSX.Element => {
-  useEffect(() => {
-    openWindow({ component: 'Users', props: {} })
-  }, [])
-
-  return <></>
-}
 
 const Users = (): JSX.Element => {
   const { updateUser } = useUsersStore()
@@ -92,4 +83,4 @@ const windowSettings = {
   }
 } as TWindow
 
-export default { Users, Init, ...windowSettings }
+export default { Users, ...windowSettings }

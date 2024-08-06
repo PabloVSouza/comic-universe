@@ -5,7 +5,7 @@ import Image from 'components/Image/Image'
 
 import useGlobalStore from 'store/useGlobalStore'
 
-import style from './style.module.scss'
+import style from './Reader.module.scss'
 import ReaderZoomWindow, {
   MousePos
 } from '../../components/ReaderComponents/ReaderZoomWindow/ReaderZoomWindow'

@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import Button from 'components/Button/Button'
 import Image from 'components/Image'
-
+import openWindow from 'functions/openWindow'
 import style from './HomeTopBar.module.scss'
 
 import logo from 'assets/logo-gray.svg'
@@ -25,7 +25,7 @@ const HomeTopBar = (): JSX.Element => {
             icon={downloadIcon}
             size="xs"
             theme="pure"
-            to="/?modal=search"
+            onClick={() => openWindow({ component: 'Search', props: {} })}
           />
         </div>
       )}

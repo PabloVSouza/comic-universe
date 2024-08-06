@@ -1,11 +1,13 @@
-.searchComic {
-  width: 90%;
-  height: 90%;
-  max-width: 1000px;
-  padding-top: 20px;
-  background: var(--modalBackground);
-  .content {
+.Search {
+  height: 100%;
+  width: 100%;
+  .Content {
+    overflow: hidden;
+    display: flex;
     flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
     .searchInput {
       display: flex;
       width: 90%;
@@ -14,6 +16,7 @@
       height: 50px;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
 
       .inputText {
         flex-grow: 1;
@@ -35,11 +38,11 @@
           width: 30px;
           height: 30px;
           aspect-ratio: 1/1;
-          -webkit-mask-image: url('assets/magnifying-glass-search.svg');
-          -webkit-mask-size: contain;
-          -webkit-mask-position: center;
-          -webkit-mask-repeat: no-repeat;
-          -webkit-mask-origin: content-box;
+          mask-image: url('assets/magnifying-glass-search.svg');
+          mask-size: contain;
+          mask-position: center;
+          mask-repeat: no-repeat;
+          mask-origin: content-box;
           background-color: var(--colorText);
           opacity: 0.5;
         }
@@ -60,8 +63,7 @@
 
     .result {
       width: 100%;
-      max-height: calc(100% - 90px);
-      flex-grow: 1;
+      height: calc(100% - 80px);
     }
   }
 }

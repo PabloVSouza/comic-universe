@@ -16,7 +16,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     },
-    icon: join(__dirname, '../../../resources/icon.png')
+    icon: join(__dirname, '../../../resources/logo.svg')
   })
 
   createEvents(mainWindow, app.getPath('userData'))

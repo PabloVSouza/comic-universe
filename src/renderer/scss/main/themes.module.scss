@@ -6,7 +6,7 @@
   --colorHover: #{$white};
   --colorBackground: #{$white-transparent};
   --colorUserProfile: transparent;
-  --colorUserProfileHover: 
+  --colorLogo: #{$yellow-logo};
 }
 
 .dark {
@@ -17,4 +17,5 @@
   --colorHover: #{$white};
   --colorBackground: #{$black-transparent};
   --colorUserProfile: #{rgba($white, 0.5)};
+  --colorLogo: #{$yellow-logo};
 }

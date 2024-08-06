@@ -11,13 +11,18 @@
     width: 100%;
     aspect-ratio: 1/1;
     opacity: 0.3;
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity $transition-default,
+      visibility $transition-default;
   }
 }
 
 .Active {
   background: var(--colorBackground);
   .icon {
-    display: inherit;
+    visibility: inherit;
+    opacity: 1;
   }
 }

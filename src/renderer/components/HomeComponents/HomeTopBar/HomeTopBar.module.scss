@@ -18,22 +18,16 @@
   .logoImage {
     height: 100%;
     aspect-ratio: 1/1;
-    transform: scale(250%);
     margin: 0 auto;
     left: 0;
     right: 0;
     position: absolute;
     z-index: 3;
-    visibility: hidden;
-    opacity: 0;
-    transition:
-      opacity $transition-default,
-      visibility $transition-default;
+    transform: translateY(200px) scale(1300%);
   }
 
   .logoImageVisible {
-    opacity: 1;
-    visibility: inherit;
+    transform: translateY(0) scale(250%);
   }
 
   .groupLeft,

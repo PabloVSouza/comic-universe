@@ -10,6 +10,7 @@
     "composite": true,
     "jsx": "react-jsx",
     "baseUrl": "src/renderer",
+    "types": ["vite-plugin-svgr/client"],
     "paths": {
       "assets/*": ["./assets/*"],
       "components/*": ["./components/*"],

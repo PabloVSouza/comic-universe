@@ -7,7 +7,7 @@ import logo from 'assets/logo.svg'
 const HomeBlankArea = ({ active }: { active?: boolean }) => {
   return (
     <div className={classNames(style.HomeBlankArea, active ? style.Active : null)}>
-      <Image src={logo} className={style.icon} alt="App Icon" />
+      {/* <Image src={logo} className={style.icon} alt="App Icon" /> */}
     </div>
   )
 }

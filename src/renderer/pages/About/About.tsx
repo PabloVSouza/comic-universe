@@ -2,7 +2,7 @@ import Image from 'components/Image/Image'
 
 import style from './About.module.scss'
 
-import appIcon from 'assets/icon.png'
+import appIcon from 'assets/logo.svg'
 
 const About = (): JSX.Element => {
   const { app } = window

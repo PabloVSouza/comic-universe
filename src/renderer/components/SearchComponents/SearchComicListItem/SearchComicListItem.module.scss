@@ -60,6 +60,9 @@
       max-height: 500px;
       aspect-ratio: 10/16;
       position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       .coverImage {
         height: 100%;
         z-index: 0;
@@ -68,6 +71,10 @@
         position: absolute;
         aspect-ratio: 10/16;
         object-fit: cover;
+      }
+      .placeHolderImage {
+        width: 90%;
+        aspect-ratio: 1/1;
       }
     }
   }

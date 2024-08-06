@@ -8,7 +8,7 @@ import useDashboardStore from 'store/useDashboardStore'
 
 import useLang from 'lang'
 
-import oldLoading from 'assets/OldLoading.gif'
+import loading from 'assets/loading.svg'
 import Image from 'components/Image/Image'
 import Button from 'components/Button/Button'
 
@@ -77,7 +77,7 @@ const SearchComicListItem = ({ data }: ComicListItem): JSX.Element => {
             className={style.coverImage}
             src={data.cover}
             lazy
-            placeholderSrc={oldLoading}
+            placeholderSrc={loading}
             placeholderClassName={style.placeHolderImage}
           />
         </div>

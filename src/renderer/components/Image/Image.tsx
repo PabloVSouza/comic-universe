@@ -73,16 +73,12 @@ const Image = ({
       onLoad: (): void => setIsLoading(0)
     }
 
-    const addEndListener = (node: HTMLElement, done: () => void): void => {
-      node.addEventListener('transitionend', done, false)
-    }
-
     return (
       <>
         <SwitchTransition mode="out-in">
           <CSSTransition
             key={isLoading}
-            addEndListener={addEndListener}
+            timeout={100}
             classNames={{
               enter: styling.enter,
               exit: styling.exit,

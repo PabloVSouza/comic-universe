@@ -1,11 +1,10 @@
-import { useRef, useEffect, ReactElement, useMemo } from 'react'
+import { useRef, useEffect, ReactElement } from 'react'
 import useWindowManagerStore from 'store/useWindowManagerStore'
 import style from './Window.module.scss'
 import Button from 'components/Button/Button'
 import classNames from 'classnames'
 
 const Window = ({
-  containerSize,
   children,
   closeable,
   className,
@@ -31,6 +30,7 @@ const Window = ({
     setIsMinimized,
     setPosition,
     setSize,
+    containerSize,
     currentWindows
   } = useWindowManagerStore()
 
@@ -47,47 +47,44 @@ const Window = ({
       setIsFocused(id)
     }, [])
 
-    const positions = useMemo(
-      () => ({
-        topLeft: {
-          top: 0,
-          left: 0
-        },
-        topCenter: {
-          top: 0,
-          left: containerSize.width / 2 - size.width / 2
-        },
-        topRight: {
-          top: 0,
-          left: containerSize.width - size.width
-        },
-        center: {
-          top: containerSize.height / 2 - size.height / 2,
-          left: containerSize.width / 2 - size.width / 2
-        },
-        centerLeft: {
-          top: containerSize.height / 2 - size.height / 2,
-          left: 0
-        },
-        centerRight: {
-          top: containerSize.height / 2 - size.height / 2,
-          left: containerSize.width - size.width
-        },
-        bottomLeft: {
-          top: containerSize.height - size.height,
-          left: 0
-        },
-        bottomCenter: {
-          top: containerSize.height - size.height,
-          left: containerSize.width / 2 - size.width / 2
-        },
-        bottomRight: {
-          top: containerSize.height - size.height,
-          left: containerSize.width - size.width
-        }
-      }),
-      [size, containerSize]
-    )
+    const positions = {
+      topLeft: {
+        top: 0,
+        left: 0
+      },
+      topCenter: {
+        top: 0,
+        left: containerSize.width / 2 - size.width / 2
+      },
+      topRight: {
+        top: 0,
+        left: containerSize.width - size.width
+      },
+      center: {
+        top: containerSize.height / 2 - size.height / 2,
+        left: containerSize.width / 2 - size.width / 2
+      },
+      centerLeft: {
+        top: containerSize.height / 2 - size.height / 2,
+        left: 0
+      },
+      centerRight: {
+        top: containerSize.height / 2 - size.height / 2,
+        left: containerSize.width - size.width
+      },
+      bottomLeft: {
+        top: containerSize.height - size.height,
+        left: 0
+      },
+      bottomCenter: {
+        top: containerSize.height - size.height,
+        left: containerSize.width / 2 - size.width / 2
+      },
+      bottomRight: {
+        top: containerSize.height - size.height,
+        left: containerSize.width - size.width
+      }
+    }
 
     useEffect(() => {
       if (initialStatus.isMaximized) setIsMaximized(id, true)
@@ -119,6 +116,16 @@ const Window = ({
         }
       }
     }, [refWindow, size.height])
+
+    const updatePosition = () => {
+      if (startPosition && size.height && positions[startPosition]) {
+        setPosition(id, positions[startPosition])
+      }
+    }
+
+    useEffect(() => {
+      if (!windowObject.windowProps.movable) updatePosition()
+    }, [containerSize])
 
     const maximizedStyle = {
       left: '0.5%',

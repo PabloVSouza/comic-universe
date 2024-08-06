@@ -14,14 +14,8 @@ type TWindowManager = {
 
 const WindowManager = ({ children }: TWindowManager): ReactElement => {
   const containerRef = useRef() as MutableRefObject<HTMLDivElement> | null
-  const {
-    currentWindows,
-    portalsRef,
-    mouseCapture,
-    removeMovingResizing,
-    containerSize,
-    setContainerSize
-  } = useWindowManagerStore()
+  const { currentWindows, portalsRef, mouseCapture, removeMovingResizing, setContainerSize } =
+    useWindowManagerStore()
 
   const updateSize = (): void => {
     const height = containerRef?.current.offsetHeight ?? 0
@@ -31,14 +25,12 @@ const WindowManager = ({ children }: TWindowManager): ReactElement => {
 
   useEffect(() => {
     updateSize()
-  }, [containerRef])
 
-  useEffect(() => {
     window.addEventListener('resize', updateSize)
     return () => {
       window.removeEventListener('resize', updateSize)
     }
-  }, [])
+  }, [containerRef])
 
   const MinimizedWindows = currentWindows.filter((window) => window.windowStatus.isMinimized)
   const ActiveWindows = currentWindows.filter((window) => !window.windowStatus.isMinimized)
@@ -61,7 +53,7 @@ const WindowManager = ({ children }: TWindowManager): ReactElement => {
 
       {ActiveWindows.map((window) => {
         const { windowProps, id } = window
-        const props = { ...windowProps, containerSize, id }
+        const props = { ...windowProps, id }
         return (
           <Window key={window.id} {...props}>
             <Portals.OutPortal node={portalsRef[window.id]} key={window.id} />

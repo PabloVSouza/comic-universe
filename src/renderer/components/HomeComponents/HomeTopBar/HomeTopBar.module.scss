@@ -5,6 +5,7 @@
   justify-content: space-between;
   background: var(--colorBackground);
   position: relative;
+  flex-shrink: 0;
 
   .draggableArea {
     position: absolute;

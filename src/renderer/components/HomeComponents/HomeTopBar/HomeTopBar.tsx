@@ -16,7 +16,12 @@ const HomeTopBar = (): JSX.Element => {
 
   return (
     <div className={style.HomeNav}>
-      <div className={style.draggableArea} />
+      <div className={style.draggableArea}>
+        <AppLogo
+          gray={userActive}
+          className={classNames(style.logoImage, userActive ? style.logoImageVisible : null)}
+        />
+      </div>
       {userActive && (
         <div className={style.groupLeft}>
           <Button
@@ -28,11 +33,6 @@ const HomeTopBar = (): JSX.Element => {
           />
         </div>
       )}
-
-      <AppLogo
-        gray={userActive}
-        className={classNames(style.logoImage, userActive ? style.logoImageVisible : null)}
-      />
 
       <div className={style.groupRight}>
         <Button

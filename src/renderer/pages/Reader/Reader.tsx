@@ -12,7 +12,8 @@ import ReaderZoomWindow, {
 import useReaderStore from 'store/useReaderStore'
 import useDashboardStore from 'store/useDashboardStore'
 
-import oldLoading from 'assets/OldLoading.gif'
+import loading from 'assets/loading.svg'
+import Cover from 'components/Cover'
 
 const Reader = (): JSX.Element => {
   const navigate = useNavigate()
@@ -146,7 +147,7 @@ const Reader = (): JSX.Element => {
   }, [])
 
   return (
-    <>
+    <Cover visible>
       <div
         className={style.Reader}
         onMouseMoveCapture={defineMousePos}
@@ -173,14 +174,14 @@ const Reader = (): JSX.Element => {
                 className={style.Image}
                 src={getPath(currentPage)}
                 lazy
-                placeholderSrc={oldLoading}
+                placeholderSrc={loading}
                 placeholderClassName={style.ImageLoading}
               />
             </div>
           ))}
         </div>
       </div>
-    </>
+    </Cover>
   )
 }
 

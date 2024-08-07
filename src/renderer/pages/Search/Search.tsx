@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef, MutableRefObject } from 'react'
 import debounce from 'lodash.debounce'
 import classNames from 'classnames'
 import SearchComicList from 'components/SearchComponents/SearchComicList/SearchComicList'
@@ -16,6 +16,7 @@ const Search = (): JSX.Element => {
   const { list, loading, search, resetComic, getList } = useSearchStore()
   const { repo, setRepo } = usePersistStore()
   const { repoList } = useGlobalStore()
+  const inputRef = useRef(null) as MutableRefObject<null> | MutableRefObject<HTMLInputElement>
 
   const texts = useLang()
 
@@ -27,6 +28,8 @@ const Search = (): JSX.Element => {
   const handleChangeRepo = (e: TOption): void => {
     if (e) setRepo(e.value)
     getList()
+
+    if (inputRef.current) inputRef.current.value = ''
   }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -66,6 +69,7 @@ const Search = (): JSX.Element => {
             placeholder={texts.SearchComic.textPlaceholder}
             type="text"
             onChange={debouncedResults}
+            ref={inputRef}
           />
         </div>
         <div className={classNames(style.inputBlock, style.inputIcon)}>

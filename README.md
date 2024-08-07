@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/pablovsouza/comic-universe/blob/Version-2.0/src/renderer/assets/icon.svg?raw=true" width="200">
+  <img src="https://github.com/pablovsouza/comic-universe/blob/master/src/renderer/assets/icon.svg?raw=true" width="200">
   <h1>Comic Universe</h1>
   <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
   <a href="https://github.com/prisma/prisma/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" /></a>
@@ -61,6 +61,7 @@ Version 2.0.0 is being developed for a while, and it's the culmination of a lot 
 
 I have a few possible paths to improve the app on the future, and here's my current list of maybe's:
 
+- Migrate from electron's IPC communication to something like a TRPC, isolating the frontend from electron, and creating the possibility of running it as a web project.
 - Implement a backend for online sync.
 - Migrate from Electron to Tauri (Really far).
 - Have a unified comic list to create a relation with the comics from the plugins.

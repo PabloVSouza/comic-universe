@@ -27,6 +27,9 @@ export default defineConfig({
         }
       }
     },
+    build: {
+      assetsInlineLimit: 0
+    },
     plugins: [react()],
     resolve: {
       alias: {

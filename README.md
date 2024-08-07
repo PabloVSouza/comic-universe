@@ -1,12 +1,13 @@
-![Comic Universe](https://github.com/pablovsouza/comic-universe/blob/Version-2.0/src/renderer/assets/icon.svg?raw=true)
-
 <div align="center">
+  <img src="https://github.com/pablovsouza/comic-universe/blob/Version-2.0/src/renderer/assets/icon.svg?raw=true" width="200">
   <h1>Comic Universe</h1>
   <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
   <a href="https://github.com/prisma/prisma/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" /></a>
   <a href="https://discord.gg/gPsQkDGDfc"><img alt="Discord" src="https://img.shields.io/discord/1270554232260526120?label=Discord"></a>
   <br />
   <br />
+  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+  <a href="https://www.instagram.com/opablosouza/">Instagram</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://discord.gg/gPsQkDGDfc">Discord</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>

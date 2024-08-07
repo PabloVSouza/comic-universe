@@ -4,10 +4,11 @@ import RepoPluginLoader from '../RepoPluginsLoader'
 const apiEvents = (): void => {
   const repoPlugin = new RepoPluginLoader()
 
-  repoPlugin.GetPluginList().then(() => {
-    const firstRepo = Object.getOwnPropertyNames(repoPlugin.repoList)[0]
+  repoPlugin.getRepoList().then((repoList) => {
+    if (Object.values(repoList).length > 0) {
+      const firstRepo = Object.getOwnPropertyNames(repoList)[0]
 
-    const properties = Object.getOwnPropertyNames(repoPlugin.repoList[firstRepo].methods)
+      const properties = Object.getOwnPropertyNames(repoList[firstRepo].methods)
 
     for (const method of properties) {
       ipcMain.handle(method, async (_event, { repo, data }) =>

@@ -70,6 +70,8 @@ const Image = ({
     const loadingProps = {
       src,
       style: { display: 'none' },
+      referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
+
       onLoad: (): void => setIsLoading(0)
     }
 

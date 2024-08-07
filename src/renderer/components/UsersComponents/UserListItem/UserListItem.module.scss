@@ -11,10 +11,11 @@
   overflow: hidden;
   position: relative;
   background: var(--colorUserProfile);
+  transition: all $transition-default;
+
   &:hover {
     background: $white-transparent;
   }
-  transition: all $transition-default;
 
   .selectButton {
     width: 100%;

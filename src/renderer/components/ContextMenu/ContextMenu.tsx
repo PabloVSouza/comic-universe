@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { useEffect, useRef } from 'react'
+import { MutableRefObject, useEffect, useRef } from 'react'
 import classNames from 'classnames'
 import style from './ContextMenu.module.scss'
 import Image from 'components/Image/Image'
@@ -46,11 +46,12 @@ export const ContextMenu = ({ options }: TContextMenu) => {
     left: position.x
   }
 
-  const ref = useRef<HTMLUListElement>(null)
+  const ref = useRef(null) as MutableRefObject<null> | MutableRefObject<HTMLUListElement>
 
   const handleMouse = (e: MouseEvent) => {
-    //@ts-ignore Fix later
-    if (e.target?.parentElement.parentElement !== ref.current) {
+    const target = e.target as HTMLUListElement
+
+    if (target !== ref.current && !ref.current?.contains(target)) {
       setVisible(false)
     }
   }

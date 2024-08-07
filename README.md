@@ -51,9 +51,18 @@ Some of those challenges are:
 
 One of the main goals was to make the app as simple to use and to setup as possible, with no extra steps required to the user.
 
-After studing for a long time and trying different solutions, i've found this excelent [Article](https://dev.to/awohletz/running-prisma-migrate-in-an-electron-app-1ehm) and [Repository](https://github.com/awohletz/electron-prisma-trpc-example) from [Ayron Wohletz](https://twitter.com/ayron_wohletz).
+After studing for a long time and trying different solutions, i've found this excelent [Article](https://dev.to/awohletz/running-prisma-migrate-in-an-electron-app-1ehm) and [Repository](https://github.com/awohletz/electron-prisma-trpc-example) from [Ayron Wohletz](https://twitter.com/ayron_wohletz), and Based on Ayron findings, and developing a few solutions of my own, a new package was created, called [Prisma Packaged](https://github.com/pablovsouza/prisma-packaged)(I know it's a bad name), and all of the app's database interations are made using this package as a prisma's assistant.
 
-Based on Ayron findings, and developing a few solutions of my own, a new package was created, called [Prisma Packaged](https://github.com/pablovsouza/prisma-packaged)(I know it's a bad name), and all of the app's database interations are made using this package as a prisma's assistant.
+## Plans for the Future?
+
+I have a few possible paths to improve the app on the future, and here's my current list of maybe's:
+
+- Implement a backend for online sync.
+- Migrate from Electron to Tauri (Really far).
+- Have a unified comic list to create a relation with the comics from the plugins.
+- Migrate styling to Tailwind.
+
+And who knows how the project evolves...
 
 ## Project Setup:
 

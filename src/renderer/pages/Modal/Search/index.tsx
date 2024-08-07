@@ -18,10 +18,7 @@ const ModalSearch = (): JSX.Element => {
 
   const texts = useLang()
 
-  const selectOptions = [
-    { value: 'hqnow', label: 'HQ Now' },
-    { value: 'lermanga', label: 'Ler Mangá' }
-  ]
+  const selectOptions = [{ value: 'hqnow', label: 'HQ Now' }]
 
   type TOption = SingleValue<{
     value: string

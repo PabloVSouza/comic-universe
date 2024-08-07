@@ -2722,9 +2722,9 @@ for-each@^0.3.3:
     is-callable "^1.1.3"
 
 foreground-child@^3.1.0:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/foreground-child/-/foreground-child-3.2.1.tgz#767004ccf3a5b30df39bed90718bab43fe0a59f7"
-  integrity sha512-PXUUyLqrR2XCWICfv6ukppP96sdFwWbNEnfEMt7jNsISjMsvaLNinAHNDYyvkyU+SZG2BTSbT5NjG+vZslfGTA==
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/foreground-child/-/foreground-child-3.3.0.tgz#0ac8644c06e431439f8561db8ecf29a7b5519c77"
+  integrity sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==
   dependencies:
     cross-spawn "^7.0.0"
     signal-exit "^4.0.1"
@@ -4041,20 +4041,20 @@ prettier@^3.0.3:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.3.3.tgz#30c54fe0be0d8d12e6ae61dbb10109ea00d53105"
   integrity sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==
 
-prisma-packaged@^0.9.3:
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/prisma-packaged/-/prisma-packaged-0.9.3.tgz#c16862d2cc75f318652378617b1935077c433ca2"
-  integrity sha512-Pn5s+9EpSQgs1x2os199pjGJngR0e2z5yHsY4EJNAA+IX3inUorfWIZQtj7U1dRB3npqE/OYDAkzE5t4M/QuGA==
+prisma-packaged@^0.9.4:
+  version "0.9.4"
+  resolved "https://registry.yarnpkg.com/prisma-packaged/-/prisma-packaged-0.9.4.tgz#cf4f3aa130d7db4709eef2db80bd83bd7ef4f14a"
+  integrity sha512-pOS0vEcaIut6EbNSH5EeP0rHWP/KJXlR0YSI2C/wIf1XKxKwLZJkOReePJDqv8n92b65OHNWuSGjoFqpbg5Cfg==
   dependencies:
     "@electron/asar" "^3.2.10"
     copyfiles "^2.4.1"
     express "^4.19.2"
-    prisma "^5.17.0"
+    prisma "^5.18.0"
     tsc "^2.0.4"
     tsconfig-paths "^4.2.0"
     typescript "^5.5.4"
 
-prisma@^5.17.0, prisma@^5.18.0:
+prisma@^5.18.0:
   version "5.18.0"
   resolved "https://registry.yarnpkg.com/prisma/-/prisma-5.18.0.tgz#5ef69c802a075b7596231ea57003496873610b9e"
   integrity sha512-+TrSIxZsh64OPOmaSgVPH7ALL9dfU0jceYaMJXsNrTkFHO7/3RANi5K2ZiPB1De9+KDxCWn7jvRq8y8pvk+o9g==

@@ -17,6 +17,7 @@
     "build": "npm run typecheck && electron-vite build",
     "prisma:generate": "npx prisma generate",
     "postinstall": "electron-builder install-app-deps",
+    "generate-icons": "electron-icon-builder --input=./resources/icon.png --output=build --flatten",
     "build:win": "npm run prisma:generate && npm run build && electron-builder --win --config",
     "build:mac": "npm run prisma:generate && electron-vite build && electron-builder --mac --universal --config",
     "build:linux": "npm run prisma:generate && electron-vite build && electron-builder --linux --config"
@@ -60,6 +61,7 @@
     "@vitejs/plugin-react": "^4.1.1",
     "electron": "^31.3.1",
     "electron-builder": "^24.6.4",
+    "electron-icon-builder": "^2.0.1",
     "electron-vite": "^2.3.0",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^9.0.0",

@@ -11,6 +11,7 @@ import style from './HomeDashboardNavBar.module.scss'
 
 import downloadIcon from 'assets/download-icon-2.svg'
 import comicBook from 'assets/comic-book.svg'
+import ProgressBar from 'components/ProgressBar'
 
 const HomeDashboardNavBar = (): JSX.Element => {
   const navigate = useNavigate()
@@ -29,8 +30,6 @@ const HomeDashboardNavBar = (): JSX.Element => {
   const totalRead = chapters.reduce((prev, cur) => {
     return cur.ReadProgress.length ? prev + cur.ReadProgress[0].page : prev
   }, 0)
-
-  const totalProgress = Math.round((100 / totalPages) * totalRead)
 
   const continueReading = (): void => {
     const lastRead = chapters.reduce((prev, cur) => {
@@ -58,12 +57,12 @@ const HomeDashboardNavBar = (): JSX.Element => {
           onClick={continueReading}
         />
       </div>
-      <div className={style.progressBar}>
-        <p>
-          {totalProgress}% {texts.Dashboard.read}
-        </p>
-        <div style={{ width: `${totalProgress}%` }} />
-      </div>
+      <ProgressBar
+        total={totalPages}
+        current={totalRead}
+        className={style.progressBar}
+        showPercentage
+      />
     </div>
   )
 }

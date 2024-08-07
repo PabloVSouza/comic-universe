@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/pablovsouza/comic-universe/blob/Version-2.0/src/renderer/assets/icon.svg?raw=true" width="200">
+  <img src="https://github.com/pablovsouza/comic-universe/blob/master/src/renderer/assets/icon.svg?raw=true" width="200">
   <h1>Comic Universe</h1>
   <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
   <a href="https://github.com/prisma/prisma/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" /></a>
@@ -53,10 +53,15 @@ One of the main goals was to make the app as simple to use and to setup as possi
 
 After studing for a long time and trying different solutions, i've found this excelent [Article](https://dev.to/awohletz/running-prisma-migrate-in-an-electron-app-1ehm) and [Repository](https://github.com/awohletz/electron-prisma-trpc-example) from [Ayron Wohletz](https://twitter.com/ayron_wohletz), and Based on Ayron findings, and developing a few solutions of my own, a new package was created, called [Prisma Packaged](https://github.com/pablovsouza/prisma-packaged)(I know it's a bad name), and all of the app's database interations are made using this package as a prisma's assistant.
 
+## 2.0.0 is almost here!
+
+Version 2.0.0 is being developed for a while, and it's the culmination of a lot o dreams that i've had for the app since it's conception (I'm looking at you, Plugin System), so if you like the project, you should be exited for what's coming!
+
 ## Plans for the Future?
 
 I have a few possible paths to improve the app on the future, and here's my current list of maybe's:
 
+- Migrate from electron's IPC communication to something like a TRPC, isolating the frontend from electron, and creating the possibility of running it as a web project.
 - Implement a backend for online sync.
 - Migrate from Electron to Tauri (Really far).
 - Have a unified comic list to create a relation with the comics from the plugins.

@@ -61,7 +61,7 @@ Version 2.0.0 is being developed for a while, and it's the culmination of a lot 
 
 Version 2.0.0 will include a new Plugin system, to add new comic repositories in a more dynamic way.
 
-The template for developing new plugins is ready, and you can find and forke it [here](https://github.com/pablovsouza/comic-universe-plugin-template).
+The template for developing new plugins is ready, and you can find and fork it [here](https://github.com/pablovsouza/comic-universe-plugin-template).
 
 ## Plans for the Future?
 

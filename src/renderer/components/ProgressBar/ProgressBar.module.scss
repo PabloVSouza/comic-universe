@@ -5,6 +5,7 @@
   width: 100%;
   text-align: center;
   position: relative;
+  transition: all $transition-default;
   p {
     position: absolute;
     margin: 0 auto;
@@ -13,10 +14,12 @@
     top: 50%;
     transform: translateY(-50%);
     font-weight: lighter;
+    transition: all $transition-default;
   }
 
   .bar {
     background: $green-transparent;
     flex-grow: 1;
+    transition: all $transition-default;
   }
 }

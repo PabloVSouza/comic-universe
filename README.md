@@ -57,6 +57,12 @@ After studing for a long time and trying different solutions, i've found this ex
 
 Version 2.0.0 is being developed for a while, and it's the culmination of a lot o dreams that i've had for the app since it's conception (I'm looking at you, Plugin System), so if you like the project, you should be exited for what's coming!
 
+### We need plugins!
+
+Version 2.0.0 will include a new Plugin system, to add new comic repositories in a more dynamic way.
+
+The template for developing new plugins is ready, and you can find and forke it [here](https://github.com/pablovsouza/comic-universe-plugin-template).
+
 ## Plans for the Future?
 
 I have a few possible paths to improve the app on the future, and here's my current list of maybe's:

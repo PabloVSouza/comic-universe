@@ -51,7 +51,7 @@ export const ContextMenu = ({ options }: TContextMenu) => {
   const handleMouse = (e: MouseEvent) => {
     const target = e.target as HTMLUListElement
 
-    if (target.parentElement !== ref.current) {
+    if (target !== ref.current && !ref.current?.contains(target)) {
       setVisible(false)
     }
   }

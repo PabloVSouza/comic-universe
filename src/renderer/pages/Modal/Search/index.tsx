@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef, MutableRefObject } from 'react'
 import debounce from 'lodash.debounce'
 import classNames from 'classnames'
 import Window from 'components/Window/Window'
@@ -13,8 +13,9 @@ import { SingleValue } from 'react-select'
 
 const ModalSearch = (): JSX.Element => {
   const [searchText, setSearchText] = useState('')
-  const { list, loading, search, resetComic, getList } = useSearchStore()
+  const { cacheList: list, loading, search, resetComic, getList } = useSearchStore()
   const { repo, setRepo } = usePersistStore()
+  const inputRef = useRef(null) as MutableRefObject<null> | MutableRefObject<HTMLInputElement>
 
   const texts = useLang()
 
@@ -28,6 +29,8 @@ const ModalSearch = (): JSX.Element => {
   const handleChangeRepo = (e: TOption): void => {
     if (e) setRepo(e.value)
     getList()
+
+    if (inputRef.current) inputRef.current.value = ''
   }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -72,6 +75,7 @@ const ModalSearch = (): JSX.Element => {
             placeholder={texts.SearchComic.textPlaceholder}
             type="text"
             onChange={debouncedResults}
+            ref={inputRef}
           />
         </div>
         <div className={classNames(style.inputBlock, style.inputIcon)}>

@@ -1,7 +1,6 @@
 import { WebContents } from 'electron'
 import slugify from 'slugify'
 import { ApolloClient, gql, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
-import fetch from 'cross-fetch'
 
 import {
   IFetchComicMethods,
@@ -22,7 +21,7 @@ export class HQNowFetchComicRepository implements IFetchComicRepository {
     })
     this.client = new ApolloClient({
       cache,
-      link: new HttpLink({ uri: data.url, fetch })
+      link: new HttpLink({ uri: data.url })
     })
     this.ipc = data.win.webContents
     this.path = data.path

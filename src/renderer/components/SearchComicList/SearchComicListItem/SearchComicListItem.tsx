@@ -46,7 +46,7 @@ const SearchComicListItem = ({ data }: ComicListItem): JSX.Element => {
     if (!data.cover || !data.synopsis) {
       getDetails({ siteId: data.siteId, siteLink: data.siteLink ?? '' })
     }
-  }, [])
+  }, [data])
 
   return (
     <li

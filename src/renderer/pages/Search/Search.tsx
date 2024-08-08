@@ -13,7 +13,7 @@ import useGlobalStore from 'store/useGlobalStore'
 
 const Search = (): JSX.Element => {
   const [searchText, setSearchText] = useState('')
-  const { list, loading, search, resetComic, getList } = useSearchStore()
+  const { cacheList: list, loading, search, resetComic, getList } = useSearchStore()
   const { repo, setRepo } = usePersistStore()
   const { repoList } = useGlobalStore()
   const inputRef = useRef(null) as MutableRefObject<null> | MutableRefObject<HTMLInputElement>

@@ -20,12 +20,14 @@
     "build": "npm run typecheck && electron-vite build",
     "prisma:generate": "npx prisma generate",
     "postinstall": "electron-builder install-app-deps",
-    "build:win": "npm run prisma:generate && npm run build && electron-builder --win --config",
-    "build:mac": "npm run prisma:generate && electron-vite build && electron-builder --mac --universal --config",
-    "build:linux": "npm run prisma:generate && electron-vite build && electron-builder --linux --config"
+    "build:win-x64": "npm run prisma:generate && npm run build && electron-builder --win --config",
+    "build:win-arm": "npm run prisma:generate && npm run build && electron-builder --win --arm64 --config",
+    "build:linux-x64": "npm run prisma:generate && electron-vite build && electron-builder --linux --config",
+    "build:linux-arm": "npm run prisma:generate && electron-vite build && electron-builder --linux --arm64 --config",
+    "build:mac": "npm run prisma:generate && electron-vite build && electron-builder --mac --universal --config"
   },
   "dependencies": {
-    "@apollo/client": "^3.11.3",
+    "@apollo/client": "^3.11.4",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
     "@electron/asar": "^3.2.7",
@@ -38,7 +40,7 @@
     "graphql": "^16.8.1",
     "lodash.debounce": "^4.0.8",
     "prisma": "^5.18.0",
-    "prisma-packaged": "^0.9.4",
+    "prisma-packaged": "^0.9.5",
     "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-confirm-alert": "^3.0.6",

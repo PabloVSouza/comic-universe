@@ -4,44 +4,50 @@ on:
   push:
     tags:
       - v*.*.*
-
 jobs:
-  release:
+  Build:
     runs-on: ${{ matrix.os }}
     permissions: write-all
     env:
       GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-
     strategy:
       matrix:
-        os: [windows-latest, macos-14, ubuntu-latest]
-
+        os: [windows-latest, ubuntu-latest, macos-14]
+        architecture: [x64, arm64]
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install Dependencies
         run: yarn
 
-      - name: build-linux
-        if: matrix.os == 'ubuntu-latest'
-        run: npm run build:linux
+      - name: build-linux-x64
+        if: matrix.architecture == 'x64' && matrix.os == 'ubuntu-latest'
+        run: npm run build:linux-x64
+
+      - name: build-linux-arm
+        if: matrix.architecture == 'arm64' && matrix.os == 'ubuntu-latest'
+        run: npm run build:linux-arm
+
+      - name: build-win-x64
+        if: matrix.architecture == 'x64' && matrix.os == 'windows-latest'
+        run: npm run build:win-x64
+
+      - name: build-win-arm
+        if: matrix.architecture == 'arm64' && matrix.os == 'windows-latest'
+        run: npm run build:win-arm
 
       - name: build-mac-universal
-        if: matrix.os == 'macos-14'
+        if: matrix.architecture == 'arm64' && matrix.os == 'macos-14'
         run: yarn run build:mac
 
-      - name: build-win
-        if: matrix.os == 'windows-latest'
-        run: yarn run build:win
-
       - name: release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           draft: true
           files: |

@@ -70,7 +70,11 @@ class RepoPluginsLoader {
         const partialPath = path.join(this.pluginsFinalPath, plugin.name, plugin.path)
         const pluginPath = is.dev ? path.join('..', '..', partialPath) : partialPath
 
-        const newPlugin: IRepoPluginRepositoryConstruct = (await import(pluginPath)).default.default
+        const { platform } = process
+
+        const importPath = platform === 'win32' ? 'file://' + pluginPath : pluginPath
+
+        const newPlugin: IRepoPluginRepositoryConstruct = (await import(importPath)).default.default
 
         const instantiatedPlugin = new newPlugin()
 

@@ -11,6 +11,9 @@ jobs:
     permissions: write-all
     env:
       GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+    strategy:
+      matrix:
+        architecture: [x64, arm64]
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
@@ -24,7 +27,12 @@ jobs:
         run: yarn
 
       - name: build
-        run: npm run build:linux
+        if: matrix.architecture == 'x64'
+        run: npm run build:linux-x64
+
+      - name: build
+        if: matrix.architecture == 'arm64'
+        run: npm run build:linux-arm
 
       - name: release
         uses: softprops/action-gh-release@v2
@@ -62,8 +70,13 @@ jobs:
       - name: Install Dependencies
         run: yarn
 
-      - name: build-win
-        run: yarn run build:win
+      - name: build
+        if: matrix.architecture == 'x64'
+        run: npm run build:win-x64
+
+      - name: build
+        if: matrix.architecture == 'x64'
+        run: npm run build:win-arm
 
       - name: release
         uses: softprops/action-gh-release@v2

@@ -6,6 +6,7 @@ const { invoke } = window.Electron.ipcRenderer
 
 interface useSearchStore {
   comic: ComicInterface
+  cacheList: ComicInterface[]
   list: ComicInterface[]
   chapters: ChapterInterface[]
   loading: boolean
@@ -21,18 +22,20 @@ interface useSearchStore {
 
 const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
   comic: {} as ComicInterface,
+  cacheList: [],
   chapters: [],
   list: [],
   loading: false,
 
   getList: async (): Promise<void> => {
     const { repo } = usePersistStore.getState()
-    const { setLoading } = useSearchStore.getState()
+    const { setLoading, cacheList } = useSearchStore.getState()
     setLoading(true)
     const list = await invoke('getList', { repo })
+    const newCacheList = cacheList.length !== list.length ? list : cacheList
 
     return new Promise((resolve) => {
-      set((state: useSearchStore) => ({ ...state, list }))
+      set((state: useSearchStore) => ({ ...state, list, cacheList: newCacheList }))
       setLoading(false)
       resolve()
     })
@@ -40,12 +43,13 @@ const initialState = (set: StoreApi<unknown>['setState']): useSearchStore => ({
 
   search: async (search): Promise<void> => {
     const { repo } = usePersistStore.getState()
-    const { setLoading } = useSearchStore.getState()
+    const { setLoading, cacheList } = useSearchStore.getState()
     setLoading(true)
     const list = await invoke('search', { repo, data: { search } })
+    const newCacheList = cacheList.length !== list.length ? list : cacheList
 
     return new Promise((resolve) => {
-      set((state: useSearchStore) => ({ ...state, list }))
+      set((state: useSearchStore) => ({ ...state, list, cacheList: newCacheList }))
       setLoading(false)
 
       resolve()

@@ -32,11 +32,12 @@ interface DownloadComicLang {
   }
 }
 
-interface RightNavLang {
+interface HomeNavLang {
   about: string
   settings: string
   darkMode: string
   changeUser: string
+  closeApp: string
 }
 
 interface SearchComicLang {
@@ -85,7 +86,7 @@ interface Lang {
   General: GenerlLang
   Dashboard: DashboardLang
   DownloadComic: DownloadComicLang
-  RightNav: RightNavLang
+  HomeNav: HomeNavLang
   SearchComic: SearchComicLang
   Settings: SettingsLang
   Users: UsersLang

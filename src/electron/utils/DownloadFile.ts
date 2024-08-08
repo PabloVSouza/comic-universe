@@ -13,7 +13,7 @@ const DownloadFile = async (path: string, url: string): Promise<string> => {
   await response.data.pipe(fs.createWriteStream(path + fileName))
 
   return new Promise((resolve) => {
-    resolve(fileName)
+    resolve("")
   })
 }
 

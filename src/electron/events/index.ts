@@ -6,7 +6,7 @@ import dbEvents from './dbEvents'
 
 export const createEvents = (window: BrowserWindow, path: string): void => {
   appEvents(window, path)
-  apiEvents(window, path)
+  apiEvents()
   dbEvents(window, path)
 }
 

@@ -1,0 +1,15 @@
+.AppLogo {
+  --color-1: #090604;
+  --color-2: #fbfbfb;
+  --color-3: #f5c713;
+
+  transition: all $transition-default;
+
+  path {
+    transition: fill $transition-default;
+  }
+}
+
+.gray {
+  --color-3: #b9b9b9;
+}

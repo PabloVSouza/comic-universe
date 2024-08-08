@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import classNames from 'classnames'
-import style from './style.module.scss'
+import style from './Cover.module.scss'
 
 interface Cover {
   className?: string
@@ -12,7 +12,7 @@ interface Cover {
 const Cover = ({ className, children, visible, index, ...props }: Cover): JSX.Element => {
   return (
     <div
-      className={classNames(style.cover, className, visible ? style.visible : null)}
+      className={classNames(style.Cover, className, visible ? style.visible : null)}
       style={index ? { zIndex: index } : {}}
       {...props}
     >

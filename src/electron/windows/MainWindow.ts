@@ -10,13 +10,13 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    // frame: false,
+    frame: false,
     webPreferences: {
       webSecurity: false,
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     },
-    icon: join(__dirname, '../../../resources/icon.png')
+    icon: join(__dirname, '../../../resources/logo.svg')
   })
 
   createEvents(mainWindow, app.getPath('userData'))

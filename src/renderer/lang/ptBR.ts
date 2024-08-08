@@ -33,11 +33,12 @@ export default class ptBR implements Lang {
     }
   }
 
-  RightNav: RightNavLang = {
+  HomeNav: HomeNavLang = {
     about: 'Sobre este App',
     settings: 'Configurações',
     darkMode: 'Modo Noturno',
-    changeUser: 'Trocar de Usuário'
+    changeUser: 'Trocar de Usuário',
+    closeApp: 'Fechar App'
   }
 
   SearchComic: SearchComicLang = {

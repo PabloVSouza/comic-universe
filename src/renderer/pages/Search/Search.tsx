@@ -13,10 +13,18 @@ import useGlobalStore from 'store/useGlobalStore'
 
 const Search = (): JSX.Element => {
   const [searchText, setSearchText] = useState('')
-  const { list, loading, search, resetComic, getList } = useSearchStore()
+  const { cacheList: list, loading, search, resetComic, getList } = useSearchStore()
   const { repo, setRepo } = usePersistStore()
   const { repoList } = useGlobalStore()
   const inputRef = useRef(null) as MutableRefObject<null> | MutableRefObject<HTMLInputElement>
+
+  useEffect(() => {
+    if (!(repo in repoList)) {
+      if (repoList[0]) setRepo(repoList[0].value)
+    }
+  }, [])
+
+  const noRepos = !repoList.length
 
   const texts = useLang()
 
@@ -48,8 +56,10 @@ const Search = (): JSX.Element => {
   }, [])
 
   useMemo(() => {
-    if (searchText.length) search(searchText)
-    if (!searchText.length) getList()
+    if (!noRepos && !!repo) {
+      if (searchText.length) search(searchText)
+      if (!searchText.length) getList()
+    }
   }, [searchText])
 
   return (
@@ -61,6 +71,7 @@ const Search = (): JSX.Element => {
             defaultValue={repoList.find((val) => val?.value === repo)}
             options={repoList}
             onChange={(e) => handleChangeRepo(e as TOption)}
+            isDisabled={noRepos}
           />
         </div>
         <div className={classNames(style.inputBlock, style.inputText)}>

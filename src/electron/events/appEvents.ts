@@ -17,8 +17,9 @@ const appEvents = (win: BrowserWindow, path: string): void => {
   })
   ipcMain.handle('getAppRepos', async () => {
     const repoPlugin = new RepoPluginsLoader()
-    await repoPlugin.GetPluginList()
-    return Object.values(repoPlugin.repoList).map((val) => ({
+    const repoList = await repoPlugin.getRepoList()
+
+    return Object.values(repoList).map((val) => ({
       label: val.RepoName,
       value: val.RepoTag
     }))

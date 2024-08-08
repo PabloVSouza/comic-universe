@@ -21,7 +21,7 @@ asarUnpack:
 win:
   executableName: comic-universe
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
+  artifactName: ${name}-${version}-win-${arch}.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
@@ -35,6 +35,7 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
 dmg:
   artifactName: ${name}-${version}-mac-${arch}.${ext}
+  backgroundColor: '#a0aef8'
 linux:
   target:
     - AppImage

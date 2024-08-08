@@ -11,9 +11,6 @@ jobs:
     permissions: write-all
     env:
       GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-    strategy:
-      matrix:
-        architecture: [x64, arm64]
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4

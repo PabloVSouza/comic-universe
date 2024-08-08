@@ -6,42 +6,31 @@ on:
       - v*.*.*
 
 jobs:
-  release:
-    runs-on: ${{ matrix.os }}
+  Linux:
+    runs-on: ubuntu-latest
     permissions: write-all
     env:
       GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-
     strategy:
       matrix:
-        os: [windows-latest, macos-14, ubuntu-latest]
-
+        architecture: [x64, arm64]
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install Dependencies
         run: yarn
 
-      - name: build-linux
-        if: matrix.os == 'ubuntu-latest'
+      - name: build
         run: npm run build:linux
 
-      - name: build-mac-universal
-        if: matrix.os == 'macos-14'
-        run: yarn run build:mac
-
-      - name: build-win
-        if: matrix.os == 'windows-latest'
-        run: yarn run build:win
-
       - name: release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           draft: true
           files: |

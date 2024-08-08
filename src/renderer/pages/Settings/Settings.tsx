@@ -20,6 +20,7 @@ const windowSettings = {
     closeable: true,
     unique: true,
     movable: true,
+    resizable: true,
     title: 'App Settings'
   },
   initialStatus: {

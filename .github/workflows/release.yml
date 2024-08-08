@@ -82,8 +82,13 @@ jobs:
       - name: Install Dependencies
         run: yarn
 
-      - name: build-win
-        run: yarn run build:win
+      - name: build
+        if: matrix.architecture == 'x64'
+        run: npm run build:win-x64
+
+      - name: build
+        if: matrix.architecture == 'x64'
+        run: npm run build:win-arm
 
       - name: release
         uses: softprops/action-gh-release@v2

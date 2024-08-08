@@ -4,7 +4,9 @@ import { join } from 'path'
 import { createEvents, removeEvents } from '../events'
 import { autoUpdater } from 'electron-updater'
 
-const CreateMainWindow = async (): Promise<BrowserWindow> => {
+import type { Startup } from '../Scripts/Startup'
+
+const CreateMainWindow = async (startUpObjects: Startup): Promise<BrowserWindow> => {
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
@@ -19,7 +21,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     icon: join(__dirname, '../../../resources/logo.svg')
   })
 
-  createEvents(mainWindow, app.getPath('userData'))
+  createEvents(mainWindow, startUpObjects, app.getPath('userData'))
 
   let firstLogin = false
 

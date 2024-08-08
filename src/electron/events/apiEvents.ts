@@ -10,10 +10,11 @@ const apiEvents = (): void => {
 
       const properties = Object.getOwnPropertyNames(repoList[firstRepo].methods)
 
-    for (const method of properties) {
-      ipcMain.handle(method, async (_event, { repo, data }) =>
-        repoPlugin.repoList[repo].methods[method](data)
-      )
+      for (const method of properties) {
+        ipcMain.handle(method, async (_event, { repo, data }) =>
+          repoList[repo].methods[method](data)
+        )
+      }
     }
   })
 }

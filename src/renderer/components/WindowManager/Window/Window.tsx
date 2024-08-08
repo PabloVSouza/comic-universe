@@ -86,11 +86,11 @@ const Window = ({
       }
     }
 
-    useEffect(() => {
-      if (initialStatus.isMaximized) setIsMaximized(id, true)
-      if (!height) {
-        let newHeight = 300
-        let newWidth = 500
+    const updateSize = () => {
+      if (!height || !windowObject.windowProps.resizable) {
+        let newHeight = Number(initialStatus.height ?? 300)
+        let newWidth = Number(initialStatus.width ?? 500)
+
         if (initialStatus.height || initialStatus.width) {
           if (initialStatus.height) newHeight = Number(initialStatus.height)
           if (initialStatus.width) newWidth = Number(initialStatus.width)
@@ -105,6 +105,11 @@ const Window = ({
         }
         setSize(id, { width: newWidth, height: newHeight })
       }
+    }
+
+    useEffect(() => {
+      if (initialStatus.isMaximized) setIsMaximized(id, true)
+      updateSize()
       if (!top || !left) {
         setPosition(id, {
           left: refWindow?.current?.offsetLeft ?? 0,
@@ -125,6 +130,7 @@ const Window = ({
 
     useEffect(() => {
       if (!windowObject.windowProps.movable) updatePosition()
+      if (!windowObject.windowProps.resizable) updateSize()
     }, [containerSize])
 
     const maximizedStyle = {

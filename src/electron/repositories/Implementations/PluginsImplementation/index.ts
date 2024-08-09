@@ -1,5 +1,4 @@
 import { app, BrowserWindow } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
 import { is } from '@electron-toolkit/utils'
 import path from 'path'
 import fs from 'fs'

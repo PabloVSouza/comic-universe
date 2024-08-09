@@ -1,4 +1,4 @@
-import { shell, BrowserWindow, app, ipcMain } from 'electron'
+import { shell, BrowserWindow, app } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
 import { autoUpdater } from 'electron-updater'

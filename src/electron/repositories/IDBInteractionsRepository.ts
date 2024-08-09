@@ -1,5 +1,3 @@
-import { BrowserWindow } from 'electron'
-
 export type IDBInteractionsMethods = {
   //Comics
   dbGetComic: (input: { id: number }) => Promise<ComicInterface>

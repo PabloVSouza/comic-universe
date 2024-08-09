@@ -45,9 +45,3 @@ linux:
 appImage:
   artifactName: ${name}-${version}-linux-${arch}.${ext}
 npmRebuild: false
-publish:
-  provider: github
-  protocol: https
-  owner: PabloVSouza
-  repo: comic-universe
-  releaseType: draft

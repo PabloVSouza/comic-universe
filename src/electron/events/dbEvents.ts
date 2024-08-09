@@ -1,13 +1,13 @@
-import { ipcMain, BrowserWindow } from 'electron'
-import { DBInteractionsRepository } from '../repositories/Implementations/DBInteractions'
+import { BrowserWindow, ipcMain } from 'electron'
+import type { Startup } from '../Scripts/Startup'
 
-const dbEvents = (win: BrowserWindow, path: string): void => {
-  const db = new DBInteractionsRepository('prisma', { path, win })
+const dbEvents = (startupObject: Startup, _path: string, _win: BrowserWindow): void => {
+  const { repoDBObject } = startupObject
 
-  const properties = Object.getOwnPropertyNames(db.repo.methods)
+  const properties = Object.getOwnPropertyNames(repoDBObject.repo.methods)
 
   for (const method of properties) {
-    ipcMain.handle(method, async (_event, data) => db.repo.methods[method](data))
+    ipcMain.handle(method, async (_event, data) => repoDBObject.repo.methods[method](data))
   }
 }
 

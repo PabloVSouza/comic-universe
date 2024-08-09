@@ -34,5 +34,4 @@ export interface IDBInteractionsRepository {
 
 export interface IDBInteractionsRepositoryInit {
   path: string
-  win: BrowserWindow
 }

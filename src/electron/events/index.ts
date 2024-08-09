@@ -6,18 +6,35 @@ import dbEvents from './dbEvents'
 import pluginEvents from './pluginEvents'
 
 import type { Startup } from '../Scripts/Startup'
+class EventManager {
+  constructor(
+    private startupObject: Startup,
+    private path: string,
+    private win: BrowserWindow
+  ) {
+    this.startEvents()
+  }
 
-export const createEvents = (window: BrowserWindow, startupObject: Startup, path: string): void => {
-  appEvents(window, startupObject, path)
-  apiEvents(window, startupObject, path)
-  dbEvents(window, startupObject, path)
-  pluginEvents(window, startupObject, path)
-}
+  public startEvents = () => {
+    appEvents(this.startupObject, this.path, this.win)
+    apiEvents(this.startupObject, this.path, this.win)
+    dbEvents(this.startupObject, this.path, this.win)
+    pluginEvents(this.startupObject, this.path, this.win)
+    ipcMain.handle('resetEvents', this.resetEvents)
+  }
 
-export const removeEvents = (): void => {
-  // @ts-ignore typing not defined by electron
-  const events = Array.from(ipcMain._invokeHandlers.keys()) as string[]
-  for (const event of events) {
-    ipcMain.removeHandler(event)
+  public removeEvents = () => {
+    // @ts-ignore typing not defined by electron
+    const events = Array.from(ipcMain._invokeHandlers.keys()) as string[]
+    for (const event of events) {
+      ipcMain.removeHandler(event)
+    }
+  }
+
+  public resetEvents = () => {
+    this.removeEvents()
+    this.startEvents()
   }
 }
+
+export default EventManager

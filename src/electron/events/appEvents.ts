@@ -1,8 +1,8 @@
-import { BrowserWindow, ipcMain } from 'electron'
+import { BrowserWindow, ipcMain, app } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import type { Startup } from '../Scripts/Startup'
 
-const appEvents = (win: BrowserWindow, _startupObject: Startup, path: string): void => {
+const appEvents = (_startupObject: Startup, path: string, win: BrowserWindow): void => {
   ipcMain.handle('getAppPath', () => path)
 
   ipcMain.handle('getIsDev', () => is.dev)
@@ -16,7 +16,7 @@ const appEvents = (win: BrowserWindow, _startupObject: Startup, path: string): v
   })
 
   ipcMain.handle('closeWindow', () => {
-    win.close()
+    app.quit()
   })
 }
 

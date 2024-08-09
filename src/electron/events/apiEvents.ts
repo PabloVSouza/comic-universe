@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron'
 import type { Startup } from '../Scripts/Startup'
 
-const apiEvents = (_win: BrowserWindow, startupObject: Startup, _path: string): void => {
+const apiEvents = (startupObject: Startup, _path: string, _win: BrowserWindow): void => {
   const { repoPluginsObject } = startupObject
 
   const repoList = repoPluginsObject.activePlugins

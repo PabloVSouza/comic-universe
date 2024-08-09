@@ -1,4 +1,5 @@
 import { app, ipcMain } from 'electron'
+import { electronAPI } from '@electron-toolkit/preload'
 import { is } from '@electron-toolkit/utils'
 import path from 'path'
 import fs from 'fs'
@@ -115,6 +116,12 @@ class RepoPluginsLoader {
       label: plugin.RepoName,
       value: plugin.RepoTag
     }))
+  }
+
+  public updatePlugins = async () => {
+    await this.installPlugins()
+    await this.activatePlugins()
+    await electronAPI.ipcRenderer.invoke('getAppPath')
   }
 
   public startUp = async () => {

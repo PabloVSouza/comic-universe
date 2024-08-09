@@ -49,5 +49,6 @@ getAppPath()
 getRepoList()
 
 on('UpdateRepo', () => {
+  console.log('Oi')
   getRepoList()
 })

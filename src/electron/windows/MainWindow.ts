@@ -1,9 +1,8 @@
-import { shell, BrowserWindow, app } from 'electron'
+import { shell, BrowserWindow, app, ipcMain } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
-import { createEvents, removeEvents } from '../events'
 import { autoUpdater } from 'electron-updater'
-
+import EventManager from '../events'
 import type { Startup } from '../Scripts/Startup'
 
 const CreateMainWindow = async (startUpObjects: Startup): Promise<BrowserWindow> => {
@@ -21,7 +20,7 @@ const CreateMainWindow = async (startUpObjects: Startup): Promise<BrowserWindow>
     icon: join(__dirname, '../../../resources/logo.svg')
   })
 
-  createEvents(mainWindow, startUpObjects, app.getPath('userData'))
+  const eventManager = new EventManager(startUpObjects, app.getPath('userData'), mainWindow)
 
   let firstLogin = false
 
@@ -49,7 +48,7 @@ const CreateMainWindow = async (startUpObjects: Startup): Promise<BrowserWindow>
   }
 
   mainWindow.on('close', () => {
-    removeEvents()
+    eventManager.removeEvents()
   })
 
   return mainWindow

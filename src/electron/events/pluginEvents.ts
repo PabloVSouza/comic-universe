@@ -1,7 +1,7 @@
-import { ipcMain, BrowserWindow } from 'electron'
+import { BrowserWindow, ipcMain } from 'electron'
 import type { Startup } from '../Scripts/Startup'
 
-const pluginEvents = (_win: BrowserWindow, startupObject: Startup, _path: string): void => {
+const pluginEvents = (startupObject: Startup, _path: string, _win: BrowserWindow): void => {
   const { repoPluginsObject } = startupObject
 
   const properties = Object.getOwnPropertyNames(repoPluginsObject)

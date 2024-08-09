@@ -1,4 +1,4 @@
-import { app, ipcMain } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { is } from '@electron-toolkit/utils'
 import path from 'path'
@@ -100,12 +100,13 @@ class RepoPluginsLoader {
         const instantiatedPlugin = new newPlugin()
 
         this.activePlugins = {
-          ...this.activatePlugins,
+          ...this.activePlugins,
           [instantiatedPlugin.RepoTag]: instantiatedPlugin
         }
-
-        ipcMain.emit('UpdateRepo')
       }
+
+      const win = BrowserWindow.getAllWindows()[0]
+      if (!!win) win.webContents.send('updateRepos')
     } catch (e) {
       throw e
     }
@@ -121,7 +122,6 @@ class RepoPluginsLoader {
   public updatePlugins = async () => {
     await this.installPlugins()
     await this.activatePlugins()
-    await electronAPI.ipcRenderer.invoke('getAppPath')
   }
 
   public startUp = async () => {

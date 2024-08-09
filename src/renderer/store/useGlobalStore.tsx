@@ -32,12 +32,14 @@ const useGlobalStore = create<useGlobalStore>((set) => ({
 
   getRepoList: async () => {
     const repoList = await invoke('getRepoList')
+
     set((state) => ({ ...state, repoList }))
   },
 
   updatePlugins: async () => {
     await invoke('installPlugins')
     await invoke('activatePlugins')
+    await invoke('resetEvents')
   }
 }))
 
@@ -48,7 +50,6 @@ const { getAppPath, getRepoList } = useGlobalStore.getState()
 getAppPath()
 getRepoList()
 
-on('UpdateRepo', () => {
-  console.log('Oi')
+on('updateRepos', () => {
   getRepoList()
 })

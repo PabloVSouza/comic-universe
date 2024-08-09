@@ -20,7 +20,9 @@ class EventManager {
     apiEvents(this.startupObject, this.path, this.win)
     dbEvents(this.startupObject, this.path, this.win)
     pluginEvents(this.startupObject, this.path, this.win)
-    ipcMain.handle('resetEvents', this.resetEvents)
+    ipcMain.handle('resetEvents', () => {
+      this.resetEvents()
+    })
   }
 
   public removeEvents = () => {

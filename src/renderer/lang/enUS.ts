@@ -53,20 +53,12 @@ export default class enUS implements Lang {
   }
 
   Settings: SettingsLang = {
-    title: 'App Settings',
-    pages: {
-      header: 'Change Pages',
-      pageDirectionOptions: {
-        leftToRight: 'Left to Right',
-        rightToLeft: 'Right to Left'
-      }
-    },
-    wallpaper: {
-      header: 'Select Wallpaper',
-      wallpaperMode: 'Wallpaper Behaviour',
-      uploadWallpaper: 'Send a Wallpaper'
-    },
-    selectLanguage: 'Select the App Language'
+    windowTitle: 'Application Settings',
+    options: {
+      generalLabel: 'General',
+      pluginsLabel: 'Plugins',
+      userLabel: 'Users'
+    }
   }
 
   Users: UsersLang = {

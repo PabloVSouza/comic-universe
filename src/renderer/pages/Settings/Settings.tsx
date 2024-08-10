@@ -4,6 +4,7 @@ import SettingsList from 'components/SettingsComponents/SettingsList'
 import SettingsGeneral from 'components/SettingsComponents/SettingsGeneral'
 import SettingsUser from 'components/SettingsComponents/SettingsUser'
 import SettingsPlugin from 'components/SettingsComponents/SettingsPlugin'
+import useLang from 'lang'
 
 import style from './Settings.module.scss'
 
@@ -14,21 +15,23 @@ import settingsIcon from 'assets/settings.svg'
 const Settings = (): ReactElement => {
   const [activeOption, setActiveOption] = useState('general')
 
+  const lang = useLang()
+
   const settingsOptions: ISettingsOption[] = [
     {
-      label: 'General Settings',
+      label: lang.Settings.options.generalLabel,
       tag: 'general',
       icon: settingsIcon,
       onClick: () => setActiveOption('general')
     },
     {
-      label: 'User Settings',
+      label: lang.Settings.options.userLabel,
       icon: userIcon,
       tag: 'user',
       onClick: () => setActiveOption('user')
     },
     {
-      label: 'Plugins',
+      label: lang.Settings.options.pluginsLabel,
       icon: pluginIcon,
       tag: 'plugins',
       onClick: () => setActiveOption('plugins')
@@ -62,7 +65,7 @@ const windowSettings = {
     titleBar: true,
     closeable: true,
     unique: true,
-    title: 'App Settings'
+    title: useLang().Settings.windowTitle
   },
   initialStatus: {
     startPosition: 'center',

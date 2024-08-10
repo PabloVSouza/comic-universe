@@ -2,4 +2,8 @@
   width: 200px;
   background: var(--colorBackground);
   flex-shrink: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }

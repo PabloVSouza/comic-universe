@@ -4,25 +4,40 @@ import SettingsList from 'components/SettingsComponents/SettingsList'
 import style from './Settings.module.scss'
 
 import pluginIcon from 'assets/plugin.svg'
+import userIcon from 'assets/user.svg'
+import settingsIcon from 'assets/settings.svg'
 
 const Settings = (): ReactElement => {
   const [activeOption, setActiveOption] = useState('')
 
   const settingsOptions: ISettingsOption[] = [
     {
+      label: 'General Settings',
+      tag: 'general',
+      icon: settingsIcon,
+      onClick: () => setActiveOption('general')
+    },
+    {
+      label: 'User Settings',
+      icon: userIcon,
+      tag: 'user',
+      onClick: () => setActiveOption('user')
+    },
+    {
       label: 'Plugins',
       icon: pluginIcon,
-      onClick: () => setActiveOption('Plugins')
+      tag: 'plugins',
+      onClick: () => setActiveOption('plugins')
     }
   ]
 
   useEffect(() => {
-    setActiveOption(settingsOptions[0].label)
+    setActiveOption(settingsOptions[0].tag)
   }, [])
 
   return (
     <>
-      <SettingsList options={settingsOptions} />
+      <SettingsList options={settingsOptions} activeOption={activeOption} />
     </>
   )
 }

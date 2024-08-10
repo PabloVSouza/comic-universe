@@ -69,8 +69,8 @@ const windowSettings = {
   },
   initialStatus: {
     startPosition: 'center',
-    width: '80%',
-    height: '80%'
+    width: 750,
+    height: 500
   }
 } as TWindow
 

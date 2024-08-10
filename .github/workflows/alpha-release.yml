@@ -67,7 +67,7 @@ jobs:
       - name: Install Dependencies
         run: yarn
 
-      - name: build-win-x64
+      - name: build-win
         run: npm run build:win-x64
 
       - name: release

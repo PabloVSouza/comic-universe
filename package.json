@@ -21,8 +21,7 @@
     "prisma:generate": "npx prisma generate",
     "postinstall": "electron-builder install-app-deps",
     "generate-icons": "electron-icon-builder --input=./resources/icon.png --output=build --flatten",
-    "build:win-x64": "npm run prisma:generate && npm run build && electron-builder --win --config",
-    "build:win-arm": "npm run prisma:generate && npm run build && electron-builder --win --arm64 --config",
+    "build:win": "npm run prisma:generate && npm run build && electron-builder --win --config",
     "build:linux-x64": "npm run prisma:generate && electron-vite build && electron-builder --linux --config",
     "build:linux-arm": "npm run prisma:generate && electron-vite build && electron-builder --linux --arm64 --config",
     "build:mac": "npm run prisma:generate && electron-vite build && electron-builder --mac --universal --config"

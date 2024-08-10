@@ -9,6 +9,9 @@
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"],
+    "typeRoots": [
+      "src/@types"
+    ],
     "baseUrl": "src/eletron",
     "resolveJsonModule": true,
     "paths": {

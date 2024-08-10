@@ -24,6 +24,9 @@ export type IDBInteractionsMethods = {
   dbGetAllUsers: () => Promise<UserInterface[]>
   dbUpdateUser: (input: { user: UserInterface }) => Promise<UserInterface>
   dbDeleteUser: (input: { id: number }) => Promise<void>
+
+  dbRunMigrations: () => Promise<void>
+  dbVerifyMigrations: () => Promise<boolean>
 }
 
 export interface IDBInteractionsRepository {

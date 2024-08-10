@@ -5,25 +5,37 @@ import { Chapter, Comic, PrismaClient, User } from '@prisma/client'
 import {
   IDBInteractionsRepository,
   IDBInteractionsMethods,
-  IDBInteractionsRepositoryInit
-} from '../../IDBInteractionsRepository'
+} from './IDBInteractionsRepository'
 
-export class PrismaDBInteractionsRepository implements IDBInteractionsRepository {
-  private db: PrismaClient
+export class DBInteractionsRepository implements IDBInteractionsRepository {
+  private db = {} as PrismaClient
+  private prismaInitializer = {} as PrismaInitializer
 
-  constructor(private data: IDBInteractionsRepositoryInit) {
+  constructor(private dbPath: string) {
     const cnnParams = '?socket_timeout=10&connection_limit=1'
-    const prodDb = `file:${path.join(this.data.path, 'db', 'database.db')}${cnnParams}`
+    const prodDb = `file:${path.join(this.dbPath, 'db', 'database.db')}${cnnParams}`
     const devDb = `file:../database.db${cnnParams}`
 
-    const dbPath = is.dev ? devDb : prodDb
+    this.dbPath = is.dev ? devDb : prodDb
+  }
 
-    const prismaInitializer = new PrismaInitializer(dbPath, '20240805000921_plugin_table')
-    this.db = prismaInitializer.prisma
-    prismaInitializer.runMigration()
+  public startup = async () => {
+    this.prismaInitializer = new PrismaInitializer(this.dbPath, '20240805000921_plugin_table')
+    await this.prismaInitializer.initializePrisma()
+    this.db = this.prismaInitializer.prisma
+    await this.prismaInitializer.runMigration()
   }
 
   methods: IDBInteractionsMethods = {
+
+    dbRunMigrations: async () => {
+      await this.prismaInitializer.runMigration()
+    },
+
+    dbVerifyMigrations: async () => {
+      return await this.prismaInitializer.verifyMigration(this.db)
+    },
+
     //Comics
     dbGetComic: async ({ id }): Promise<ComicInterface> => {
       const comic = await this.db.comic.findUnique({ where: { id } })

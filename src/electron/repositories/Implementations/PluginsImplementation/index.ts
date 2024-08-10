@@ -50,8 +50,6 @@ class RepoPluginsLoader {
 
       await extract(finalPath, destPath)
 
-      console.log(finalPath)
-
       fs.unlinkSync(devPath)
     }
   }

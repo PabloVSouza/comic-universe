@@ -1,4 +1,4 @@
-export interface IRepoPluginMethods {
+interface IRepoPluginMethods {
   getList(): Promise<ComicInterface[]>
   search(input: { search: string }): Promise<ComicInterface[]>
   getDetails(search: { [key: string]: string }): Promise<Partial<ComicInterface>>
@@ -10,18 +10,25 @@ export interface IRepoPluginMethods {
   }): Promise<{ cover: string; pageFiles: Page[] }>
 }
 
-export interface IRepoPluginRepository {
+interface IRepoPluginRepository {
   RepoName: string
   RepoUrl: string
   RepoTag: string
   methods: IRepoPluginMethods
 }
 
-export interface IRepoPluginRepositoryConstruct {
+interface IRepoPluginRepositoryConstruct {
   new (): IRepoPluginRepository
 }
 
-export interface IRepoPluginRepositoryInit {
+interface IRepoPluginRepositoryInit {
   path: string
   url: string
+}
+
+interface RepoPluginInfo {
+  name: string
+  author: string
+  repository: string
+  version: string
 }

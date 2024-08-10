@@ -1,0 +1,3 @@
+const SettingsPluginList = () => {
+  return <></>
+}

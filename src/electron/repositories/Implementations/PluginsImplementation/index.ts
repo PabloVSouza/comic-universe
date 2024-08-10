@@ -2,10 +2,6 @@ import { app, BrowserWindow } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import path from 'path'
 import fs from 'fs'
-import {
-  IRepoPluginRepository,
-  IRepoPluginRepositoryConstruct
-} from '../../../../@types/RepoPlugin'
 import CreateDirectory from '../../../utils/CreateDirectory'
 import { extract } from 'pacote'
 

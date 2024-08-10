@@ -52,7 +52,7 @@ class RepoPluginsLoader {
 
       console.log(finalPath)
 
-      fs.unlinkSync(finalPath)
+      fs.unlinkSync(devPath)
     }
   }
 

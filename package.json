@@ -37,7 +37,7 @@
     "electron-updater": "^6.1.4",
     "lodash.debounce": "^4.0.8",
     "pacote": "^18.0.6",
-    "prisma-packaged": "^0.9.7",
+    "prisma-packaged": "github:pablovsouza/prisma-packaged#staging",
     "react": "^18.2.0",
     "react-confirm-alert": "^3.0.6",
     "react-dom": "^18.2.0",

@@ -1,5 +1,5 @@
 import RepoPluginsLoader from '../repositories/Implementations/PluginsImplementation'
-import { DBInteractionsRepository } from '../repositories/Implementations/DBInteractions'
+import { DBInteractionsRepository } from '../repositories/Implementations/DBImplementations/DBImplementationsRepository'
 import { app } from 'electron'
 
 const Startup = async () => {
@@ -9,7 +9,9 @@ const Startup = async () => {
 
   const path = app.getPath('userData')
 
-  const repoDBObject = new DBInteractionsRepository('prisma', { path })
+  const repoDBObject = new DBInteractionsRepository(path)
+
+  await repoDBObject.startup()
 
   return { repoPluginsObject, repoDBObject }
 }

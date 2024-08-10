@@ -5436,10 +5436,9 @@ prettier@^3.0.3:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.3.3.tgz#30c54fe0be0d8d12e6ae61dbb10109ea00d53105"
   integrity sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==
 
-prisma-packaged@^0.9.7:
+"prisma-packaged@github:pablovsouza/prisma-packaged#staging":
   version "0.9.7"
-  resolved "https://registry.yarnpkg.com/prisma-packaged/-/prisma-packaged-0.9.7.tgz#9e9b40f2099ade199fbc6ac7753a90a68811ca43"
-  integrity sha512-/HN6PXsfKYZGspZeMzAcsed5Ops2t3uC/C+4aUPGNXPPe6xrFTj4BhlaTYtbpwS4Ts5Ne0XDT7rouH+VNnEQMA==
+  resolved "https://codeload.github.com/pablovsouza/prisma-packaged/tar.gz/412082b7c2dcb7622a3ca8b1ba502693d9748fc3"
   dependencies:
     "@electron/asar" "^3.2.10"
     copyfiles "^2.4.1"

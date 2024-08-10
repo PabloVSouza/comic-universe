@@ -3,7 +3,7 @@ name: Build/release Electron app
 on:
   push:
     tags:
-      - v*.*.*
+      - v*.*.*-nightly.*
 jobs:
   Build:
     runs-on: ${{ matrix.os }}

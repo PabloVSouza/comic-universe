@@ -44,4 +44,4 @@ linux:
   category: Utility
 appImage:
   artifactName: ${name}-${version}-linux-${arch}.${ext}
-npmRebuild: false
+npmRebuild: true

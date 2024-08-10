@@ -36,9 +36,10 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v2
-
         with:
-          draft: true
+          prerelease: true
+          tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: |
             dist/*.exe
             dist/*.zip
@@ -49,7 +50,6 @@ jobs:
             dist/*.rpm
             dist/*.tar.gz
             dist/*.yml
-            dist/*.blockmap
   Windows:
     runs-on: windows-latest
     permissions: write-all
@@ -74,7 +74,9 @@ jobs:
         uses: softprops/action-gh-release@v2
 
         with:
-          draft: true
+          prerelease: true
+          tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: |
             dist/*.exe
             dist/*.zip
@@ -85,7 +87,6 @@ jobs:
             dist/*.rpm
             dist/*.tar.gz
             dist/*.yml
-            dist/*.blockmap
   Mac:
     runs-on: macos-14
     permissions: write-all
@@ -111,6 +112,8 @@ jobs:
 
         with:
           prerelease: true
+          tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: |
             dist/*.exe
             dist/*.zip

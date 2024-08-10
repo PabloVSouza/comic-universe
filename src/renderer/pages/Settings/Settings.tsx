@@ -1,12 +1,28 @@
-import { ReactElement } from 'react'
-import SettingsList from 'components/SettingsComponents/SettingsList/SettingsList'
+import { ReactElement, useState, useEffect } from 'react'
+import SettingsList from 'components/SettingsComponents/SettingsList'
 
 import style from './Settings.module.scss'
 
+import pluginIcon from 'assets/plugin.svg'
+
 const Settings = (): ReactElement => {
+  const [activeOption, setActiveOption] = useState('')
+
+  const settingsOptions: ISettingsOption[] = [
+    {
+      label: 'Plugins',
+      icon: pluginIcon,
+      onClick: () => setActiveOption('Plugins')
+    }
+  ]
+
+  useEffect(() => {
+    setActiveOption(settingsOptions[0].label)
+  }, [])
+
   return (
     <>
-      <SettingsList />
+      <SettingsList options={settingsOptions} />
     </>
   )
 }
@@ -18,7 +34,6 @@ const windowSettings = {
     titleBar: true,
     closeable: true,
     unique: true,
-    movable: true,
     title: 'App Settings'
   },
   initialStatus: {

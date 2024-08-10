@@ -20,7 +20,7 @@ import exitIcon from 'assets/exit-door.svg'
 import refreshIcon from 'assets/refresh.svg'
 
 const HomeNav = (): JSX.Element => {
-  const { menuVisible, toggleMenu, updatePlugins } = useGlobalStore()
+  const { menuVisible, toggleMenu, updatePlugins, runMigrations } = useGlobalStore()
   const { switchTheme, currentUser } = usePersistStore()
 
   const navigate = useNavigate()
@@ -56,6 +56,11 @@ const HomeNav = (): JSX.Element => {
       label: 'Refresh Plugins',
       icon: refreshIcon,
       onClick: () => updatePlugins()
+    },
+    {
+      label: 'Run Migrations',
+      icon: refreshIcon,
+      onClick: () => runMigrations()
     }
   ]
 

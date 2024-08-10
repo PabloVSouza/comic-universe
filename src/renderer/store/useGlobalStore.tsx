@@ -16,6 +16,7 @@ interface useGlobalStore {
   getAppPath: () => Promise<void>
   getRepoList: () => Promise<void>
   updatePlugins: () => Promise<void>
+  runMigrations: () => Promise<void>
 }
 
 const useGlobalStore = create<useGlobalStore>((set) => ({
@@ -40,6 +41,10 @@ const useGlobalStore = create<useGlobalStore>((set) => ({
     await invoke('installPlugins')
     await invoke('activatePlugins')
     await invoke('resetEvents')
+  },
+
+  runMigrations: async () => {
+    await invoke('dbRunMigrations')
   }
 }))
 

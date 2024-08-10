@@ -1,5 +1,3 @@
-import { BrowserWindow } from 'electron'
-
 export type IDBInteractionsMethods = {
   //Comics
   dbGetComic: (input: { id: number }) => Promise<ComicInterface>
@@ -26,6 +24,9 @@ export type IDBInteractionsMethods = {
   dbGetAllUsers: () => Promise<UserInterface[]>
   dbUpdateUser: (input: { user: UserInterface }) => Promise<UserInterface>
   dbDeleteUser: (input: { id: number }) => Promise<void>
+
+  dbRunMigrations: () => Promise<void>
+  dbVerifyMigrations: () => Promise<boolean>
 }
 
 export interface IDBInteractionsRepository {
@@ -34,5 +35,4 @@ export interface IDBInteractionsRepository {
 
 export interface IDBInteractionsRepositoryInit {
   path: string
-  win: BrowserWindow
 }

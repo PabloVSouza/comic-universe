@@ -1,22 +1,18 @@
-import { ipcMain } from 'electron'
-import RepoPluginLoader from '../RepoPluginsLoader'
+import { BrowserWindow, ipcMain } from 'electron'
+import type { Startup } from '../Scripts/Startup'
 
-const apiEvents = (): void => {
-  const repoPlugin = new RepoPluginLoader()
+const apiEvents = (startupObject: Startup, _path: string, _win: BrowserWindow): void => {
+  const { repoPluginsObject } = startupObject
 
-  repoPlugin.getRepoList().then((repoList) => {
-    if (Object.values(repoList).length > 0) {
-      const firstRepo = Object.getOwnPropertyNames(repoList)[0]
+  const repoList = repoPluginsObject.activePlugins
 
-      const properties = Object.getOwnPropertyNames(repoList[firstRepo].methods)
-
-      for (const method of properties) {
-        ipcMain.handle(method, async (_event, { repo, data }) =>
-          repoList[repo].methods[method](data)
-        )
-      }
+  if (Object.values(repoList).length > 0) {
+    const firstRepo = Object.getOwnPropertyNames(repoList)[0]
+    const properties = Object.getOwnPropertyNames(repoList[firstRepo].methods)
+    for (const method of properties) {
+      ipcMain.handle(method, async (_event, { repo, data }) => repoList[repo].methods[method](data))
     }
-  })
+  }
 }
 
 export default apiEvents

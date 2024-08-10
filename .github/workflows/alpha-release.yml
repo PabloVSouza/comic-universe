@@ -3,7 +3,7 @@ name: Build/release Electron app
 on:
   push:
     tags:
-      - v*.*.*-stable.*
+      - v*.*.*-alpha.*
 jobs:
   Linux:
     runs-on: ${{ matrix.os }}
@@ -68,7 +68,7 @@ jobs:
         run: yarn
 
       - name: build-win
-        run: npm run build:win
+        run: yarn run build:win
 
       - name: release
         uses: softprops/action-gh-release@v2
@@ -111,7 +111,7 @@ jobs:
         uses: softprops/action-gh-release@v2
 
         with:
-          draft: true
+          prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: |

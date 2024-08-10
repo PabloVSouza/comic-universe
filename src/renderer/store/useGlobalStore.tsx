@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { SingleValue } from 'react-select'
 
-const { invoke } = window.Electron.ipcRenderer
+const { invoke, on } = window.Electron.ipcRenderer
 
 type TOption = SingleValue<{
   value: string
@@ -14,7 +14,9 @@ interface useGlobalStore {
   repoList: TOption[]
   toggleMenu: () => void
   getAppPath: () => Promise<void>
-  getAppRepos: () => Promise<void>
+  getRepoList: () => Promise<void>
+  updatePlugins: () => Promise<void>
+  runMigrations: () => Promise<void>
 }
 
 const useGlobalStore = create<useGlobalStore>((set) => ({
@@ -29,14 +31,30 @@ const useGlobalStore = create<useGlobalStore>((set) => ({
     set((state) => ({ ...state, appPath }))
   },
 
-  getAppRepos: async () => {
-    const repoList = await invoke('getAppRepos')
-    set((state) => ({...state, repoList}))
+  getRepoList: async () => {
+    const repoList = await invoke('getRepoList')
+
+    set((state) => ({ ...state, repoList }))
   },
+
+  updatePlugins: async () => {
+    await invoke('installPlugins')
+    await invoke('activatePlugins')
+    await invoke('resetEvents')
+  },
+
+  runMigrations: async () => {
+    await invoke('dbRunMigrations')
+  }
 }))
 
 export default useGlobalStore
 
-const { getAppPath, getAppRepos } = useGlobalStore.getState()
+const { getAppPath, getRepoList } = useGlobalStore.getState()
+
 getAppPath()
-getAppRepos()
+getRepoList()
+
+on('updateRepos', () => {
+  getRepoList()
+})

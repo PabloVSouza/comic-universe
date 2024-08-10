@@ -1,6 +1,6 @@
 import style from './SettingsGeneral.module.scss'
 
-const SettingsUser = () => {
+const SettingsGeneral = () => {
   return (
     <div className={style.SettingsGeneral}>
       <h2>General Settings</h2>
@@ -8,4 +8,4 @@ const SettingsUser = () => {
   )
 }
 
-export default SettingsUser
+export default SettingsGeneral

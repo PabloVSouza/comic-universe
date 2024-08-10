@@ -1,6 +1,6 @@
 import style from './SettingsPlugin.module.scss'
 
-const SettingsUser = () => {
+const SettingsPlugin = () => {
   return (
     <div className={style.SettingsPlugin}>
       <h2>Plugin Settings</h2>
@@ -8,4 +8,4 @@ const SettingsUser = () => {
   )
 }
 
-export default SettingsUser
+export default SettingsPlugin

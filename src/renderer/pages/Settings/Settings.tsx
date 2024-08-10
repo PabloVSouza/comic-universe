@@ -1,14 +1,12 @@
-import { ReactElement, useState } from 'react'
+import { ReactElement } from 'react'
+import SettingsList from 'components/SettingsComponents/SettingsList/SettingsList'
+
 import style from './Settings.module.scss'
 
 const Settings = (): ReactElement => {
-  const [number, setNumber] = useState(0)
-
   return (
     <>
-      <h3>Settings</h3>
-      <p>{number}</p>
-      <button onClick={(): void => setNumber(number + 1)}>Increase</button>
+      <SettingsList />
     </>
   )
 }
@@ -16,15 +14,17 @@ const Settings = (): ReactElement => {
 const windowSettings = {
   windowProps: {
     className: style.Settings,
+    contentClassName: style.Content,
     titleBar: true,
     closeable: true,
     unique: true,
     movable: true,
-    resizable: true,
     title: 'App Settings'
   },
   initialStatus: {
-    startPosition: 'center'
+    startPosition: 'center',
+    width: '80%',
+    height: '80%'
   }
 } as TWindow
 

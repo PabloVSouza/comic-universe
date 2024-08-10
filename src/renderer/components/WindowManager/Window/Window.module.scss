@@ -19,11 +19,6 @@
     background: var(--colorBackground);
     flex-shrink: 0;
     box-shadow: $shadow-default;
-    cursor: grab;
-
-    &:active {
-      cursor: grabbing;
-    }
 
     .movableArea {
       width: 100%;

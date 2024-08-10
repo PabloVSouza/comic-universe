@@ -68,7 +68,7 @@ jobs:
         run: yarn
 
       - name: build-win
-        run: npm run build:win-x64
+        run: npm run build:win
 
       - name: release
         uses: softprops/action-gh-release@v2

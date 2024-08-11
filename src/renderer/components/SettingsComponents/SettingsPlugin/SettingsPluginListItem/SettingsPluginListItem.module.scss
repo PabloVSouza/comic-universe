@@ -2,16 +2,28 @@
   display: flex;
   height: 100px;
   background: var(--colorHighlight);
+  padding: 0 10px;
+  color: var(--colorTextHighlight);
   .textArea {
+    gap: 5px;
     flex-grow: 1;
     flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     .name {
+      font-weight: bold;
     }
 
-    .author {
-    }
-
-    .version {
+    .VersionAuthor {
+      display: flex;
+      gap: 5px;
+      font-size: 15px;
+      text-decoration: wavy;
+      .version {
+      }
+      .author {
+      }
     }
 
     .repository {

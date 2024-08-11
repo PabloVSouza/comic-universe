@@ -10,8 +10,10 @@ const SettingsPluginListItem = ({ plugin }: { plugin: RepoPluginInfo }) => {
     <li className={style.SettingsPluginListItem}>
       <div className={style.textArea}>
         <p className={style.name}>{plugin.name}</p>
-        <span className={style.version}>{plugin.version}</span>
-        <span className={style.author}>{plugin.author}</span>
+        <p className={style.VersionAuthor}>
+          <span className={style.version}>Version: {plugin.version}</span>
+          <span className={style.author}>Author: {plugin.author}</span>
+        </p>
         <a href={plugin.repository} target="_blank" rel="noreferrer">
           <u>Github Repository</u>
         </a>

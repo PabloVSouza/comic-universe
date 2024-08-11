@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Dropzone from 'components/Dropzone'
 import style from './SettingsPlugin.module.scss'
 import SettingsPluginList from './SettingsPluginList'

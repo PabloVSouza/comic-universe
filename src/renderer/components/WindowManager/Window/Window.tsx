@@ -3,7 +3,6 @@ import useWindowManagerStore from 'store/useWindowManagerStore'
 import style from './Window.module.scss'
 import Button from 'components/Button/Button'
 import classNames from 'classnames'
-import { windowsStore } from 'process'
 
 const Window = ({
   children,

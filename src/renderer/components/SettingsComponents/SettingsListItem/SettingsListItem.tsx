@@ -7,8 +7,8 @@ const SettingsListItem = ({ option, active }: { option: ISettingsOption; active?
     <li
       className={classNames(style.SettingsListItem, active ? style.active : '')}
       onClick={option.onClick}
+      title={option.label}
     >
-      <p className={style.Label}>{option.label}</p>
       <div className={style.IconContainer}>
         <Image src={option.icon} svg className={style.Icon} />
       </div>

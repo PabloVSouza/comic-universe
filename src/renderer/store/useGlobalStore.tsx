@@ -39,7 +39,6 @@ const useGlobalStore = create<useGlobalStore>((set) => ({
 
   getAppRunningPath: async (): Promise<void> => {
     const appRunningPath = await invoke('getAppRunningPath')
-    console.log(appRunningPath)
 
     set((state) => ({ ...state, appRunningPath }))
   },

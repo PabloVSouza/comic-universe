@@ -20,7 +20,12 @@ const CreateMainWindow = async (startUpObjects: Startup): Promise<BrowserWindow>
     icon: join(__dirname, '../../../resources/logo.svg')
   })
 
-  const eventManager = new EventManager(startUpObjects, app.getPath('userData'), mainWindow)
+  const eventManager = new EventManager(
+    startUpObjects,
+    app.getPath('userData'),
+    app.getAppPath(),
+    mainWindow
+  )
 
   let firstLogin = false
 

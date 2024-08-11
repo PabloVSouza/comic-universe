@@ -10,16 +10,17 @@ class EventManager {
   constructor(
     private startupObject: Startup,
     private path: string,
+    private runningPath: string,
     private win: BrowserWindow
   ) {
     this.startEvents()
   }
 
   public startEvents = () => {
-    appEvents(this.startupObject, this.path, this.win)
-    apiEvents(this.startupObject, this.path, this.win)
-    dbEvents(this.startupObject, this.path, this.win)
-    pluginEvents(this.startupObject, this.path, this.win)
+    appEvents(this.startupObject, this.path, this.runningPath, this.win)
+    apiEvents(this.startupObject, this.path, this.runningPath, this.win)
+    dbEvents(this.startupObject, this.path, this.runningPath, this.win)
+    pluginEvents(this.startupObject, this.path, this.runningPath, this.win)
     ipcMain.handle('resetEvents', () => {
       this.resetEvents()
     })

@@ -30,5 +30,7 @@ interface RepoPluginInfo {
   name: string
   author: string
   repository: string
+  path: string
+  iconPath: string
   version: string
 }

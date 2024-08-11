@@ -2,8 +2,15 @@ import { BrowserWindow, ipcMain, app } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import type { Startup } from '../Scripts/Startup'
 
-const appEvents = (_startupObject: Startup, path: string, win: BrowserWindow): void => {
+const appEvents = (
+  _startupObject: Startup,
+  path: string,
+  runningPath: string,
+  win: BrowserWindow
+): void => {
   ipcMain.handle('getAppPath', () => path)
+
+  ipcMain.handle('getAppRunningPath', () => (is.dev ? runningPath : path))
 
   ipcMain.handle('getIsDev', () => is.dev)
 

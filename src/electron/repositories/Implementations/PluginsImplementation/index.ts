@@ -64,9 +64,11 @@ class RepoPluginsLoader {
           const repoObj = {
             name: packageFile.name,
             path: packageFile.main,
+            author: packageFile.author,
             version: packageFile.version,
-            repository: packageFile.repository.url
-          }
+            repository: packageFile.repository.url,
+            iconPath: path.join(folderPath, packageFile.icon)
+          } as RepoPluginInfo
 
           pluginsList.push(repoObj)
         } catch {

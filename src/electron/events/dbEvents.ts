@@ -1,7 +1,12 @@
 import { BrowserWindow, ipcMain } from 'electron'
 import type { Startup } from '../Scripts/Startup'
 
-const dbEvents = (startupObject: Startup, _path: string, _win: BrowserWindow): void => {
+const dbEvents = (
+  startupObject: Startup,
+  _path: string,
+  _runningPath: string,
+  _win: BrowserWindow
+): void => {
   const { repoDBObject } = startupObject
 
   const properties = Object.getOwnPropertyNames(repoDBObject.methods)

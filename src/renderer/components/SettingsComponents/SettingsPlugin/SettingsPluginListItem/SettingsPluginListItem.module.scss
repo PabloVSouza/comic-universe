@@ -1,2 +1,27 @@
 .SettingsPluginListItem {
+  display: flex;
+  height: 100px;
+  background: var(--colorHighlight);
+  .textArea {
+    flex-grow: 1;
+    flex-shrink: 0;
+    .name {
+    }
+
+    .author {
+    }
+
+    .version {
+    }
+
+    .repository {
+    }
+  }
+
+  .icon {
+    flex-shrink: 0;
+    height: 100%;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+  }
 }

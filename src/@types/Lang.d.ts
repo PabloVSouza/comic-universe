@@ -52,20 +52,12 @@ interface SearchComicLang {
 }
 
 interface SettingsLang {
-  title: string
-  pages: {
-    header: string
-    pageDirectionOptions: {
-      leftToRight: string
-      rightToLeft: string
-    }
+  windowTitle: string
+  options: {
+    generalLabel: string
+    userLabel: string
+    pluginsLabel: string
   }
-  wallpaper: {
-    header: string
-    wallpaperMode: string
-    uploadWallpaper: string
-  }
-  selectLanguage: string
 }
 
 interface UsersLang {

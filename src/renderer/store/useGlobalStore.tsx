@@ -10,25 +10,37 @@ type TOption = SingleValue<{
 
 interface useGlobalStore {
   appPath: string
+  appRunningPath: string
   menuVisible: boolean
   repoList: TOption[]
+  pluginsList: RepoPluginInfo[]
   toggleMenu: () => void
   getAppPath: () => Promise<void>
+  getAppRunningPath: () => Promise<void>
   getRepoList: () => Promise<void>
   updatePlugins: () => Promise<void>
+  getPluginInfoList: () => Promise<void>
   runMigrations: () => Promise<void>
 }
 
 const useGlobalStore = create<useGlobalStore>((set) => ({
   appPath: '',
+  appRunningPath: '',
   menuVisible: false,
   repoList: [],
+  pluginsList: [],
 
   toggleMenu: (): void => set((state) => ({ ...state, menuVisible: !state.menuVisible })),
 
   getAppPath: async (): Promise<void> => {
     const appPath = await invoke('getAppPath')
     set((state) => ({ ...state, appPath }))
+  },
+
+  getAppRunningPath: async (): Promise<void> => {
+    const appRunningPath = await invoke('getAppRunningPath')
+
+    set((state) => ({ ...state, appRunningPath }))
   },
 
   getRepoList: async () => {
@@ -43,6 +55,12 @@ const useGlobalStore = create<useGlobalStore>((set) => ({
     await invoke('resetEvents')
   },
 
+  getPluginInfoList: async () => {
+    const pluginsList = await invoke('getPluginInfoList')
+
+    set((state) => ({ ...state, pluginsList }))
+  },
+
   runMigrations: async () => {
     await invoke('dbRunMigrations')
   }
@@ -50,9 +68,10 @@ const useGlobalStore = create<useGlobalStore>((set) => ({
 
 export default useGlobalStore
 
-const { getAppPath, getRepoList } = useGlobalStore.getState()
+const { getAppPath, getRepoList, getAppRunningPath } = useGlobalStore.getState()
 
 getAppPath()
+getAppRunningPath()
 getRepoList()
 
 on('updateRepos', () => {

@@ -2,10 +2,6 @@ import { app, BrowserWindow } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import path from 'path'
 import fs from 'fs'
-import {
-  IRepoPluginRepository,
-  IRepoPluginRepositoryConstruct
-} from '../../../../@types/RepoPlugin'
 import CreateDirectory from '../../../utils/CreateDirectory'
 import { extract } from 'pacote'
 
@@ -68,9 +64,11 @@ class RepoPluginsLoader {
           const repoObj = {
             name: packageFile.name,
             path: packageFile.main,
+            author: packageFile.author,
             version: packageFile.version,
-            repository: packageFile.repository.url
-          }
+            repository: packageFile.repository.url,
+            iconPath: path.join(folderPath, packageFile.icon)
+          } as RepoPluginInfo
 
           pluginsList.push(repoObj)
         } catch {

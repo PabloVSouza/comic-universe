@@ -3,6 +3,7 @@ import useWindowManagerStore from 'store/useWindowManagerStore'
 import style from './Window.module.scss'
 import Button from 'components/Button/Button'
 import classNames from 'classnames'
+import { windowsStore } from 'process'
 
 const Window = ({
   children,
@@ -164,12 +165,15 @@ const Window = ({
       <div
         className={style.Window}
         ref={refWindow}
-        style={finalStyle}
+        style={{ ...finalStyle, cursor: windowStatus.isMoving ? 'grabbing' : 'unset' }}
         onMouseDown={(): void => setIsFocused(id)}
         {...props}
       >
         {titleBar && (
-          <div className={style.titleBar}>
+          <div
+            className={style.titleBar}
+            style={{ cursor: movable ? (windowStatus.isMoving ? 'grabbing' : 'grab') : 'unset' }}
+          >
             <div
               className={style.movableArea}
               onDoubleClick={maximizeWindow}

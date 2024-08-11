@@ -1,14 +1,59 @@
-import { ReactElement, useState } from 'react'
+import { ReactElement, useState, useEffect } from 'react'
+import SettingsList from 'components/SettingsComponents/SettingsList'
+
+import SettingsGeneral from 'components/SettingsComponents/SettingsGeneral'
+import SettingsUser from 'components/SettingsComponents/SettingsUser'
+import SettingsPlugin from 'components/SettingsComponents/SettingsPlugin'
+import useLang from 'lang'
+
 import style from './Settings.module.scss'
 
+import pluginIcon from 'assets/plugin.svg'
+import userIcon from 'assets/user.svg'
+import settingsIcon from 'assets/settings.svg'
+
 const Settings = (): ReactElement => {
-  const [number, setNumber] = useState(0)
+  const [activeOption, setActiveOption] = useState('general')
+
+  const lang = useLang()
+
+  const settingsOptions: ISettingsOption[] = [
+    {
+      label: lang.Settings.options.generalLabel,
+      tag: 'general',
+      icon: settingsIcon,
+      onClick: () => setActiveOption('general')
+    },
+    {
+      label: lang.Settings.options.userLabel,
+      icon: userIcon,
+      tag: 'user',
+      onClick: () => setActiveOption('user')
+    },
+    {
+      label: lang.Settings.options.pluginsLabel,
+      icon: pluginIcon,
+      tag: 'plugins',
+      onClick: () => setActiveOption('plugins')
+    }
+  ]
+
+  useEffect(() => {
+    setActiveOption(settingsOptions[0].tag)
+  }, [])
+
+  const componentList = {
+    general: SettingsGeneral,
+    user: SettingsUser,
+    plugins: SettingsPlugin
+  }
+
+  const Components = componentList[activeOption]
 
   return (
     <>
-      <h3>Settings</h3>
-      <p>{number}</p>
-      <button onClick={(): void => setNumber(number + 1)}>Increase</button>
+      <SettingsList options={settingsOptions} activeOption={activeOption} />
+      <Components />
     </>
   )
 }
@@ -16,15 +61,16 @@ const Settings = (): ReactElement => {
 const windowSettings = {
   windowProps: {
     className: style.Settings,
+    contentClassName: style.Content,
     titleBar: true,
     closeable: true,
     unique: true,
-    movable: true,
-    resizable: true,
-    title: 'App Settings'
+    title: useLang().Settings.windowTitle
   },
   initialStatus: {
-    startPosition: 'center'
+    startPosition: 'center',
+    width: 750,
+    height: 500
   }
 } as TWindow
 

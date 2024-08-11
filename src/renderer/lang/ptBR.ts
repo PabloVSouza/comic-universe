@@ -53,20 +53,12 @@ export default class ptBR implements Lang {
   }
 
   Settings: SettingsLang = {
-    title: 'Configurações',
-    pages: {
-      header: 'Troca de páginas',
-      pageDirectionOptions: {
-        leftToRight: 'Esquerda para Direita',
-        rightToLeft: 'Direita para Esquerda'
-      }
-    },
-    wallpaper: {
-      header: 'Selecione o Papel de Parede',
-      wallpaperMode: 'Modo do Papel de Parede',
-      uploadWallpaper: 'Envie um Papel de Parede'
-    },
-    selectLanguage: 'Selecione o Idioma do App'
+    windowTitle: 'Configurações',
+    options: {
+      generalLabel: 'Geral',
+      pluginsLabel: 'Plugins',
+      userLabel: 'Usuário'
+    }
   }
 
   Users: UsersLang = {

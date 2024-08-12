@@ -116,6 +116,10 @@ class RepoPluginsLoader {
     }))
   }
 
+  public downloadAndInstallPlugin = (plugin: string) => {
+    console.log(plugin)
+  }
+
   public updatePlugins = async () => {
     await this.installPlugins()
     await this.activatePlugins()

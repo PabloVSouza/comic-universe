@@ -10,7 +10,7 @@ import downloadIcon from 'assets/download-icon-3.svg'
 import useGlobalStore from 'store/useGlobalStore'
 
 const SettingsPlugin = () => {
-  const { pluginsList, getPluginInfoList } = useGlobalStore()
+  const { pluginsList, getPluginInfoList, downloadAndInstallPlugin } = useGlobalStore()
 
   const [apiPlugins, setApiPlugins] = useState([] as IRepoApiPluginList[])
 
@@ -54,6 +54,8 @@ const SettingsPlugin = () => {
           icon={downloadIcon}
           theme="pure"
           title="Download and Install Plugin"
+          disabled={!selectedPluginToInstall}
+          onClick={() => downloadAndInstallPlugin(selectedPluginToInstall)}
         />
       </div>
       <SettingsPluginList pluginsList={pluginsList} />

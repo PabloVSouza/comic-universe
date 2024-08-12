@@ -17,10 +17,9 @@ import settingsIcon from 'assets/settings.svg'
 import darkmodeIcon from 'assets/darkmode.svg'
 import userIcon from 'assets/user.svg'
 import exitIcon from 'assets/exit-door.svg'
-import refreshIcon from 'assets/refresh.svg'
 
 const HomeNav = (): JSX.Element => {
-  const { menuVisible, toggleMenu, updatePlugins, runMigrations } = useGlobalStore()
+  const { menuVisible, toggleMenu } = useGlobalStore()
   const { switchTheme, currentUser } = usePersistStore()
 
   const navigate = useNavigate()

@@ -20,8 +20,6 @@ const SettingsPlugin = () => {
     setSelectedPluginToInstall(val)
   }
 
-  console.log(selectedPluginToInstall.label)
-
   useEffect(() => {
     getPluginInfoList()
   }, [])

@@ -14,10 +14,15 @@ const SettingsPlugin = () => {
 
   const [apiPlugins, setApiPlugins] = useState([] as IRepoApiPluginList[])
 
-  const [selectedPluginToInstall, setSelectedPluginToInstall] = useState({} as TOption)
+  const [selectedPluginToInstall, setSelectedPluginToInstall] = useState('' as string | TOption)
 
   const handleSelectPluginToInstall = (val: TOption) => {
     setSelectedPluginToInstall(val)
+  }
+
+  const handleButton = () => {
+    if (typeof selectedPluginToInstall === 'object')
+      downloadAndInstallPlugin(selectedPluginToInstall.value)
   }
 
   useEffect(() => {
@@ -31,7 +36,7 @@ const SettingsPlugin = () => {
   }, [])
 
   useEffect(() => {
-    setSelectedPluginToInstall({} as TOption)
+    setSelectedPluginToInstall('')
   }, [pluginsList])
 
   const pluginSelectOptions = apiPlugins
@@ -59,7 +64,7 @@ const SettingsPlugin = () => {
           theme="pure"
           title="Download and Install Plugin"
           disabled={!selectedPluginToInstall}
-          onClick={() => downloadAndInstallPlugin(selectedPluginToInstall.value)}
+          onClick={handleButton}
         />
       </div>
       <SettingsPluginList pluginsList={pluginsList} />

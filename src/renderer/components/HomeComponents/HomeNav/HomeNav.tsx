@@ -51,16 +51,6 @@ const HomeNav = (): JSX.Element => {
       label: texts.HomeNav.changeUser,
       icon: userIcon,
       onClick: (): void => navigate('/users')
-    },
-    {
-      label: 'Refresh Plugins',
-      icon: refreshIcon,
-      onClick: () => updatePlugins()
-    },
-    {
-      label: 'Run Migrations',
-      icon: refreshIcon,
-      onClick: () => runMigrations()
     }
   ]
 

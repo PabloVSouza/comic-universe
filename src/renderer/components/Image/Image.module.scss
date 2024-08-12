@@ -1,0 +1,25 @@
+.enter {
+  opacity: 0;
+}
+
+.exit {
+  opacity: 1;
+}
+
+.enterActive,
+.exitActive {
+  transition: opacity $transition-default;
+}
+
+.enterActive {
+  opacity: 1;
+}
+
+.exitActive {
+  opacity: 0;
+}
+
+.enterActive,
+.exitActive {
+  transition: 0.2;
+}

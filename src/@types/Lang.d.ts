@@ -32,11 +32,12 @@ interface DownloadComicLang {
   }
 }
 
-interface RightNavLang {
+interface HomeNavLang {
   about: string
   settings: string
   darkMode: string
   changeUser: string
+  closeApp: string
 }
 
 interface SearchComicLang {
@@ -51,20 +52,12 @@ interface SearchComicLang {
 }
 
 interface SettingsLang {
-  title: string
-  pages: {
-    header: string
-    pageDirectionOptions: {
-      leftToRight: string
-      rightToLeft: string
-    }
+  windowTitle: string
+  options: {
+    generalLabel: string
+    userLabel: string
+    pluginsLabel: string
   }
-  wallpaper: {
-    header: string
-    wallpaperMode: string
-    uploadWallpaper: string
-  }
-  selectLanguage: string
 }
 
 interface UsersLang {
@@ -85,7 +78,7 @@ interface Lang {
   General: GenerlLang
   Dashboard: DashboardLang
   DownloadComic: DownloadComicLang
-  RightNav: RightNavLang
+  HomeNav: HomeNavLang
   SearchComic: SearchComicLang
   Settings: SettingsLang
   Users: UsersLang

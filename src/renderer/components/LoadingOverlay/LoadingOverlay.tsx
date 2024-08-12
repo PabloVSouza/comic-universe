@@ -1,7 +1,7 @@
 import Cover from 'components/Cover/Cover'
 import Image from 'components/Image/Image'
 
-import style from './style.module.scss'
+import style from './LoadingOverlay.module.scss'
 
 import imgLoading from 'assets/loading.svg'
 

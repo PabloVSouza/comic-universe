@@ -1,6 +1,6 @@
 import { ReactElement, useRef, useState, ImgHTMLAttributes, CSSProperties } from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
-import styling from './style.module.scss'
+import styling from './Image.module.scss'
 
 type ImageProps = {
   placeholderSrc?: string
@@ -30,6 +30,7 @@ const Image = ({
     src,
     alt,
     style,
+    referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
     ...props
   }
 
@@ -69,11 +70,9 @@ const Image = ({
     const loadingProps = {
       src,
       style: { display: 'none' },
-      onLoad: (): void => setIsLoading(0)
-    }
+      referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
 
-    const addEndListener = (node: HTMLElement, done: () => void): void => {
-      node.addEventListener('transitionend', done, false)
+      onLoad: (): void => setIsLoading(0)
     }
 
     return (
@@ -81,7 +80,7 @@ const Image = ({
         <SwitchTransition mode="out-in">
           <CSSTransition
             key={isLoading}
-            addEndListener={addEndListener}
+            timeout={100}
             classNames={{
               enter: styling.enter,
               exit: styling.exit,
@@ -89,7 +88,7 @@ const Image = ({
               exitActive: styling.exitActive
             }}
           >
-            {isLoading ? <img {...placeHolderProps} /> : <img {...lazyImageProps} />}
+            {!!isLoading ? <img {...placeHolderProps} /> : <img {...lazyImageProps} />}
           </CSSTransition>
         </SwitchTransition>
         <img {...loadingProps} />

@@ -33,11 +33,12 @@ export default class ptBR implements Lang {
     }
   }
 
-  RightNav: RightNavLang = {
+  HomeNav: HomeNavLang = {
     about: 'Sobre este App',
     settings: 'Configurações',
     darkMode: 'Modo Noturno',
-    changeUser: 'Trocar de Usuário'
+    changeUser: 'Trocar de Usuário',
+    closeApp: 'Fechar App'
   }
 
   SearchComic: SearchComicLang = {
@@ -52,20 +53,12 @@ export default class ptBR implements Lang {
   }
 
   Settings: SettingsLang = {
-    title: 'Configurações',
-    pages: {
-      header: 'Troca de páginas',
-      pageDirectionOptions: {
-        leftToRight: 'Esquerda para Direita',
-        rightToLeft: 'Direita para Esquerda'
-      }
-    },
-    wallpaper: {
-      header: 'Selecione o Papel de Parede',
-      wallpaperMode: 'Modo do Papel de Parede',
-      uploadWallpaper: 'Envie um Papel de Parede'
-    },
-    selectLanguage: 'Selecione o Idioma do App'
+    windowTitle: 'Configurações',
+    options: {
+      generalLabel: 'Geral',
+      pluginsLabel: 'Plugins',
+      userLabel: 'Usuário'
+    }
   }
 
   Users: UsersLang = {

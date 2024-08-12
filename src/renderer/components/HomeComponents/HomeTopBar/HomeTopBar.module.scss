@@ -1,0 +1,50 @@
+.HomeNav {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  background: var(--colorBackground);
+  position: relative;
+  flex-shrink: 0;
+  padding: 0 10px;
+
+  .draggableArea {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    -webkit-app-region: drag;
+  }
+
+  .logoImage {
+    height: 50px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    position: absolute;
+    top: 2.5px;
+    z-index: 3;
+    transition: all $transition-default;
+    transform: translateY(20vh) scale(800%);
+  }
+
+  .logoImageVisible {
+    transform: translateY(0px) scale(200%);
+  }
+
+  .groupLeft,
+  .groupRight {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-app-region: no-drag;
+  }
+
+  .groupRight {
+    margin-left: auto;
+    .button {
+      z-index: 101;
+    }
+  }
+}

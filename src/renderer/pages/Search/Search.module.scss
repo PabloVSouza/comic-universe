@@ -1,0 +1,69 @@
+.Search {
+  height: 100%;
+  width: 100%;
+  .Content {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    .searchInput {
+      display: flex;
+      width: 90%;
+      box-shadow: $shadow-default;
+      margin: 20px;
+      height: 50px;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      .inputText {
+        flex-grow: 1;
+        padding: 0 20px;
+        .inputElement {
+          border: none;
+          height: 100%;
+          width: 100%;
+          background: transparent;
+          color: var(--colorText);
+          font-size: 18px;
+        }
+      }
+
+      .inputIcon {
+        padding-right: 20px;
+        border-radius: 0 $radius-default $radius-default;
+        .searchIcon {
+          width: 30px;
+          height: 30px;
+          aspect-ratio: 1/1;
+          mask-image: url('assets/magnifying-glass-search.svg');
+          mask-size: contain;
+          mask-position: center;
+          mask-repeat: no-repeat;
+          mask-origin: content-box;
+          background-color: var(--colorText);
+          opacity: 0.5;
+        }
+      }
+
+      .inputSelect {
+        border-radius: $radius-default 0 0 $radius-default;
+      }
+
+      .inputBlock {
+        background-color: var(--colorBackground);
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    .result {
+      width: 100%;
+      height: calc(100% - 80px);
+    }
+  }
+}

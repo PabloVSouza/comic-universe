@@ -33,11 +33,12 @@ export default class enUS implements Lang {
     }
   }
 
-  RightNav: RightNavLang = {
+  HomeNav: HomeNavLang = {
     about: 'About This App',
     settings: 'Settings',
     darkMode: 'Dark Mode',
-    changeUser: 'Change User'
+    changeUser: 'Change User',
+    closeApp: 'Fechar App'
   }
 
   SearchComic: SearchComicLang = {
@@ -52,20 +53,12 @@ export default class enUS implements Lang {
   }
 
   Settings: SettingsLang = {
-    title: 'App Settings',
-    pages: {
-      header: 'Change Pages',
-      pageDirectionOptions: {
-        leftToRight: 'Left to Right',
-        rightToLeft: 'Right to Left'
-      }
-    },
-    wallpaper: {
-      header: 'Select Wallpaper',
-      wallpaperMode: 'Wallpaper Behaviour',
-      uploadWallpaper: 'Send a Wallpaper'
-    },
-    selectLanguage: 'Select the App Language'
+    windowTitle: 'Application Settings',
+    options: {
+      generalLabel: 'General',
+      pluginsLabel: 'Plugins',
+      userLabel: 'Users'
+    }
   }
 
   Users: UsersLang = {

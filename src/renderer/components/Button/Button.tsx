@@ -1,8 +1,7 @@
 import { ReactElement } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Image from 'components/Image/Image'
+import Image from 'components/Image'
 import classNames from 'classnames'
-
 import style from './Button.module.scss'
 
 type TButton = {
@@ -13,7 +12,7 @@ type TButton = {
   icon?: string
   onClick?: () => void
   size?: 'xxs' | 'xs' | 's' | 'm' | 'l' | 'xl'
-  theme?: 'pure' | 'burger' | 'resize' | 'close' | 'minimize' | 'roundedRectangle' | 'roundedSquare'
+  theme?: 'pure' | 'burger' | 'resize' | 'close' | 'minimize'
   to?: string
 } & React.ComponentProps<'button'>
 
@@ -55,7 +54,7 @@ const Button = ({
 
   return (
     <button {...customProps}>
-      <Image className={style.icon} src={icon} svg />
+      {icon ? <Image className={style.icon} src={icon} svg /> : <div className={style.icon} />}
       {children}
     </button>
   )

@@ -1,0 +1,13 @@
+.UsersList {
+  overflow: auto;
+  flex-grow: 1;
+  display: flex;
+  max-width: 100%;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  gap: 10px;
+  justify-content: start;
+  padding: 0 10px;
+  align-items: center;
+  flex-grow: 1;
+}

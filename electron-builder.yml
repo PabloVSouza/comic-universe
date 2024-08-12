@@ -35,6 +35,7 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
 dmg:
   artifactName: ${name}-${version}-mac-${arch}.${ext}
+  backgroundColor: '#a0aef8'
 linux:
   target:
     - AppImage
@@ -43,10 +44,4 @@ linux:
   category: Utility
 appImage:
   artifactName: ${name}-${version}-linux-${arch}.${ext}
-npmRebuild: false
-publish:
-  provider: github
-  protocol: https
-  owner: PabloVSouza
-  repo: comic-universe
-  releaseType: draft
+npmRebuild: true

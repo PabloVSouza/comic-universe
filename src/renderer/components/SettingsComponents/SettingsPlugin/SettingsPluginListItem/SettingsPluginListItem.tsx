@@ -4,7 +4,7 @@ import FixFilePaths from 'functions/fixFilePaths'
 
 import style from './SettingsPluginListItem.module.scss'
 
-const SettingsPluginListItem = ({ plugin }: { plugin: RepoPluginInfo }) => {
+const SettingsPluginListItem = ({ plugin }: { plugin: IRepoPluginInfo }) => {
   const iconPath = FixFilePaths(plugin.iconPath)
   return (
     <li className={style.SettingsPluginListItem}>

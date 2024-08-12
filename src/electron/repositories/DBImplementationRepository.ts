@@ -2,10 +2,6 @@ import { is } from '@electron-toolkit/utils'
 import path from 'path'
 import { PrismaInitializer } from 'prisma-packaged'
 import { Chapter, Comic, PrismaClient, User } from '@prisma/client'
-import {
-  IDBInteractionsRepository,
-  IDBInteractionsMethods,
-} from './IDBInteractionsRepository'
 
 export class DBInteractionsRepository implements IDBInteractionsRepository {
   private db = {} as PrismaClient
@@ -27,7 +23,6 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
   }
 
   methods: IDBInteractionsMethods = {
-
     dbRunMigrations: async () => {
       await this.prismaInitializer.runMigration()
     },

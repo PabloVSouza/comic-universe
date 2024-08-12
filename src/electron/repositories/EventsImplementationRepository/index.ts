@@ -5,7 +5,7 @@ import apiEvents from './apiEvents'
 import dbEvents from './dbEvents'
 import pluginEvents from './pluginEvents'
 
-import type { Startup } from '../Scripts/Startup'
+import type { Startup } from 'scripts/Startup'
 class EventManager {
   constructor(
     private startupObject: Startup,

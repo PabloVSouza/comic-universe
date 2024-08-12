@@ -14,7 +14,7 @@ const SettingsPluginListItem = ({ plugin }: { plugin: IRepoPluginInfo }) => {
           <span className={style.version}>Version: {plugin.version}</span>
           <span className={style.author}>Author: {plugin.author}</span>
         </p>
-        <a href={plugin.repository} target="_blank" rel="noreferrer">
+        <a href={plugin.repository} target="_blank">
           <u>Github Repository</u>
         </a>
       </div>

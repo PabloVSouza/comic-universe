@@ -63,7 +63,10 @@ const useGlobalStore = create<useGlobalStore>((set) => ({
   },
 
   downloadAndInstallPlugin: async (plugin) => {
+    const { updatePlugins, getPluginInfoList } = useGlobalStore.getState()
     await invoke('downloadAndInstallPlugin', plugin)
+    await updatePlugins()
+    await getPluginInfoList()
   },
 
   runMigrations: async () => {

@@ -14,11 +14,13 @@ const SettingsPlugin = () => {
 
   const [apiPlugins, setApiPlugins] = useState([] as IRepoApiPluginList[])
 
-  const [selectedPluginToInstall, setSelectedPluginToInstall] = useState('')
+  const [selectedPluginToInstall, setSelectedPluginToInstall] = useState({} as TOption)
 
   const handleSelectPluginToInstall = (val: TOption) => {
-    setSelectedPluginToInstall(val.label)
+    setSelectedPluginToInstall(val)
   }
+
+  console.log(selectedPluginToInstall.label)
 
   useEffect(() => {
     getPluginInfoList()
@@ -30,14 +32,16 @@ const SettingsPlugin = () => {
     })
   }, [])
 
+  useEffect(() => {
+    setSelectedPluginToInstall({} as TOption)
+  }, [pluginsList])
+
   const pluginSelectOptions = apiPlugins
     .map((val) => ({
       label: val.name,
-      value: val.name
+      value: val.repo
     }))
     .filter((val) => !pluginsList.find((plugin) => plugin.name == val.label))
-
-  console.log(selectedPluginToInstall)
 
   return (
     <div className={style.SettingsPlugin}>
@@ -48,6 +52,8 @@ const SettingsPlugin = () => {
           options={pluginSelectOptions}
           placeholder="Select a plugin to install"
           onChange={(e) => handleSelectPluginToInstall(e as TOption)}
+          isDisabled={!pluginSelectOptions.length}
+          value={selectedPluginToInstall}
         />
         <Button
           className={style.button}
@@ -55,7 +61,7 @@ const SettingsPlugin = () => {
           theme="pure"
           title="Download and Install Plugin"
           disabled={!selectedPluginToInstall}
-          onClick={() => downloadAndInstallPlugin(selectedPluginToInstall)}
+          onClick={() => downloadAndInstallPlugin(selectedPluginToInstall.value)}
         />
       </div>
       <SettingsPluginList pluginsList={pluginsList} />

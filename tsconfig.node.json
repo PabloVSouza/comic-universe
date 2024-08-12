@@ -9,14 +9,14 @@
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"],
-    "resolveJsonModule": true,
+    "baseUrl": "src/eletron",
     "paths": {
-      "main/*": ["./src/electron/main/*"],
-      "preload/*": ["./src/electron/preload/*"],
-      "repositories/*": ["./src/electron/repositories/*"],
-      "scripts/*": ["./src/electron/scripts/*"],
-      "utils/*":["./src/electron/utils/*"],
-      "windows/*":["./src/electron/windows/*"],
+      "lib/*": ["./lib/*"],
+      "utils/*":["./utils/*"],
+      "repositories/*": ["./repositories/*"],
+      "main/*": ["./main/*"],
+      "preload/*": ["./preload/*"],
+      "events/*": ["./events/*"],
     }
   }
 }

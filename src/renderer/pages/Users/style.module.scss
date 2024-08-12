@@ -1,0 +1,43 @@
+.Users {
+  width: 600px;
+  min-height: 250px;
+  max-height: 400px;
+  background: var(--colorBackground);
+  color: var(--colorText);
+
+  .Content {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    overflow: hidden;
+
+    .body {
+      display: flex;
+      width: 100%;
+      flex-grow: 1;
+      overflow: auto;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      padding: 20px 0;
+
+    
+      input {
+        width: 90%;
+        padding: 10px;
+        border: none;
+        background: var(--colorBackground);
+        color: var(--colorText);
+        font-size: 30px;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 20px;
+      }
+    }
+  }
+}

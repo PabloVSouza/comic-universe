@@ -1,7 +1,6 @@
 import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
-import svgr from 'vite-plugin-svgr'
 
 export default defineConfig({
   main: {
@@ -10,17 +9,7 @@ export default defineConfig({
         entry: 'src/electron/main/index.ts'
       }
     },
-    plugins: [externalizeDepsPlugin()],
-    resolve: {
-      alias: {
-        main: resolve('src/electron/main'),
-        preload: resolve('src/electron/preload'),
-        repositories: resolve('src/electron/repositories'),
-        scripts: resolve('src/electron/scripts'),
-        utils: resolve('src/electron/utils'),
-        windows: resolve('src/electron/windows')
-      }
-    }
+    plugins: [externalizeDepsPlugin()]
   },
   preload: {
     build: {
@@ -41,17 +30,15 @@ export default defineConfig({
     build: {
       assetsInlineLimit: 0
     },
-    plugins: [react(), svgr()],
+    plugins: [react()],
     resolve: {
       alias: {
         '@': resolve('src/renderer/'),
         assets: resolve('src/renderer/assets'),
-        api: resolve('src/renderer/api'),
         components: resolve('src/renderer/components'),
         lang: resolve('src/renderer/lang'),
         hooks: resolve('src/renderer/hooks'),
         pages: resolve('src/renderer/pages'),
-        functions: resolve('src/renderer/functions'),
         routes: resolve('src/renderer/routes'),
         scss: resolve('src/renderer/scss'),
         store: resolve('src/renderer/store')

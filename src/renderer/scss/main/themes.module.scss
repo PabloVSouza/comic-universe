@@ -6,7 +6,7 @@
   --colorHover: #{$white};
   --colorBackground: #{$white-transparent};
   --colorUserProfile: transparent;
-  --colorLogo: #{$yellow-logo};
+  --colorUserProfileHover: 
 }
 
 .dark {
@@ -17,11 +17,4 @@
   --colorHover: #{$white};
   --colorBackground: #{$black-transparent};
   --colorUserProfile: #{rgba($white, 0.5)};
-  --colorLogo: #{$yellow-logo};
-
-  --settingsPluginListBackground: #{rgba($black, 0.2)};
-  --settingsOptionBackground: #{rgba($white, 0.3)};
-  --settingsOptionBackgroundHover: #{rgba($white, 0.8)};
-
-  --settingsPluginListItemBG: #rgba($black, 0.3);
 }

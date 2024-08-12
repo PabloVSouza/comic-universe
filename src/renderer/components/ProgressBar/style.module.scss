@@ -1,0 +1,22 @@
+.progressBar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  p {
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: lighter;
+  }
+
+  .bar {
+    background: $green-transparent;
+    flex-grow: 1;
+  }
+}

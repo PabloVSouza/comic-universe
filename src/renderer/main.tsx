@@ -1,8 +1,10 @@
 import { ReactNode, useEffect } from 'react'
-import { HashRouter, useNavigate } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import ReactDOM from 'react-dom/client'
 import Routes from 'routes'
 import usePersistStore from 'store/usePersistStore'
+
 import style from 'scss/main/style.module.scss'
 import themes from 'scss/main/themes.module.scss'
 

@@ -1,0 +1,99 @@
+.SearchComicListItem {
+  background: var(--colorBackground);
+  margin-bottom: 1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  min-height: 100px;
+  flex-direction: column;
+
+  &:hover {
+    background: var(--colorHover);
+    color: var(--colorTextHighlight);
+  }
+
+  .content {
+    display: flex;
+    width: 100%;
+    height: auto;
+    justify-content: space-between;
+    align-items: center;
+    .texts {
+      flex-grow: 1;
+      padding: 10px;
+      text-align: center;
+      .title {
+        font-size: 25px;
+        font-weight: 300;
+        display: inline-block;
+        text-align: center;
+        width: 100%;
+      }
+      .publisher {
+        white-space: nowrap;
+        font-size: 10px;
+        text-align: center;
+      }
+      .genre {
+        font-size: 15px;
+        padding: 10px 0;
+      }
+      .status {
+        text-align: center;
+      }
+      .chapters {
+        margin: 20px 0;
+      }
+      .synopsis {
+        display: -webkit-box;
+        width: 100%;
+        height: 100%;
+        -webkit-line-clamp: 12;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+
+    .cover {
+      height: 200px;
+      flex-shrink: 0;
+      max-height: 500px;
+      aspect-ratio: 10/16;
+      position: relative;
+      .coverImage {
+        height: 100%;
+        z-index: 0;
+        height: inherit;
+        right: 0;
+        position: absolute;
+        aspect-ratio: 10/16;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .buttonArea {
+    height: 70px;
+    width: 100%;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+    padding: 10px;
+    background: var(--colorBackground);
+  }
+}
+
+.extended {
+  .content {
+    .cover {
+      height: 400px;
+    }
+  }
+
+  &:hover {
+    background: var(--colorBackground);
+    color: var(--colorText);
+  }
+}

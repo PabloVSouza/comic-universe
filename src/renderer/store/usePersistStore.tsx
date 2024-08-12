@@ -19,7 +19,7 @@ const usePersistStore = create<usePersistStore>()(
       theme: 'dark',
       lang: 'ptBR',
       currentUser: {} as UserInterface,
-      repo: '',
+      repo: 'hqnow',
 
       switchTheme: (theme): void =>
         set({ theme: theme || get().theme === 'dark' ? 'light' : 'dark' }),

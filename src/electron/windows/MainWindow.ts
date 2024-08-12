@@ -1,31 +1,25 @@
 import { shell, BrowserWindow, app } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
+import { createEvents, removeEvents } from '../events'
 import { autoUpdater } from 'electron-updater'
-import EventManager from 'repositories/EventsImplementationRepository'
-import type { Startup } from 'scripts/Startup'
 
-const CreateMainWindow = async (startUpObjects: Startup): Promise<BrowserWindow> => {
+const CreateMainWindow = async (): Promise<BrowserWindow> => {
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    frame: false,
+    // frame: false,
     webPreferences: {
       webSecurity: false,
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     },
-    icon: join(__dirname, '../../../resources/logo.svg')
+    icon: join(__dirname, '../../../resources/icon.png')
   })
 
-  const eventManager = new EventManager(
-    startUpObjects,
-    app.getPath('userData'),
-    app.getAppPath(),
-    mainWindow
-  )
+  createEvents(mainWindow, app.getPath('userData'))
 
   let firstLogin = false
 
@@ -53,7 +47,7 @@ const CreateMainWindow = async (startUpObjects: Startup): Promise<BrowserWindow>
   }
 
   mainWindow.on('close', () => {
-    eventManager.removeEvents()
+    removeEvents()
   })
 
   return mainWindow

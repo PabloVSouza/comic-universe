@@ -1,13 +1,11 @@
 .main {
   height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   width: 100vw;
-  background: url('@/assets/wallpaper.webp');
   background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  background: url("@/assets/wallpapers/1.jpeg");
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  overflow: hidden;
 }

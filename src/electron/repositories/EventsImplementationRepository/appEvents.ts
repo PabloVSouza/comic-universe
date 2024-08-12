@@ -1,6 +1,6 @@
 import { BrowserWindow, ipcMain, app } from 'electron'
 import { is } from '@electron-toolkit/utils'
-import type { Startup } from '../Scripts/Startup'
+import type { Startup } from 'scripts/Startup'
 
 const appEvents = (
   _startupObject: Startup,

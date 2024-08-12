@@ -2,8 +2,8 @@ import { shell, BrowserWindow, app } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
 import { autoUpdater } from 'electron-updater'
-import EventManager from '../events'
-import type { Startup } from '../Scripts/Startup'
+import EventManager from 'repositories/EventsImplementationRepository'
+import type { Startup } from 'scripts/Startup'
 
 const CreateMainWindow = async (startUpObjects: Startup): Promise<BrowserWindow> => {
   const mainWindow = new BrowserWindow({

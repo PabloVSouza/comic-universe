@@ -2,8 +2,10 @@ import { app, BrowserWindow } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import path from 'path'
 import fs from 'fs'
-import CreateDirectory from '../../../utils/CreateDirectory'
+import CreateDirectory from 'utils/CreateDirectory'
 import { extract } from 'pacote'
+import githubApi from 'utils/GithubApi'
+import DownloadFile from 'utils/DownloadFile'
 
 class RepoPluginsLoader {
   private pluginsProdPath = path.join(app.getPath('userData'), 'plugins')
@@ -68,7 +70,7 @@ class RepoPluginsLoader {
             version: packageFile.version,
             repository: packageFile.repository.url,
             iconPath: path.join(folderPath, packageFile.icon)
-          } as RepoPluginInfo
+          } as IRepoPluginInfo
 
           pluginsList.push(repoObj)
         } catch {
@@ -114,6 +116,16 @@ class RepoPluginsLoader {
       label: plugin.RepoName,
       value: plugin.RepoTag
     }))
+  }
+
+  private getGithubData = async (repoUrl: string) => {
+    const { data } = await githubApi.get(`repos/${repoUrl}/releases/latest`)
+    return data
+  }
+
+  public downloadAndInstallPlugin = async (plugin: string) => {
+    const githubData = await this.getGithubData(plugin)
+    await DownloadFile(this.pluginsFinalPath + '/', githubData.assets[0].browser_download_url)
   }
 
   public updatePlugins = async () => {

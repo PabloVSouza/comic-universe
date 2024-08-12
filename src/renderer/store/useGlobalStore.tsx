@@ -13,7 +13,7 @@ interface useGlobalStore {
   appRunningPath: string
   menuVisible: boolean
   repoList: TOption[]
-  pluginsList: RepoPluginInfo[]
+  pluginsList: IRepoPluginInfo[]
   toggleMenu: () => void
   getAppPath: () => Promise<void>
   getAppRunningPath: () => Promise<void>
@@ -21,6 +21,7 @@ interface useGlobalStore {
   updatePlugins: () => Promise<void>
   getPluginInfoList: () => Promise<void>
   runMigrations: () => Promise<void>
+  downloadAndInstallPlugin: (plugin: string) => Promise<void>
 }
 
 const useGlobalStore = create<useGlobalStore>((set) => ({
@@ -59,6 +60,13 @@ const useGlobalStore = create<useGlobalStore>((set) => ({
     const pluginsList = await invoke('getPluginInfoList')
 
     set((state) => ({ ...state, pluginsList }))
+  },
+
+  downloadAndInstallPlugin: async (plugin) => {
+    const { updatePlugins, getPluginInfoList } = useGlobalStore.getState()
+    await invoke('downloadAndInstallPlugin', plugin)
+    await updatePlugins()
+    await getPluginInfoList()
   },
 
   runMigrations: async () => {

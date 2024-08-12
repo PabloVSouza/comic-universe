@@ -1,4 +1,4 @@
-export type IDBInteractionsMethods = {
+type IDBInteractionsMethods = {
   //Comics
   dbGetComic: (input: { id: number }) => Promise<ComicInterface>
   dbGetComicComplete: (input: { id: number; userId: number }) => Promise<ComicInterface>
@@ -29,10 +29,10 @@ export type IDBInteractionsMethods = {
   dbVerifyMigrations: () => Promise<boolean>
 }
 
-export interface IDBInteractionsRepository {
+interface IDBInteractionsRepository {
   methods: IDBInteractionsMethods
 }
 
-export interface IDBInteractionsRepositoryInit {
+interface IDBInteractionsRepositoryInit {
   path: string
 }

@@ -10,7 +10,17 @@ export default defineConfig({
         entry: 'src/electron/main/index.ts'
       }
     },
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
+    resolve: {
+      alias: {
+        main: resolve('src/electron/main'),
+        preload: resolve('src/electron/preload'),
+        repositories: resolve('src/electron/repositories'),
+        scripts: resolve('src/electron/scripts'),
+        utils: resolve('src/electron/utils'),
+        windows: resolve('src/electron/windows')
+      }
+    }
   },
   preload: {
     build: {
@@ -36,6 +46,7 @@ export default defineConfig({
       alias: {
         '@': resolve('src/renderer/'),
         assets: resolve('src/renderer/assets'),
+        api: resolve('src/renderer/api'),
         components: resolve('src/renderer/components'),
         lang: resolve('src/renderer/lang'),
         hooks: resolve('src/renderer/hooks'),

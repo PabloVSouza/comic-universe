@@ -1,5 +1,5 @@
-import RepoPluginsLoader from '../repositories/Implementations/PluginsImplementation'
-import { DBInteractionsRepository } from '../repositories/Implementations/DBImplementations/DBImplementationsRepository'
+import RepoPluginsLoader from 'repositories/PluginImplementationRepository'
+import { DBInteractionsRepository } from 'repositories/DBImplementationRepository'
 import { app } from 'electron'
 
 const Startup = async () => {

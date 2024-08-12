@@ -1,5 +1,5 @@
 import { BrowserWindow, ipcMain } from 'electron'
-import type { Startup } from '../Scripts/Startup'
+import type { Startup } from 'scripts/Startup'
 
 const dbEvents = (
   startupObject: Startup,

@@ -4,7 +4,7 @@ import FixFilePaths from 'functions/fixFilePaths'
 
 import style from './SettingsPluginListItem.module.scss'
 
-const SettingsPluginListItem = ({ plugin }: { plugin: RepoPluginInfo }) => {
+const SettingsPluginListItem = ({ plugin }: { plugin: IRepoPluginInfo }) => {
   const iconPath = FixFilePaths(plugin.iconPath)
   return (
     <li className={style.SettingsPluginListItem}>
@@ -14,7 +14,7 @@ const SettingsPluginListItem = ({ plugin }: { plugin: RepoPluginInfo }) => {
           <span className={style.version}>Version: {plugin.version}</span>
           <span className={style.author}>Author: {plugin.author}</span>
         </p>
-        <a href={plugin.repository} target="_blank" rel="noreferrer">
+        <a href={plugin.repository} target="_blank">
           <u>Github Repository</u>
         </a>
       </div>

@@ -26,11 +26,17 @@ interface IRepoPluginRepositoryInit {
   url: string
 }
 
-interface RepoPluginInfo {
+interface IRepoPluginInfo {
   name: string
   author: string
   repository: string
   path: string
   iconPath: string
   version: string
+}
+
+interface IRepoApiPluginList {
+  name: string
+  repo: string
+  tag: string
 }

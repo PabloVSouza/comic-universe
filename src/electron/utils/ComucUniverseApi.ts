@@ -1,5 +1,5 @@
 import Axios from 'axios'
 
 export default Axios.create({
-  baseURL: 'https://api.github.com'
+  baseURL: 'https://comic-universe.vercel.app/api'
 })

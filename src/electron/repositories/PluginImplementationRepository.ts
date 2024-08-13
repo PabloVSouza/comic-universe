@@ -5,6 +5,7 @@ import fs from 'fs'
 import CreateDirectory from 'utils/CreateDirectory'
 import { extract } from 'pacote'
 import githubApi from 'utils/GithubApi'
+import ComucUniverseApi from 'utils/ComucUniverseApi'
 import DownloadFile from 'utils/DownloadFile'
 
 class RepoPluginsLoader {
@@ -31,6 +32,12 @@ class RepoPluginsLoader {
       .readdirSync(this.pluginsFinalPath, { withFileTypes: true })
       .filter((val) => val.name.includes('.tgz') && !val.isDirectory())
       .map((val) => val.name)
+
+  public getPluginsFromApi = async () => {
+    const { data } = await ComucUniverseApi.get('plugins')
+
+    return data
+  }
 
   public installPlugins = async () => {
     const pluginsList = this.getNotInstalledPluginsList()

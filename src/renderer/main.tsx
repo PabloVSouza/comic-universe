@@ -3,7 +3,7 @@ import { HashRouter, useNavigate } from 'react-router-dom'
 import ReactDOM from 'react-dom/client'
 import Routes from 'routes'
 import usePersistStore from 'store/usePersistStore'
-import style from 'scss/main/style.module.scss'
+import 'scss/main/main.scss'
 import themes from 'scss/main/themes.module.scss'
 
 import classNames from 'classnames'
@@ -23,7 +23,7 @@ const Main = ({ children }: Props): JSX.Element => {
     })
   }, [])
 
-  return <div className={classNames(themes[theme], style.main)}>{children}</div>
+  return <div className={classNames(themes[theme], 'main')}>{children}</div>
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

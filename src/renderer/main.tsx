@@ -23,7 +23,7 @@ const Main = ({ children }: Props): JSX.Element => {
     })
   }, [])
 
-  return <div className={classNames(themes[theme], 'main')}>{children}</div>
+  return <div className={classNames(themes[theme], 'main', 'dark')}>{children}</div>
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

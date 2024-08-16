@@ -11,8 +11,6 @@ import useDashboardStore from 'store/useDashboardStore'
 import useDownloadStore from 'store/useDownloadStore'
 import useGlobalStore from 'store/useGlobalStore'
 
-import style from './HomeComicListItem.module.scss'
-
 const { path } = window
 
 const ComicListItem = ({
@@ -41,24 +39,27 @@ const ComicListItem = ({
   return (
     <li
       className={classNames(
-        style.HomeComicListItem,
-        !isDownloading ? style.regular : '',
-        active ? style.active : null
+        'w-full h-24 overflow-hidden flex flex-shrink-0 items-center justify-center bg-list-item-bg/70 relative cursor-pointer transition-colors',
+        !isDownloading ? 'hover:bg-list-item-bg-highlight/90 hover:text-text-oposite' : '',
+        active ? '!bg-list-item-bg-highlight/70 text-text-oposite' : null
       )}
       onClick={handleClick}
       {...props}
     >
       {isDownloading ? (
-        <>
-          <div className={style.progress}>
-            <ProgressBar total={totalChapters} current={downloadProgress} />
-            <Image className={style.downloadImage} src={loadingImage} />
-          </div>
-        </>
+        <div className="flex-grow h-full flex justify-center items-center">
+          <ProgressBar total={totalChapters} current={downloadProgress} />
+          <Image className="absolute h-1/2" src={loadingImage} />
+        </div>
       ) : (
-        <p className={style.name}>{ReactHtmlParser(item.name)}</p>
+        <p className="flex-grow py-1 h-full flex justify-center items-center text-center">
+          {ReactHtmlParser(item.name)}
+        </p>
       )}
-      <Image className={style.cover} src={cover} />
+      <Image
+        className="flex-shrink-0 h-full aspect-[10/16] object-cover object-center"
+        src={cover}
+      />
     </li>
   )
 }

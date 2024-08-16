@@ -7,8 +7,6 @@ import useLang from 'lang'
 
 import deleteIcon from 'assets/trash.svg'
 
-import style from './HomeComicList.module.scss'
-
 const HomeComicList = (): JSX.Element => {
   const { list } = useDashboardStore()
   const lang = useLang()
@@ -48,7 +46,7 @@ const HomeComicList = (): JSX.Element => {
   ] as TContextOptions[]
 
   return (
-    <ul className={style.HomeComicList}>
+    <ul className="h-full w-60 overflow-auto flex flex-col gap-px z-20 mt-px bg-list">
       <ContextMenu options={ctxOptions} />
       {list.map((item) => (
         <ComicListItem

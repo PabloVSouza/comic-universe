@@ -149,7 +149,7 @@ const Reader = (): JSX.Element => {
   return (
     <Cover visible>
       <div
-        className={style.Reader}
+        className="w-full h-full relative overflow-hidden"
         onMouseMoveCapture={defineMousePos}
         onContextMenu={(): void => setZoomVisible(!zoomVisible)}
       >
@@ -160,18 +160,24 @@ const Reader = (): JSX.Element => {
             visible={zoomVisible}
           />
         )}
-        <div className={style.pages} style={position}>
+        <div className="h-full flex transition duration-500 ease-default" style={position}>
           {pages?.map((currentPage) => (
-            <div key={currentPage.path} className={style.page}>
-              <div className={style.buttons}>
+            <div
+              key={currentPage.path}
+              className="h-full w-full shrink-0 overflow-hidden flex justify-center align-center"
+            >
+              <div className="absolute w-screen h-screen flex justify-between">
                 <button
-                  className={style.btnPrevious}
+                  className="w-24 h-full transition duration-500 ease-default bg-transparent border-none cursor-pointer hover:bg-list-item-hover"
                   onClick={(): Promise<void> => previousPage()}
                 />
-                <button className={style.btnNext} onClick={(): Promise<void> => nextPage()} />
+                <button
+                  className="w-24 h-full transition duration-500 ease-default bg-transparent border-none cursor-pointer hover:bg-list-item-hover"
+                  onClick={(): Promise<void> => nextPage()}
+                />
               </div>
               <Image
-                className={style.Image}
+                className=""
                 src={getPath(currentPage)}
                 lazy
                 placeholderSrc={loading}

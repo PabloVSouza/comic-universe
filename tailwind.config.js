@@ -15,7 +15,14 @@ const addTransparency = (color, transparency) => {
 module.exports = {
   content: ['./src/renderer/index.html', './src/renderer/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {}
+    extend: {
+      boxShadow: {
+        default: '3px 7px 16px -5px rgba(0, 0, 0, 0.75)'
+      },
+      transitionTimingFunction: {
+        default: 'cubic-bezier(0.075, 0.82, 0.165, 1)'
+      }
+    }
   },
   plugins: [
     createThemes({

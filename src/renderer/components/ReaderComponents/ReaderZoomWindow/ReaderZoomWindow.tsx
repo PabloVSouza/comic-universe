@@ -2,8 +2,6 @@ import { useState, useRef } from 'react'
 import classNames from 'classnames'
 import Image from 'components/Image/Image'
 
-import style from './ReaderZoomWindow.module.scss'
-
 export interface MousePos {
   x: number
   y: number
@@ -72,12 +70,19 @@ const ReaderZoomWindow = ({ mousePos, image, visible }: ZoomWindow): JSX.Element
 
   return (
     <div
-      className={classNames(style.ZoomWindow, visible ? style.visible : null)}
+      className={classNames(
+        'w-1/3 aspect-square absolute overflow-hidden z-20 cursor-zoom-in shadow-default rounded-full transition-opacity duration-500 ease-default',
+        visible ? ' opacity-100' : ' opacity-0'
+      )}
       onWheel={changeZoomFactor}
       style={windowPosition()}
       ref={windowRef}
     >
-      <Image src={image} className={style.zoomedImage} style={zoomPosition()} />
+      <Image
+        src={image}
+        className="absolute object-contain bg-no-repeat bg-center"
+        style={zoomPosition()}
+      />
     </div>
   )
 }

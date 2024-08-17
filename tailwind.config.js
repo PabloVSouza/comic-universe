@@ -29,6 +29,8 @@ module.exports = {
       light: {
         'text-default': colors.zinc[900],
         'text-oposite': colors.zinc[900],
+        'bg-default': addTransparency(colors.zinc[300], 0.7),
+        'bg-oposite': addTransparency(colors.slate[50], 0.8),
         list: addTransparency(colors.zinc[300], 0.7),
         'list-item': addTransparency(colors.zinc[300], 0.7),
         'list-item-hover': addTransparency(colors.slate[50], 0.6),

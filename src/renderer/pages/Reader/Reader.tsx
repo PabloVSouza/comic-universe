@@ -5,7 +5,6 @@ import Image from 'components/Image/Image'
 
 import useGlobalStore from 'store/useGlobalStore'
 
-import style from './Reader.module.scss'
 import ReaderZoomWindow, {
   MousePos
 } from '../../components/ReaderComponents/ReaderZoomWindow/ReaderZoomWindow'
@@ -177,11 +176,11 @@ const Reader = (): JSX.Element => {
                 />
               </div>
               <Image
-                className=""
+                className="w-full h-full object-contain"
                 src={getPath(currentPage)}
                 lazy
                 placeholderSrc={loading}
-                placeholderClassName={style.ImageLoading}
+                placeholderClassName="w-full"
               />
             </div>
           ))}

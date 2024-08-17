@@ -167,11 +167,11 @@ const Reader = (): JSX.Element => {
             >
               <div className="absolute w-screen h-screen flex justify-between">
                 <button
-                  className="w-24 h-full transition duration-500 ease-default bg-transparent border-none cursor-pointer hover:bg-list-item-hover"
+                  className="w-24 h-full transition duration-500 ease-default bg-transparent border-none cursor-pointer hover:bg-default"
                   onClick={(): Promise<void> => previousPage()}
                 />
                 <button
-                  className="w-24 h-full transition duration-500 ease-default bg-transparent border-none cursor-pointer hover:bg-list-item-hover"
+                  className="w-24 h-full transition duration-500 ease-default bg-transparent border-none cursor-pointer hover:bg-default"
                   onClick={(): Promise<void> => nextPage()}
                 />
               </div>

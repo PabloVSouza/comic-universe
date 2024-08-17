@@ -1,7 +1,4 @@
 import Image from 'components/Image/Image'
-
-import style from './About.module.scss'
-
 import appIcon from 'assets/icon.svg'
 
 const About = (): JSX.Element => {
@@ -9,16 +6,16 @@ const About = (): JSX.Element => {
 
   return (
     <>
-      <Image src={appIcon} className={style.icon} />
-      <div className={style.texts}>
-        <h1>Comic Universe</h1>
+      <Image src={appIcon} className="w-1/3 aspect-square flex-shrink-0" />
+      <div className="flex flex-grow h-full flex-col items-center justify-center text-center gap-1">
+        <h1 className="text-3xl">Comic Universe</h1>
         <p>Ver: {app.version}</p>
         <p>Author: {app.author}</p>
         <p>License: {app.license}</p>
         {app.description.split('. ').map((description) => (
           <p key={description}>{description}.</p>
         ))}
-        <a href={app.repository} target="_blank" rel="noreferrer">
+        <a href={app.repository} target="_blank" rel="noreferrer" className="mt-2">
           <u>Github Repository</u>
         </a>
       </div>
@@ -28,9 +25,10 @@ const About = (): JSX.Element => {
 
 const windowSettings = {
   windowProps: {
-    className: style.About,
+    className: 'flex-grow',
     closeable: true,
-    title: 'About This App'
+    title: 'About This App',
+    contentClassName: 'flex-grow flex h-full w-full items-center justify-center p-8'
   },
   initialStatus: {
     startPosition: 'center',

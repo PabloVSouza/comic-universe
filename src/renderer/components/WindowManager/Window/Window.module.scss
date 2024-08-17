@@ -19,6 +19,7 @@
     background: var(--colorBackground);
     flex-shrink: 0;
     box-shadow: $shadow-default;
+    position: relative;
 
     .movableArea {
       width: 100%;
@@ -52,9 +53,7 @@
   }
 
   .content {
-    max-height: calc(100% - 30px);
     flex-grow: 1;
     overflow: auto;
-    flex-shrink: 0;
   }
 }

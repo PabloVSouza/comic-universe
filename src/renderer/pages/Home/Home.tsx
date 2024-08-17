@@ -10,8 +10,6 @@ import HomeBlankArea from 'components/HomeComponents/HomeBlankArea'
 import usePersistStore from 'store/usePersistStore'
 import WindowManager from 'components/WindowManager'
 
-import style from './Home.module.scss'
-
 const Home = (): JSX.Element => {
   const { currentUser, setCurrentUser } = usePersistStore()
   const location = useLocation()
@@ -26,11 +24,11 @@ const Home = (): JSX.Element => {
   }, [location])
 
   return (
-    <div className={style.Home}>
+    <div className="w-full h-full flex-shrink-0 flex-grow flex flex-col justify-start items-center text-text-default">
       <HomeTopBar />
       <HomeNav />
       <WindowManager>
-        <div className={style.body}>
+        <div className="flex w-full h-full min-h-0 flex-grow gap-px">
           <HomeBlankArea active={!userActive} />
           {userActive && (
             <>

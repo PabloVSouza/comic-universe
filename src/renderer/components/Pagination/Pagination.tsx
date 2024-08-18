@@ -66,8 +66,8 @@ const Pagination = ({ setOffset, className, itemsPerPage, list, ...props }: IPag
       pageRangeDisplayed={2}
       marginPagesDisplayed={2}
       pageCount={totalPages}
-      nextLabel={lang.SearchComic.pagination.next}
-      previousLabel={lang.SearchComic.pagination.previous}
+      nextLabel={lang.Pagination.next}
+      previousLabel={lang.Pagination.previous}
       {...props}
     />
   )

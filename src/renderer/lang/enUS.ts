@@ -45,11 +45,12 @@ export default class enUS implements Lang {
     textPlaceholder: 'Type your Search',
     bookmarkComic: 'Bookmark',
     alreadyBookmarked: 'Bookmarked',
-    availableChapters: 'Chapters Available',
-    pagination: {
-      previous: 'Previous',
-      next: 'Next'
-    }
+    availableChapters: 'Chapters Available'
+  }
+
+  Pagination: PaginationLang = {
+    previous: 'Previous',
+    next: 'Next'
   }
 
   Settings: SettingsLang = {

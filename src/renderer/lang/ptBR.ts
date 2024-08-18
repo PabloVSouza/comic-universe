@@ -45,11 +45,12 @@ export default class ptBR implements Lang {
     textPlaceholder: 'Digite sua Busca',
     bookmarkComic: 'Favoritar',
     alreadyBookmarked: 'Favoritado',
-    availableChapters: 'Capítulos Disponíveis',
-    pagination: {
-      previous: 'Anterior',
-      next: 'Próxima'
-    }
+    availableChapters: 'Capítulos Disponíveis'
+  }
+
+  Pagination: PaginationLang = {
+    previous: 'Anterior',
+    next: 'Próxima'
   }
 
   Settings: SettingsLang = {

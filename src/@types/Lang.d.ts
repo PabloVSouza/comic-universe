@@ -45,10 +45,11 @@ interface SearchComicLang {
   bookmarkComic: string
   alreadyBookmarked: string
   availableChapters: string
-  pagination: {
-    previous: string
-    next: string
-  }
+}
+
+interface PaginationLang {
+  previous: string
+  next: string
 }
 
 interface SettingsLang {
@@ -82,4 +83,5 @@ interface Lang {
   SearchComic: SearchComicLang
   Settings: SettingsLang
   Users: UsersLang
+  Pagination: PaginationLang
 }

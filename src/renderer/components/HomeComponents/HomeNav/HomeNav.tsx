@@ -68,7 +68,7 @@ const HomeNav = (): JSX.Element => {
   }
 
   return (
-    <Cover visible={menuVisible} className="z-50">
+    <Cover visible={menuVisible}>
       <ul
         className={classNames(
           'transition-move-fade bg-default h-full w-52 duration-500 ease-default ml-auto mb-auto pt-12 flex gap-1 flex-col',

@@ -180,7 +180,7 @@ const Reader = (): JSX.Element => {
                 src={getPath(currentPage)}
                 lazy
                 placeholderSrc={loading}
-                placeholderClassName="w-full"
+                placeholderClassName="w-1/4"
               />
             </div>
           ))}

@@ -44,7 +44,7 @@ const Pagination = ({ setOffset, className, itemsPerPage, list, ...props }: IPag
       pageLinkClassName={linkStyle}
       breakLinkClassName={linkStyle}
       activeLinkClassName={linkStyle}
-      pageClassName={classNames(btnStyle, 'bg-zinc-950/70 hover:bg-zinc-50/30 aspect-square')}
+      pageClassName={classNames(btnStyle, 'bg-default/50 hover:bg-oposite/30 aspect-square')}
       previousClassName={classNames(
         btnStyle,
         'h-3/4 px-3 text-zinc-950 bg-lime-500/80 hover:bg-lime-500/100 '
@@ -59,7 +59,7 @@ const Pagination = ({ setOffset, className, itemsPerPage, list, ...props }: IPag
       )}
       activeClassName={classNames(
         btnStyle,
-        'h-2/3 text-zinc-950 font-bold bg-zinc-50/70 hover:!bg-zinc-50/90'
+        'h-2/3 text-zinc-950 font-bold !bg-zinc-50/70 hover:!bg-zinc-50/90'
       )}
       forcePage={page}
       onPageChange={handlePageClick}

@@ -23,7 +23,7 @@ const SearchComicList = ({ list, itemsPerPage = 10, offset }: SearchComicList): 
   }, [offset])
 
   return (
-    <ul className="w-full flex flex-grow flex-col overflow-auto" ref={refScrollElement}>
+    <ul className="w-full flex flex-grow flex-col overflow-auto gap-px" ref={refScrollElement}>
       {currentItems.map((comic) => {
         return <SearchComicListItem data={comic} id={comic.siteId} key={comic.siteId} />
       })}

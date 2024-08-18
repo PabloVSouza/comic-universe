@@ -1,15 +1,16 @@
 import { useState, useMemo, useEffect, useRef, MutableRefObject } from 'react'
 import debounce from 'lodash.debounce'
-import classNames from 'classnames'
 import SearchComicList from 'components/SearchComponents/SearchComicList/SearchComicList'
 import Select from 'components/Select'
 import useSearchStore from 'store/useSearchStore'
 import usePersistStore from 'store/usePersistStore'
 import useLang from 'lang'
-import style from './Search.module.scss'
 import Loading from 'components/LoadingOverlay/LoadingOverlay'
 import { SingleValue } from 'react-select'
 import useGlobalStore from 'store/useGlobalStore'
+import Image from 'components/Image'
+
+import searchIcon from 'assets/magnifying-glass-search.svg'
 
 const Search = (): JSX.Element => {
   const [searchText, setSearchText] = useState('')
@@ -65,29 +66,29 @@ const Search = (): JSX.Element => {
   return (
     <>
       <Loading isLoading={loading} />
-      <div className={style.searchInput}>
-        <div className={classNames(style.inputBlock, style.inputSelect)}>
+      <div className="w-full h-24 flex-shrink-0 px-10 py-6">
+        <div className="h-full w-full bg-default rounded flex justify-center items-center pr-4 ">
           <Select
             defaultValue={repoList.find((val) => val?.value === repo)}
             options={repoList}
             onChange={(e) => handleChangeRepo(e as TOption)}
             isDisabled={noRepos}
           />
-        </div>
-        <div className={classNames(style.inputBlock, style.inputText)}>
           <input
-            className={style.inputElement}
+            className="flex-grow bg-transparent text-lg pl-5"
             placeholder={texts.SearchComic.textPlaceholder}
             type="text"
             onChange={debouncedResults}
             ref={inputRef}
           />
-        </div>
-        <div className={classNames(style.inputBlock, style.inputIcon)}>
-          <div className={style.searchIcon} />
+          <Image
+            src={searchIcon}
+            svg
+            className="h-full aspect-square bg-text-default p-2 opacity-40"
+          />
         </div>
       </div>
-      <div className={style.result}>
+      <div className="flex-grow">
         <SearchComicList list={list} />
       </div>
     </>
@@ -96,8 +97,8 @@ const Search = (): JSX.Element => {
 
 const windowSettings = {
   windowProps: {
-    className: style.Search,
-    contentClassName: style.Content,
+    className: 'h-full w-full',
+    contentClassName: 'h-full w-full flex flex-col overflow-hidden items-center',
     closeable: true,
     titleBar: true,
     unique: true,

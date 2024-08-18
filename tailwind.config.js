@@ -27,6 +27,7 @@ module.exports = {
       }
     }
   },
+
   plugins: [
     createThemes({
       light: {

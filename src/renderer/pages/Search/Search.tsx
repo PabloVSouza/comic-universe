@@ -1,14 +1,16 @@
 import { useState, useMemo, useEffect, useRef, MutableRefObject } from 'react'
 import debounce from 'lodash.debounce'
-import SearchComicList from 'components/SearchComponents/SearchComicList/SearchComicList'
+import { SingleValue } from 'react-select'
+
 import Select from 'components/Select'
+import Image from 'components/Image'
+import SearchComicList from 'components/SearchComponents/SearchComicList/SearchComicList'
+import Loading from 'components/LoadingOverlay/LoadingOverlay'
+
+import useLang from 'lang'
 import useSearchStore from 'store/useSearchStore'
 import usePersistStore from 'store/usePersistStore'
-import useLang from 'lang'
-import Loading from 'components/LoadingOverlay/LoadingOverlay'
-import { SingleValue } from 'react-select'
 import useGlobalStore from 'store/useGlobalStore'
-import Image from 'components/Image'
 
 import searchIcon from 'assets/magnifying-glass-search.svg'
 

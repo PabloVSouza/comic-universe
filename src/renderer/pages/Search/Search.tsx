@@ -6,6 +6,7 @@ import Select from 'components/Select'
 import Image from 'components/Image'
 import SearchComicList from 'components/SearchComponents/SearchComicList/SearchComicList'
 import Loading from 'components/LoadingOverlay/LoadingOverlay'
+import Pagination from 'components/Pagination'
 
 import useLang from 'lang'
 import useSearchStore from 'store/useSearchStore'
@@ -16,6 +17,7 @@ import searchIcon from 'assets/magnifying-glass-search.svg'
 
 const Search = (): JSX.Element => {
   const [searchText, setSearchText] = useState('')
+  const [offset, setOffset] = useState(0)
   const { cacheList: list, loading, search, resetComic, getList } = useSearchStore()
   const { repo, setRepo } = usePersistStore()
   const { repoList } = useGlobalStore()
@@ -68,7 +70,7 @@ const Search = (): JSX.Element => {
   return (
     <>
       <Loading isLoading={loading} />
-      <div className="w-full h-24 flex-shrink-0 px-10 py-6">
+      <div className="w-full h-24 flex-shrink-0 py-6 px-11">
         <div className="h-full w-full bg-default shadow-default shadow-black rounded flex justify-center items-center pr-4 ">
           <Select
             defaultValue={repoList.find((val) => val?.value === repo)}
@@ -90,16 +92,14 @@ const Search = (): JSX.Element => {
           />
         </div>
       </div>
-      <div className="flex-grow">
-        <SearchComicList list={list} />
-      </div>
+      <SearchComicList list={list} offset={offset} />
+      <Pagination setOffset={setOffset} list={list} itemsPerPage={10} className="w-3/4" />
     </>
   )
 }
 
 const windowSettings = {
   windowProps: {
-    className: 'h-full w-full',
     contentClassName: 'h-full w-full flex flex-col overflow-hidden items-center',
     closeable: true,
     titleBar: true,

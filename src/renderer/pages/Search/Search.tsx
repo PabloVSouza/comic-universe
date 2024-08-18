@@ -67,7 +67,7 @@ const Search = (): JSX.Element => {
     <>
       <Loading isLoading={loading} />
       <div className="w-full h-24 flex-shrink-0 px-10 py-6">
-        <div className="h-full w-full bg-default rounded flex justify-center items-center pr-4 ">
+        <div className="h-full w-full bg-default shadow-default rounded flex justify-center items-center pr-4 ">
           <Select
             defaultValue={repoList.find((val) => val?.value === repo)}
             options={repoList}

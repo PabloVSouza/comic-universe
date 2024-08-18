@@ -6,8 +6,6 @@ import Window from './Window/Window'
 
 import useWindowManagerStore from 'store/useWindowManagerStore'
 
-import style from './WindowManager.module.scss'
-
 type TWindowManager = {
   children: ReactNode
 }
@@ -37,7 +35,7 @@ const WindowManager = ({ children }: TWindowManager): ReactElement => {
 
   return (
     <div
-      className={style.WindowManager}
+      className="relative w-full h-full"
       ref={containerRef}
       onMouseMoveCapture={mouseCapture}
       onMouseUp={removeMovingResizing}

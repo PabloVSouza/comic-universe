@@ -26,6 +26,7 @@ const About = (): JSX.Element => {
 const windowSettings = {
   windowProps: {
     className: 'flex-grow',
+    unique: true,
     closeable: true,
     title: 'About This App',
     contentClassName: 'flex-grow flex h-full w-full items-center justify-center p-8'

@@ -67,7 +67,7 @@ const Search = (): JSX.Element => {
     <>
       <Loading isLoading={loading} />
       <div className="w-full h-24 flex-shrink-0 px-10 py-6">
-        <div className="h-full w-full bg-default shadow-default rounded flex justify-center items-center pr-4 ">
+        <div className="h-full w-full bg-default shadow-default shadow-black rounded flex justify-center items-center pr-4 ">
           <Select
             defaultValue={repoList.find((val) => val?.value === repo)}
             options={repoList}
@@ -75,7 +75,7 @@ const Search = (): JSX.Element => {
             isDisabled={noRepos}
           />
           <input
-            className="flex-grow bg-transparent text-lg pl-5"
+            className="flex-grow bg-transparent text-lg placeholder:text-text-default placeholder:opacity-60 pl-5"
             placeholder={texts.SearchComic.textPlaceholder}
             type="text"
             onChange={debouncedResults}
@@ -84,7 +84,7 @@ const Search = (): JSX.Element => {
           <Image
             src={searchIcon}
             svg
-            className="h-full aspect-square bg-text-default p-2 opacity-40"
+            className="h-full aspect-square bg-text-default p-2 opacity-60"
           />
         </div>
       </div>

@@ -50,8 +50,10 @@ const SearchComicListItem = ({ data }: ComicListItem): JSX.Element => {
   return (
     <li
       className={classNames(
-        'h-48 bg-list-item hover:bg-list-item-hover hover:text-text-oposite flex flex-col transition-all duration-500 ease-default cursor-pointer',
-        !!extended && 'h-96 hover:bg-list-item hover:text-text-default cursor-default'
+        'bg-list-item flex flex-col transition-all duration-500 ease-default',
+        extended
+          ? 'h-96 hover:bg-list-item hover:text-text-default cursor-default'
+          : 'h-48 hover:bg-list-item-hover hover:text-text-oposite cursor-pointer'
       )}
       onClick={setActive}
     >

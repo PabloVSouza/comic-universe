@@ -52,9 +52,7 @@ const ComicListItem = ({
           <Image className="absolute h-1/2" src={loadingImage} />
         </div>
       ) : (
-        <p className="flex-grow py-1 h-full flex justify-center items-center text-center">
-          {ReactHtmlParser(item.name)}
-        </p>
+        <p className="line-clamp-3 text-center p-1 flex-grow">{ReactHtmlParser(item.name)}</p>
       )}
       <Image
         className="flex-shrink-0 h-full aspect-[10/16] object-cover object-center"

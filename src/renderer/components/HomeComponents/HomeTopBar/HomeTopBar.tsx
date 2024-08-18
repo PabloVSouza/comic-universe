@@ -19,7 +19,6 @@ const HomeTopBar = (): JSX.Element => {
       <div className="[-webkit-app-region:drag] h-full w-full absolute" />
       {userActive && (
         <Button
-          className="{style.button}"
           icon={downloadIcon}
           size="xs"
           theme="pure"

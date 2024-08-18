@@ -20,7 +20,8 @@ module.exports = {
         default: 'cubic-bezier(0.075, 0.82, 0.165, 1)'
       },
       transitionProperty: {
-        fade: 'opacity, visibility'
+        fade: 'opacity, visibility',
+        'move-fade': 'transform, visibility'
       },
       aspectRatio: {
         portrait: '9 / 16',

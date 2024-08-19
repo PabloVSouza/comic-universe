@@ -71,7 +71,7 @@ const HomeNav = (): JSX.Element => {
     <Cover visible={menuVisible}>
       <ul
         className={classNames(
-          'transition-move-fade bg-default h-full w-52 duration-500 ease-default ml-auto mb-auto pt-12 flex gap-1 flex-col',
+          'transition-move-fade bg-default h-full w-52 duration-500 ease-default ml-auto mb-auto pt-14 flex gap-px flex-col',
           menuVisible ? 'translate-x-0' : 'translate-x-full'
         )}
       >

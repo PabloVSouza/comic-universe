@@ -15,7 +15,7 @@ const HomeTopBar = (): JSX.Element => {
   const userActive = !!currentUser.id
 
   return (
-    <div className="w-full h-14 flex justify-between relative shrink-0 items-center">
+    <div className="w-full h-14 flex justify-between relative shrink-0 items-center bg-default">
       <div className="[-webkit-app-region:drag] h-full w-full absolute" />
       {userActive && (
         <Button

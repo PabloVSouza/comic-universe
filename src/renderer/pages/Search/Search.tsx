@@ -71,7 +71,7 @@ const Search = (): JSX.Element => {
     <>
       <Loading isLoading={loading} />
       <div className="w-full h-24 flex-shrink-0 py-6 px-11">
-        <div className="h-full w-full bg-default shadow-xl rounded flex justify-center items-center pr-4 max-w-3xl my-0 mx-auto">
+        <div className="h-full w-full bg-default shadow-basic rounded flex justify-center items-center pr-4 max-w-3xl my-0 mx-auto">
           <Select
             defaultValue={repoList.find((val) => val?.value === repo)}
             options={repoList}
@@ -93,12 +93,14 @@ const Search = (): JSX.Element => {
         </div>
       </div>
       <SearchComicList list={list} offset={offset} />
-      <Pagination
-        setOffset={setOffset}
-        list={list}
-        itemsPerPage={10}
-        className="!w-3/4 max-w-3xl"
-      />
+      <div className="w-full flex items-center justify-center shadow-basic">
+        <Pagination
+          setOffset={setOffset}
+          list={list}
+          itemsPerPage={10}
+          className="!w-3/4 max-w-3xl"
+        />
+      </div>
     </>
   )
 }

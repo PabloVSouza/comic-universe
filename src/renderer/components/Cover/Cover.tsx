@@ -12,7 +12,7 @@ const Cover = ({ className, children, visible, index, ...props }: Cover): JSX.El
   return (
     <div
       className={classNames(
-        'w-full h-full absolute flex items-center justify-center bg-default backdrop-blur-sm transition-all duration-500 ease-default z-30',
+        'w-full h-full absolute flex items-center justify-center bg-dark backdrop-blur-sm transition-all duration-500 ease-default z-30',
         visible ? 'visible opacity-100' : 'invisible opacity-0',
         className
       )}

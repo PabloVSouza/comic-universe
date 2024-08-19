@@ -162,7 +162,7 @@ const Window = ({
 
     return (
       <div
-        className={style.Window}
+        className="absolute min-h-24 min-w-24 rounded bg-modal backdrop-blur-sm overflow-hidden shadow-md shadow-black flex flex-col translate-3d-0"
         ref={refWindow}
         style={{ ...finalStyle, cursor: windowStatus.isMoving ? 'grabbing' : 'unset' }}
         onMouseDown={(): void => setIsFocused(id)}
@@ -170,7 +170,7 @@ const Window = ({
       >
         {titleBar && (
           <div
-            className={style.titleBar}
+            className="w-full h-8 bg-default shrink-0 shadow-basic relative"
             style={{ cursor: movable ? (windowStatus.isMoving ? 'grabbing' : 'grab') : 'unset' }}
           >
             <div

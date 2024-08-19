@@ -23,7 +23,7 @@ const Pagination = ({ setOffset, className, itemsPerPage, list, ...props }: IPag
   }
 
   const btnStyle =
-    'flex justify-center items-center rounded h-1/2 cursor-pointer shadow-default shadow-black transition-all duration-500 ease-default'
+    'flex justify-center items-center rounded h-1/2 cursor-pointer shadow-basic transition-all duration-500 ease-default'
 
   const linkStyle = 'h-full w-full flex justify-center items-center'
 
@@ -32,7 +32,7 @@ const Pagination = ({ setOffset, className, itemsPerPage, list, ...props }: IPag
     setPage(0)
   }, [list])
 
-  return (
+  return totalPages > 0 ? (
     <ReactPaginate
       breakLabel="..."
       className={classNames(
@@ -70,6 +70,8 @@ const Pagination = ({ setOffset, className, itemsPerPage, list, ...props }: IPag
       previousLabel={lang.Pagination.previous}
       {...props}
     />
+  ) : (
+    <></>
   )
 }
 

@@ -70,7 +70,7 @@ const Search = (): JSX.Element => {
   return (
     <>
       <Loading isLoading={loading} />
-      <div className="w-full h-24 flex-shrink-0 py-6 px-11">
+      <div className="w-full h-24 flex-shrink-0 py-6 px-11 absolute top-0 bg-modal backdrop-blur-sm">
         <div className="h-full w-full bg-default shadow-basic rounded flex justify-center items-center pr-4 max-w-3xl my-0 mx-auto">
           <Select
             defaultValue={repoList.find((val) => val?.value === repo)}
@@ -92,8 +92,8 @@ const Search = (): JSX.Element => {
           />
         </div>
       </div>
-      <SearchComicList list={list} offset={offset} />
-      <div className="w-full flex items-center justify-center shadow-basic">
+      <SearchComicList list={list} offset={offset} className="pt-24 pb-14" />
+      <div className="w-full flex items-center justify-center shadow-basic absolute bottom-0 h-14 bg-modal backdrop-blur-sm">
         <Pagination
           setOffset={setOffset}
           list={list}
@@ -107,7 +107,7 @@ const Search = (): JSX.Element => {
 
 const windowSettings = {
   windowProps: {
-    contentClassName: 'h-full w-full flex flex-col overflow-hidden items-center',
+    contentClassName: 'h-full w-full flex flex-col overflow-hidden items-center relative',
     closeable: true,
     titleBar: true,
     unique: true,

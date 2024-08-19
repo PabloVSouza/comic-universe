@@ -82,7 +82,7 @@ const HomeNav = (): JSX.Element => {
             key={option.label}
           >
             <Image
-              className="bg-light aspect-square h-full p-3 group-hover:bg-text-oposite"
+              className="bg-text-default aspect-square h-full p-3 group-hover:bg-text-oposite"
               src={option.icon}
               svg
             />

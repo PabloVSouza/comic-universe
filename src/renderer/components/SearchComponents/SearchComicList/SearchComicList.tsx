@@ -4,12 +4,18 @@ import classNames from 'classnames'
 import SearchComicListItem from '../SearchComicListItem/SearchComicListItem'
 
 interface SearchComicList {
+  className?: string
   list: ComicInterface[]
   itemsPerPage?: number
   offset: number
 }
 
-const SearchComicList = ({ list, itemsPerPage = 10, offset }: SearchComicList): JSX.Element => {
+const SearchComicList = ({
+  className,
+  list,
+  itemsPerPage = 10,
+  offset
+}: SearchComicList): JSX.Element => {
   const refScrollElement = useRef() as MutableRefObject<HTMLUListElement>
   const endOffset = offset + itemsPerPage
   const currentItems = list?.slice(offset, endOffset)
@@ -28,7 +34,8 @@ const SearchComicList = ({ list, itemsPerPage = 10, offset }: SearchComicList): 
     <ul
       className={classNames(
         'w-full flex flex-grow flex-col overflow-auto gap-px',
-        !list.length ? 'bg-default' : ''
+        !list.length ? 'bg-default' : '',
+        className
       )}
       ref={refScrollElement}
     >

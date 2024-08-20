@@ -111,6 +111,8 @@ const windowSettings = {
     closeable: true,
     titleBar: true,
     unique: true,
+    minimizable: true,
+    resizable: true,
     title: useLang().SearchComic.windowTitle
   },
   initialStatus: {

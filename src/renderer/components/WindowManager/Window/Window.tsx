@@ -1,6 +1,6 @@
 import { useRef, useEffect, ReactElement } from 'react'
 import useWindowManagerStore from 'store/useWindowManagerStore'
-import Button from 'components/Button/Button'
+import Button from 'components/Button'
 import classNames from 'classnames'
 
 const Window = ({
@@ -161,7 +161,7 @@ const Window = ({
 
     return (
       <div
-        className="absolute min-h-24 min-w-24 rounded bg-modal backdrop-blur-sm overflow-hidden shadow-basic flex flex-col translate-3d-0"
+        className="absolute min-h-24 min-w-24 rounded-lg bg-modal backdrop-blur-sm !overflow-hidden shadow-basic flex flex-col translate-3d-0"
         ref={refWindow}
         style={{ ...finalStyle, cursor: windowStatus.isMoving ? 'grabbing' : 'unset' }}
         onMouseDown={(): void => setIsFocused(id)}
@@ -179,7 +179,7 @@ const Window = ({
             >
               {!!title && <p className="w-full text-center">{title}</p>}
             </div>
-            <div className="absolute top-0 right-0 [&>button:first-child]:!rounded-bl">
+            <div className="absolute top-0 right-0 h-full [&>button:first-child]:!rounded-bl">
               {minimizable && (
                 <Button theme="minimize" onClick={(): void => setIsMinimized(id, true)} />
               )}
@@ -189,7 +189,7 @@ const Window = ({
         )}
 
         {!titleBar && (
-          <div className="absolute top-0 right-0 [&>button]:!rounded-bl">
+          <div className="absolute flex top-0 right-0 [&>button]:!rounded-bl">
             {minimizable && (
               <Button theme="minimize" onClick={(): void => setIsMinimized(id, true)} />
             )}

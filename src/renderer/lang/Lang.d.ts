@@ -41,6 +41,7 @@ interface HomeNavLang {
 }
 
 interface SearchComicLang {
+  windowTitle: string
   textPlaceholder: string
   bookmarkComic: string
   alreadyBookmarked: string

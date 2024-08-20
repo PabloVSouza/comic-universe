@@ -39,7 +39,7 @@ const ComicListItem = ({
   return (
     <li
       className={classNames(
-        'w-full h-24 overflow-hidden flex flex-shrink-0 items-center justify-center bg-list-item relative cursor-pointer transition-colors',
+        'w-full h-24 overflow-hidden flex flex-shrink-0 items-center justify-center bg-list-item relative cursor-pointer transition-colors backdrop-blur-sm',
         !isDownloading ? 'hover:bg-list-item-hover hover:text-text-oposite' : '',
         active ? '!bg-list-item-active text-text-oposite' : null
       )}

@@ -179,7 +179,7 @@ const Window = ({
             >
               {!!title && <p className="w-full text-center">{title}</p>}
             </div>
-            <div className="absolute top-0 right-0 [&>button]:!rounded-bl">
+            <div className="absolute top-0 right-0 [&>button:first-child]:!rounded-bl">
               {minimizable && (
                 <Button theme="minimize" onClick={(): void => setIsMinimized(id, true)} />
               )}

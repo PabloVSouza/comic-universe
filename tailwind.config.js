@@ -57,12 +57,12 @@ module.exports = {
         light: addTransparency(colors.slate[50], 0.8),
         'text-default': colors.zinc[900],
         'text-oposite': colors.zinc[900],
-        default: addTransparency(colors.zinc[300], 0.7),
+        default: addTransparency(colors.zinc[200], 0.7),
         oposite: addTransparency(colors.slate[50], 0.8),
         list: addTransparency(colors.zinc[300], 0.7),
-        'list-item': addTransparency(colors.zinc[300], 0.7),
-        'list-item-hover': addTransparency(colors.slate[50], 0.6),
-        'list-item-active': addTransparency(colors.slate[50], 0.8),
+        'list-item': addTransparency(colors.zinc[400], 0.7),
+        'list-item-hover': addTransparency(colors.slate[200], 0.8),
+        'list-item-active': addTransparency(colors.slate[100], 0.8),
         modal: addTransparency(colors.zinc[200], 0.9)
       },
       dark: {

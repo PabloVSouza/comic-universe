@@ -1,5 +1,4 @@
 import { ReactElement } from 'react'
-import style from './MinimizeItem.module.scss'
 import useWindowManagerStore from 'store/useWindowManagerStore'
 
 const MinimizedItem = ({ title, id }: Partial<TWindowProps>): ReactElement => {
@@ -8,11 +7,11 @@ const MinimizedItem = ({ title, id }: Partial<TWindowProps>): ReactElement => {
   if (id)
     return (
       <div
-        className={style.MinimizeItem}
+        className="max-w-72 min-w-24 h-full bg-modal flex items-center justify-center px-2 cursor-pointer shadow-basic rounded hover:bg-oposite hover:text-text-oposite"
         onClick={(): void => setIsMinimized(id, false)}
         onContextMenu={(): void => removeWindow(id)}
       >
-        <p>{title}</p>
+        <p className="whitespace-nowrap text-ellipsis overflow-hidden">{title}</p>
       </div>
     )
 

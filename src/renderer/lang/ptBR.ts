@@ -42,6 +42,7 @@ export default class ptBR implements Lang {
   }
 
   SearchComic: SearchComicLang = {
+    windowTitle: 'Busca de Quadrinhos',
     textPlaceholder: 'Digite sua Busca',
     bookmarkComic: 'Favoritar',
     alreadyBookmarked: 'Favoritado',

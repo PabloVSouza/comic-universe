@@ -1,7 +1,6 @@
 import { ReactElement } from 'react'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import MinimizedItem from './MinimizedItem'
-import style from './MinimizeBar.module.scss'
 
 type TMinimizeBarProps = {
   MinimizedList: TWindow[]
@@ -16,7 +15,10 @@ const MinimizedBar = ({ MinimizedList }: TMinimizeBarProps): ReactElement => {
   const [minimizedRef] = useAutoAnimate(animationSettings)
 
   return (
-    <div className={style.MinimizedBar} ref={minimizedRef}>
+    <div
+      className="w-full absolute bottom-2 h-12 z-20 p-2 flex gap-1 overflow-x-auto"
+      ref={minimizedRef}
+    >
       {MinimizedList.reverse().map((win) => {
         const { title } = win.windowProps
         return <MinimizedItem key={win.id} id={win.id} title={title} />

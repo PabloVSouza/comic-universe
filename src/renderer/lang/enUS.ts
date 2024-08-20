@@ -42,6 +42,7 @@ export default class enUS implements Lang {
   }
 
   SearchComic: SearchComicLang = {
+    windowTitle: 'Search Comics',
     textPlaceholder: 'Type your Search',
     bookmarkComic: 'Bookmark',
     alreadyBookmarked: 'Bookmarked',

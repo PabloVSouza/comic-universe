@@ -5,7 +5,7 @@
     "src/electron/preload/*",
     "electron.vite.config.*",
     "src/@types/*.d.ts"
-  ],
+,   "src/**/*.d.ts"  ],
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"],

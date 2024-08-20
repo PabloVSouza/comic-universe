@@ -9,8 +9,6 @@ import useDashboardStore from 'store/useDashboardStore'
 import useDownloadStore from 'store/useDownloadStore'
 import usePersistStore from 'store/usePersistStore'
 
-import style from './HomeDashboard.module.scss'
-
 const HomeDashboard = (): JSX.Element => {
   const navigate = useNavigate()
 
@@ -31,7 +29,7 @@ const HomeDashboard = (): JSX.Element => {
   }, [queue, list])
 
   return (
-    <div className={style.HomeDashboard}>
+    <div className="h-full w-full grow flex flex-col gap-px bg-default z-10 mt-px">
       {!!comic.id && !isDownloading && (
         <>
           <HomeDashboardHeader />

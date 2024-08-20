@@ -16,9 +16,22 @@ const ProgressBar = ({
   const percentage = Math.round((100 / total) * current)
 
   return (
-    <div className={classNames(style.ProgressBar, className)} {...props}>
-      {showPercentage && <p>{percentage}%</p>}
-      <div className={style.bar} style={{ width: `${percentage}%` }} />
+    <div
+      className={classNames(
+        'flex flex-col h-full w-full text-center relative transition-all duration-500 ease-default',
+        className
+      )}
+      {...props}
+    >
+      {showPercentage && (
+        <p className="absolute mx-auto left-0 right-0 top-1/2 -translate-y-1/2 font-light transition-all ease-default">
+          {percentage}%
+        </p>
+      )}
+      <div
+        className={'bg-lime-500/60 flex-grow transition-all duration-500 ease-default'}
+        style={{ width: `${percentage}%` }}
+      />
     </div>
   )
 }

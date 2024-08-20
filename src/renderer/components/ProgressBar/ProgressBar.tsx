@@ -1,4 +1,3 @@
-import style from './ProgressBar.module.scss'
 import classNames from 'classnames'
 
 const ProgressBar = ({

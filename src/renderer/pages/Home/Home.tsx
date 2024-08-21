@@ -24,11 +24,11 @@ const Home = (): JSX.Element => {
   }, [location])
 
   return (
-    <div className="w-full max-h-full h-full flex-shrink-0 flex-grow flex flex-col justify-start items-center text-text-default pb-[57px]">
+    <div className="w-full h-full flex-shrink-0 flex-grow flex flex-col justify-start items-center text-text-default">
       <HomeTopBar />
       <HomeNav />
       <WindowManager>
-        <div className="flex w-full h-full min-h-0 flex-grow gap-px">
+        <div className="flex h-full gap-px">
           <HomeBlankArea active={!userActive} />
           {userActive && (
             <>

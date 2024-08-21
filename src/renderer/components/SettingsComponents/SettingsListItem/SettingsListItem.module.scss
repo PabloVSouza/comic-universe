@@ -6,7 +6,7 @@
   justify-content: center;
 
   cursor: pointer;
-  transition: background $transition-default;
+  // transition: background $transition-default;
   flex-shrink: 0;
   gap: 1px;
 
@@ -21,7 +21,7 @@
     display: flex;
     padding-left: 10px;
     align-items: center;
-    text-shadow: $black 1px 1px;
+    // text-shadow: $black 1px 1px;
   }
 
   .IconContainer {
@@ -30,7 +30,7 @@
     padding: 15px;
     flex-shrink: 0;
 
-    transition: background $transition-default;
+    // transition: background $transition-default;
 
     .Icon {
       height: 100%;

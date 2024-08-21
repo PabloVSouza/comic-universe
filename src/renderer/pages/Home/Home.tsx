@@ -24,7 +24,7 @@ const Home = (): JSX.Element => {
   }, [location])
 
   return (
-    <div className="w-full h-full flex-shrink-0 flex-grow flex flex-col justify-start items-center text-text-default">
+    <div className="w-full max-h-full h-full flex-shrink-0 flex-grow flex flex-col justify-start items-center text-text-default pb-[57px]">
       <HomeTopBar />
       <HomeNav />
       <WindowManager>

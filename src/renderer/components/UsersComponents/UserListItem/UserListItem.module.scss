@@ -2,7 +2,7 @@
   width: 100px;
   border-radius: 100%;
   aspect-ratio: 1/1;
-  border: 1px solid $white-darker;
+  // border: 1px solid $white-darker;
   cursor: pointer;
   flex-shrink: 0;
   display: flex;
@@ -11,10 +11,10 @@
   overflow: hidden;
   position: relative;
   background: var(--colorUserProfile);
-  transition: all $transition-default;
+  // transition: all $transition-default;
 
   &:hover {
-    background: $white-transparent;
+    // background: $white-transparent;
   }
 
   .selectButton {
@@ -24,8 +24,8 @@
     top: 0;
     z-index: 2;
     .name {
-      background: rgba($white-darker, 0.9);
-      color: $black;
+      // background: rgba($white-darker, 0.9);
+      // color: $black;
       width: 100%;
       text-align: center;
       padding: 5px 0;
@@ -40,7 +40,7 @@
     position: absolute;
     top: 0;
     z-index: 1;
-    background: $black-transparent;
+    // background: $black-transparent;
   }
 
   .deleteButton {
@@ -52,7 +52,7 @@
     text-align: center;
     padding: 2px;
     opacity: 0;
-    background: rgba($white, 0.7);
+    // background: rgba($white, 0.7);
 
     &:hover {
       opacity: 1;

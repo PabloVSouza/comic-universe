@@ -17,6 +17,9 @@ module.exports = {
   content: ['./src/renderer/index.html', './src/renderer/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        roboto: ['Roboto', 'sans']
+      },
       transform: {
         '3d': 'translate3d(0, 0, 0)'
       },

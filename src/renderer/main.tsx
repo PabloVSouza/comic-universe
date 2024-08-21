@@ -2,8 +2,7 @@ import { ReactNode, useEffect } from 'react'
 import { HashRouter, useNavigate } from 'react-router-dom'
 import ReactDOM from 'react-dom/client'
 import Routes from 'routes'
-import 'scss/main/main.scss'
-import themes from 'scss/main/themes.module.scss'
+import 'css/main.css'
 import usePersistStore from 'store/usePersistStore'
 import classNames from 'classnames'
 
@@ -27,8 +26,7 @@ const Main = ({ children }: Props): JSX.Element => {
   return (
     <div
       className={classNames(
-        themes[theme],
-        'h-screen w-screen bg-cover bg-center bg-no-repeat flex justify-center items-center relative overflow-hidden',
+        'h-[calc(100dvh)] w-screen bg-cover bg-center bg-no-repeat flex justify-center items-center relative overflow-hidden',
         theme
       )}
       style={{ backgroundImage: `url(${wallpaper}` }}

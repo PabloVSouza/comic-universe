@@ -61,7 +61,7 @@ const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.E
     <li
       className={classNames(
         `
-          group h-10 w-full shrink-0 relative flex items-center font-semibold gap-px
+          group h-10 w-full relative flex items-center font-semibold gap-px
           [&>div]:even:before:bg-transparent
         `,
         disabled ? 'cursor-auto' : 'cursor-pointer'

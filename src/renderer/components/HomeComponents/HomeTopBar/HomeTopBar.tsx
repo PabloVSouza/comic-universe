@@ -16,7 +16,7 @@ const HomeTopBar = (): JSX.Element => {
 
   return (
     <div className="w-full h-14 flex justify-between relative shrink-0 items-center bg-default">
-      <div className="[-webkit-app-region:drag] h-full w-full absolute z-20" />
+      <div className="[-webkit-app-region:drag] h-full w-full absolute" />
       {userActive && (
         <Button
           className="z-30"
@@ -34,7 +34,7 @@ const HomeTopBar = (): JSX.Element => {
         )}
       />
       <Button
-        className="z-50 ml-auto"
+        className="z-30 ml-auto"
         size="xs"
         active={menuVisible}
         theme="burger"

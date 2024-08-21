@@ -78,7 +78,7 @@ module.exports = {
         'list-item': addTransparency(colors.zinc[950], 0.7),
         'list-item-hover': addTransparency(colors.slate[50], 0.6),
         'list-item-active': addTransparency(colors.slate[50], 0.8),
-        modal: addTransparency(colors.zinc[800], 0.8)
+        modal: addTransparency(colors.zinc[800], 0.5)
       }
     })
   ]

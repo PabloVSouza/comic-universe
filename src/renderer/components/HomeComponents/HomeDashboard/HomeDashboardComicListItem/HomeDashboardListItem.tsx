@@ -1,13 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
-
 import useLang from 'lang'
-
 import Button from 'components/Button/Button'
-
 import useDashboardStore from 'store/useDashboardStore'
-
-import style from './HomeDashboardListItem.module.scss'
 
 import closedBook from 'assets/closed-book-icon.svg'
 import bookStack from 'assets/book-stack.svg'
@@ -56,21 +51,33 @@ const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.E
     await setComic(comic.id)
   }
 
+  const listItem = `
+    h-full flex justify-center items-center relative bg-list-item
+    group-hover:bg-list-item-active group-hover:text-text-oposite
+    before:content-[' '] before:absolute before:bg-list-item before:h-full before:w-full before:-z-10
+  `
+
   return (
     <li
-      className={classNames(style.HomeDashboardListItem, disabled ? style.disabled : null)}
+      className={classNames(
+        `
+          group h-10 w-full shrink-0 relative flex items-center font-semibold gap-px
+          [&>div]:even:before:bg-transparent
+        `,
+        disabled ? 'cursor-auto' : 'cursor-pointer'
+      )}
       onDoubleClick={(): Promise<void> => openChapter()}
     >
-      <div className={classNames(style.listItem, style.number)}>
+      <div className={classNames(listItem, 'w-20')}>
         <p>{item.number}</p>
       </div>
-      <div className={classNames(style.listItem, style.name)}>
+      <div className={classNames(listItem, 'grow')}>
         <p>{item.name}</p>
       </div>
-      <div className={classNames(style.listItem, style.percentage)}>
+      <div className={classNames(listItem, 'w-20')}>
         <p>{percentage}%</p>
       </div>
-      <div className={classNames(style.listItem, style.button)}>
+      <div className={classNames(listItem, 'aspect-square')}>
         <Button
           theme="pure"
           size="xxs"
@@ -79,7 +86,7 @@ const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.E
           onClick={(): Promise<void> => handleReadProgress(0)}
         />
       </div>
-      <div className={classNames(style.listItem, style.button)}>
+      <div className={classNames(listItem, '')}>
         <Button
           theme="pure"
           size="xxs"

@@ -113,6 +113,7 @@ const windowSettings = {
     unique: true,
     minimizable: true,
     resizable: true,
+    movable: true,
     title: useLang().SearchComic.windowTitle
   },
   initialStatus: {

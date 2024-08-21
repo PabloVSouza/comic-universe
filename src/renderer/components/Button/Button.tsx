@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import Image from 'components/Image'
 
 const buttonStyling = {
-  base: 'cursor-pointer relative overflow-hidden [-webkit-app-region:no-drag] transition-all duration-500 ease-default',
+  base: 'cursor-pointer relative overflow-hidden transition-all duration-500 ease-default',
   themes: {
     default: { button: { default: '', active: '' }, icon: { default: '', active: '' } },
     pure: {

@@ -16,9 +16,10 @@ const HomeTopBar = (): JSX.Element => {
 
   return (
     <div className="w-full h-14 flex justify-between relative shrink-0 items-center bg-default">
-      <div className="[-webkit-app-region:drag] h-full w-full absolute" />
+      <div className="[-webkit-app-region:drag] h-full w-full absolute z-20" />
       {userActive && (
         <Button
+          className="z-30"
           icon={downloadIcon}
           size="xs"
           theme="pure"

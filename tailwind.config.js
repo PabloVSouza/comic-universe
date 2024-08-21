@@ -60,10 +60,10 @@ module.exports = {
         default: addTransparency(colors.zinc[200], 0.7),
         oposite: addTransparency(colors.slate[50], 0.8),
         list: addTransparency(colors.zinc[300], 0.7),
-        'list-item': addTransparency(colors.zinc[400], 0.7),
+        'list-item': addTransparency(colors.zinc[100], 0.7),
         'list-item-hover': addTransparency(colors.slate[200], 0.8),
         'list-item-active': addTransparency(colors.slate[100], 0.8),
-        modal: addTransparency(colors.zinc[200], 0.9)
+        modal: addTransparency(colors.zinc[200], 0.5)
       },
       dark: {
         'text-dark': colors.zinc[900],

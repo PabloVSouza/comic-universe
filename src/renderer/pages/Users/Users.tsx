@@ -1,16 +1,11 @@
 import { useEffect, useState } from 'react'
-
 import Button from 'components/Button/Button'
 import UsersList from '../../components/UsersComponents/UserList/UsersList'
-
 import useLang from 'lang'
-
 import useUsersStore from 'store/useUsersStore'
 
 import confirmIcon from 'assets/confirm.svg'
 import cancelIcon from 'assets/cancel.svg'
-
-import style from './Users.module.scss'
 
 const Users = (): JSX.Element => {
   const { updateUser } = useUsersStore()
@@ -35,13 +30,14 @@ const Users = (): JSX.Element => {
     <>
       {newUser ? (
         <>
-          <h1 className={style.header}>{lang.Users.createButton}</h1>
+          <h1 className="text-2xl ">{lang.Users.createButton}</h1>
           <input
+            className="w-11/12 p-2 border-none bg-default text-3xl rounded-lg"
             type="text"
             placeholder={lang.Users.namePlaceholder}
             onChange={(e): void => setUserName(e.target.value)}
           />
-          <div className={style.buttons}>
+          <div className="">
             <Button
               icon={cancelIcon}
               theme="pure"
@@ -60,7 +56,7 @@ const Users = (): JSX.Element => {
         </>
       ) : (
         <>
-          <h1 className={style.header}>{lang.Users.header}</h1>
+          <h1 className="text-2xl">{lang.Users.header}</h1>
           <UsersList list={users} newUserAction={() => setNewUser(true)} />
         </>
       )}
@@ -70,8 +66,8 @@ const Users = (): JSX.Element => {
 
 const windowSettings = {
   windowProps: {
-    className: style.Users,
-    contentClassName: style.Content,
+    className: 'grow relative',
+    contentClassName: 'flex w-full h-full flex-col justify-evenly items-center overflow-auto pt-5',
     maximizable: true,
     unique: true,
     title: 'Users'

@@ -1,6 +1,5 @@
 import { ReactElement, useRef, useState, ImgHTMLAttributes, CSSProperties } from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
-import styling from './Image.module.scss'
 
 type ImageProps = {
   placeholderSrc?: string
@@ -71,23 +70,20 @@ const Image = ({
       src,
       style: { display: 'none' },
       referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
-
       onLoad: (): void => setIsLoading(0)
+    }
+
+    const transitionStyles = {
+      enter: 'opacity-0',
+      enterActive: 'transition-opacity duration-200 opacity-100',
+      exit: 'opacity-100',
+      exitActive: 'transition-opacity duration-200 opacity-0'
     }
 
     return (
       <>
         <SwitchTransition mode="out-in">
-          <CSSTransition
-            key={isLoading}
-            timeout={100}
-            classNames={{
-              enter: styling.enter,
-              exit: styling.exit,
-              enterActive: styling.enterActive,
-              exitActive: styling.exitActive
-            }}
-          >
+          <CSSTransition key={isLoading} timeout={100} classNames={transitionStyles}>
             {!!isLoading ? <img {...placeHolderProps} /> : <img {...lazyImageProps} />}
           </CSSTransition>
         </SwitchTransition>
@@ -97,4 +93,5 @@ const Image = ({
   }
   return <img {...pureImgProps} />
 }
+
 export default Image

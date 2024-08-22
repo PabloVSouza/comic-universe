@@ -42,14 +42,16 @@ export default class enUS implements Lang {
   }
 
   SearchComic: SearchComicLang = {
+    windowTitle: 'Search Comics',
     textPlaceholder: 'Type your Search',
     bookmarkComic: 'Bookmark',
     alreadyBookmarked: 'Bookmarked',
-    availableChapters: 'Chapters Available',
-    pagination: {
-      previous: 'Previous',
-      next: 'Next'
-    }
+    availableChapters: 'Chapters Available'
+  }
+
+  Pagination: PaginationLang = {
+    previous: 'Previous',
+    next: 'Next'
   }
 
   Settings: SettingsLang = {

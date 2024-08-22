@@ -1,13 +1,8 @@
 import { useNavigate } from 'react-router-dom'
-
 import Button from 'components/Button/Button'
-
 import useLang from 'lang'
-
 import useDashboardStore from 'store/useDashboardStore'
 import useDownloadStore from 'store/useDownloadStore'
-
-import style from './HomeDashboardNavBar.module.scss'
 
 import downloadIcon from 'assets/download-icon-2.svg'
 import comicBook from 'assets/comic-book.svg'
@@ -40,8 +35,8 @@ const HomeDashboardNavBar = (): JSX.Element => {
   }
 
   return (
-    <div className={style.HomeDashboardNavBar}>
-      <div className={style.buttons}>
+    <div className="h-12 shrink-0 bg-default relative flex">
+      <div className="z-20 w-full h-full flex items-center justify-between px-2">
         <Button
           theme="pure"
           size="xxs"
@@ -60,7 +55,7 @@ const HomeDashboardNavBar = (): JSX.Element => {
       <ProgressBar
         total={totalPages}
         current={totalRead}
-        className={style.progressBar}
+        className="!absolute h-full w-full"
         showPercentage
       />
     </div>

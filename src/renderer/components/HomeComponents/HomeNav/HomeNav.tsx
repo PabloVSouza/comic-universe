@@ -3,14 +3,13 @@ const { invoke } = window.Electron.ipcRenderer
 import classNames from 'classnames'
 import Cover from 'components/Cover/Cover'
 import openWindow from 'functions/openWindow'
+import Image from 'components/Image'
 
 import useLang from 'lang'
 
 import useGlobalStore from 'store/useGlobalStore'
 
 import usePersistStore from 'store/usePersistStore'
-
-import style from './HomeNav.module.scss'
 
 import infoIcon from 'assets/info.svg'
 import settingsIcon from 'assets/settings.svg'
@@ -69,14 +68,24 @@ const HomeNav = (): JSX.Element => {
   }
 
   return (
-    <Cover
-      visible={menuVisible}
-      className={classNames(style.HomeNav, menuVisible ? style.visible : null)}
-    >
-      <ul>
+    <Cover visible={menuVisible}>
+      <ul
+        className={classNames(
+          'transition-move-fade bg-default h-full w-52 duration-500 ease-default ml-auto mb-auto pt-14 flex gap-px flex-col',
+          menuVisible ? 'translate-x-0' : 'translate-x-full'
+        )}
+      >
         {finalMenuOptions.map((option) => (
-          <li onClick={(): void => handleClick(option.onClick)} key={option.label}>
-            <div className={style.icon} style={{ WebkitMaskImage: `url(${option.icon})` }} />
+          <li
+            className="group h-12 bg-default flex items-center cursor-pointer hover:bg-light hover:text-text-oposite"
+            onClick={(): void => handleClick(option.onClick)}
+            key={option.label}
+          >
+            <Image
+              className="bg-text-default aspect-square h-full p-3 group-hover:bg-text-oposite"
+              src={option.icon}
+              svg
+            />
             <p>{option.label}</p>
           </li>
         ))}

@@ -1,8 +1,6 @@
 import Cover from 'components/Cover/Cover'
 import Image from 'components/Image/Image'
-
-import style from './LoadingOverlay.module.scss'
-
+import ProgressBar from 'components/ProgressBar'
 import imgLoading from 'assets/loading.svg'
 
 interface Loading {
@@ -15,17 +13,21 @@ interface Loading {
 }
 
 const LoadingOverlay = ({ isLoading, message, progress }: Loading): JSX.Element => {
-  const totalProgress = progress ? Math.round((100 / progress.total) * progress.current) : 0
   return (
-    <Cover visible={isLoading} index="999">
+    <Cover visible={isLoading}>
       {message ? (
-        <div className={style.message}>
+        <div
+          className={
+            'w-96 h-60 rounded bg-dark text-text-light flex flex-col justify-center items-center px-5'
+          }
+        >
           <h1>{message}</h1>
-          <Image src={imgLoading} alt="" />
-          <div className={style.progressBar}>
-            <p>{totalProgress}%</p>
-            <div className={style.bar} style={{ width: `${totalProgress}%` }} />
-          </div>
+          <Image src={imgLoading} alt="" className="h-full" />
+          <ProgressBar
+            current={progress?.current ?? 0}
+            total={progress?.total ?? 0}
+            showPercentage
+          />
         </div>
       ) : (
         <Image src={imgLoading} alt="" />

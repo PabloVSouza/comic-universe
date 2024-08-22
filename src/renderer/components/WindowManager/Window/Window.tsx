@@ -1,7 +1,6 @@
 import { useRef, useEffect, ReactElement } from 'react'
 import useWindowManagerStore from 'store/useWindowManagerStore'
-import style from './Window.module.scss'
-import Button from 'components/Button/Button'
+import Button from 'components/Button'
 import classNames from 'classnames'
 
 const Window = ({
@@ -162,7 +161,7 @@ const Window = ({
 
     return (
       <div
-        className={style.Window}
+        className="absolute min-h-24 min-w-24 rounded-lg bg-modal backdrop-blur-sm !overflow-hidden shadow-basic flex flex-col translate-3d-0"
         ref={refWindow}
         style={{ ...finalStyle, cursor: windowStatus.isMoving ? 'grabbing' : 'unset' }}
         onMouseDown={(): void => setIsFocused(id)}
@@ -170,17 +169,17 @@ const Window = ({
       >
         {titleBar && (
           <div
-            className={style.titleBar}
+            className="w-full h-8 bg-default shrink-0 shadow-basic relative"
             style={{ cursor: movable ? (windowStatus.isMoving ? 'grabbing' : 'grab') : 'unset' }}
           >
             <div
-              className={style.movableArea}
+              className="w-full h-full flex items-center"
               onDoubleClick={maximizeWindow}
               onMouseDown={verifyAndSetMove}
             >
-              {!!title && <p className={style.title}>{title}</p>}
+              {!!title && <p className="w-full text-center">{title}</p>}
             </div>
-            <div className={style.buttonArea}>
+            <div className="absolute top-0 right-0 h-full [&>button:first-child]:!rounded-bl">
               {minimizable && (
                 <Button theme="minimize" onClick={(): void => setIsMinimized(id, true)} />
               )}
@@ -190,7 +189,7 @@ const Window = ({
         )}
 
         {!titleBar && (
-          <div className={style.buttonArea}>
+          <div className="absolute flex top-0 right-0 [&>button]:!rounded-bl">
             {minimizable && (
               <Button theme="minimize" onClick={(): void => setIsMinimized(id, true)} />
             )}
@@ -198,9 +197,9 @@ const Window = ({
           </div>
         )}
 
-        <div className={classNames(className, style.content)}>{children}</div>
+        <div className={classNames('flex-grow overflow-auto', className)}>{children}</div>
         {resizable && (
-          <div className={style.resizeButtonArea}>
+          <div className="absolute bottom-0 right-0">
             <Button theme="resize" onMouseDown={verifyAndSetResize} />
           </div>
         )}

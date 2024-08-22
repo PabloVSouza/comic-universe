@@ -27,7 +27,7 @@
       "lang/*": ["./lang/*"],
       "functions/*": ["./functions/*"],
       "routes/*": ["./routes/*"],
-      "scss/*": ["./scss/*"],
+      "css/*": ["./css/*"],
       "store/*": ["./store/*"],
       "@types/*": ["./@types/*"]
     }

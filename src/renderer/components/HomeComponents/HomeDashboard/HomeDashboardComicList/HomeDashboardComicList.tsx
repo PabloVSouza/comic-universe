@@ -1,14 +1,11 @@
 import DashboardListItem from '../HomeDashboardComicListItem'
-
 import useDashboardStore from 'store/useDashboardStore'
-
-import style from './HomeDashboardComicList.module.scss'
 
 const HomeDashboardComicList = (): JSX.Element => {
   const { comic } = useDashboardStore()
 
   return (
-    <ul className={style.HomeDashboardComicList}>
+    <ul className="grow overflow-auto flex flex-col items-start gap-px">
       {comic.chapters.map((item) => (
         <DashboardListItem key={item.id} item={item} />
       ))}

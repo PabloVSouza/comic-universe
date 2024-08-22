@@ -1,8 +1,14 @@
 import classNames from 'classnames'
-import style from './HomeBlankArea.module.scss'
 
 const HomeBlankArea = ({ active }: { active?: boolean }) => {
-  return <div className={classNames(style.HomeBlankArea, active ? style.Active : null)} />
+  return (
+    <div
+      className={classNames(
+        'w-full h-full absolute flex justify-center items-center z-10',
+        active ? 'bg-default' : ''
+      )}
+    />
+  )
 }
 
 export default HomeBlankArea

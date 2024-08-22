@@ -1,7 +1,5 @@
 import UsersListItem from '../UserListItem/UserListItem'
 
-import style from './UsersList.module.scss'
-
 const UsersList = ({
   list,
   newUserAction
@@ -10,7 +8,7 @@ const UsersList = ({
   newUserAction: () => void
 }): JSX.Element => {
   return (
-    <div className={style.UsersList}>
+    <div className="overflow-auto grow flex w-full flex-nowrap shrink-0 gap-2 justify-center px-2 items-center">
       <UsersListItem newUser newUserAction={newUserAction} />
       {list.map((item) => (
         <UsersListItem key={item.id} data={item} />

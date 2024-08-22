@@ -69,21 +69,31 @@ const UsersListItem = ({ data, newUser, newUserAction }: UsersListItem): JSX.Ele
     return new Promise((resolve) => resolve())
   }
 
+  const baseStyling =
+    'w-24 rounded-full aspect-square cursor-pointer shrink-1 flex justify-center items-center !overflow-clip relative border border-white bg-light/60 hover:bg-light/80 transition-all duration-500 ease-default box-border'
+
+  const bgStyling = 'w-full h-full absolute top-0 z-10 bg-dark'
+
   if (newUser)
     return (
-      <div className={classNames(style.UsersListItem, style.newUser)} onClick={newUserAction}>
-        <Image className={style.background} svg src={plusIcon} />
+      <div className={classNames(baseStyling)} onClick={newUserAction}>
+        <Image className={bgStyling} svg src={plusIcon} />
       </div>
     )
 
   return (
-    <div className={style.UsersListItem}>
-      <Image className={style.background} svg src={userIcon} />
-      <div onClick={(): Promise<void> => setUser()} className={style.selectButton}>
-        <p className={style.name}>{data?.name}</p>
+    <div className={baseStyling}>
+      <Image className={bgStyling} svg src={userIcon} />
+      <div onClick={(): Promise<void> => setUser()} className="w-full h-3/4 absolute top-0 z-10">
+        <p className="w-full backdrop-blur-sm text-text-dark text-center py-1 absolute bottom-0 bg-light">
+          {data?.name}
+        </p>
       </div>
-      <div className={style.deleteButton} onClick={(): Promise<void> => handleDeleteUser()}>
-        <Image className={style.deleteImage} svg src={deleteIcon} />
+      <div
+        className="absolute w-full h-1/5 bottom-0 z-10 text-center p-px opacity-0 hover:opacity-100 transition-fade duration-500 ease-default"
+        onClick={(): Promise<void> => handleDeleteUser()}
+      >
+        <Image className="h-full bg-red-500" svg src={deleteIcon} />
       </div>
     </div>
   )

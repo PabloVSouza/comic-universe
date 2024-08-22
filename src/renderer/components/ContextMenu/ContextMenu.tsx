@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { MutableRefObject, useEffect, useRef } from 'react'
 import classNames from 'classnames'
-import style from './ContextMenu.module.scss'
 import Image from 'components/Image/Image'
 
 export type TContextOptions = {
@@ -72,14 +71,27 @@ export const ContextMenu = ({ options }: TContextMenu) => {
 
   return (
     <ul
-      className={classNames(style.ContextMenu, visible ? style.visible : null)}
+      className={classNames(
+        'fixed z-50 bg-default text-text-default rounded shadow-basic transition-fade',
+        visible ? 'opacity-100 visible' : 'opacity-0 invisible'
+      )}
       style={dynamicStyle}
       ref={ref}
     >
       {options.map((option) => (
-        <li key={option.title} onClick={() => handleAction(option)}>
-          <p>{option.title}</p>
-          {!!option.icon && <Image className={style.icon} src={option.icon} svg />}
+        <li
+          className="group rounded p-4 cursor-pointer border-b-text-oposite flex items-center h-12 gap-4 last:border-b-transparent hover:bg-oposite hover:text-text-oposite"
+          key={option.title}
+          onClick={() => handleAction(option)}
+        >
+          <p className="grow">{option.title}</p>
+          {!!option.icon && (
+            <Image
+              className={'max-h-full w-5 aspect-square bg-text-default group-hover:bg-text-oposite'}
+              src={option.icon}
+              svg
+            />
+          )}
         </li>
       ))}
     </ul>

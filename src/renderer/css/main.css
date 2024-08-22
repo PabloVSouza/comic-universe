@@ -1,0 +1,34 @@
+@import './fonts/roboto/roboto.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply font-roboto;
+    @apply font-thin;
+    @apply outline-none;
+    @apply [-webkit-app-region:no-drag];
+    @apply box-border;
+    @apply select-none;
+  }
+  *::-webkit-scrollbar-track {
+    @apply bg-zinc-50/50;
+  }
+
+  *::-webkit-scrollbar {
+    @apply w-1;
+    @apply h-2;
+    @apply bg-zinc-50/50;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    @apply bg-zinc-950/70;
+  }
+
+  img,
+  video {
+    max-width: unset;
+    height: unset;
+  }
+}

@@ -31,13 +31,6 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()]
   },
   renderer: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: `@import "@/scss/style.scss"; @import "@/scss/base/fonts/roboto/roboto.scss";`
-        }
-      }
-    },
     build: {
       assetsInlineLimit: 0
     },
@@ -53,7 +46,7 @@ export default defineConfig({
         pages: resolve('src/renderer/pages'),
         functions: resolve('src/renderer/functions'),
         routes: resolve('src/renderer/routes'),
-        scss: resolve('src/renderer/scss'),
+        css: resolve('src/renderer/css'),
         store: resolve('src/renderer/store')
       }
     }

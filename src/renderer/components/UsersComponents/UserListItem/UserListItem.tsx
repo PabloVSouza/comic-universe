@@ -9,8 +9,6 @@ import useLang from 'lang'
 
 import usePersistStore from 'store/usePersistStore'
 
-import style from './UserListItem.module.scss'
-
 import plusIcon from 'assets/plus.svg'
 import userIcon from 'assets/user.svg'
 import deleteIcon from 'assets/trash.svg'

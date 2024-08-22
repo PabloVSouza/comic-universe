@@ -8,6 +8,7 @@
     @apply font-roboto;
     @apply font-thin;
     @apply outline-none;
+    @apply [-webkit-app-region:no-drag];
   }
   *::-webkit-scrollbar-track {
     @apply bg-zinc-50/50;

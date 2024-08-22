@@ -1,6 +1,6 @@
 import useWindowManagerStore from 'store/useWindowManagerStore'
 import { v4 as randomUUID } from 'uuid'
-import PageList from 'pages/PageList'
+import PageList from 'pages'
 
 const openWindow = ({
   component,

@@ -71,7 +71,7 @@ const ReaderZoomWindow = ({ mousePos, image, visible }: ZoomWindow): JSX.Element
   return (
     <div
       className={classNames(
-        'w-1/3 aspect-square absolute overflow-hidden z-20 cursor-zoom-in shadow-2xl shadow-black rounded-full transition-fade duration-500 ease-default',
+        'w-96 aspect-square absolute overflow-hidden z-20 cursor-zoom-in shadow-2xl shadow-black rounded-full transition-fade duration-500 ease-default',
         visible ? ' opacity-100' : ' opacity-0 invisible'
       )}
       onWheel={changeZoomFactor}

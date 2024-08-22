@@ -35,7 +35,7 @@ const WindowManager = ({ children, className }: TWindowManager): ReactElement =>
 
   return (
     <div
-      className={classNames('relative grow h-px', className)}
+      className={classNames('relative grow h-px w-full', className)}
       ref={containerRef}
       onMouseMoveCapture={mouseCapture}
       onMouseUp={removeMovingResizing}

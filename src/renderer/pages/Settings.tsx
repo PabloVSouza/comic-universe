@@ -1,12 +1,9 @@
 import { ReactElement, useState, useEffect } from 'react'
 import SettingsList from 'components/SettingsComponents/SettingsList'
-
 import SettingsGeneral from 'components/SettingsComponents/SettingsGeneral'
 import SettingsUser from 'components/SettingsComponents/SettingsUser'
 import SettingsPlugin from 'components/SettingsComponents/SettingsPlugin'
 import useLang from 'lang'
-
-import style from './Settings.module.scss'
 
 import pluginIcon from 'assets/plugin.svg'
 import userIcon from 'assets/user.svg'
@@ -60,8 +57,8 @@ const Settings = (): ReactElement => {
 
 const windowSettings = {
   windowProps: {
-    className: style.Settings,
-    contentClassName: style.Content,
+    className: 'overflow-auto',
+    contentClassName: 'size-full flex',
     titleBar: true,
     closeable: true,
     unique: true,

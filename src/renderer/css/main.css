@@ -10,6 +10,7 @@
     @apply outline-none;
     @apply [-webkit-app-region:no-drag];
     @apply box-border;
+    @apply select-none;
   }
   *::-webkit-scrollbar-track {
     @apply bg-zinc-50/50;

@@ -34,7 +34,7 @@ const HomeTopBar = (): JSX.Element => {
         )}
       />
       <Button
-        className="z-30 ml-auto"
+        className="z-40 ml-auto"
         size="xs"
         active={menuVisible}
         theme="burger"

@@ -7,7 +7,7 @@ import useGlobalStore from 'store/useGlobalStore'
 
 import ReaderZoomWindow, {
   MousePos
-} from '../../components/ReaderComponents/ReaderZoomWindow/ReaderZoomWindow'
+} from 'components/ReaderComponents/ReaderZoomWindow/ReaderZoomWindow'
 import useReaderStore from 'store/useReaderStore'
 import useDashboardStore from 'store/useDashboardStore'
 

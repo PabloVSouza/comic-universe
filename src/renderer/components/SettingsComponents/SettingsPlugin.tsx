@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react'
-import style from './SettingsPlugin.module.scss'
 import SettingsPluginList from './SettingsPluginList'
 import Select from 'components/Select'
 import api from 'api'
 import Button from 'components/Button'
+import useGlobalStore from 'store/useGlobalStore'
 
 import downloadIcon from 'assets/download-icon-3.svg'
-
-import useGlobalStore from 'store/useGlobalStore'
 
 const SettingsPlugin = () => {
   const { pluginsList, getPluginInfoList, downloadAndInstallPlugin } = useGlobalStore()
@@ -47,11 +45,11 @@ const SettingsPlugin = () => {
     .filter((val) => !pluginsList.find((plugin) => plugin.name == val.label))
 
   return (
-    <div className={style.SettingsPlugin}>
-      <h2>Plugin Settings</h2>
-      <div className={style.selectArea}>
+    <div className="grow flex justify-center items-center p-2 flex-col gap-5">
+      <h2 className="text-2xl">Plugin Settings</h2>
+      <div className="w-full h-12 shrink-0 flex justify-center items-start gap-2">
         <Select
-          className={style.select}
+          className="!w-1/2 bg-default rounded-lg"
           options={pluginSelectOptions}
           placeholder="Select a plugin to install"
           onChange={(e) => handleSelectPluginToInstall(e as TOption)}
@@ -59,7 +57,7 @@ const SettingsPlugin = () => {
           value={selectedPluginToInstall}
         />
         <Button
-          className={style.button}
+          className="h-full"
           icon={downloadIcon}
           theme="pure"
           title="Download and Install Plugin"

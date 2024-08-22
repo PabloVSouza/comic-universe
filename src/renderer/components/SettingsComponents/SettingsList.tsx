@@ -1,5 +1,4 @@
-import SettingsListItem from '../SettingsListItem'
-import style from './SettingsList.module.scss'
+import SettingsListItem from './SettingsListItem'
 
 const SettingsList = ({
   options,
@@ -9,7 +8,7 @@ const SettingsList = ({
   activeOption: string
 }) => {
   return (
-    <ul className={style.SettingsList}>
+    <ul className="w-14 h-full overflow-auto shrink-0 flex flex-col gap-px bg-modal shadow-basic">
       {options.map((option) => (
         <SettingsListItem option={option} key={option.label} active={option.tag === activeOption} />
       ))}

@@ -1,8 +1,6 @@
-import style from './SettingsGeneral.module.scss'
-
 const SettingsGeneral = () => {
   return (
-    <div className={style.SettingsGeneral}>
+    <div className="flex grow justify-center p-3">
       <h2>General Settings</h2>
     </div>
   )

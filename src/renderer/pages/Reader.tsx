@@ -5,9 +5,7 @@ import Image from 'components/Image/Image'
 
 import useGlobalStore from 'store/useGlobalStore'
 
-import ReaderZoomWindow, {
-  MousePos
-} from 'components/ReaderComponents/ReaderZoomWindow/ReaderZoomWindow'
+import ReaderZoomWindow, { MousePos } from 'components/ReaderComponents/ReaderZoomWindow'
 import useReaderStore from 'store/useReaderStore'
 import useDashboardStore from 'store/useDashboardStore'
 

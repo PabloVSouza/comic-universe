@@ -1,8 +1,6 @@
-import style from './SettingsUser.module.scss'
-
 const SettingsUser = () => {
   return (
-    <div className={style.SettingsUser}>
+    <div className="flex grow justify-center p-3">
       <h2>User Settings</h2>
     </div>
   )

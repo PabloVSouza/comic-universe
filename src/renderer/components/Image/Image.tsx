@@ -55,11 +55,13 @@ const Image = ({
       alt: 'Image Placeholder',
       className: placeholderClassName,
       style: placeholderStyle,
-      ref: placeholderRef
+      ref: placeholderRef,
+      referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy
     }
 
     const lazyImageProps = {
       ...props,
+      referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
       style,
       src,
       className,

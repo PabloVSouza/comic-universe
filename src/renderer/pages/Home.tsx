@@ -1,14 +1,13 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import openWindow from 'functions/openWindow'
-
 import HomeTopBar from 'components/HomeComponents/HomeTopBar'
 import HomeComicList from 'components/HomeComponents/HomeComicList'
-import HomeComicDashboard from 'components/HomeComponents/HomeDashboard'
+import HomeComicDashboard from 'components/HomeComponents/HomeDashboardComponents/HomeDashboard'
 import HomeNav from 'components/HomeComponents/HomeNav'
 import HomeBlankArea from 'components/HomeComponents/HomeBlankArea'
+import WindowManager from 'components/WindowComponents/WindowManager'
 import usePersistStore from 'store/usePersistStore'
-import WindowManager from 'components/WindowManager'
 
 const Home = (): JSX.Element => {
   const { currentUser, setCurrentUser } = usePersistStore()

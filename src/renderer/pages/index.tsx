@@ -1,7 +1,7 @@
-import Settings from './Settings'
-import About from './About'
-import Users from './Users'
-import Search from './Search'
+import Settings from 'pages/Settings'
+import About from 'pages/About'
+import Users from 'pages/Users'
+import Search from 'pages/Search'
 export default {
   About,
   Settings,

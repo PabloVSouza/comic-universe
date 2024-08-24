@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import Button from 'components/Button/Button'
-import UsersList from 'components/UsersComponents/UserList/UsersList'
+import Button from 'components/Button'
+import UsersList from 'components/UsersComponents/UsersList'
 import useLang from 'lang'
 import useUsersStore from 'store/useUsersStore'
 

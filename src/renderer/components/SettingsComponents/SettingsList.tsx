@@ -1,4 +1,4 @@
-import SettingsListItem from './SettingsListItem'
+import SettingsListItem from 'components/SettingsComponents/SettingsListItem'
 
 const SettingsList = ({
   options,

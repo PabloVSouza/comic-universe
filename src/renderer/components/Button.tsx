@@ -78,10 +78,10 @@ const buttonStyling = {
     xl: 'w-48 p-5'
   },
   colors: {
-    white: 'bg-zinc-100 hover:bg-zinc-50',
-    black: 'bg-zing-950 hover:bg-zinc-800',
-    green: 'bg-lime-500 hover:bg-lime-300',
-    red: 'bg-red-500 hover:bg-lime-400'
+    white: 'bg-zinc-100/80 hover:bg-zinc-50 text-zinc-950',
+    black: 'bg-zing-950 hover:bg-zinc-800 text-zinc-50',
+    green: 'bg-lime-500/70 hover:bg-lime-500 text-zinc-950',
+    red: 'bg-red-500 hover:bg-lime-400 text-zinc-50'
   }
 } as const
 

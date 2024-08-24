@@ -42,7 +42,7 @@ const SearchComicListItem = ({ data }: IComicListItem): JSX.Element => {
   }
 
   useMemo(() => {
-    if (!data.synopsis) {
+    if (!data.cover || !data.synopsis) {
       getDetails({ siteId: data.siteId, siteLink: data.siteLink ?? '' })
     }
   }, [list])

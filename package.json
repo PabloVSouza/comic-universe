@@ -1,6 +1,6 @@
 {
   "name": "comic-universe",
-  "version": "2.0.0-alpha.5",
+  "version": "2.0.0-alpha.6",
   "description": "Open Source App made using Electron and React for downloading and reading comics from web sources provided by the user. This app was created for study purposes only and should never be sold or used for anything commercial",
   "main": "./out/main/index.js",
   "author": "Pablo Souza",
@@ -29,6 +29,7 @@
     "@electron/asar": "^3.2.7",
     "@formkit/auto-animate": "^0.8.2",
     "@prisma/client": "^5.18.0",
+    "@tanstack/react-query": "^5.52.1",
     "axios": "^1.7.4",
     "classnames": "^2.3.2",
     "electron-updater": "^6.1.4",

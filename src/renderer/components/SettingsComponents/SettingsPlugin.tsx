@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import SettingsPluginList from './SettingsPluginList'
+import SettingsPluginList from 'components/SettingsComponents/SettingsPluginList'
 import Select from 'components/Select'
 import api from 'api'
 import Button from 'components/Button'

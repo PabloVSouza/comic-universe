@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import slugify from 'slugify'
-import Image from 'components/Image/Image'
+import Image from 'components/Image'
 
 import useGlobalStore from 'store/useGlobalStore'
 
-import ReaderZoomWindow, { MousePos } from 'components/ReaderComponents/ReaderZoomWindow'
+import ReaderZoomWindow, { IMousePos } from 'components/ZoomWindow'
 import useReaderStore from 'store/useReaderStore'
 import useDashboardStore from 'store/useDashboardStore'
 
@@ -18,7 +18,7 @@ const Reader = (): JSX.Element => {
   const comicId = Number(useParams().comicId)
   const chapterId = Number(useParams().chapterId)
 
-  const [mousePos, setMousePos] = useState<MousePos>({} as MousePos)
+  const [mousePos, setMousePos] = useState<IMousePos>({} as IMousePos)
   const [zoomVisible, setZoomVisible] = useState(false)
 
   const { appPath } = useGlobalStore()

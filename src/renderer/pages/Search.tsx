@@ -1,13 +1,11 @@
 import { useState, useMemo, useEffect, useRef, MutableRefObject } from 'react'
 import debounce from 'lodash.debounce'
 import { SingleValue } from 'react-select'
-
 import Select from 'components/Select'
 import Image from 'components/Image'
-import SearchComicList from 'components/SearchComponents/SearchComicList/SearchComicList'
-import Loading from 'components/LoadingOverlay/LoadingOverlay'
+import SearchComicList from 'components/SearchComponents/SearchComicList'
+import Loading from 'components/LoadingOverlay'
 import Pagination from 'components/Pagination'
-
 import useLang from 'lang'
 import useSearchStore from 'store/useSearchStore'
 import usePersistStore from 'store/usePersistStore'

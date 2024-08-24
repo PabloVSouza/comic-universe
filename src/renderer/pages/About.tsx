@@ -1,4 +1,5 @@
-import Image from 'components/Image/Image'
+import Image from 'components/Image'
+
 import appIcon from 'assets/icon.svg'
 
 const About = (): JSX.Element => {

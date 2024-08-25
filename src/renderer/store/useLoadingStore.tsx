@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import useApi from 'api'
 
 interface useLoadingStore {
   status: boolean
@@ -27,7 +28,7 @@ const useLoadingStore = create<useLoadingStore>((set) => ({
 
 export default useLoadingStore
 
-const { on } = window.Electron.ipcRenderer
+const { on } = useApi()
 
 on('loading', (_event, data) => {
   useLoadingStore.getState().setLoading(data)

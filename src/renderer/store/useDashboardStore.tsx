@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-const { invoke } = window.Electron.ipcRenderer
+import useApi from 'api'
 import useDownloadStore from './useDownloadStore'
 import usePersistStore from './usePersistStore'
 
@@ -10,6 +10,8 @@ interface useDashboardStore {
   setComic: (id: number) => Promise<void>
   deleteComic: (comic: ComicInterface) => Promise<void>
 }
+
+const { invoke } = useApi()
 
 const useDashboardStore = create<useDashboardStore>((set) => ({
   comic: {} as ComicInterface,

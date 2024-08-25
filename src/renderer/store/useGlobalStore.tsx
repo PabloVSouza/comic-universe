@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { SingleValue } from 'react-select'
+import useApi from 'api'
 
-const { invoke, on } = window.Electron.ipcRenderer
+const { invoke, on } = useApi()
 
 type TOption = SingleValue<{
   value: string

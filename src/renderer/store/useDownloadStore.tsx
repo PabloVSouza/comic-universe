@@ -3,8 +3,9 @@ import useDashboardStore from './useDashboardStore'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import useLang from 'lang'
+import useApi from 'api'
 
-const { invoke } = window.Electron.ipcRenderer
+const { invoke } = useApi()
 
 interface useDownloadStore {
   queue: ChapterInterface[]

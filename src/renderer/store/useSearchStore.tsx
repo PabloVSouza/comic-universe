@@ -1,8 +1,8 @@
 import { create, StoreApi } from 'zustand'
 import useDashboardStore from './useDashboardStore'
 import usePersistStore from './usePersistStore'
-
-const { invoke } = window.Electron.ipcRenderer
+import useApi from 'api'
+const { invoke } = useApi()
 
 interface useSearchStore {
   comic: ComicInterface

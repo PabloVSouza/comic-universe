@@ -1,8 +1,9 @@
 import { create, StoreApi } from 'zustand'
 import useDashboardStore from './useDashboardStore'
 import usePersistStore from './usePersistStore'
+import useApi from 'api'
 
-const { invoke } = window.Electron.ipcRenderer
+const { invoke } = useApi()
 
 interface useReaderStore {
   readProgress: ReadProgressInterface

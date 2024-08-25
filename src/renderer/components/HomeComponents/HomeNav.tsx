@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-const { invoke } = window.Electron.ipcRenderer
+import useApi from 'api'
 import classNames from 'classnames'
 import Cover from 'components/Cover'
 import openWindow from 'functions/openWindow'
@@ -13,6 +13,8 @@ import settingsIcon from 'assets/settings.svg'
 import darkmodeIcon from 'assets/darkmode.svg'
 import userIcon from 'assets/user.svg'
 import exitIcon from 'assets/exit-door.svg'
+
+const { invoke } = useApi()
 
 const HomeNav = (): JSX.Element => {
   const { menuVisible, toggleMenu } = useGlobalStore()

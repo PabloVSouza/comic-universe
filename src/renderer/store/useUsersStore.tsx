@@ -1,6 +1,7 @@
 import { create } from 'zustand'
+import useApi from 'api'
 
-const { invoke } = window.Electron.ipcRenderer
+const { invoke } = useApi()
 
 interface useUsersStore {
   users: UserInterface[]

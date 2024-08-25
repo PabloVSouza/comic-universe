@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-const { isDev } = window
+import useApi from 'api'
 
 interface usePersistStore {
   theme: string
@@ -12,6 +12,10 @@ interface usePersistStore {
   setCurrentUser: (currentUser: UserInterface) => void
   setRepo: (repo: string) => void
 }
+
+const { invoke } = useApi()
+
+const isDev = await invoke('getIsDev')
 
 const usePersistStore = create<usePersistStore>()(
   persist(

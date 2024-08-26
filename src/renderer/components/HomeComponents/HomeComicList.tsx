@@ -1,14 +1,24 @@
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { confirmAlert } from 'react-confirm-alert'
+import useApi from 'api'
 import { ContextMenu, openContextMenu, TContextOptions } from 'components/ContextMenu'
 import ComicListItem from 'components/HomeComponents/HomeComicListItem'
 import useLang from 'lang'
+import LoadingOverlay from 'components/LoadingOverlay'
 import useDashboardStore from 'store/useDashboardStore'
 
 import deleteIcon from 'assets/trash.svg'
 
+const { invoke } = useApi()
+
 const HomeComicList = (): JSX.Element => {
-  const { list } = useDashboardStore()
+  const { data, isLoading } = useQuery({
+    queryKey: ['comicList'],
+    queryFn: async () => (await invoke('dbGetAllComics')) as ComicInterface[],
+    initialData: []
+  })
+
   const lang = useLang()
 
   const [currentCtxItem, setCurrentCtxItem] = useState({} as ComicInterface)
@@ -47,8 +57,9 @@ const HomeComicList = (): JSX.Element => {
 
   return (
     <ul className="h-full w-60 overflow-auto flex flex-col gap-px z-20 mt-px bg-list">
+      <LoadingOverlay isLoading={isLoading} />
       <ContextMenu options={ctxOptions} />
-      {list.map((item) => (
+      {data.map((item) => (
         <ComicListItem
           key={item.id}
           item={item}

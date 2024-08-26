@@ -7,7 +7,7 @@ interface useDashboardStore {
   comic: ComicInterface
   list: ComicInterface[]
   getListDB: () => Promise<void>
-  setComic: (id: number) => Promise<void>
+  setComic: (comic: ComicInterface) => Promise<void>
   deleteComic: (comic: ComicInterface) => Promise<void>
 }
 
@@ -31,13 +31,8 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
     set((state) => ({ ...state, list }))
   },
 
-  setComic: async (id): Promise<void> => {
-    const { currentUser } = usePersistStore.getState()
-    if (currentUser.id) {
-      const userId = currentUser.id
-      const completeComic = await invoke('dbGetComicComplete', { id, userId })
-      set((state) => ({ ...state, comic: completeComic }))
-    }
+  setComic: async (comic): Promise<void> => {
+    set((state) => ({ ...state, comic }))
   },
 
   deleteComic: async (comic): Promise<void> => {
@@ -46,9 +41,5 @@ const useDashboardStore = create<useDashboardStore>((set) => ({
     getListDB()
   }
 }))
-
-const { getListDB } = useDashboardStore.getState()
-
-getListDB()
 
 export default useDashboardStore

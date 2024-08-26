@@ -25,7 +25,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
     const { comic, setComic } = useDashboardStore.getState()
 
     if (!comic.id) {
-      await setComic(comicId)
+      // await setComic(comicId)
       await setInitialState(comicId, chapterId)
     } else {
       const chapterIndex = comic.chapters.findIndex((val: ChapterInterface) => val.id === chapterId)
@@ -49,7 +49,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
           totalPages
         }
         await setReadProgressDB(newReadProgress)
-        await setComic(comic.id)
+        await setComic(comic)
         await setInitialState(comic.id, chapterId)
       }
     }

@@ -1,21 +1,18 @@
 import classNames from 'classnames'
-import slugify from 'slugify'
 import ReactHtmlParser from 'react-html-parser'
 import ProgressBar from 'components/ProgressBar'
 import Image from 'components/Image'
 
+import FixFilePaths from 'functions/fixFilePaths'
+
 import loadingImage from 'assets/loading.svg'
 import useDashboardStore from 'store/useDashboardStore'
 import useDownloadStore from 'store/useDownloadStore'
-import useGlobalStore from 'store/useGlobalStore'
-
-const { path } = window
 
 const ComicListItem = ({
   item,
   ...props
 }: { item: ComicInterface } & Partial<React.LiHTMLAttributes<HTMLLIElement>>): JSX.Element => {
-  const { appPath } = useGlobalStore()
   const { comic, setComic } = useDashboardStore()
   const { queue } = useDownloadStore()
 
@@ -23,16 +20,14 @@ const ComicListItem = ({
   const active = comic.id === item.id
   const isDownloading = !!inQueue
 
-  const totalChapters = item.chapters.length
+  const totalChapters = item.chapters.length ?? 0
   const downloadProgress = (inQueue - totalChapters) * -1
 
   const handleClick = (): void => {
-    if (!isDownloading) setComic(item.id)
+    if (!isDownloading) setComic(item)
   }
 
-  const cover = item.cover.startsWith('http')
-    ? item.cover
-    : `file:///${path.join(appPath, 'downloads', item.type, slugify(item.name), item.cover)}`
+  const cover = FixFilePaths(item.cover)
 
   return (
     <li

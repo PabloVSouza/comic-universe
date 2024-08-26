@@ -1,12 +1,12 @@
-import useGlobalStore from 'store/useGlobalStore'
+// import useGlobalStore from 'store/useGlobalStore'
 
 const FixFilePaths = (path: string) => {
-  const { appRunningPath } = useGlobalStore.getState()
+  // const { appRunningPath } = useGlobalStore.getState()
 
-  const { isDev } = window
+  return path
 
-  const prefix = isDev ? appRunningPath : ''
-  return 'file://' + window.path.join(prefix, path)
+  // const prefix = isDev ? appRunningPath : ''
+  // return 'file://' + join(prefix, path)
 }
 
 export default FixFilePaths

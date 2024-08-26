@@ -22,7 +22,7 @@ const Image = ({
   ...props
 }: IImageProps): ReactElement => {
   const [isLoading, setIsLoading] = useState(1)
-  const placeholderRef = useRef(null)
+  const nodeRef = useRef(null)
 
   const pureImgProps = {
     className,
@@ -55,7 +55,7 @@ const Image = ({
       alt: 'Image Placeholder',
       className: placeholderClassName,
       style: placeholderStyle,
-      ref: placeholderRef,
+      ref: nodeRef,
       referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy
     }
 
@@ -65,7 +65,8 @@ const Image = ({
       style,
       src,
       className,
-      alt
+      alt,
+      ref: nodeRef
     }
 
     const loadingProps = {
@@ -85,7 +86,12 @@ const Image = ({
     return (
       <>
         <SwitchTransition mode="out-in">
-          <CSSTransition key={isLoading} timeout={100} classNames={transitionStyles}>
+          <CSSTransition
+            nodeRef={nodeRef}
+            key={isLoading}
+            timeout={100}
+            classNames={transitionStyles}
+          >
             {!!isLoading ? <img {...placeHolderProps} /> : <img {...lazyImageProps} />}
           </CSSTransition>
         </SwitchTransition>

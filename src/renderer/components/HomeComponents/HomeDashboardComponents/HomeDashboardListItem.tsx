@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import useLang from 'lang'
 import Button from 'components/Button'
-import useDashboardStore from 'store/useDashboardStore'
+// import useDashboardStore from 'store/useDashboardStore'
 
 import closedBook from 'assets/closed-book-icon.svg'
 import bookStack from 'assets/book-stack.svg'
@@ -14,7 +14,7 @@ const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.E
 
   const texts = useLang()
 
-  const { comic, setComic } = useDashboardStore()
+  // const { item, setComic } = useDashboardStore()
   const { setReadProgressDB } = useReaderStore()
   const { currentUser } = usePersistStore()
 
@@ -32,7 +32,7 @@ const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.E
 
   const openChapter = async (): Promise<void> => {
     if (pages) {
-      navigate(`/reader/${comic.id}/${item.id}`)
+      navigate(`/reader/${item.id}/${item.id}`)
     }
   }
 
@@ -42,13 +42,13 @@ const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.E
     await setReadProgressDB({
       ...ReadProgress,
       chapterId: item.id,
-      comicId: comic.id,
+      comicId: item.id,
       userId: currentUser.id,
       totalPages,
       page
     })
 
-    await setComic(comic.id)
+    // await setComic(comic.id)
   }
 
   const listItem = `

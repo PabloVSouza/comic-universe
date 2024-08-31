@@ -15,7 +15,7 @@ const { invoke } = useApi()
 const HomeDashboardNavBar = ({ comic }: { comic: ComicInterface }): JSX.Element => {
   const { currentUser } = usePersistStore()
 
-  const { data: comicData, isLoading } = useQuery({
+  const { data: comicData } = useQuery({
     queryKey: ['comicData', comic],
     queryFn: async () =>
       (await invoke('dbGetComicComplete', {

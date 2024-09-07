@@ -1,5 +1,6 @@
-import { useNavigate } from 'react-router-dom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { confirmAlert } from 'react-confirm-alert'
+import useApi from 'api'
 import classNames from 'classnames'
 import Image from 'components/Image'
 import useLang from 'lang'
@@ -9,7 +10,6 @@ import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import plusIcon from 'assets/plus.svg'
 import userIcon from 'assets/user.svg'
 import deleteIcon from 'assets/trash.svg'
-import useUsersStore from 'store/useUsersStore'
 import useDashboardStore from 'store/useDashboardStore'
 import useWindowManagerStore from 'store/useWindowManagerStore'
 
@@ -20,11 +20,16 @@ interface IUsersListItem {
 }
 
 const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItem): JSX.Element => {
-  const navigate = useNavigate()
   const lang = useLang()
+  const { invoke } = useApi()
+  const queryClient = useQueryClient()
+
+  const { mutate: deleteUser } = useMutation({
+    mutationFn: async (id: number) => await invoke('dbDeleteUser', { id }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['userData'] })
+  })
 
   const { setCurrentUser } = usePersistStore()
-  const { deleteUser } = useUsersStore()
   const { getListDB } = useDashboardStore()
   const { currentWindows, removeWindow } = useWindowManagerStore()
 
@@ -39,7 +44,6 @@ const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItem): JSX.El
       setCurrentUser(data)
       closeUserWindow()
       await getListDB()
-      navigate('/')
     }
   }
 
@@ -53,7 +57,7 @@ const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItem): JSX.El
         buttons: [
           {
             label: lang.Users.deleteUser.confirmDeleteButton,
-            onClick: async () => await deleteUser(id)
+            onClick: () => deleteUser(id)
           },
           {
             label: lang.Users.deleteUser.cancelDeleteButton
@@ -65,7 +69,7 @@ const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItem): JSX.El
   }
 
   const baseStyling =
-    'w-24 rounded-full aspect-square cursor-pointer shrink-1 flex justify-center items-center !overflow-clip relative border border-white bg-light/60 hover:bg-light/80 transition-all duration-500 ease-default box-border'
+    'w-24 rounded-full aspect-square cursor-pointer shrink-0 flex justify-center items-center !overflow-clip relative border border-white bg-light/60 hover:bg-light/80 transition-all duration-500 ease-default box-border'
 
   const bgStyling = 'w-full h-full absolute top-0 z-10 bg-dark'
 

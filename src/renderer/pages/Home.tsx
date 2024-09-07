@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 import openWindow from 'functions/openWindow'
 import HomeTopBar from 'components/HomeComponents/HomeTopBar'
 import HomeComicList from 'components/HomeComponents/HomeComicList'
@@ -10,17 +9,13 @@ import WindowManager from 'components/WindowComponents/WindowManager'
 import usePersistStore from 'store/usePersistStore'
 
 const Home = (): JSX.Element => {
-  const { currentUser, setCurrentUser } = usePersistStore()
-  const location = useLocation()
+  const { currentUser } = usePersistStore()
 
   const userActive = !!currentUser.id
 
   useEffect(() => {
-    if (location.pathname === '/users') {
-      setCurrentUser({} as UserInterface)
-      openWindow({ component: 'Users', props: {} })
-    }
-  }, [location])
+    if (!userActive) openWindow({ component: 'Users', props: {} })
+  }, [userActive])
 
   return (
     <div className="w-full h-full flex-shrink-0 flex-grow flex flex-col justify-start items-center text-text-default">

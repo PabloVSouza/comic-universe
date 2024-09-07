@@ -1,12 +1,11 @@
-import { ReactNode, useEffect } from 'react'
-import { HashRouter, useNavigate } from 'react-router-dom'
+import { ReactNode } from 'react'
+import { HashRouter } from 'react-router-dom'
 import ReactDOM from 'react-dom/client'
 import Routes from 'routes'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import 'css/main.css'
 import usePersistStore from 'store/usePersistStore'
 import classNames from 'classnames'
-import useApi from 'api'
 
 import wallpaper from 'assets/wallpaper.webp'
 
@@ -18,14 +17,6 @@ const queryClient = new QueryClient()
 
 const Main = ({ children }: Props): JSX.Element => {
   const { theme } = usePersistStore()
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    const { on } = useApi()
-    on('changeUrl', (_event, url) => {
-      navigate(url)
-    })
-  }, [])
 
   return (
     <div

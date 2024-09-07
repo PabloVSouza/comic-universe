@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import useApi from 'api'
 import classNames from 'classnames'
 import Cover from 'components/Cover'
@@ -18,13 +17,13 @@ const { invoke } = useApi()
 
 const HomeNav = (): JSX.Element => {
   const { menuVisible, toggleMenu } = useGlobalStore()
-  const { switchTheme, currentUser } = usePersistStore()
+  const { switchTheme, currentUser, setCurrentUser } = usePersistStore()
 
-  const navigate = useNavigate()
   const texts = useLang()
   const activeUser = !!currentUser.id
 
   const closeApp = (): void => {
+    setCurrentUser({} as UserInterface)
     invoke('closeWindow')
   }
 
@@ -47,7 +46,7 @@ const HomeNav = (): JSX.Element => {
     {
       label: texts.HomeNav.changeUser,
       icon: userIcon,
-      onClick: (): void => navigate('/users')
+      onClick: (): void => setCurrentUser({} as UserInterface)
     }
   ]
 

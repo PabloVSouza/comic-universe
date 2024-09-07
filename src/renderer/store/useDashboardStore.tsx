@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import useApi from 'api'
 import useDownloadStore from './useDownloadStore'
-import usePersistStore from './usePersistStore'
 
 interface useDashboardStore {
   comic: ComicInterface

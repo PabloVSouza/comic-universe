@@ -1,7 +1,5 @@
 import { create } from 'zustand'
 import useDashboardStore from './useDashboardStore'
-import { confirmAlert } from 'react-confirm-alert'
-import 'react-confirm-alert/src/react-confirm-alert.css'
 import useLang from 'lang'
 import useApi from 'api'
 
@@ -49,14 +47,14 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
       await getListDB()
     } else {
       const lang = useLang()
-      confirmAlert({
-        message: lang.Dashboard.newChapter.noNewChapterMessage,
-        buttons: [
-          {
-            label: lang.Dashboard.newChapter.noNewChapterConfirm
-          }
-        ]
-      })
+      // confirmAlert({
+      //   message: lang.Dashboard.newChapter.noNewChapterMessage,
+      //   buttons: [
+      //     {
+      //       label: lang.Dashboard.newChapter.noNewChapterConfirm
+      //     }
+      //   ]
+      // })
     }
 
     return new Promise((resolve) => resolve())
@@ -98,7 +96,7 @@ const queueManager = (): void => {
           inProgress = inProgress.filter((e) => e.id !== chapter.id)
           if (result) {
             await removeFromQueue(chapter).then(() => {
-              setComic(chapter.comicId)
+              setComic(chapter)
             })
           }
         })

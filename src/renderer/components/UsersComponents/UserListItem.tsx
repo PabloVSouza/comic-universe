@@ -1,17 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { confirmAlert } from 'react-confirm-alert'
-import useApi from 'api'
 import classNames from 'classnames'
-import Image from 'components/Image'
+import useApi from 'api'
 import useLang from 'lang'
+import Image from 'components/Image'
+import { confirmAlert } from 'components/Alert'
 import usePersistStore from 'store/usePersistStore'
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
+import useDashboardStore from 'store/useDashboardStore'
+import useWindowManagerStore from 'store/useWindowManagerStore'
 
 import plusIcon from 'assets/plus.svg'
 import userIcon from 'assets/user.svg'
 import deleteIcon from 'assets/trash.svg'
-import useDashboardStore from 'store/useDashboardStore'
-import useWindowManagerStore from 'store/useWindowManagerStore'
 
 interface IUsersListItem {
   data?: UserInterface
@@ -51,19 +50,21 @@ const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItem): JSX.El
 
   const handleDeleteUser = async (): Promise<void> => {
     if (id) {
-      confirmAlert({
-        title: lang.Users.deleteUser.deleteUserTitle,
-        message: lang.Users.deleteUser.deleteUserMessage,
-        buttons: [
-          {
-            label: lang.Users.deleteUser.confirmDeleteButton,
-            onClick: () => deleteUser(id)
-          },
-          {
-            label: lang.Users.deleteUser.cancelDeleteButton
-          }
-        ]
-      })
+      // confirmAlert({
+      //   title: lang.Users.deleteUser.deleteUserTitle,
+      //   message: lang.Users.deleteUser.deleteUserMessage,
+      //   buttons: [
+      //     {
+      //       label: lang.Users.deleteUser.confirmDeleteButton,
+      //       onClick: () => deleteUser(id)
+      //     },
+      //     {
+      //       label: lang.Users.deleteUser.cancelDeleteButton
+      //     }
+      //   ]
+      // })
+
+      confirmAlert({})
     }
     return new Promise((resolve) => resolve())
   }

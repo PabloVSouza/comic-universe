@@ -1378,10 +1378,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.54.1.tgz#8d6c5e6691dd023f9181d69f7f9d790f52f1bdda"
   integrity sha512-hKS+WRpT5zBFip21pB6Jx1C0hranWQrbv5EJ7qPoiV5MYI3C8rTCqWC9DdBseiPT1JgQWh8Y55YthuYZNiw3Xw==
 
-"@tanstack/react-query@^5.52.1":
-  version "5.55.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.55.0.tgz#6221031f2ef1397261a63794ee021635e5f1ec84"
-  integrity sha512-2uYuxEbRQD8TORUiTUacEOwt1e8aoSqUOJFGY5TUrh6rQ3U85zrMS2wvbNhBhXGh6Vj69QDCP2yv8tIY7joo6Q==
+"@tanstack/react-query@^5.55.1":
+  version "5.55.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.55.1.tgz#4cacb43e9c4729e854441e41f78189603dd7e3cf"
+  integrity sha512-WpHBGFNFkJkApUIxsoJaOLXQdXp61sjPdbppyvO52RtMJg0lbMgYx56qien7W3DUJwYU7Gnk4L6w4IQEYm1cfw==
   dependencies:
     "@tanstack/query-core" "5.54.1"
 
@@ -5708,10 +5708,10 @@ prettier@^3.0.3:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.3.3.tgz#30c54fe0be0d8d12e6ae61dbb10109ea00d53105"
   integrity sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==
 
-prisma-shell-extension@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/prisma-shell-extension/-/prisma-shell-extension-1.0.0.tgz#707b41a01068905d9f00fb2e9ed94f2673587f85"
-  integrity sha512-rWS/H5ELdWfCydCX1Fm3S1r41SCx+rD60EuH6TUl4MRHIXIYn+JDqWgo4DLO7jeCqMYvokV02KkkPQjx5MM1wA==
+prisma-shell-extension@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/prisma-shell-extension/-/prisma-shell-extension-1.0.1.tgz#77c52a9f5140921201880ae779e96d38a40db408"
+  integrity sha512-SojttSF8z763XEjQ3+boOuMtjZRq74mWISTXHKN86fHcLcR8eNVs5VM3BlFie0Ix4S7IH/VJH900AYtkrJQAJA==
   dependencies:
     "@electron/asar" "^3.2.10"
 

@@ -1,6 +1,7 @@
 export default class ptBR implements Lang {
   General: GenerlLang = {
-    inDevelopment: 'Função em desenvolvimento'
+    inDevelopment: 'Função em desenvolvimento',
+    alertConfirmButton: 'Ok'
   }
 
   Dashboard: DashboardLang = {

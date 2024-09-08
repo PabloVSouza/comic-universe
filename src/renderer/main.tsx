@@ -6,6 +6,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import 'css/main.css'
 import usePersistStore from 'store/usePersistStore'
 import classNames from 'classnames'
+import { AlertProvider } from 'components/Alert'
 
 import wallpaper from 'assets/wallpaper.webp'
 
@@ -35,7 +36,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <QueryClientProvider client={queryClient}>
     <HashRouter>
       <Main>
-        <Routes />
+        <AlertProvider>
+          <Routes />
+        </AlertProvider>
       </Main>
     </HashRouter>
   </QueryClientProvider>

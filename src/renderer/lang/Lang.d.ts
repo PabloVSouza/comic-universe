@@ -1,5 +1,6 @@
 interface GenerlLang {
   inDevelopment: string
+  alertConfirmButton: string
 }
 
 interface DashboardLang {

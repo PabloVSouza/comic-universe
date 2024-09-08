@@ -50,21 +50,19 @@ const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItem): JSX.El
 
   const handleDeleteUser = async (): Promise<void> => {
     if (id) {
-      // confirmAlert({
-      //   title: lang.Users.deleteUser.deleteUserTitle,
-      //   message: lang.Users.deleteUser.deleteUserMessage,
-      //   buttons: [
-      //     {
-      //       label: lang.Users.deleteUser.confirmDeleteButton,
-      //       onClick: () => deleteUser(id)
-      //     },
-      //     {
-      //       label: lang.Users.deleteUser.cancelDeleteButton
-      //     }
-      //   ]
-      // })
-
-      confirmAlert({})
+      confirmAlert({
+        title: lang.Users.deleteUser.deleteUserTitle,
+        message: lang.Users.deleteUser.deleteUserMessage,
+        buttons: [
+          {
+            label: lang.Users.deleteUser.confirmDeleteButton,
+            action: () => deleteUser(id)
+          },
+          {
+            label: lang.Users.deleteUser.cancelDeleteButton
+          }
+        ]
+      })
     }
     return new Promise((resolve) => resolve())
   }

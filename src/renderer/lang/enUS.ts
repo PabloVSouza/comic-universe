@@ -1,6 +1,7 @@
 export default class enUS implements Lang {
   General: GenerlLang = {
-    inDevelopment: 'Function in development'
+    inDevelopment: 'Function in development',
+    alertConfirmButton: 'Ok'
   }
 
   Dashboard: DashboardLang = {

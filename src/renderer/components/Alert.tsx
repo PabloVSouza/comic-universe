@@ -39,8 +39,8 @@ const Alert = ({ title, message, buttons, className, visible }: IAlertProps) => 
       visible={currentVisible}
     >
       <div className="bg-default p-5 rounded-lg shadow-lg max-w-sm w-full">
-        {title && <h2 className="text-2xl text-text-default mb-4">{title}</h2>}
-        {message && <p className="mb-4">{message}</p>}
+        {title && <h2 className="text-2xl text-text-default  mb-4">{title}</h2>}
+        {message && <p className="mb-4 text-text-default">{message}</p>}
         <div className="flex justify-end space-x-2">
           {buttons?.map((button, index) => (
             <Button key={index} onClick={button.action}>

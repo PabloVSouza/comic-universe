@@ -1,28 +1,33 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { confirmAlert } from 'react-confirm-alert'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
+import useLang from 'lang'
+import { confirmAlert } from 'components/Alert'
 import { ContextMenu, openContextMenu, TContextOptions } from 'components/ContextMenu'
 import ComicListItem from 'components/HomeComponents/HomeComicListItem'
-import useLang from 'lang'
 import LoadingOverlay from 'components/LoadingOverlay'
-import useDashboardStore from 'store/useDashboardStore'
 
 import deleteIcon from 'assets/trash.svg'
 
 const { invoke } = useApi()
 
 const HomeComicList = (): JSX.Element => {
-  const { data, isLoading } = useQuery({
+  const queryClient = useQueryClient()
+
+  const { data: comicList, isLoading } = useQuery({
     queryKey: ['comicList'],
     queryFn: async () => (await invoke('dbGetAllComics')) as ComicInterface[],
     initialData: []
   })
 
+  const { mutate: deleteComic } = useMutation({
+    mutationFn: async (comic: ComicInterface) => await invoke('dbDeleteComic', { comic }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
+  })
+
   const lang = useLang()
 
   const [currentCtxItem, setCurrentCtxItem] = useState({} as ComicInterface)
-  const { deleteComic } = useDashboardStore()
 
   const handleRightClick = (e: React.MouseEvent, item: ComicInterface) => {
     const position = {
@@ -38,6 +43,7 @@ const HomeComicList = (): JSX.Element => {
       icon: deleteIcon,
       action: () => {
         confirmAlert({
+          title: lang.Dashboard.contextMenu.deleteComic.title,
           message: lang.Dashboard.contextMenu.deleteComic.confirmMessage,
           buttons: [
             {
@@ -45,7 +51,7 @@ const HomeComicList = (): JSX.Element => {
             },
             {
               label: lang.Dashboard.contextMenu.deleteComic.confirmOk,
-              onClick: () => {
+              action: () => {
                 deleteComic(currentCtxItem)
               }
             }
@@ -59,7 +65,7 @@ const HomeComicList = (): JSX.Element => {
     <ul className="h-full w-60 overflow-auto flex flex-col gap-px z-20 mt-px bg-list">
       <LoadingOverlay isLoading={isLoading} />
       <ContextMenu options={ctxOptions} />
-      {data.map((item) => (
+      {comicList.map((item) => (
         <ComicListItem
           key={item.id}
           item={item}

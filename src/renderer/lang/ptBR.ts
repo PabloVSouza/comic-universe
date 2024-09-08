@@ -16,8 +16,8 @@ export default class ptBR implements Lang {
     },
     contextMenu: {
       deleteComic: {
-        title: 'Apagar Quadrinho',
-        confirmMessage: 'Deseja mesmo apagar? (Todo o progresso de leitura será apagado!)',
+        title: 'Deseja mesmo apagar?',
+        confirmMessage: 'Todo o progresso de leitura será apagado!',
         confirmOk: 'Confirmar',
         confirmCancel: 'Cancelar'
       }

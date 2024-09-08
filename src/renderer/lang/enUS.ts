@@ -16,8 +16,8 @@ export default class enUS implements Lang {
     },
     contextMenu: {
       deleteComic: {
-        title: 'Delete Comic',
-        confirmMessage: 'Do you really want to delete? (All the read progress will be lost!)',
+        title: 'Do you really want to delete?',
+        confirmMessage: 'All the read progress will be lost!',
         confirmOk: 'Confirm',
         confirmCancel: 'Cancel'
       }

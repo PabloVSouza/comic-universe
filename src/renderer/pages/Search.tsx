@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect, useRef, MutableRefObject } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
 import debounce from 'lodash.debounce'
-import { SingleValue } from 'react-select'
 import Select from 'components/Select'
 import Image from 'components/Image'
 import SearchComicList from 'components/SearchComponents/SearchComicList'
@@ -13,6 +12,11 @@ import usePersistStore from 'store/usePersistStore'
 
 import searchIcon from 'assets/magnifying-glass-search.svg'
 
+type TOption = {
+  value: string
+  label: string
+}
+
 const Search = (): JSX.Element => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
@@ -21,6 +25,21 @@ const Search = (): JSX.Element => {
   const { repo, setRepo } = usePersistStore()
   const inputRef = useRef(null) as MutableRefObject<null> | MutableRefObject<HTMLInputElement>
 
+  const [noRepos, setNoRepos] = useState(true)
+
+  const { data: repoList } = useQuery({
+    queryKey: ['repoList'],
+    queryFn: async () => {
+      const repos = (await invoke('getRepoList')) as TOption[]
+      if (!!repos.length) {
+        if (!repo.value || !repos.includes(repo)) setRepo(repos[0])
+        setNoRepos(false)
+      }
+      return repos as TOption[]
+    },
+    initialData: []
+  })
+
   const {
     data: list,
     isFetching,
@@ -28,29 +47,11 @@ const Search = (): JSX.Element => {
   } = useQuery({
     queryKey: ['searchList', search, repo],
     queryFn: async () => await invoke('search', { repo: repo.value, data: { search } }),
-    initialData: []
+    initialData: [],
+    enabled: !!repoList.length
   })
-
-  const { data: repoList } = useQuery({
-    queryKey: ['repoList'],
-    queryFn: async () => (await invoke('getRepoList')) as TOption[],
-    initialData: []
-  })
-
-  // useEffect(() => {
-  //   if (!(repo in repoList)) {
-  //     if (repoList[0]) setRepo(repoList[0])
-  //   }
-  // }, [repoList])
-
-  const noRepos = !repoList.length
 
   const texts = useLang()
-
-  type TOption = SingleValue<{
-    value: string
-    label: string
-  }>
 
   const handleChangeRepo = (e: TOption): void => {
     if (inputRef.current) inputRef.current.value = ''
@@ -85,7 +86,7 @@ const Search = (): JSX.Element => {
       <div className="w-full h-24 flex-shrink-0 py-6 px-11 absolute top-0 bg-modal backdrop-blur-sm shadow-basic">
         <div className="h-full w-full bg-default shadow-basic rounded flex justify-center items-center pr-4 max-w-3xl my-0 mx-auto">
           <Select
-            defaultValue={repo}
+            value={noRepos ? { label: texts.SearchComic.noReposAvailable } : repo}
             options={repoList}
             onChange={(e) => handleChangeRepo(e as TOption)}
             isDisabled={noRepos}

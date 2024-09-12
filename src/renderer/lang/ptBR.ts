@@ -47,7 +47,8 @@ export default class ptBR implements Lang {
     textPlaceholder: 'Digite sua Busca',
     bookmarkComic: 'Favoritar',
     alreadyBookmarked: 'Favoritado',
-    availableChapters: 'Capítulos Disponíveis'
+    availableChapters: 'Capítulos Disponíveis',
+    noReposAvailable: 'Sem Repositórios'
   }
 
   Pagination: PaginationLang = {

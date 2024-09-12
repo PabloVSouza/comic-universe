@@ -47,7 +47,8 @@ export default class enUS implements Lang {
     textPlaceholder: 'Type your Search',
     bookmarkComic: 'Bookmark',
     alreadyBookmarked: 'Bookmarked',
-    availableChapters: 'Chapters Available'
+    availableChapters: 'Chapters Available',
+    noReposAvailable: 'No Repos Available'
   }
 
   Pagination: PaginationLang = {

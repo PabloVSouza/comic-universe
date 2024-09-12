@@ -1,4 +1,6 @@
 import { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import useApi from 'api'
 import openWindow from 'functions/openWindow'
 import HomeTopBar from 'components/HomeComponents/HomeTopBar'
 import HomeComicList from 'components/HomeComponents/HomeComicList'
@@ -9,9 +11,15 @@ import WindowManager from 'components/WindowComponents/WindowManager'
 import usePersistStore from 'store/usePersistStore'
 
 const Home = (): JSX.Element => {
+  const { invoke } = useApi()
   const { currentUser } = usePersistStore()
-
   const userActive = !!currentUser.id
+
+  const { data: comicList } = useQuery({
+    queryKey: ['comicList'],
+    queryFn: async () => (await invoke('dbGetAllComics')) as ComicInterface[],
+    initialData: []
+  })
 
   useEffect(() => {
     if (!userActive) openWindow({ component: 'Users', props: {} })
@@ -26,8 +34,8 @@ const Home = (): JSX.Element => {
           <HomeBlankArea active={!userActive} />
           {userActive && (
             <>
-              <HomeComicList />
-              <HomeComicDashboard />
+              <HomeComicList comicList={comicList} />
+              <HomeComicDashboard comicList={comicList} />
             </>
           )}
         </div>

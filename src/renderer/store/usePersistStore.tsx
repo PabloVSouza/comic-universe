@@ -6,11 +6,11 @@ interface usePersistStore {
   theme: string
   lang: string
   currentUser: UserInterface
-  repo: string
+  repo: TOption
   switchTheme: (theme?: string) => void
   changeLanguage: (lang?: string) => void
   setCurrentUser: (currentUser: UserInterface) => void
-  setRepo: (repo: string) => void
+  setRepo: (repo: TOption) => void
 }
 
 const { invoke } = useApi()
@@ -23,7 +23,7 @@ const usePersistStore = create<usePersistStore>()(
       theme: 'dark',
       lang: 'ptBR',
       currentUser: {} as UserInterface,
-      repo: '',
+      repo: {} as TOption,
 
       switchTheme: (theme): void =>
         set({ theme: theme || get().theme === 'dark' ? 'light' : 'dark' }),

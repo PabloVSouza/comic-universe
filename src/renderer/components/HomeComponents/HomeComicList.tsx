@@ -1,24 +1,17 @@
 import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
 import useLang from 'lang'
 import { confirmAlert } from 'components/Alert'
 import { ContextMenu, openContextMenu, TContextOptions } from 'components/ContextMenu'
 import ComicListItem from 'components/HomeComponents/HomeComicListItem'
-import LoadingOverlay from 'components/LoadingOverlay'
 
 import deleteIcon from 'assets/trash.svg'
 
 const { invoke } = useApi()
 
-const HomeComicList = (): JSX.Element => {
+const HomeComicList = ({ comicList }: { comicList: ComicInterface[] }): JSX.Element => {
   const queryClient = useQueryClient()
-
-  const { data: comicList, isLoading } = useQuery({
-    queryKey: ['comicList'],
-    queryFn: async () => (await invoke('dbGetAllComics')) as ComicInterface[],
-    initialData: []
-  })
 
   const { mutate: deleteComic } = useMutation({
     mutationFn: async (comic: ComicInterface) => await invoke('dbDeleteComic', { comic }),
@@ -63,7 +56,6 @@ const HomeComicList = (): JSX.Element => {
 
   return (
     <ul className="h-full w-60 overflow-auto flex flex-col gap-px z-20 mt-px bg-list">
-      <LoadingOverlay isLoading={isLoading} />
       <ContextMenu options={ctxOptions} />
       {comicList.map((item) => (
         <ComicListItem

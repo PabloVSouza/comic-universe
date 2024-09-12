@@ -83,7 +83,7 @@ const Search = (): JSX.Element => {
   return (
     <>
       <Loading isLoading={isFetching} />
-      <div className="w-full h-24 flex-shrink-0 py-6 px-11 absolute top-0 bg-modal backdrop-blur-sm shadow-basic">
+      <div className="w-full h-24 flex-shrink-0 py-6 px-11 absolute top-0 bg-modal backdrop-blur-sm shadow-basic z-10">
         <div className="h-full w-full bg-default shadow-basic rounded flex justify-center items-center pr-4 max-w-3xl my-0 mx-auto">
           <Select
             value={noRepos ? { label: texts.SearchComic.noReposAvailable } : repo}

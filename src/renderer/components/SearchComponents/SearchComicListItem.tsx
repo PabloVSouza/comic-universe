@@ -1,6 +1,7 @@
 import { LiHTMLAttributes } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
+import LoadingOverlay from 'components/LoadingOverlay'
 import { useNavigate } from 'react-router-dom'
 import ReactHtmlParser from 'react-html-parser'
 import classNames from 'classnames'
@@ -33,13 +34,13 @@ const SearchComicListItem = ({
 
   const active = String(activeComic.siteId) === String(data.siteId)
 
-  const { data: comicList } = useQuery({
+  const { data: comicList, isFetching: comicListFetching } = useQuery({
     queryKey: ['comicList'],
     queryFn: async () => (await invoke('dbGetAllComics')) as ComicInterface[],
     initialData: []
   })
 
-  const { data: comicDetails } = useQuery({
+  const { data: comicDetails, isFetching: comicDetailsFetching } = useQuery({
     queryKey: [`comicDetails-${repo.value}-${data.siteId}`],
     queryFn: async () => {
       const search = { siteId: data.siteId, siteLink: data.siteLink ?? '' }
@@ -52,7 +53,7 @@ const SearchComicListItem = ({
     enabled: !data.cover || !data.synopsis
   })
 
-  const { data: chapterData } = useQuery({
+  const { data: chapterData, isFetching: chapterDataFetching } = useQuery({
     queryKey: [`chapterData-${repo.value}-${data.siteId}`],
     queryFn: async () =>
       (await invoke('getChapters', {
@@ -73,6 +74,8 @@ const SearchComicListItem = ({
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
   })
 
+  const isLoading = comicListFetching || chapterDataFetching || comicDetailsFetching
+
   const extended = active && chapterData.length > 0
 
   const comicData = { ...data, ...comicDetails }
@@ -91,13 +94,14 @@ const SearchComicListItem = ({
   return (
     <li
       className={classNames(
-        'bg-list-item flex flex-col transition-all duration-500 ease-default',
+        'bg-list-item flex flex-col transition-all duration-500 ease-default relative',
         extended
           ? 'h-96 hover:bg-list-item hover:text-text-default cursor-default'
           : 'h-48 hover:bg-list-item-hover hover:text-text-oposite cursor-pointer'
       )}
       onClick={setActive}
     >
+      <LoadingOverlay isLoading={isLoading} />
       <div className="flex h-full">
         <div className="flex-grow flex flex-col justify-center items-center p-3">
           <h1 className="text-2xl text-center">{ReactHtmlParser(comicData.name)}</h1>

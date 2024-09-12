@@ -15,6 +15,8 @@ interface useGlobalStore {
   menuVisible: boolean
   repoList: TOption[]
   pluginsList: IRepoPluginInfo[]
+  activeComic: ComicInterface
+  setActiveComic: (comic: ComicInterface) => void
   toggleMenu: () => void
   getAppPath: () => Promise<void>
   getAppRunningPath: () => Promise<void>
@@ -31,6 +33,9 @@ const useGlobalStore = create<useGlobalStore>((set) => ({
   menuVisible: false,
   repoList: [],
   pluginsList: [],
+  activeComic: {} as ComicInterface,
+
+  setActiveComic: (activeComic) => set((state) => ({ ...state, activeComic })),
 
   toggleMenu: (): void => set((state) => ({ ...state, menuVisible: !state.menuVisible })),
 

@@ -1,34 +1,24 @@
 import { useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import useApi from 'api'
 import Button from 'components/Button'
 import useLang from 'lang'
 import useDownloadStore from 'store/useDownloadStore'
-import usePersistStore from 'store/usePersistStore'
 
 import downloadIcon from 'assets/download-icon-2.svg'
 import comicBook from 'assets/comic-book.svg'
 import ProgressBar from 'components/ProgressBar'
 
-const { invoke } = useApi()
-
-const HomeDashboardNavBar = ({ comic }: { comic: ComicInterface }): JSX.Element => {
-  const { currentUser } = usePersistStore()
-
-  const { data: comicData } = useQuery({
-    queryKey: ['comicData', comic],
-    queryFn: async () =>
-      (await invoke('dbGetComicComplete', {
-        id: comic.id,
-        userId: currentUser.id
-      })) as ComicInterface
-  })
-
+const HomeDashboardNavBar = ({
+  comic,
+  additionalData
+}: {
+  comic: ComicInterface
+  additionalData: ComicInterface
+}): JSX.Element => {
   const navigate = useNavigate()
   const texts = useLang()
   const { getNewChapters } = useDownloadStore()
 
-  const chapters = comicData?.chapters ?? []
+  const chapters = additionalData?.chapters ?? []
 
   const totalPages = chapters.reduce((prev, cur) => {
     return cur.pages ? prev + JSON.parse(cur.pages).length : prev

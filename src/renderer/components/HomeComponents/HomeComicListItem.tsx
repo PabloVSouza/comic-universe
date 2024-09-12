@@ -6,25 +6,25 @@ import Image from 'components/Image'
 import FixFilePaths from 'functions/fixFilePaths'
 
 import loadingImage from 'assets/loading.svg'
-import useDashboardStore from 'store/useDashboardStore'
+import useGlobalStore from 'store/useGlobalStore'
 import useDownloadStore from 'store/useDownloadStore'
 
 const ComicListItem = ({
   item,
   ...props
 }: { item: ComicInterface } & Partial<React.LiHTMLAttributes<HTMLLIElement>>): JSX.Element => {
-  const { comic, setComic } = useDashboardStore()
+  const { activeComic, setActiveComic } = useGlobalStore()
   const { queue } = useDownloadStore()
 
   const inQueue = queue.filter((value) => value.comicId == item.id).length ?? 0
-  const active = comic.id === item.id
+  const active = activeComic.id === item.id
   const isDownloading = !!inQueue
 
   const totalChapters = item.chapters.length ?? 0
   const downloadProgress = (inQueue - totalChapters) * -1
 
   const handleClick = (): void => {
-    if (!isDownloading) setComic(item)
+    if (!isDownloading) setActiveComic(item)
   }
 
   const cover = FixFilePaths(item.cover)

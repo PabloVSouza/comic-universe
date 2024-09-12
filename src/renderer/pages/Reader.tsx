@@ -76,7 +76,7 @@ const Reader = (): JSX.Element => {
     }
     if (page === totalPages) {
       if (chapterIndex === comic.chapters.length - 1) {
-        await setComic(comic.id)
+        await setComic(comic)
         navigate('/')
       }
       if (chapterIndex < comic.chapters.length - 1)
@@ -93,7 +93,7 @@ const Reader = (): JSX.Element => {
     }
     if (page === 1) {
       if (chapterIndex === 0) {
-        await setComic(comic.id)
+        await setComic(comic)
         navigate('/')
       }
       if (chapterIndex <= comic.chapters.length - 1 && chapterIndex !== 0)
@@ -112,7 +112,7 @@ const Reader = (): JSX.Element => {
       },
 
       Escape: async (): Promise<void> => {
-        await setComic(comic.id)
+        await setComic(comic)
         navigate('/')
       }
     }

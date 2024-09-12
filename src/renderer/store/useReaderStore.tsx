@@ -1,5 +1,5 @@
 import { create, StoreApi } from 'zustand'
-import useDashboardStore from './useDashboardStore'
+import useGlobalStore from './useGlobalStore'
 import usePersistStore from './usePersistStore'
 import useApi from 'api'
 
@@ -22,17 +22,19 @@ const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
   setInitialState: async (comicId, chapterId): Promise<void> => {
     const { setChapterIndex, setReadProgress, setReadProgressDB, setInitialState } =
       useReaderStore.getState()
-    const { comic, setComic } = useDashboardStore.getState()
+    const { activeComic, setActiveComic } = useGlobalStore.getState()
 
-    if (!comic.id) {
-      // await setComic(comicId)
+    if (!activeComic.id) {
+      // await setComic(comic)
       await setInitialState(comicId, chapterId)
     } else {
-      const chapterIndex = comic.chapters.findIndex((val: ChapterInterface) => val.id === chapterId)
+      const chapterIndex = activeComic.chapters.findIndex(
+        (val: ChapterInterface) => val.id === chapterId
+      )
 
       await setChapterIndex(chapterIndex)
 
-      const chapter = comic.chapters[chapterIndex]
+      const chapter = activeComic.chapters[chapterIndex]
 
       const totalPages = JSON.parse(chapter.pages).length
 
@@ -43,14 +45,14 @@ const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
 
         const newReadProgress = {
           chapterId,
-          comicId: comic.id,
+          comicId: activeComic.id,
           page: 1,
           userId: currentUser.id ?? 0,
           totalPages
         }
         await setReadProgressDB(newReadProgress)
-        await setComic(comic)
-        await setInitialState(comic.id, chapterId)
+        setActiveComic(activeComic)
+        await setInitialState(activeComic.id, chapterId)
       }
     }
 

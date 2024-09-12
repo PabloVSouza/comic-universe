@@ -5,7 +5,6 @@ import useLang from 'lang'
 import Image from 'components/Image'
 import { confirmAlert } from 'components/Alert'
 import usePersistStore from 'store/usePersistStore'
-import useDashboardStore from 'store/useDashboardStore'
 import useWindowManagerStore from 'store/useWindowManagerStore'
 
 import plusIcon from 'assets/plus.svg'
@@ -29,7 +28,6 @@ const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItem): JSX.El
   })
 
   const { setCurrentUser } = usePersistStore()
-  const { getListDB } = useDashboardStore()
   const { currentWindows, removeWindow } = useWindowManagerStore()
 
   const closeUserWindow = () => {
@@ -42,7 +40,6 @@ const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItem): JSX.El
     if (data) {
       setCurrentUser(data)
       closeUserWindow()
-      await getListDB()
     }
   }
 

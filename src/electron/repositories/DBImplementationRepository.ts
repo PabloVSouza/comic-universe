@@ -39,7 +39,7 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
       })
     },
 
-    dbGetComicComplete: async ({ id, userId }): Promise<ComicInterface> => {
+    dbGetComicAdditionalData: async ({ id, userId }): Promise<ComicInterface> => {
       const comic = await this.db.comic.findUnique({
         where: { id },
         include: {

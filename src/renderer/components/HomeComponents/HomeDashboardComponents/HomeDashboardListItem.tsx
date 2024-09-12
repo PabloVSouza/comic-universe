@@ -52,7 +52,7 @@ const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.E
       })
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['comicData'] })
+      await queryClient.invalidateQueries({ queryKey: ['additionalData'] })
     }
   })
 

@@ -28,7 +28,7 @@ const HomeDashboard = ({ comicList }: { comicList: ComicInterface[] }): JSX.Elem
   }, [queue, comicList])
 
   const { data: additionalData, isFetching } = useQuery({
-    queryKey: ['comicData', activeComic],
+    queryKey: ['additionalData', activeComic],
     queryFn: async () =>
       (await invoke('dbGetComicAdditionalData', {
         id: activeComic.id,

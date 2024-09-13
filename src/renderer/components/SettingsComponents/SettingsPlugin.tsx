@@ -1,16 +1,43 @@
 import { useEffect, useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import useApi from 'api'
 import SettingsPluginList from 'components/SettingsComponents/SettingsPluginList'
 import Select from 'components/Select'
-import api from 'api'
 import Button from 'components/Button'
-import useGlobalStore from 'store/useGlobalStore'
 
 import downloadIcon from 'assets/download-icon-3.svg'
 
 const SettingsPlugin = () => {
-  const { pluginsList, getPluginInfoList, downloadAndInstallPlugin } = useGlobalStore()
+  const { invoke } = useApi()
+  const queryClient = useQueryClient()
 
-  const [apiPlugins, setApiPlugins] = useState([] as IRepoApiPluginList[])
+  const { data: pluginsList } = useQuery({
+    queryKey: ['pluginsList'],
+    queryFn: async () => await invoke('getPluginInfoList'),
+    initialData: []
+  })
+
+  const { data: apiPlugins } = useQuery({
+    queryKey: ['apiPlugins'],
+    queryFn: async () => (await invoke('getPluginsFromApi')) as IRepoApiPluginList[],
+    initialData: []
+  })
+
+  const { mutate: updatePlugins } = useMutation({
+    mutationFn: async () => {
+      await invoke('installPlugins')
+      await invoke('activatePlugins')
+      await invoke('resetEvents')
+      queryClient.invalidateQueries({ queryKey: ['pluginsList'] })
+    }
+  })
+
+  const { mutate: downloadAndInstallPlugin } = useMutation({
+    mutationFn: async (plugin: string) => {
+      await invoke('downloadAndInstallPlugin', plugin)
+      updatePlugins()
+    }
+  })
 
   const [selectedPluginToInstall, setSelectedPluginToInstall] = useState('' as string | TOption)
 
@@ -22,16 +49,6 @@ const SettingsPlugin = () => {
     if (typeof selectedPluginToInstall === 'object')
       downloadAndInstallPlugin(selectedPluginToInstall.value)
   }
-
-  useEffect(() => {
-    getPluginInfoList()
-  }, [])
-
-  useEffect(() => {
-    api.get('plugins').then((res) => {
-      setApiPlugins(res.data)
-    })
-  }, [])
 
   useEffect(() => {
     setSelectedPluginToInstall('')

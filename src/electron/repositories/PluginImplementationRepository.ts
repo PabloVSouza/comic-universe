@@ -5,7 +5,7 @@ import fs from 'fs'
 import CreateDirectory from 'utils/CreateDirectory'
 import { extract } from 'pacote'
 import githubApi from 'utils/GithubApi'
-import ComucUniverseApi from 'utils/ComucUniverseApi'
+import ComicUniverseApi from 'utils/ComicUniverseApi'
 import DownloadFile from 'utils/DownloadFile'
 
 class RepoPluginsLoader {
@@ -34,7 +34,7 @@ class RepoPluginsLoader {
       .map((val) => val.name)
 
   public getPluginsFromApi = async () => {
-    const { data } = await ComucUniverseApi.get('plugins')
+    const { data } = await ComicUniverseApi.get('plugins')
 
     return data
   }
@@ -75,7 +75,7 @@ class RepoPluginsLoader {
             path: packageFile.main,
             author: packageFile.author,
             version: packageFile.version,
-            repository: packageFile.repository.url,
+            repository: packageFile.repository,
             iconPath: path.join(folderPath, packageFile.icon)
           } as IRepoPluginInfo
 

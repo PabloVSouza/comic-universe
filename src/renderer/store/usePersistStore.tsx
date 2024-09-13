@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import useApi from 'api'
+import useGlobalStore from './useGlobalStore'
 
-interface usePersistStore {
+interface IusePersistStore {
   theme: string
   lang: string
   currentUser: UserInterface
@@ -13,11 +13,9 @@ interface usePersistStore {
   setRepo: (repo: TOption) => void
 }
 
-const { invoke } = useApi()
+const { appParams } = useGlobalStore.getState()
 
-const isDev = await invoke('getIsDev')
-
-const usePersistStore = create<usePersistStore>()(
+const usePersistStore = create<IusePersistStore>()(
   persist(
     (set, get) => ({
       theme: 'dark',
@@ -38,7 +36,7 @@ const usePersistStore = create<usePersistStore>()(
       setRepo: (repo): void => set({ repo })
     }),
     {
-      name: isDev ? 'comic-universe-dev' : 'comic-universe',
+      name: appParams.isDev ? 'comic-universe-dev' : 'comic-universe',
       storage: createJSONStorage(() => localStorage)
     }
   )

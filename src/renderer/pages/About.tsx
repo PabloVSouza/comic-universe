@@ -8,7 +8,7 @@ import appIcon from 'assets/icon.svg'
 const { invoke } = useApi()
 
 const About = (): JSX.Element => {
-  const { data, isLoading } = useQuery({
+  const { data: appData, isLoading } = useQuery({
     queryKey: ['appData'],
     queryFn: async () => await invoke('getAppData')
   })
@@ -19,13 +19,13 @@ const About = (): JSX.Element => {
       <Image src={appIcon} className="w-1/3 aspect-square flex-shrink-0" />
       <div className="flex flex-grow h-full flex-col items-center justify-center text-center gap-1">
         <h1 className="text-3xl">Comic Universe</h1>
-        <p>Ver: {data.version}</p>
-        <p>Author: {data.author}</p>
-        <p>License: {data.license}</p>
-        {data.description.split('. ').map((description) => (
-          <p key={description}>{description}.</p>
-        ))}
-        <a href={data.repository} target="_blank" rel="noreferrer" className="mt-2">
+        <p>Ver: {appData?.version}</p>
+        <p>Author: {appData?.author}</p>
+        <p>License: {appData?.license}</p>
+        {appData?.description
+          .split('. ')
+          .map((description) => <p key={description}>{description}.</p>)}
+        <a href={appData?.repository} target="_blank" rel="noreferrer" className="mt-2">
           <u>Github Repository</u>
         </a>
       </div>

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import useDashboardStore from './useDashboardStore'
+import useGlobalStore from './useGlobalStore'
 import useLang from 'lang'
 import useApi from 'api'
 
@@ -30,15 +30,17 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
   },
 
   getNewChapters: async (): Promise<void> => {
-    const { comic } = useDashboardStore.getState()
+    const { activeComic } = useGlobalStore.getState()
 
-    const { repo, siteId } = comic
+    const { repo, siteId } = activeComic
     const chapters = await invoke('getChapters', { repo, data: { siteId } })
 
     const newChapters = chapters
-      .filter((val) => comic.chapters.findIndex((chapter) => val.siteId === chapter.siteId) < 0)
+      .filter(
+        (val) => activeComic.chapters.findIndex((chapter) => val.siteId === chapter.siteId) < 0
+      )
       .reduce((acc, cur) => {
-        return [...acc, { ...cur, comicId: comic.id, repo: comic.repo }]
+        return [...acc, { ...cur, comicId: activeComic.id, repo: activeComic.repo }]
       }, [])
 
     if (newChapters.length) {
@@ -82,7 +84,7 @@ const queueManager = (): void => {
 
   const queueCleaner = async (): Promise<void> => {
     const { queue, getChapterPages, removeFromQueue } = useDownloadStore.getState()
-    const { setComic } = useDashboardStore.getState()
+    const { setActiveComic } = useGlobalStore.getState()
 
     const notInProgress = queue.filter((e) => !inProgress.includes(e))
 
@@ -94,7 +96,7 @@ const queueManager = (): void => {
           inProgress = inProgress.filter((e) => e.id !== chapter.id)
           if (result) {
             await removeFromQueue(chapter).then(() => {
-              setComic(chapter)
+              setActiveComic(chapter)
             })
           }
         })

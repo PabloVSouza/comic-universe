@@ -11,8 +11,8 @@ const HomeDashboardNavBar = ({
   comic,
   additionalData
 }: {
-  comic: ComicInterface
-  additionalData: ComicInterface
+  comic: IComic
+  additionalData: IComic
 }): JSX.Element => {
   const navigate = useNavigate()
   const texts = useLang()

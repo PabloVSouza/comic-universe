@@ -12,7 +12,7 @@ import useDownloadStore from 'store/useDownloadStore'
 const ComicListItem = ({
   item,
   ...props
-}: { item: ComicInterface } & Partial<React.LiHTMLAttributes<HTMLLIElement>>): JSX.Element => {
+}: { item: IComic } & Partial<React.LiHTMLAttributes<HTMLLIElement>>): JSX.Element => {
   const { activeComic, setActiveComic } = useGlobalStore()
   const { queue } = useDownloadStore()
 

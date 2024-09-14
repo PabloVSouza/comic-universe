@@ -32,14 +32,14 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
     },
 
     //Comics
-    dbGetComic: async ({ id }): Promise<ComicInterface> => {
+    dbGetComic: async ({ id }): Promise<IComic> => {
       const comic = await this.db.comic.findUnique({ where: { id } })
       return new Promise((resolve) => {
-        resolve(comic as ComicInterface)
+        resolve(comic as IComic)
       })
     },
 
-    dbGetComicAdditionalData: async ({ id, userId }): Promise<ComicInterface> => {
+    dbGetComicAdditionalData: async ({ id, userId }): Promise<IComic> => {
       const comic = await this.db.comic.findUnique({
         where: { id },
         include: {
@@ -50,14 +50,14 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
       })
 
       return new Promise((resolve) => {
-        resolve(comic as ComicInterface)
+        resolve(comic as IComic)
       })
     },
 
-    dbGetAllComics: async (): Promise<ComicInterface[]> => {
+    dbGetAllComics: async (): Promise<IComic[]> => {
       const comics = (await this.db.comic.findMany({
         include: { chapters: true }
-      })) as ComicInterface[]
+      })) as IComic[]
       return new Promise((resolve) => {
         resolve(comics)
       })
@@ -99,19 +99,19 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
     },
 
     //Chapters
-    dbGetAllChaptersNoPage: async (): Promise<ChapterInterface[]> => {
+    dbGetAllChaptersNoPage: async (): Promise<IChapter[]> => {
       const chapters = (await this.db.chapter.findMany({
         where: { pages: null }
-      })) as ChapterInterface[]
+      })) as IChapter[]
       return new Promise((resolve) => {
         resolve(chapters)
       })
     },
 
-    dbGetChapters: async ({ comicId }): Promise<ChapterInterface[]> => {
+    dbGetChapters: async ({ comicId }): Promise<IChapter[]> => {
       const chapters = await this.db.chapter.findMany({ where: { comicId } })
       return new Promise((resolve) => {
-        resolve(chapters as ChapterInterface[])
+        resolve(chapters as IChapter[])
       })
     },
 
@@ -124,11 +124,11 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
       })
     },
 
-    dbUpdateChapter: async ({ chapter }): Promise<ChapterInterface> => {
+    dbUpdateChapter: async ({ chapter }): Promise<IChapter> => {
       const updatedChapter = (await this.db.chapter.update({
         where: { id: chapter.id },
         data: chapter as Chapter
-      })) as ChapterInterface
+      })) as IChapter
 
       return new Promise((resolve) => {
         resolve(updatedChapter)
@@ -136,11 +136,11 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
     },
 
     //Read Progress
-    dbGetReadProgress: async (search): Promise<ReadProgressInterface[]> => {
+    dbGetReadProgress: async (search): Promise<IReadProgress[]> => {
       //@ts-ignore Multiple ways of searching
       const readProgress = await this.db.readProgress.findMany({ where: search })
       return new Promise((resolve) => {
-        resolve(readProgress as ReadProgressInterface[])
+        resolve(readProgress as IReadProgress[])
       })
     },
 
@@ -153,14 +153,14 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
     },
 
     //Users
-    dbGetAllUsers: async (): Promise<UserInterface[]> => {
+    dbGetAllUsers: async (): Promise<IUser[]> => {
       const users = await this.db.user.findMany()
       return new Promise((resolve) => {
-        resolve(users as UserInterface[])
+        resolve(users as IUser[])
       })
     },
 
-    dbUpdateUser: async ({ user }): Promise<UserInterface> => {
+    dbUpdateUser: async ({ user }): Promise<IUser> => {
       const userData = user as User
 
       const newData = user.id

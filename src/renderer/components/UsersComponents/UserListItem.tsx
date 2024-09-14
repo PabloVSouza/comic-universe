@@ -11,13 +11,13 @@ import plusIcon from 'assets/plus.svg'
 import userIcon from 'assets/user.svg'
 import deleteIcon from 'assets/trash.svg'
 
-interface IUsersListItem {
-  data?: UserInterface
+interface IUsersListItemProps {
+  data?: IUser
   newUser?: boolean
   newUserAction?: () => void
 }
 
-const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItem): JSX.Element => {
+const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItemProps): JSX.Element => {
   const lang = useLang()
   const { invoke } = useApi()
   const queryClient = useQueryClient()

@@ -9,7 +9,7 @@ import useGlobalStore from 'store/useGlobalStore'
 import useDownloadStore from 'store/useDownloadStore'
 import usePersistStore from 'store/usePersistStore'
 
-const HomeDashboard = ({ comicList }: { comicList: ComicInterface[] }): JSX.Element => {
+const HomeDashboard = ({ comicList }: { comicList: IComic[] }): JSX.Element => {
   const { invoke } = useApi()
   const { activeComic, setActiveComic } = useGlobalStore()
   const { queue } = useDownloadStore()
@@ -33,7 +33,7 @@ const HomeDashboard = ({ comicList }: { comicList: ComicInterface[] }): JSX.Elem
       (await invoke('dbGetComicAdditionalData', {
         id: activeComic.id,
         userId: currentUser.id
-      })) as ComicInterface,
+      })) as IComic,
     enabled: !!activeComic.id
   })
 

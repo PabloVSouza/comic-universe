@@ -1,4 +1,4 @@
-interface ComicInterface {
+interface IComic {
   id: number
   siteId: string
   name: string
@@ -13,6 +13,5 @@ interface ComicInterface {
   synopsis: string
   year?: string
   type: string
-  chapters: Chapter[]
-  ReadProgress: ReadProgress[]
+  chapters: IChapter[]
 }

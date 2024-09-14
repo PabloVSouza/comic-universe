@@ -15,9 +15,9 @@ import Image from 'components/Image'
 import Button from 'components/Button'
 
 interface IComicListItem extends LiHTMLAttributes<unknown> {
-  data: ComicInterface
-  activeComic: ComicInterface
-  setActiveComic: (comic: ComicInterface) => void
+  data: IComic
+  activeComic: IComic
+  setActiveComic: (comic: IComic) => void
 }
 
 const SearchComicListItem = ({
@@ -36,7 +36,7 @@ const SearchComicListItem = ({
 
   const { data: comicList, isFetching: comicListFetching } = useQuery({
     queryKey: ['comicList'],
-    queryFn: async () => (await invoke('dbGetAllComics')) as ComicInterface[],
+    queryFn: async () => (await invoke('dbGetAllComics')) as IComic[],
     initialData: []
   })
 
@@ -59,7 +59,7 @@ const SearchComicListItem = ({
       (await invoke('getChapters', {
         repo: repo.value,
         data: { siteId: data.siteId }
-      })) as ChapterInterface[],
+      })) as IChapter[],
     initialData: [],
     enabled: active && !data.chapters
   })

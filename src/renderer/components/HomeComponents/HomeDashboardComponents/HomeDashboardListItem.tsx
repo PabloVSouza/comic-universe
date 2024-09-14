@@ -5,21 +5,23 @@ import useApi from 'api'
 import useLang from 'lang'
 import Button from 'components/Button'
 import usePersistStore from 'store/usePersistStore'
+import useGlobalStore from 'store/useGlobalStore'
 
 import closedBook from 'assets/closed-book-icon.svg'
 import bookStack from 'assets/book-stack.svg'
 
 const { invoke } = useApi()
 
-const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.Element => {
+const HomeDashboardComicListItem = ({ item }: { item: IChapter }): JSX.Element => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const { activeComic } = useGlobalStore()
 
   const texts = useLang()
 
   const { currentUser } = usePersistStore()
 
-  const pages = item.pages ? (JSON.parse(item.pages) as Page[]) : ([] as Page[])
+  const pages = item.pages ? (JSON.parse(item.pages) as IPage[]) : ([] as IPage[])
 
   const disabled = !item.pages
 
@@ -33,7 +35,7 @@ const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.E
 
   const openChapter = async (): Promise<void> => {
     if (pages) {
-      navigate(`/reader/${item.id}/${item.id}`)
+      navigate(`/reader/${activeComic.id}/${item.id}`)
     }
   }
 

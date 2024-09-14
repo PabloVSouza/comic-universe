@@ -17,8 +17,8 @@ type IDBInteractionsMethods = {
   dbUpdateChapter: (input: { chapter: ChapterInterface }) => Promise<ChapterInterface>
 
   //Read Progress
-  dbGetReadProgress: (input: { search: string }) => Promise<ReadProgressInterface[]>
-  dbUpdateReadProgress: (input: { readProgress: ReadProgressInterface }) => Promise<void>
+  dbGetReadProgress: (input: { search: string }) => Promise<IReadProgress[]>
+  dbUpdateReadProgress: (input: { readProgress: IReadProgress }) => Promise<void>
 
   //Users
   dbGetAllUsers: () => Promise<UserInterface[]>

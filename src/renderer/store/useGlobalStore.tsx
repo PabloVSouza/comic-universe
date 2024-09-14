@@ -12,10 +12,10 @@ interface IAppParams {
 interface IuseGlobalStore {
   appParams: IAppParams
   menuVisible: boolean
-  activeComic: ComicInterface
+  activeComic: IComic
   getAppParams: () => Promise<void>
   toggleMenu: () => void
-  setActiveComic: (comic: ComicInterface) => void
+  setActiveComic: (comic: IComic) => void
   updatePlugins: () => Promise<void>
 }
 
@@ -23,7 +23,7 @@ const useGlobalStore = create<IuseGlobalStore>((set) => ({
   appParams: {} as IAppParams,
   menuVisible: false,
   repoList: [],
-  activeComic: {} as ComicInterface,
+  activeComic: {} as IComic,
 
   getAppParams: async () => {
     const appParams = await invoke('getAppParams')

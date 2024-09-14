@@ -4,7 +4,7 @@ const UsersList = ({
   list,
   newUserAction
 }: {
-  list: UserInterface[]
+  list: IUser[]
   newUserAction: () => void
 }): JSX.Element => {
   return (

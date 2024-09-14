@@ -2,7 +2,7 @@ import HtmlParser from 'react-html-parser'
 import FixFilePaths from 'functions/fixFilePaths'
 import Image from 'components/Image'
 
-const HomeDashboardHeader = ({ comic }: { comic: ComicInterface }): JSX.Element => {
+const HomeDashboardHeader = ({ comic }: { comic: IComic }): JSX.Element => {
   const cover = FixFilePaths(comic.cover)
 
   return (

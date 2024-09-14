@@ -5,18 +5,18 @@ import useApi from 'api'
 
 const { invoke } = useApi()
 
-interface useReaderStore {
-  readProgress: ReadProgressInterface
+interface IuseReaderStore {
+  readProgress: IReadProgress
   chapterIndex: number
   setInitialState: (comicId: number, chapterId: number) => Promise<void>
   setChapterIndex: (chapterIndex: number) => Promise<void>
-  setReadProgress: (readProgress: ReadProgressInterface) => Promise<void>
-  setReadProgressDB: (readProgress: ReadProgressInterface) => Promise<void>
+  setReadProgress: (readProgress: IReadProgress) => Promise<void>
+  setReadProgressDB: (readProgress: IReadProgress) => Promise<void>
   resetReader: () => void
 }
 
-const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
-  readProgress: {} as ReadProgressInterface,
+const initialState = (set: StoreApi<unknown>['setState']): IuseReaderStore => ({
+  readProgress: {} as IReadProgress,
   chapterIndex: 0,
 
   setInitialState: async (comicId, chapterId): Promise<void> => {
@@ -28,9 +28,7 @@ const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
       // await setComic(comic)
       await setInitialState(comicId, chapterId)
     } else {
-      const chapterIndex = activeComic.chapters.findIndex(
-        (val: ChapterInterface) => val.id === chapterId
-      )
+      const chapterIndex = activeComic.chapters.findIndex((val: IChapter) => val.id === chapterId)
 
       await setChapterIndex(chapterIndex)
 
@@ -60,12 +58,12 @@ const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
   },
 
   setChapterIndex: async (chapterIndex): Promise<void> => {
-    set((state: useReaderStore) => ({ ...state, chapterIndex }))
+    set((state) => ({ ...state, chapterIndex }))
     return new Promise((resolve) => resolve())
   },
 
   setReadProgress: async (readProgress): Promise<void> => {
-    set((state: useReaderStore) => ({ ...state, readProgress }))
+    set((state: IuseReaderStore) => ({ ...state, readProgress }))
     return new Promise((resolve) => resolve())
   },
 
@@ -76,6 +74,6 @@ const initialState = (set: StoreApi<unknown>['setState']): useReaderStore => ({
   resetReader: (): void => set(() => initialState(set))
 })
 
-const useReaderStore = create<useReaderStore>((set) => initialState(set))
+const useReaderStore = create<IuseReaderStore>((set) => initialState(set))
 
 export default useReaderStore

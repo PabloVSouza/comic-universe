@@ -1,4 +1,4 @@
-interface ChapterInterface {
+interface IChapter {
   id: number
   comicId: number
   siteId: string
@@ -11,6 +11,6 @@ interface ChapterInterface {
   repo: string
   language?: string
   offline: boolean
-  Comic: Comic
-  ReadProgress: ReadProgress[]
+  Comic: IComic
+  ReadProgress: IReadProgress[]
 }

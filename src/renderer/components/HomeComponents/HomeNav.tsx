@@ -23,7 +23,7 @@ const HomeNav = (): JSX.Element => {
   const activeUser = !!currentUser.id
 
   const closeApp = (): void => {
-    setCurrentUser({} as UserInterface)
+    setCurrentUser({} as IUser)
     invoke('closeWindow')
   }
 
@@ -46,7 +46,7 @@ const HomeNav = (): JSX.Element => {
     {
       label: texts.HomeNav.changeUser,
       icon: userIcon,
-      onClick: (): void => setCurrentUser({} as UserInterface)
+      onClick: (): void => setCurrentUser({} as IUser)
     }
   ]
 

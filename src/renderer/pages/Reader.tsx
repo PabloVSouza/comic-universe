@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
+import { useQuery, useMutation } from '@tanstack/react-query'
+import useApi from 'api'
 import { useParams, useNavigate } from 'react-router-dom'
 import slugify from 'slugify'
 import Image from 'components/Image'
+import FixFilePaths from 'functions/fixFilePaths'
 
 import useGlobalStore from 'store/useGlobalStore'
 
@@ -13,139 +16,151 @@ import loading from 'assets/loading.svg'
 import Cover from 'components/Cover'
 
 const Reader = (): JSX.Element => {
-  const navigate = useNavigate()
-
+  // const navigate = useNavigate()
+  const { invoke } = useApi()
+  const { activeComic, setActiveComic } = useGlobalStore()
+  const [chapterIndex, setChapterIndex] = useState(0)
+  const [mousePos, setMousePos] = useState<IMousePos>({} as IMousePos)
+  const [zoomVisible, setZoomVisible] = useState(false)
   const comicId = Number(useParams().comicId)
   const chapterId = Number(useParams().chapterId)
 
-  const [mousePos, setMousePos] = useState<IMousePos>({} as IMousePos)
-  const [zoomVisible, setZoomVisible] = useState(false)
+  useQuery({
+    queryKey: ['activeComicData'],
+    queryFn: async () => {
+      const comicData = (await invoke('dbGetComicAdditionalData', {
+        id: comicId
+      })) as IComic
+      if (!activeComic.id) setActiveComic(comicData)
+      setChapterIndex(comicData.chapters.findIndex((val) => val.id === chapterId))
+      return comicData
+    }
+  })
 
-  const { appPath } = useGlobalStore()
+  const { mutate: updateReadProgress } = useMutation({
+    mutationFn: async (readProgress: IReadProgress) => {
+      await invoke('dbUpdateReadProgress', { readProgress })
+    }
+  })
 
-  const {
-    chapterIndex,
-    readProgress,
-    resetReader,
-    setInitialState,
-    setReadProgress,
-    setReadProgressDB
-  } = useReaderStore()
+  const chapter = activeComic.chapters ? activeComic.chapters[chapterIndex] : ({} as IChapter)
 
-  const { comic, setComic } = useDashboardStore()
+  const readProgress = chapter.ReadProgress
 
   useEffect(() => {
-    setInitialState(comicId, chapterId)
-  }, [chapterId])
-
-  useEffect(() => {
-    if (readProgress.page === 0) {
-      const newReadProgress = { ...readProgress, page: 1 } as ReadProgressInterface
-      setReadProgress(newReadProgress)
-      setReadProgressDB(newReadProgress)
+    if (!readProgress) {
+      updateReadProgress()
     }
   }, [readProgress])
 
-  let chapter: ChapterInterface | undefined
-  let pages: Page[] | undefined
+  // useEffect(() => {
+  //   if (readProgress.page === 0) {
+  //     const newReadProgress = { ...readProgress, page: 1 } as ReadProgressInterface
+  //     setReadProgress(newReadProgress)
+  //     setReadProgressDB(newReadProgress)
+  //   }
+  // }, [readProgress])
 
-  if (readProgress.id) {
-    chapter = comic.chapters[chapterIndex] as ChapterInterface
-    pages = JSON.parse(chapter.pages) as Page[]
-  }
+  // let chapter: ChapterInterface | undefined
+  // let pages: Page[] | undefined
 
-  const getPath = (page: Page): string =>
-    !chapter?.offline
-      ? (page?.path ?? '')
-      : `file:///${window.path.join(
-          appPath,
-          'downloads',
-          comic.repo,
-          slugify(comic.name),
-          slugify(chapter.number),
-          page.filename
-        )}`
+  // if (readProgress.id) {
+  //   chapter = comic.chapters[chapterIndex] as ChapterInterface
+  //   pages = JSON.parse(chapter.pages) as Page[]
+  // }
 
-  const nextPage = async (): Promise<void> => {
-    const { page, totalPages } = readProgress
+  // const getPath = (page: Page): string =>
+  //   !chapter?.offline
+  //     ? (page?.path ?? '')
+  //     : `file:///${window.path.join(
+  //         appPath,
+  //         'downloads',
+  //         comic.repo,
+  //         slugify(comic.name),
+  //         slugify(chapter.number),
+  //         page.filename
+  //       )}`
 
-    if (page < totalPages) {
-      const newReadProgress = { ...readProgress, page: page + 1 } as ReadProgressInterface
-      await setReadProgress(newReadProgress)
-      await setReadProgressDB(newReadProgress)
-    }
-    if (page === totalPages) {
-      if (chapterIndex === comic.chapters.length - 1) {
-        await setComic(comic)
-        navigate('/')
-      }
-      if (chapterIndex < comic.chapters.length - 1)
-        navigate(`/reader/${comicId}/${comic.chapters[chapterIndex + 1].id}`)
-    }
-  }
+  // const nextPage = async (): Promise<void> => {
+  //   const { page, totalPages } = readProgress
 
-  const previousPage = async (): Promise<void> => {
-    const { page, totalPages } = readProgress
-    if (totalPages >= page && page !== 1) {
-      const newReadProgress = { ...readProgress, page: page - 1 } as ReadProgressInterface
-      await setReadProgress(newReadProgress)
-      await setReadProgressDB(newReadProgress)
-    }
-    if (page === 1) {
-      if (chapterIndex === 0) {
-        await setComic(comic)
-        navigate('/')
-      }
-      if (chapterIndex <= comic.chapters.length - 1 && chapterIndex !== 0)
-        navigate(`/reader/${comicId}/${comic.chapters[chapterIndex - 1].id}`)
-    }
-  }
+  //   if (page < totalPages) {
+  //     const newReadProgress = { ...readProgress, page: page + 1 } as ReadProgressInterface
+  //     await setReadProgress(newReadProgress)
+  //     await setReadProgressDB(newReadProgress)
+  //   }
+  //   if (page === totalPages) {
+  //     if (chapterIndex === comic.chapters.length - 1) {
+  //       await setComic(comic)
+  //       navigate('/')
+  //     }
+  //     if (chapterIndex < comic.chapters.length - 1)
+  //       navigate(`/reader/${comicId}/${comic.chapters[chapterIndex + 1].id}`)
+  //   }
+  // }
 
-  const handleKeys = (e: KeyboardEvent): void => {
-    const keys = {
-      ArrowLeft: (): void => {
-        previousPage()
-      },
+  // const previousPage = async (): Promise<void> => {
+  //   const { page, totalPages } = readProgress
+  //   if (totalPages >= page && page !== 1) {
+  //     const newReadProgress = { ...readProgress, page: page - 1 } as ReadProgressInterface
+  //     await setReadProgress(newReadProgress)
+  //     await setReadProgressDB(newReadProgress)
+  //   }
+  //   if (page === 1) {
+  //     if (chapterIndex === 0) {
+  //       await setComic(comic)
+  //       navigate('/')
+  //     }
+  //     if (chapterIndex <= comic.chapters.length - 1 && chapterIndex !== 0)
+  //       navigate(`/reader/${comicId}/${comic.chapters[chapterIndex - 1].id}`)
+  //   }
+  // }
 
-      ArrowRight: async (): Promise<void> => {
-        await nextPage()
-      },
+  // const handleKeys = (e: KeyboardEvent): void => {
+  //   const keys = {
+  //     ArrowLeft: (): void => {
+  //       previousPage()
+  //     },
 
-      Escape: async (): Promise<void> => {
-        await setComic(comic)
-        navigate('/')
-      }
-    }
+  //     ArrowRight: async (): Promise<void> => {
+  //       await nextPage()
+  //     },
 
-    if (keys[e.key]) {
-      keys[e.key]()
-    }
-  }
+  //     Escape: async (): Promise<void> => {
+  //       await setComic(comic)
+  //       navigate('/')
+  //     }
+  //   }
 
-  const defineMousePos = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-    setMousePos({ x: e.pageX, y: e.pageY })
-  }
+  //   if (keys[e.key]) {
+  //     keys[e.key]()
+  //   }
+  // }
 
-  const position = {
-    transform: `translateX(-${(readProgress.page - 1) * 100}%)`
-  }
+  // const defineMousePos = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+  //   setMousePos({ x: e.pageX, y: e.pageY })
+  // }
 
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeys)
-    return () => {
-      document.removeEventListener('keydown', handleKeys)
-    }
-  }, [comic, chapterIndex, readProgress])
+  // const position = {
+  //   transform: `translateX(-${(readProgress.page - 1) * 100}%)`
+  // }
 
-  useEffect(() => {
-    return () => {
-      resetReader()
-    }
-  }, [])
+  // useEffect(() => {
+  //   document.addEventListener('keydown', handleKeys)
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeys)
+  //   }
+  // }, [comic, chapterIndex, readProgress])
+
+  // useEffect(() => {
+  //   return () => {
+  //     resetReader()
+  //   }
+  // }, [])
 
   return (
     <Cover visible>
-      <div
+      {/* <div
         className="w-full h-full relative overflow-hidden"
         onMouseMoveCapture={defineMousePos}
         onContextMenu={(): void => setZoomVisible(!zoomVisible)}
@@ -153,7 +168,7 @@ const Reader = (): JSX.Element => {
         {!!pages?.length && (
           <ReaderZoomWindow
             mousePos={mousePos}
-            image={getPath(pages[readProgress.page - 1]) ?? ''}
+            image={FixFilePaths(pages[readProgress.page - 1].path) ?? ''}
             visible={zoomVisible}
           />
         )}
@@ -183,7 +198,7 @@ const Reader = (): JSX.Element => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </Cover>
   )
 }

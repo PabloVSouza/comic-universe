@@ -17,7 +17,7 @@ const Home = (): JSX.Element => {
 
   const { data: comicList } = useQuery({
     queryKey: ['comicList'],
-    queryFn: async () => (await invoke('dbGetAllComics')) as ComicInterface[],
+    queryFn: async () => (await invoke('dbGetAllComics')) as IComic[],
     initialData: []
   })
 

@@ -4,7 +4,7 @@ import SearchComicListItem from 'components/SearchComponents/SearchComicListItem
 
 interface ISearchComicList {
   className?: string
-  list: ComicInterface[]
+  list: IComic[]
   itemsPerPage?: number
   offset: number
 }
@@ -19,7 +19,7 @@ const SearchComicList = ({
   const endOffset = offset + itemsPerPage
   const currentItems = list?.slice(offset, endOffset)
 
-  const [activeComic, setActiveComic] = useState({} as ComicInterface)
+  const [activeComic, setActiveComic] = useState({} as IComic)
 
   useEffect(() => {
     const { current } = refScrollElement

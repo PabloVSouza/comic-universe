@@ -5,11 +5,11 @@ import useGlobalStore from './useGlobalStore'
 interface IusePersistStore {
   theme: string
   lang: string
-  currentUser: UserInterface
+  currentUser: IUser
   repo: TOption
   switchTheme: (theme?: string) => void
   changeLanguage: (lang?: string) => void
-  setCurrentUser: (currentUser: UserInterface) => void
+  setCurrentUser: (currentUser: IUser) => void
   setRepo: (repo: TOption) => void
 }
 
@@ -20,7 +20,7 @@ const usePersistStore = create<IusePersistStore>()(
     (set, get) => ({
       theme: 'dark',
       lang: 'ptBR',
-      currentUser: {} as UserInterface,
+      currentUser: {} as IUser,
       repo: {} as TOption,
 
       switchTheme: (theme): void =>

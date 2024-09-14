@@ -1,13 +1,13 @@
 import { create } from 'zustand'
 
-interface useDashboardStore {
-  comic: ComicInterface
+interface IDashboardStore {
+  comic: IComic
 
-  setComic: (comic: ComicInterface) => Promise<void>
+  setComic: (comic: IComic) => Promise<void>
 }
 
-const useDashboardStore = create<useDashboardStore>((set) => ({
-  comic: {} as ComicInterface,
+const useDashboardStore = create<IDashboardStore>((set) => ({
+  comic: {} as IComic,
 
   setComic: async (comic): Promise<void> => {
     set((state) => ({ ...state, comic }))

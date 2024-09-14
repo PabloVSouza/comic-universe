@@ -10,19 +10,19 @@ import deleteIcon from 'assets/trash.svg'
 
 const { invoke } = useApi()
 
-const HomeComicList = ({ comicList }: { comicList: ComicInterface[] }): JSX.Element => {
+const HomeComicList = ({ comicList }: { comicList: IComic[] }): JSX.Element => {
   const queryClient = useQueryClient()
 
   const { mutate: deleteComic } = useMutation({
-    mutationFn: async (comic: ComicInterface) => await invoke('dbDeleteComic', { comic }),
+    mutationFn: async (comic: IComic) => await invoke('dbDeleteComic', { comic }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
   })
 
   const lang = useLang()
 
-  const [currentCtxItem, setCurrentCtxItem] = useState({} as ComicInterface)
+  const [currentCtxItem, setCurrentCtxItem] = useState({} as IComic)
 
-  const handleRightClick = (e: React.MouseEvent, item: ComicInterface) => {
+  const handleRightClick = (e: React.MouseEvent, item: IComic) => {
     const position = {
       x: e.pageX - 20,
       y: e.pageY - 20

@@ -54,7 +54,7 @@ const HomeDashboardComicListItem = ({ item }: { item: IChapter }): JSX.Element =
       })
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['additionalData'] })
+      await queryClient.invalidateQueries({ queryKey: ['activeComicData'] })
     }
   })
 

@@ -62,11 +62,9 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
   },
 
   getChapterPages: async (chapter): Promise<boolean> => {
-    const { siteLink } = chapter
-
     const { repo } = chapter
 
-    const pages = await invoke('getPages', { repo, data: { siteLink } })
+    const pages = await invoke('getPages', { repo, data: { chapter } })
 
     if (pages.length > 0) {
       await invoke('dbUpdateChapter', { chapter: { ...chapter, pages: JSON.stringify(pages) } })

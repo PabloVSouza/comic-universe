@@ -46,7 +46,11 @@ const Search = (): JSX.Element => {
     refetch
   } = useQuery({
     queryKey: ['searchList', search, repo],
-    queryFn: async () => await invoke('search', { repo: repo.value, data: { search } }),
+    queryFn: async () => {
+      return search.length > 0
+        ? await invoke('search', { repo: repo.value, data: { search } })
+        : await invoke('getList', { repo: repo.value })
+    },
     initialData: [],
     enabled: !!repoList.length
   })

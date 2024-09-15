@@ -83,8 +83,6 @@ const Reader = (): JSX.Element => {
     }
   }, [readProgress])
 
-  console.log(chapterIndex)
-
   const nextPage = async (): Promise<void> => {
     if (readProgress) {
       const { page, totalPages } = readProgress

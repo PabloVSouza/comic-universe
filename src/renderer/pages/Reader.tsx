@@ -17,7 +17,6 @@ const Reader = (): JSX.Element => {
   const queryClient = useQueryClient()
   const { activeComic, setActiveComic } = useGlobalStore()
   const { currentUser } = usePersistStore()
-  const [chapterIndex, setChapterIndex] = useState(0)
   const [mousePos, setMousePos] = useState<IMousePos>({} as IMousePos)
   const [zoomVisible, setZoomVisible] = useState(false)
   const comicId = Number(useParams().comicId)
@@ -31,13 +30,13 @@ const Reader = (): JSX.Element => {
         userId: currentUser.id
       })) as IComic
       if (!activeComic.id) setActiveComic(comicData)
-      setChapterIndex(comicData.chapters.findIndex((val) => val.id === chapterId))
       return comicData
     },
     enabled: !!currentUser.id && !activeComic.id
   })
-
   const chapter = activeComic?.chapters?.find((val) => val.id == chapterId)
+  const chapters = activeComic?.chapters
+  const chapterIndex = chapters.findIndex((val) => val.id === chapterId) ?? 0
   const pages = JSON.parse(chapter?.pages ?? '[]') as IPage[]
 
   const getReadProgress = async () => {
@@ -83,9 +82,13 @@ const Reader = (): JSX.Element => {
     }
   }, [readProgress])
 
+  console.log(chapterIndex)
+
   const nextPage = async (): Promise<void> => {
     if (readProgress) {
       const { page, totalPages } = readProgress
+
+      console.log({ page, totalPages })
 
       if (page < totalPages) {
         const newReadProgress = { ...readProgress, page: page + 1 } as IReadProgress
@@ -93,7 +96,8 @@ const Reader = (): JSX.Element => {
       }
 
       if (page === totalPages) {
-        if (chapterIndex === activeComic.chapters.length - 1) navigate('/')
+        console.log(chapterIndex, chapters.length)
+        if (chapterIndex === chapters.length - 1) navigate('/')
 
         if (chapterIndex < activeComic.chapters.length - 1)
           navigate(`/reader/${comicId}/${activeComic.chapters[chapterIndex + 1].id}`)

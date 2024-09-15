@@ -89,8 +89,6 @@ const Reader = (): JSX.Element => {
     if (readProgress) {
       const { page, totalPages } = readProgress
 
-      console.log({ page, totalPages })
-
       if (page < totalPages) {
         const newReadProgress = { ...readProgress, page: page + 1 } as IReadProgress
         updateReadProgress(newReadProgress)

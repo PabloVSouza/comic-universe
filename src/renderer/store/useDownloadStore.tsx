@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import useGlobalStore from './useGlobalStore'
 import useLang from 'lang'
 import useApi from 'api'
+import { confirmAlert } from 'components/Alert'
 
 const { invoke } = useApi()
 
@@ -47,14 +48,14 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
       await invoke('dbInsertChapters', { chapters: newChapters })
     } else {
       const lang = useLang()
-      // confirmAlert({
-      //   message: lang.Dashboard.newChapter.noNewChapterMessage,
-      //   buttons: [
-      //     {
-      //       label: lang.Dashboard.newChapter.noNewChapterConfirm
-      //     }
-      //   ]
-      // })
+      confirmAlert({
+        message: lang.Dashboard.newChapter.noNewChapterMessage,
+        buttons: [
+          {
+            label: lang.Dashboard.newChapter.noNewChapterConfirm
+          }
+        ]
+      })
     }
 
     return new Promise((resolve) => resolve())
@@ -65,7 +66,9 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
 
     const { repo } = chapter
 
-    const pages = await invoke('getPages', { repo, data: { siteLink } })
+    console.log(repo)
+
+    const pages = await invoke('getPages', { repo, data: { chapter } })
 
     if (pages.length > 0) {
       await invoke('dbUpdateChapter', { chapter: { ...chapter, pages: JSON.stringify(pages) } })

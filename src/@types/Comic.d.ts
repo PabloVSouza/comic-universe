@@ -12,6 +12,6 @@ interface IComic {
   siteLink: string
   synopsis: string
   year?: string
-  type: string
+  type: 'hq' | 'manga' | 'manhwa' | 'manhua'
   chapters: IChapter[]
 }

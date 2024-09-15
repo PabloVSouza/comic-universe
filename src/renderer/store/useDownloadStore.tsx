@@ -62,11 +62,7 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
   },
 
   getChapterPages: async (chapter): Promise<boolean> => {
-    const { siteLink } = chapter
-
     const { repo } = chapter
-
-    console.log(repo)
 
     const pages = await invoke('getPages', { repo, data: { chapter } })
 

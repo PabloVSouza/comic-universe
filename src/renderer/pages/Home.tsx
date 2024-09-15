@@ -26,8 +26,7 @@ const Home = (): JSX.Element => {
   const { mutate: addChaptersToQueue } = useMutation({
     mutationFn: async () => {
       const noPageChapters = await invoke('dbGetAllChaptersNoPage')
-
-      addToQueue(noPageChapters[0])
+      for (const chapter of noPageChapters) addToQueue(chapter)
     }
   })
 

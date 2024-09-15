@@ -34,6 +34,7 @@ const Reader = (): JSX.Element => {
     },
     enabled: !!currentUser.id && !activeComic.id
   })
+
   const chapter = activeComic?.chapters?.find((val) => val.id == chapterId)
   const chapters = activeComic?.chapters
   const chapterIndex = chapters.findIndex((val) => val.id === chapterId) ?? 0

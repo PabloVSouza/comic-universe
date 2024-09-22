@@ -61,7 +61,7 @@ const Reader = (): JSX.Element => {
   const { data: readProgress } = useQuery({
     queryKey: ['readProgressData'],
     queryFn: async () => await getReadProgress(),
-    enabled: !!activeComic.id && !!currentUser.id && !!chapter?.pages.length
+    enabled: !!activeComic.id && !!currentUser.id && !!(chapter?.pages?.length ?? 0)
   })
 
   const resetQueries = () => {

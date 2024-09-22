@@ -37,7 +37,7 @@ const Reader = (): JSX.Element => {
 
   const chapter = activeComic?.chapters?.find((val) => val.id == chapterId)
   const chapters = activeComic?.chapters
-  const chapterIndex = chapters.findIndex((val) => val.id === chapterId) ?? 0
+  const chapterIndex = chapters?.findIndex((val) => val.id === chapterId) ?? 0
   const pages = JSON.parse(chapter?.pages ?? '[]') as IPage[]
 
   const getReadProgress = async () => {
@@ -93,7 +93,6 @@ const Reader = (): JSX.Element => {
       }
 
       if (page === totalPages) {
-        console.log(chapterIndex, chapters.length)
         if (chapterIndex === chapters.length - 1) navigate('/')
 
         if (chapterIndex < activeComic.chapters.length - 1)
@@ -143,7 +142,7 @@ const Reader = (): JSX.Element => {
   }
 
   const position = {
-    transform: `translateX(-${((readProgress?.page ?? 1) - 1) * 100}%)`
+    transform: `translate3d(-${((readProgress?.page ?? 1) - 1) * 100}%,0,0)`
   }
 
   useEffect(() => {
@@ -166,7 +165,7 @@ const Reader = (): JSX.Element => {
         {!!pages?.length && readProgress?.page && (
           <ReaderZoomWindow
             mousePos={mousePos}
-            image={FixFilePaths(pages[readProgress.page - 1].path) ?? ''}
+            image={FixFilePaths(pages[readProgress?.page - 1]?.path ?? '') ?? ''}
             visible={zoomVisible}
           />
         )}

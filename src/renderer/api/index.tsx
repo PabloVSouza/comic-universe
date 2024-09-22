@@ -1,15 +1,15 @@
-// import IpcImplementation from './IpcImplementation'
+import IpcImplementation from './IpcImplementation'
 import RestImplemention from './RestImplementation'
 
-// const ApiList = { IpcImplementation, RestImplemention }
+const ApiList = { IpcImplementation, RestImplemention }
 
-const defaultImplementation = 'RestImplementation'
+const defaultImplementation = 'IpcImplementation' as keyof typeof ApiList
 
-const useApi = (_implementation: string = defaultImplementation) => {
+const useApi = (implementation: string = defaultImplementation) => {
   return {
     invoke: async (method: string, args?: any) => {
       console.log(`Call ${method}, args: ${JSON.stringify(args)}`)
-      return await RestImplemention.invoke(method, args)
+      return await ApiList[implementation].invoke(method, args)
     }
   }
 }

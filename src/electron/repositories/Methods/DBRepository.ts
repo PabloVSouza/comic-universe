@@ -57,9 +57,7 @@ class DBRepository implements IDBRepository {
     },
 
     dbGetAllComics: async (): Promise<IComic[]> => {
-      const comics = (await this.db.comic.findMany({
-        include: { chapters: true }
-      })) as IComic[]
+      const comics = (await this.db.comic.findMany({})) as IComic[]
       return new Promise((resolve) => {
         resolve(comics)
       })

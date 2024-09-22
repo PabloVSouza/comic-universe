@@ -1,5 +1,8 @@
-const { invoke, on } = window.Electron.ipcRenderer
+let IpcImplementation = {}
 
-const IpcImplementation = { invoke, on }
+if (window.Electron) {
+  const { invoke, on } = window.Electron.ipcRenderer
+  IpcImplementation = { invoke, on }
+}
 
 export default IpcImplementation

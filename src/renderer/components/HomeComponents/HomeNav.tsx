@@ -1,5 +1,4 @@
-import { useNavigate } from 'react-router-dom'
-const { invoke } = window.Electron.ipcRenderer
+import useApi from 'api'
 import classNames from 'classnames'
 import Cover from 'components/Cover'
 import openWindow from 'functions/openWindow'
@@ -14,15 +13,17 @@ import darkmodeIcon from 'assets/darkmode.svg'
 import userIcon from 'assets/user.svg'
 import exitIcon from 'assets/exit-door.svg'
 
+const { invoke } = useApi()
+
 const HomeNav = (): JSX.Element => {
   const { menuVisible, toggleMenu } = useGlobalStore()
-  const { switchTheme, currentUser } = usePersistStore()
+  const { switchTheme, currentUser, setCurrentUser } = usePersistStore()
 
-  const navigate = useNavigate()
   const texts = useLang()
   const activeUser = !!currentUser.id
 
   const closeApp = (): void => {
+    setCurrentUser({} as IUser)
     invoke('closeWindow')
   }
 
@@ -45,7 +46,7 @@ const HomeNav = (): JSX.Element => {
     {
       label: texts.HomeNav.changeUser,
       icon: userIcon,
-      onClick: (): void => navigate('/users')
+      onClick: (): void => setCurrentUser({} as IUser)
     }
   ]
 

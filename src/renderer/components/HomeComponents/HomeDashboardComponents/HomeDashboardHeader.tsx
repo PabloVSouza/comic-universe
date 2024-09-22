@@ -1,23 +1,9 @@
-import slugify from 'slugify'
 import HtmlParser from 'react-html-parser'
+import FixFilePaths from 'functions/fixFilePaths'
 import Image from 'components/Image'
-import useDashboardStore from 'store/useDashboardStore'
-import useGlobalStore from 'store/useGlobalStore'
 
-const HomeDashboardHeader = (): JSX.Element => {
-  const { appPath } = useGlobalStore()
-
-  const { comic } = useDashboardStore()
-
-  const cover = comic?.cover.startsWith('http')
-    ? comic.cover
-    : `file:///${window.path.join(
-        appPath,
-        'downloads',
-        comic.type,
-        slugify(comic.name),
-        comic.cover
-      )}`
+const HomeDashboardHeader = ({ comic }: { comic: IComic }): JSX.Element => {
+  const cover = FixFilePaths(comic.cover)
 
   return (
     <div className="w-full h-72 shrink-0 bg-default flex">

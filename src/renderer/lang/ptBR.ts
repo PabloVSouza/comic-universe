@@ -1,6 +1,7 @@
 export default class ptBR implements Lang {
   General: GenerlLang = {
-    inDevelopment: 'Função em desenvolvimento'
+    inDevelopment: 'Função em desenvolvimento',
+    alertConfirmButton: 'Ok'
   }
 
   Dashboard: DashboardLang = {
@@ -15,8 +16,8 @@ export default class ptBR implements Lang {
     },
     contextMenu: {
       deleteComic: {
-        title: 'Apagar Quadrinho',
-        confirmMessage: 'Deseja mesmo apagar? (Todo o progresso de leitura será apagado!)',
+        title: 'Deseja mesmo apagar?',
+        confirmMessage: 'Todo o progresso de leitura será apagado!',
         confirmOk: 'Confirmar',
         confirmCancel: 'Cancelar'
       }
@@ -46,7 +47,8 @@ export default class ptBR implements Lang {
     textPlaceholder: 'Digite sua Busca',
     bookmarkComic: 'Favoritar',
     alreadyBookmarked: 'Favoritado',
-    availableChapters: 'Capítulos Disponíveis'
+    availableChapters: 'Capítulos Disponíveis',
+    noReposAvailable: 'Sem Repositórios'
   }
 
   Pagination: PaginationLang = {

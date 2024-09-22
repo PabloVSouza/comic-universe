@@ -1,6 +1,7 @@
 export default class enUS implements Lang {
   General: GenerlLang = {
-    inDevelopment: 'Function in development'
+    inDevelopment: 'Function in development',
+    alertConfirmButton: 'Ok'
   }
 
   Dashboard: DashboardLang = {
@@ -15,8 +16,8 @@ export default class enUS implements Lang {
     },
     contextMenu: {
       deleteComic: {
-        title: 'Delete Comic',
-        confirmMessage: 'Do you really want to delete? (All the read progress will be lost!)',
+        title: 'Do you really want to delete?',
+        confirmMessage: 'All the read progress will be lost!',
         confirmOk: 'Confirm',
         confirmCancel: 'Cancel'
       }
@@ -46,7 +47,8 @@ export default class enUS implements Lang {
     textPlaceholder: 'Type your Search',
     bookmarkComic: 'Bookmark',
     alreadyBookmarked: 'Bookmarked',
-    availableChapters: 'Chapters Available'
+    availableChapters: 'Chapters Available',
+    noReposAvailable: 'No Repos Available'
   }
 
   Pagination: PaginationLang = {

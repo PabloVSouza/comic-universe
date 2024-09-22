@@ -1,25 +1,27 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-const { isDev } = window
+import useGlobalStore from './useGlobalStore'
 
-interface usePersistStore {
+interface IusePersistStore {
   theme: string
   lang: string
-  currentUser: UserInterface
-  repo: string
+  currentUser: IUser
+  repo: TOption
   switchTheme: (theme?: string) => void
   changeLanguage: (lang?: string) => void
-  setCurrentUser: (currentUser: UserInterface) => void
-  setRepo: (repo: string) => void
+  setCurrentUser: (currentUser: IUser) => void
+  setRepo: (repo: TOption) => void
 }
 
-const usePersistStore = create<usePersistStore>()(
+const { appParams } = useGlobalStore.getState()
+
+const usePersistStore = create<IusePersistStore>()(
   persist(
     (set, get) => ({
       theme: 'dark',
       lang: 'ptBR',
-      currentUser: {} as UserInterface,
-      repo: '',
+      currentUser: {} as IUser,
+      repo: {} as TOption,
 
       switchTheme: (theme): void =>
         set({ theme: theme || get().theme === 'dark' ? 'light' : 'dark' }),
@@ -34,7 +36,7 @@ const usePersistStore = create<usePersistStore>()(
       setRepo: (repo): void => set({ repo })
     }),
     {
-      name: isDev ? 'comic-universe-dev' : 'comic-universe',
+      name: appParams.isDev ? 'comic-universe-dev' : 'comic-universe',
       storage: createJSONStorage(() => localStorage)
     }
   )

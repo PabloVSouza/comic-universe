@@ -1,7 +1,7 @@
 type IDBInteractionsMethods = {
   //Comics
   dbGetComic: (input: { id: number }) => Promise<ComicInterface>
-  dbGetComicComplete: (input: { id: number; userId: number }) => Promise<ComicInterface>
+  dbGetComicAdditionalData: (input: { id: number; userId: number }) => Promise<ComicInterface>
   dbGetAllComics: () => Promise<ComicInterface[]>
   dbInsertComic: (input: {
     comic: ComicInterface
@@ -17,8 +17,8 @@ type IDBInteractionsMethods = {
   dbUpdateChapter: (input: { chapter: ChapterInterface }) => Promise<ChapterInterface>
 
   //Read Progress
-  dbGetReadProgress: (input: { search: string }) => Promise<ReadProgressInterface[]>
-  dbUpdateReadProgress: (input: { readProgress: ReadProgressInterface }) => Promise<void>
+  dbGetReadProgress: (input: { search: string }) => Promise<IReadProgress[]>
+  dbUpdateReadProgress: (input: { readProgress: IReadProgress }) => Promise<void>
 
   //Users
   dbGetAllUsers: () => Promise<UserInterface[]>

@@ -1,10 +1,12 @@
-import { LiHTMLAttributes, useMemo } from 'react'
+import { LiHTMLAttributes } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import useApi from 'api'
+import LoadingOverlay from 'components/LoadingOverlay'
 import { useNavigate } from 'react-router-dom'
 import ReactHtmlParser from 'react-html-parser'
 import classNames from 'classnames'
 
-import useSearchStore from 'store/useSearchStore'
-import useDashboardStore from 'store/useDashboardStore'
+import usePersistStore from 'store/usePersistStore'
 
 import useLang from 'lang'
 
@@ -13,66 +15,111 @@ import Image from 'components/Image'
 import Button from 'components/Button'
 
 interface IComicListItem extends LiHTMLAttributes<unknown> {
-  data: ComicInterface
+  data: IComic
+  activeComic: IComic
+  setActiveComic: (comic: IComic) => void
 }
 
-const SearchComicListItem = ({ data }: IComicListItem): JSX.Element => {
+const SearchComicListItem = ({
+  data,
+  activeComic,
+  setActiveComic
+}: IComicListItem): JSX.Element => {
   const texts = useLang()
+  const { invoke } = useApi()
+  const queryClient = useQueryClient()
+  const { repo } = usePersistStore()
 
   const navigate = useNavigate()
 
-  const { list } = useDashboardStore()
+  const active = String(activeComic.siteId) === String(data.siteId)
 
-  const existsInDB = !!list.find((comic) => comic.siteId === data.siteId)
+  const { data: comicList, isFetching: comicListFetching } = useQuery({
+    queryKey: ['comicList'],
+    queryFn: async () => (await invoke('dbGetAllComics')) as IComic[],
+    initialData: []
+  })
 
-  const { comic, chapters, getDetails, getChapters, insertComic, setComic } = useSearchStore(
-    (state) => state
-  )
+  const { data: comicDetails, isFetching: comicDetailsFetching } = useQuery({
+    queryKey: [`comicDetails-${repo.value}-${data.siteId}`],
+    queryFn: async () => {
+      const search = { siteId: data.siteId, siteLink: data.siteLink ?? '' }
+
+      return await invoke('getDetails', {
+        repo: repo.value,
+        data: search
+      })
+    },
+    enabled: !data.cover || !data.synopsis
+  })
+
+  const { data: chapterData, isFetching: chapterDataFetching } = useQuery({
+    queryKey: [`chapterData-${repo.value}-${data.siteId}`],
+    queryFn: async () =>
+      (await invoke('getChapters', {
+        repo: repo.value,
+        data: { siteId: data.siteId }
+      })) as IChapter[],
+    initialData: [],
+    enabled: active && !data.chapters
+  })
+
+  const { mutate: insertComic } = useMutation({
+    mutationFn: async () =>
+      await invoke('dbInsertComic', {
+        comic: { ...data, ...comicDetails },
+        chapters: chapterData,
+        repo: repo.value
+      }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
+  })
+
+  const isLoading = comicListFetching || chapterDataFetching || comicDetailsFetching
+
+  const extended = active && chapterData.length > 0
+
+  const comicData = { ...data, ...comicDetails }
+
+  const existsInDB = !!comicList.find((comic) => String(comic.siteId) === String(data.siteId))
 
   const setActive = async (): Promise<void> => {
-    await getChapters(data.siteId)
-    setComic(data)
+    setActiveComic(comicData)
   }
-
-  const extended = comic.siteId === data.siteId
 
   const addToList = (): void => {
     insertComic()
     navigate('/')
   }
 
-  useMemo(() => {
-    if (!data.cover || !data.synopsis) {
-      getDetails({ siteId: data.siteId, siteLink: data.siteLink ?? '' })
-    }
-  }, [list])
-
   return (
     <li
       className={classNames(
-        'bg-list-item flex flex-col transition-all duration-500 ease-default',
+        'bg-list-item flex flex-col transition-all duration-500 ease-default relative',
         extended
           ? 'h-96 hover:bg-list-item hover:text-text-default cursor-default'
           : 'h-48 hover:bg-list-item-hover hover:text-text-oposite cursor-pointer'
       )}
       onClick={setActive}
     >
+      <LoadingOverlay isLoading={isLoading} />
       <div className="flex h-full">
         <div className="flex-grow flex flex-col justify-center items-center p-3">
-          <h1 className="text-2xl text-center">{ReactHtmlParser(data.name)}</h1>
-          {!!data.publisher && <p className="text-xs">{data.publisher}</p>}
-          {!!data.author && <p className="text-xs">{data.author}</p>}
-          {!!data.genres && (
-            <p className="text-sm">{!!data.genres && JSON.parse(data.genres).join(', ')}</p>
+          <h1 className="text-2xl text-center">{ReactHtmlParser(comicData.name)}</h1>
+          {!!comicData.publisher && <p className="text-xs">{comicData.publisher}</p>}
+          {!!comicData.author && <p className="text-xs">{comicData.author}</p>}
+          {!!comicData.genres && (
+            <p className="text-sm">
+              {!!comicData.genres && JSON.parse(comicData.genres).join(', ')}
+            </p>
           )}
-          {!!data.status && <p>{data.status}</p>}
+          {!!comicData.status && <p>{comicData.status}</p>}
           {extended && (
             <>
               <p className="mt-2">
-                {chapters.length} {texts.SearchComic.availableChapters}
+                {chapterData.length} {texts.SearchComic.availableChapters}
               </p>
               <div className="flex-grow h-px flex justify-center items-center my-2">
-                <p className="overflow-auto max-h-full">{ReactHtmlParser(data.synopsis)}</p>
+                <p className="overflow-auto max-h-full">{ReactHtmlParser(comicData.synopsis)}</p>
               </div>
               <div className="flex-shrink-0">
                 <Button
@@ -92,7 +139,7 @@ const SearchComicListItem = ({ data }: IComicListItem): JSX.Element => {
         <Image
           className="h-auto aspect-10/16"
           placeholderClassName="h-full px-3 aspect-10/16"
-          src={data.cover}
+          src={comicData.cover}
           lazy
           placeholderSrc={loading}
         />

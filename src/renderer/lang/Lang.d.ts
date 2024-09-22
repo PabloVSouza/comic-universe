@@ -1,5 +1,6 @@
 interface GenerlLang {
   inDevelopment: string
+  alertConfirmButton: string
 }
 
 interface DashboardLang {
@@ -46,6 +47,7 @@ interface SearchComicLang {
   bookmarkComic: string
   alreadyBookmarked: string
   availableChapters: string
+  noReposAvailable: string
 }
 
 interface PaginationLang {

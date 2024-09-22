@@ -1,103 +1,119 @@
 import { useEffect, useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate } from 'react-router-dom'
-import slugify from 'slugify'
 import Image from 'components/Image'
-
+import useApi from 'api'
+import FixFilePaths from 'functions/fixFilePaths'
 import useGlobalStore from 'store/useGlobalStore'
-
+import usePersistStore from 'store/usePersistStore'
 import ReaderZoomWindow, { IMousePos } from 'components/ZoomWindow'
-import useReaderStore from 'store/useReaderStore'
-import useDashboardStore from 'store/useDashboardStore'
 
 import loading from 'assets/loading.svg'
 import Cover from 'components/Cover'
 
 const Reader = (): JSX.Element => {
   const navigate = useNavigate()
-
+  const { invoke } = useApi()
+  const queryClient = useQueryClient()
+  const { activeComic, setActiveComic } = useGlobalStore()
+  const { currentUser } = usePersistStore()
+  const [mousePos, setMousePos] = useState<IMousePos>({} as IMousePos)
+  const [zoomVisible, setZoomVisible] = useState(false)
   const comicId = Number(useParams().comicId)
   const chapterId = Number(useParams().chapterId)
 
-  const [mousePos, setMousePos] = useState<IMousePos>({} as IMousePos)
-  const [zoomVisible, setZoomVisible] = useState(false)
+  useQuery({
+    queryKey: ['activeComicData'],
+    queryFn: async () => {
+      const comicData = (await invoke('dbGetComicAdditionalData', {
+        id: comicId,
+        userId: currentUser.id
+      })) as IComic
+      if (!activeComic.id) setActiveComic(comicData)
+      return comicData
+    },
+    enabled: !!currentUser.id && !activeComic.id
+  })
 
-  const { appPath } = useGlobalStore()
+  const chapter = activeComic?.chapters?.find((val) => val.id == chapterId)
+  const chapters = activeComic?.chapters
+  const chapterIndex = chapters?.findIndex((val) => val.id === chapterId) ?? 0
+  const pages = JSON.parse(chapter?.pages ?? '[]') as IPage[]
 
-  const {
-    chapterIndex,
-    readProgress,
-    resetReader,
-    setInitialState,
-    setReadProgress,
-    setReadProgressDB
-  } = useReaderStore()
+  const getReadProgress = async () => {
+    let result = await invoke('dbGetReadProgress', { chapterId, userId: currentUser.id })
+    if (!result.length) {
+      await invoke('dbUpdateReadProgress', {
+        readProgress: {
+          chapterId,
+          comicId,
+          page: 1,
+          userId: currentUser.id ?? 0,
+          totalPages: pages.length ?? 0
+        }
+      })
+      result = await invoke('dbGetReadProgress', { chapterId, userId: currentUser.id })
+    }
 
-  const { comic, setComic } = useDashboardStore()
+    return result[0] as IReadProgress
+  }
+
+  const { data: readProgress } = useQuery({
+    queryKey: ['readProgressData'],
+    queryFn: async () => await getReadProgress(),
+    enabled: !!activeComic.id && !!currentUser.id && !!(chapter?.pages?.length ?? 0)
+  })
+
+  const resetQueries = () => {
+    queryClient.invalidateQueries({ queryKey: ['activeComicData'] })
+    queryClient.invalidateQueries({ queryKey: ['readProgressData'] })
+  }
+
+  const { mutate: updateReadProgress } = useMutation({
+    mutationFn: async (readProgress: IReadProgress) => {
+      await invoke('dbUpdateReadProgress', { readProgress })
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['readProgressData'] })
+  })
 
   useEffect(() => {
-    setInitialState(comicId, chapterId)
-  }, [chapterId])
-
-  useEffect(() => {
-    if (readProgress.page === 0) {
-      const newReadProgress = { ...readProgress, page: 1 } as ReadProgressInterface
-      setReadProgress(newReadProgress)
-      setReadProgressDB(newReadProgress)
+    if (readProgress && readProgress.page === 0) {
+      const newReadProgress = { ...readProgress, page: 1 } as IReadProgress
+      updateReadProgress(newReadProgress)
     }
   }, [readProgress])
 
-  let chapter: ChapterInterface | undefined
-  let pages: Page[] | undefined
-
-  if (readProgress.id) {
-    chapter = comic.chapters[chapterIndex] as ChapterInterface
-    pages = JSON.parse(chapter.pages) as Page[]
-  }
-
-  const getPath = (page: Page): string =>
-    !chapter?.offline
-      ? (page?.path ?? '')
-      : `file:///${window.path.join(
-          appPath,
-          'downloads',
-          comic.repo,
-          slugify(comic.name),
-          slugify(chapter.number),
-          page.filename
-        )}`
-
   const nextPage = async (): Promise<void> => {
-    const { page, totalPages } = readProgress
+    if (readProgress) {
+      const { page, totalPages } = readProgress
 
-    if (page < totalPages) {
-      const newReadProgress = { ...readProgress, page: page + 1 } as ReadProgressInterface
-      await setReadProgress(newReadProgress)
-      await setReadProgressDB(newReadProgress)
-    }
-    if (page === totalPages) {
-      if (chapterIndex === comic.chapters.length - 1) {
-        await setComic(comic.id)
-        navigate('/')
+      if (page < totalPages) {
+        const newReadProgress = { ...readProgress, page: page + 1 } as IReadProgress
+        updateReadProgress(newReadProgress)
       }
-      if (chapterIndex < comic.chapters.length - 1)
-        navigate(`/reader/${comicId}/${comic.chapters[chapterIndex + 1].id}`)
+
+      if (page === totalPages) {
+        if (chapterIndex === chapters.length - 1) navigate('/')
+
+        if (chapterIndex < activeComic.chapters.length - 1)
+          navigate(`/reader/${comicId}/${activeComic.chapters[chapterIndex + 1].id}`)
+      }
     }
   }
 
   const previousPage = async (): Promise<void> => {
-    const { page, totalPages } = readProgress
-    if (totalPages >= page && page !== 1) {
-      const newReadProgress = { ...readProgress, page: page - 1 } as ReadProgressInterface
-      await setReadProgress(newReadProgress)
-      await setReadProgressDB(newReadProgress)
-    }
-    if (page === 1) {
-      if (chapterIndex === 0) {
-        await setComic(comic.id)
-        navigate('/')
+    if (readProgress) {
+      const { page, totalPages } = readProgress
+      if (totalPages >= page && page !== 1) {
+        const newReadProgress = { ...readProgress, page: page - 1 } as IReadProgress
+        updateReadProgress(newReadProgress)
       }
-      if (chapterIndex <= comic.chapters.length - 1 && chapterIndex !== 0)
-        navigate(`/reader/${comicId}/${comic.chapters[chapterIndex - 1].id}`)
+      if (page === 1) {
+        if (chapterIndex === 0) navigate('/')
+
+        if (chapterIndex <= activeComic.chapters.length - 1 && chapterIndex !== 0)
+          navigate(`/reader/${comicId}/${activeComic.chapters[chapterIndex - 1].id}`)
+      }
     }
   }
 
@@ -112,7 +128,6 @@ const Reader = (): JSX.Element => {
       },
 
       Escape: async (): Promise<void> => {
-        await setComic(comic.id)
         navigate('/')
       }
     }
@@ -127,7 +142,7 @@ const Reader = (): JSX.Element => {
   }
 
   const position = {
-    transform: `translateX(-${(readProgress.page - 1) * 100}%)`
+    transform: `translate3d(-${((readProgress?.page ?? 1) - 1) * 100}%,0,0)`
   }
 
   useEffect(() => {
@@ -135,14 +150,11 @@ const Reader = (): JSX.Element => {
     return () => {
       document.removeEventListener('keydown', handleKeys)
     }
-  }, [comic, chapterIndex, readProgress])
+  }, [activeComic, chapterIndex, readProgress])
 
   useEffect(() => {
-    return () => {
-      resetReader()
-    }
-  }, [])
-
+    resetQueries()
+  }, [chapterId])
   return (
     <Cover visible>
       <div
@@ -150,38 +162,39 @@ const Reader = (): JSX.Element => {
         onMouseMoveCapture={defineMousePos}
         onContextMenu={(): void => setZoomVisible(!zoomVisible)}
       >
-        {!!pages?.length && (
+        {!!pages?.length && readProgress?.page && (
           <ReaderZoomWindow
             mousePos={mousePos}
-            image={getPath(pages[readProgress.page - 1]) ?? ''}
+            image={FixFilePaths(pages[readProgress?.page - 1]?.path ?? '') ?? ''}
             visible={zoomVisible}
           />
         )}
         <div className="h-full flex transition duration-500 ease-default" style={position}>
-          {pages?.map((currentPage) => (
-            <div
-              key={currentPage.path}
-              className="h-full w-full shrink-0 overflow-hidden flex justify-center align-center"
-            >
-              <div className="absolute w-screen h-screen flex justify-between">
-                <button
-                  className="w-24 h-full transition duration-500 ease-default bg-transparent border-none cursor-pointer hover:bg-light"
-                  onClick={(): Promise<void> => previousPage()}
-                />
-                <button
-                  className="w-24 h-full transition duration-500 ease-default bg-transparent border-none cursor-pointer hover:bg-light"
-                  onClick={(): Promise<void> => nextPage()}
+          {!!pages.length &&
+            pages?.map((page) => (
+              <div
+                key={page.path}
+                className="h-full w-full shrink-0 overflow-hidden flex justify-center align-center"
+              >
+                <div className="absolute w-screen h-screen flex justify-between">
+                  <button
+                    className="w-24 h-full transition duration-500 ease-default bg-transparent border-none cursor-pointer hover:bg-light"
+                    onClick={(): Promise<void> => previousPage()}
+                  />
+                  <button
+                    className="w-24 h-full transition duration-500 ease-default bg-transparent border-none cursor-pointer hover:bg-light"
+                    onClick={(): Promise<void> => nextPage()}
+                  />
+                </div>
+                <Image
+                  className="w-full h-full object-contain"
+                  src={page.path}
+                  lazy
+                  placeholderSrc={loading}
+                  placeholderClassName="w-1/4"
                 />
               </div>
-              <Image
-                className="w-full h-full object-contain"
-                src={getPath(currentPage)}
-                lazy
-                placeholderSrc={loading}
-                placeholderClassName="w-1/4"
-              />
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </Cover>

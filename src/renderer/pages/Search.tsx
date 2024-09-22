@@ -1,50 +1,70 @@
 import { useState, useMemo, useEffect, useRef, MutableRefObject } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import useApi from 'api'
 import debounce from 'lodash.debounce'
-import { SingleValue } from 'react-select'
 import Select from 'components/Select'
 import Image from 'components/Image'
 import SearchComicList from 'components/SearchComponents/SearchComicList'
 import Loading from 'components/LoadingOverlay'
 import Pagination from 'components/Pagination'
 import useLang from 'lang'
-import useSearchStore from 'store/useSearchStore'
 import usePersistStore from 'store/usePersistStore'
-import useGlobalStore from 'store/useGlobalStore'
 
 import searchIcon from 'assets/magnifying-glass-search.svg'
 
+type TOption = {
+  value: string
+  label: string
+}
+
 const Search = (): JSX.Element => {
-  const [searchText, setSearchText] = useState('')
+  const { invoke } = useApi()
+  const queryClient = useQueryClient()
+  const [search, setSearch] = useState('')
   const [offset, setOffset] = useState(0)
-  const { cacheList: list, loading, search, resetComic, getList } = useSearchStore()
   const { repo, setRepo } = usePersistStore()
-  const { repoList } = useGlobalStore()
   const inputRef = useRef(null) as MutableRefObject<null> | MutableRefObject<HTMLInputElement>
 
-  useEffect(() => {
-    if (!(repo in repoList)) {
-      if (repoList[0]) setRepo(repoList[0].value)
-    }
-  }, [])
+  const [noRepos, setNoRepos] = useState(true)
 
-  const noRepos = !repoList.length
+  const { data: repoList } = useQuery({
+    queryKey: ['repoList'],
+    queryFn: async () => {
+      const repos = (await invoke('getRepoList')) as TOption[]
+      if (!!repos.length) {
+        if (!repo.value || !repos.includes(repo)) setRepo(repos[0])
+        setNoRepos(false)
+      }
+      return repos as TOption[]
+    },
+    initialData: []
+  })
+
+  const {
+    data: list,
+    isFetching,
+    refetch
+  } = useQuery({
+    queryKey: ['searchList', search, repo],
+    queryFn: async () => {
+      return search.length > 0
+        ? await invoke('search', { repo: repo.value, data: { search } })
+        : await invoke('getList', { repo: repo.value })
+    },
+    initialData: [],
+    enabled: !!repoList.length
+  })
 
   const texts = useLang()
 
-  type TOption = SingleValue<{
-    value: string
-    label: string
-  }>
-
   const handleChangeRepo = (e: TOption): void => {
-    if (e) setRepo(e.value)
-    getList()
-
     if (inputRef.current) inputRef.current.value = ''
+    if (e) setRepo(e)
   }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setSearchText(e.target.value)
+    setSearch(e.target.value)
+    refetch()
   }
 
   const debouncedResults = useMemo(() => {
@@ -53,25 +73,24 @@ const Search = (): JSX.Element => {
 
   useEffect(() => {
     return () => {
-      resetComic()
       debouncedResults.cancel()
+      queryClient.invalidateQueries({ queryKey: ['repoList'] })
     }
   }, [])
 
   useMemo(() => {
     if (!noRepos && !!repo) {
-      if (searchText.length) search(searchText)
-      if (!searchText.length) getList()
+      if (search.length) refetch()
     }
-  }, [searchText])
+  }, [search])
 
   return (
     <>
-      <Loading isLoading={loading} />
-      <div className="w-full h-24 flex-shrink-0 py-6 px-11 absolute top-0 bg-modal backdrop-blur-sm shadow-basic">
+      <Loading isLoading={isFetching} />
+      <div className="w-full h-24 flex-shrink-0 py-6 px-11 absolute top-0 bg-modal backdrop-blur-sm shadow-basic z-10">
         <div className="h-full w-full bg-default shadow-basic rounded flex justify-center items-center pr-4 max-w-3xl my-0 mx-auto">
           <Select
-            defaultValue={repoList.find((val) => val?.value === repo)}
+            value={noRepos ? { label: texts.SearchComic.noReposAvailable } : repo}
             options={repoList}
             onChange={(e) => handleChangeRepo(e as TOption)}
             isDisabled={noRepos}

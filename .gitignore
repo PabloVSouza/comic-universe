@@ -6,5 +6,5 @@ out
 *.db-journal
 .env
 **/.DS_Store
-plugins
+plugins*
 

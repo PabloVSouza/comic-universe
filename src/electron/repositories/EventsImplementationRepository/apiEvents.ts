@@ -12,8 +12,15 @@ const apiEvents = (
   const repoList = repoPluginsObject.activePlugins
 
   if (Object.values(repoList).length > 0) {
-    const firstRepo = Object.getOwnPropertyNames(repoList)[0]
-    const properties = Object.getOwnPropertyNames(repoList[firstRepo].methods)
+    const properties = [] as string[]
+
+    for (const repo of Object.getOwnPropertyNames(repoList)) {
+      const repoProps = Object.getOwnPropertyNames(repoList[repo].methods)
+      for (const prop of repoProps) {
+        if (!properties.includes(prop)) properties.push(prop)
+      }
+    }
+
     for (const method of properties) {
       ipcMain.handle(method, async (_event, { repo, data }) => repoList[repo].methods[method](data))
     }

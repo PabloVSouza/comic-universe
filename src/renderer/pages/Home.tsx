@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useQuery, useMutation } from '@tanstack/react-query'
+import useApi from 'api'
 import openWindow from 'functions/openWindow'
 import HomeTopBar from 'components/HomeComponents/HomeTopBar'
 import HomeComicList from 'components/HomeComponents/HomeComicList'
@@ -8,19 +9,34 @@ import HomeNav from 'components/HomeComponents/HomeNav'
 import HomeBlankArea from 'components/HomeComponents/HomeBlankArea'
 import WindowManager from 'components/WindowComponents/WindowManager'
 import usePersistStore from 'store/usePersistStore'
+import useDownloadStore from 'store/useDownloadStore'
 
 const Home = (): JSX.Element => {
-  const { currentUser, setCurrentUser } = usePersistStore()
-  const location = useLocation()
-
+  const { invoke } = useApi()
+  const { currentUser } = usePersistStore()
   const userActive = !!currentUser.id
+  const { addToQueue } = useDownloadStore()
+
+  const { data: comicList } = useQuery({
+    queryKey: ['comicList'],
+    queryFn: async () => (await invoke('dbGetAllComics')) as IComic[],
+    initialData: []
+  })
+
+  const { mutate: addChaptersToQueue } = useMutation({
+    mutationFn: async () => {
+      const noPageChapters = await invoke('dbGetAllChaptersNoPage')
+      for (const chapter of noPageChapters) addToQueue(chapter)
+    }
+  })
 
   useEffect(() => {
-    if (location.pathname === '/users') {
-      setCurrentUser({} as UserInterface)
-      openWindow({ component: 'Users', props: {} })
-    }
-  }, [location])
+    addChaptersToQueue()
+  }, [comicList])
+
+  useEffect(() => {
+    if (!userActive) openWindow({ component: 'Users', props: {} })
+  }, [userActive])
 
   return (
     <div className="w-full h-full flex-shrink-0 flex-grow flex flex-col justify-start items-center text-text-default">
@@ -31,8 +47,8 @@ const Home = (): JSX.Element => {
           <HomeBlankArea active={!userActive} />
           {userActive && (
             <>
-              <HomeComicList />
-              <HomeComicDashboard />
+              <HomeComicList comicList={comicList} />
+              <HomeComicDashboard comicList={comicList} />
             </>
           )}
         </div>

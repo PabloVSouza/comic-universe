@@ -1,38 +1,50 @@
-import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import LoadingOverlay from 'components/LoadingOverlay'
+import useApi from 'api'
 import HomeDashboardHeader from 'components/HomeComponents/HomeDashboardComponents/HomeDashboardHeader'
-import HomeDashboardNav from 'components/HomeComponents/HomeDashboardComponents/HomeDashboardNavBar'
-import HomeDashboardList from 'components/HomeComponents/HomeDashboardComponents/HomeDashboardComicList'
-import useDashboardStore from 'store/useDashboardStore'
+import HomeDashboardNavBar from 'components/HomeComponents/HomeDashboardComponents/HomeDashboardNavBar'
+import HomeDashboardList from 'components/HomeComponents/HomeDashboardComponents/HomeDashboardList'
+import useGlobalStore from 'store/useGlobalStore'
 import useDownloadStore from 'store/useDownloadStore'
 import usePersistStore from 'store/usePersistStore'
 
-const HomeDashboard = (): JSX.Element => {
-  const navigate = useNavigate()
-
-  const { comic, list, setComic } = useDashboardStore()
+const HomeDashboard = ({ comicList }: { comicList: IComic[] }): JSX.Element => {
+  const { invoke } = useApi()
+  const { activeComic, setActiveComic } = useGlobalStore()
   const { queue } = useDownloadStore()
   const { currentUser } = usePersistStore()
 
-  useEffect(() => {
-    if (!currentUser.id) navigate('/users')
-  }, [])
-
-  const isDownloading = !!queue.find((item) => item.comicId === comic.id)
+  const isDownloading = !!queue.find((item) => item.comicId === activeComic.id)
 
   useEffect(() => {
-    if (!comic.id && list.length && !queue.find((item) => item.comicId === list[0].id)) {
-      setComic(list[0].id)
+    if (
+      !activeComic.id &&
+      comicList.length &&
+      !queue.find((item) => item.comicId === comicList[0].id)
+    ) {
+      setActiveComic(comicList[0])
     }
-  }, [queue, list])
+  }, [queue, comicList])
+
+  const { data: additionalData, isFetching } = useQuery({
+    queryKey: ['activeComicData', activeComic],
+    queryFn: async () =>
+      (await invoke('dbGetComicAdditionalData', {
+        id: activeComic.id,
+        userId: currentUser.id
+      })) as IComic,
+    enabled: !!activeComic.id
+  })
 
   return (
     <div className="h-full w-full grow flex flex-col gap-px bg-default z-10 mt-px">
-      {!!comic.id && !isDownloading && (
+      <LoadingOverlay isLoading={isFetching} />
+      {!!activeComic.id && !isDownloading && !!additionalData?.chapters.length && (
         <>
-          <HomeDashboardHeader />
-          <HomeDashboardNav />
-          <HomeDashboardList />
+          <HomeDashboardHeader comic={activeComic} />
+          <HomeDashboardNavBar comic={activeComic} additionalData={additionalData} />
+          <HomeDashboardList additionalData={additionalData} />
         </>
       )}
     </div>

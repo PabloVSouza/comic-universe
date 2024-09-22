@@ -1,22 +1,24 @@
 import { useNavigate } from 'react-router-dom'
 import Button from 'components/Button'
 import useLang from 'lang'
-import useDashboardStore from 'store/useDashboardStore'
 import useDownloadStore from 'store/useDownloadStore'
 
 import downloadIcon from 'assets/download-icon-2.svg'
 import comicBook from 'assets/comic-book.svg'
 import ProgressBar from 'components/ProgressBar'
 
-const HomeDashboardNavBar = (): JSX.Element => {
+const HomeDashboardNavBar = ({
+  comic,
+  additionalData
+}: {
+  comic: IComic
+  additionalData: IComic
+}): JSX.Element => {
   const navigate = useNavigate()
-
   const texts = useLang()
-
-  const { comic } = useDashboardStore()
   const { getNewChapters } = useDownloadStore()
 
-  const { chapters } = comic
+  const chapters = additionalData?.chapters ?? []
 
   const totalPages = chapters.reduce((prev, cur) => {
     return cur.pages ? prev + JSON.parse(cur.pages).length : prev

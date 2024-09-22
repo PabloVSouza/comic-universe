@@ -1,24 +1,27 @@
 import { useNavigate } from 'react-router-dom'
+import { useQueryClient, useMutation } from '@tanstack/react-query'
 import classNames from 'classnames'
+import useApi from 'api'
 import useLang from 'lang'
 import Button from 'components/Button'
-import useDashboardStore from 'store/useDashboardStore'
+import usePersistStore from 'store/usePersistStore'
+import useGlobalStore from 'store/useGlobalStore'
 
 import closedBook from 'assets/closed-book-icon.svg'
 import bookStack from 'assets/book-stack.svg'
-import useReaderStore from 'store/useReaderStore'
-import usePersistStore from 'store/usePersistStore'
 
-const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.Element => {
+const { invoke } = useApi()
+
+const HomeDashboardComicListItem = ({ item }: { item: IChapter }): JSX.Element => {
+  const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const { activeComic } = useGlobalStore()
 
   const texts = useLang()
 
-  const { comic, setComic } = useDashboardStore()
-  const { setReadProgressDB } = useReaderStore()
   const { currentUser } = usePersistStore()
 
-  const pages = item.pages ? (JSON.parse(item.pages) as Page[]) : ([] as Page[])
+  const pages = item.pages ? (JSON.parse(item.pages) as IPage[]) : ([] as IPage[])
 
   const disabled = !item.pages
 
@@ -32,24 +35,28 @@ const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.E
 
   const openChapter = async (): Promise<void> => {
     if (pages) {
-      navigate(`/reader/${comic.id}/${item.id}`)
+      navigate(`/reader/${activeComic.id}/${item.id}`)
     }
   }
 
-  const handleReadProgress = async (page: number): Promise<void> => {
-    const ReadProgress = item.ReadProgress[0]
-
-    await setReadProgressDB({
-      ...ReadProgress,
-      chapterId: item.id,
-      comicId: comic.id,
-      userId: currentUser.id,
-      totalPages,
-      page
-    })
-
-    await setComic(comic.id)
-  }
+  const mutation = useMutation({
+    mutationFn: async (page: number) => {
+      const ReadProgress = item.ReadProgress[0]
+      await invoke('dbUpdateReadProgress', {
+        readProgress: {
+          ...ReadProgress,
+          chapterId: item.id,
+          comicId: item.comicId,
+          userId: currentUser.id,
+          totalPages,
+          page
+        }
+      })
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['activeComicData'] })
+    }
+  })
 
   const listItem = `
     h-full flex justify-center items-center relative bg-list-item
@@ -83,7 +90,7 @@ const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.E
           size="xxs"
           icon={closedBook}
           title={texts.Dashboard.resetProgress}
-          onClick={(): Promise<void> => handleReadProgress(0)}
+          onClick={() => mutation.mutate(0)}
         />
       </div>
       <div className={classNames(listItem, '')}>
@@ -92,7 +99,7 @@ const HomeDashboardComicListItem = ({ item }: { item: ChapterInterface }): JSX.E
           size="xxs"
           icon={bookStack}
           title={texts.Dashboard.setComplete}
-          onClick={(): Promise<void> => handleReadProgress(totalPages)}
+          onClick={() => mutation.mutate(totalPages)}
         />
       </div>
     </li>

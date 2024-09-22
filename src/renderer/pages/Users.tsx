@@ -1,30 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import useApi from 'api'
+import LoadingOverlay from 'components/LoadingOverlay'
 import Button from 'components/Button'
 import UsersList from 'components/UsersComponents/UsersList'
 import useLang from 'lang'
-import useUsersStore from 'store/useUsersStore'
 
 import confirmIcon from 'assets/confirm.svg'
 import cancelIcon from 'assets/cancel.svg'
 
 const Users = (): JSX.Element => {
-  const { updateUser } = useUsersStore()
+  const { invoke } = useApi()
+  const queryClient = useQueryClient()
+
+  const { data: users, isLoading } = useQuery({
+    queryKey: ['userData'],
+    queryFn: async () => await invoke('dbGetAllUsers'),
+    initialData: []
+  })
 
   const [newUser, setNewUser] = useState(false)
 
-  const [username, setUserName] = useState('')
+  const [name, setName] = useState('')
 
   const lang = useLang()
-  const { users, getUsers } = useUsersStore()
 
-  const createUser = async (): Promise<void> => {
-    await updateUser({ name: username })
-    setNewUser(false)
-  }
-
-  useEffect(() => {
-    getUsers()
-  }, [])
+  const { mutate: createUser } = useMutation({
+    mutationFn: async () => await invoke('dbUpdateUser', { user: { name } }),
+    onSuccess: () => {
+      setNewUser(false)
+      queryClient.invalidateQueries({ queryKey: ['userData'] })
+    }
+  })
 
   return (
     <>
@@ -35,7 +42,7 @@ const Users = (): JSX.Element => {
             className="w-11/12 p-2 border-none bg-default text-3xl rounded-lg"
             type="text"
             placeholder={lang.Users.namePlaceholder}
-            onChange={(e): void => setUserName(e.target.value)}
+            onChange={(e): void => setName(e.target.value)}
           />
           <div className="">
             <Button
@@ -50,12 +57,13 @@ const Users = (): JSX.Element => {
               theme="pure"
               size="xs"
               title={lang.Users.createButton}
-              onClick={createUser}
+              onClick={() => createUser()}
             />
           </div>
         </>
       ) : (
         <>
+          <LoadingOverlay isLoading={isLoading} />
           <h1 className="text-2xl">{lang.Users.header}</h1>
           <UsersList list={users} newUserAction={() => setNewUser(true)} />
         </>
@@ -66,7 +74,7 @@ const Users = (): JSX.Element => {
 
 const windowSettings = {
   windowProps: {
-    className: 'grow relative',
+    className: 'grow relative overflow-hidden',
     contentClassName: 'flex w-full h-full flex-col justify-evenly items-center overflow-auto pt-5',
     maximizable: true,
     unique: true,

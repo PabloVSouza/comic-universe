@@ -6,7 +6,10 @@ import Image from 'components/Image'
 const buttonStyling = {
   base: 'cursor-pointer relative overflow-hidden transition-all duration-500 ease-default',
   themes: {
-    default: { button: { default: '', active: '' }, icon: { default: '', active: '' } },
+    default: {
+      button: { default: 'bg-oposite/70 px-5 py-1 rounded hover:bg-oposite', active: '' },
+      icon: { default: '', active: '' }
+    },
     pure: {
       button: {
         default:

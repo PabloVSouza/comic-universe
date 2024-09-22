@@ -1,10 +1,10 @@
-import { useEffect, useRef, MutableRefObject } from 'react'
+import { useEffect, useState, useRef, MutableRefObject } from 'react'
 import classNames from 'classnames'
 import SearchComicListItem from 'components/SearchComponents/SearchComicListItem'
 
 interface ISearchComicList {
   className?: string
-  list: ComicInterface[]
+  list: IComic[]
   itemsPerPage?: number
   offset: number
 }
@@ -18,6 +18,8 @@ const SearchComicList = ({
   const refScrollElement = useRef() as MutableRefObject<HTMLUListElement>
   const endOffset = offset + itemsPerPage
   const currentItems = list?.slice(offset, endOffset)
+
+  const [activeComic, setActiveComic] = useState({} as IComic)
 
   useEffect(() => {
     const { current } = refScrollElement
@@ -39,7 +41,15 @@ const SearchComicList = ({
       ref={refScrollElement}
     >
       {currentItems.map((comic) => {
-        return <SearchComicListItem data={comic} id={comic.siteId} key={comic.siteId} />
+        return (
+          <SearchComicListItem
+            data={comic}
+            id={comic.siteId}
+            key={comic.siteId}
+            activeComic={activeComic}
+            setActiveComic={setActiveComic}
+          />
+        )
       })}
     </ul>
   )

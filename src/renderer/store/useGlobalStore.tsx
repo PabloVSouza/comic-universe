@@ -1,87 +1,47 @@
 import { create } from 'zustand'
-import { SingleValue } from 'react-select'
+import useApi from 'api'
 
-const { invoke, on } = window.Electron.ipcRenderer
+const { invoke } = useApi()
 
-type TOption = SingleValue<{
-  value: string
-  label: string
-}>
-
-interface useGlobalStore {
-  appPath: string
+interface IAppParams {
   appRunningPath: string
-  menuVisible: boolean
-  repoList: TOption[]
-  pluginsList: IRepoPluginInfo[]
-  toggleMenu: () => void
-  getAppPath: () => Promise<void>
-  getAppRunningPath: () => Promise<void>
-  getRepoList: () => Promise<void>
-  updatePlugins: () => Promise<void>
-  getPluginInfoList: () => Promise<void>
-  runMigrations: () => Promise<void>
-  downloadAndInstallPlugin: (plugin: string) => Promise<void>
+  appPath: string
+  isDev: boolean
 }
 
-const useGlobalStore = create<useGlobalStore>((set) => ({
-  appPath: '',
-  appRunningPath: '',
+interface IuseGlobalStore {
+  appParams: IAppParams
+  menuVisible: boolean
+  activeComic: IComic
+  getAppParams: () => Promise<void>
+  toggleMenu: () => void
+  setActiveComic: (comic: IComic) => void
+  updatePlugins: () => Promise<void>
+}
+
+const useGlobalStore = create<IuseGlobalStore>((set) => ({
+  appParams: {} as IAppParams,
   menuVisible: false,
   repoList: [],
-  pluginsList: [],
+  activeComic: {} as IComic,
+
+  getAppParams: async () => {
+    const appParams = await invoke('getAppParams')
+    set((state) => ({ ...state, appParams }))
+  },
+
+  setActiveComic: (activeComic) => set((state) => ({ ...state, activeComic })),
 
   toggleMenu: (): void => set((state) => ({ ...state, menuVisible: !state.menuVisible })),
-
-  getAppPath: async (): Promise<void> => {
-    const appPath = await invoke('getAppPath')
-    set((state) => ({ ...state, appPath }))
-  },
-
-  getAppRunningPath: async (): Promise<void> => {
-    const appRunningPath = await invoke('getAppRunningPath')
-
-    set((state) => ({ ...state, appRunningPath }))
-  },
-
-  getRepoList: async () => {
-    const repoList = await invoke('getRepoList')
-
-    set((state) => ({ ...state, repoList }))
-  },
 
   updatePlugins: async () => {
     await invoke('installPlugins')
     await invoke('activatePlugins')
     await invoke('resetEvents')
-  },
-
-  getPluginInfoList: async () => {
-    const pluginsList = await invoke('getPluginInfoList')
-
-    set((state) => ({ ...state, pluginsList }))
-  },
-
-  downloadAndInstallPlugin: async (plugin) => {
-    const { updatePlugins, getPluginInfoList } = useGlobalStore.getState()
-    await invoke('downloadAndInstallPlugin', plugin)
-    await updatePlugins()
-    await getPluginInfoList()
-  },
-
-  runMigrations: async () => {
-    await invoke('dbRunMigrations')
   }
 }))
 
+const { getAppParams } = useGlobalStore.getState()
+getAppParams()
+
 export default useGlobalStore
-
-const { getAppPath, getRepoList, getAppRunningPath } = useGlobalStore.getState()
-
-getAppPath()
-getAppRunningPath()
-getRepoList()
-
-on('updateRepos', () => {
-  getRepoList()
-})

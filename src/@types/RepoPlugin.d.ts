@@ -1,13 +1,13 @@
 interface IRepoPluginMethods {
-  getList(): Promise<ComicInterface[]>
-  search(input: { search: string }): Promise<ComicInterface[]>
-  getDetails(search: { [key: string]: string }): Promise<Partial<ComicInterface>>
-  getChapters(input: { siteId: string }): Promise<ChapterInterface[]>
-  getPages?(input: { siteLink: string }): Promise<Page[]>
+  getList(): Promise<IComic[]>
+  search(input: { search: string }): Promise<IComic[]>
+  getDetails(search: { [key: string]: string }): Promise<Partial<IComic>>
+  getChapters(input: { siteId: string }): Promise<IChapter[]>
+  getPages?(input: { siteLink: string }): Promise<IPage[]>
   downloadChapter?(input: {
-    comic: ComicInterface
-    chapter: ChapterInterface
-  }): Promise<{ cover: string; pageFiles: Page[] }>
+    comic: IComic
+    chapter: IChapter
+  }): Promise<{ cover: string; pageFiles: IPage[] }>
 }
 
 interface IRepoPluginRepository {

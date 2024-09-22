@@ -1,43 +1,20 @@
-import { BrowserWindow, ipcMain, app } from 'electron'
-import { is } from '@electron-toolkit/utils'
+import { BrowserWindow, ipcMain } from 'electron'
 import type { Startup } from 'scripts/Startup'
-import pathLib from 'path'
-import fs from 'fs'
+import AppRepository from '../Methods/AppRepository'
 
-const appEvents = (
-  _startupObject: Startup,
+const dbEvents = (
+  startupObject: Startup,
   path: string,
   runningPath: string,
   win: BrowserWindow
 ): void => {
-  ipcMain.handle('getAppData', () => {
-    const packageJson = String(fs.readFileSync(__dirname + '/../../package.json'))
-    return JSON.parse(packageJson)
-  })
+  const appRepository = new AppRepository(startupObject, path, runningPath, win)
 
-  ipcMain.handle('path', (_, args: string[]) => {
-    pathLib.join(...args)
-  })
+  const properties = Object.getOwnPropertyNames(appRepository.methods)
 
-  ipcMain.handle('getAppParams', () => {
-    const appRunningPath = is.dev ? runningPath : path
-    const appPath = path
-    const isDev = is.dev
-
-    return { appRunningPath, appPath, isDev }
-  })
-
-  ipcMain.handle('maximizeWindow', () => {
-    if (!win.isMaximized()) {
-      win.maximize()
-    } else {
-      win.unmaximize()
-    }
-  })
-
-  ipcMain.handle('closeWindow', () => {
-    app.quit()
-  })
+  for (const method of properties) {
+    ipcMain.handle(method, async (_event, data) => appRepository.methods[method](data))
+  }
 }
 
-export default appEvents
+export default dbEvents

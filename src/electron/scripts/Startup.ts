@@ -1,15 +1,16 @@
-import RepoPluginsLoader from 'repositories/PluginImplementationRepository'
-import { DBInteractionsRepository } from 'repositories/DBImplementationRepository'
+import PluginsRepository from '../repositories/Methods/PluginsRepository'
+import DBRepository from '../repositories/Methods/DBRepository'
+
 import { app } from 'electron'
 
 const Startup = async () => {
-  const repoPluginsObject = new RepoPluginsLoader()
+  const repoPluginsObject = new PluginsRepository()
 
   await repoPluginsObject.startUp()
 
   const path = app.getPath('userData')
 
-  const repoDBObject = new DBInteractionsRepository(path)
+  const repoDBObject = new DBRepository(path)
 
   await repoDBObject.startup()
 

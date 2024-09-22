@@ -3,7 +3,7 @@ import path from 'path'
 import { PrismaInitializer } from 'prisma-shell-extension'
 import { Chapter, Comic, PrismaClient, User } from '@prisma/client'
 
-export class DBInteractionsRepository implements IDBInteractionsRepository {
+class DBRepository implements IDBRepository {
   private db = {} as PrismaClient
   private prismaInitializer = {} as PrismaInitializer
 
@@ -22,7 +22,7 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
     await this.prismaInitializer.runMigration()
   }
 
-  methods: IDBInteractionsMethods = {
+  methods: IDBMethods = {
     dbRunMigrations: async () => {
       await this.prismaInitializer.runMigration()
     },
@@ -181,3 +181,5 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
     }
   }
 }
+
+export default DBRepository

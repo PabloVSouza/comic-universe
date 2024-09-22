@@ -1,12 +1,10 @@
 import { BrowserWindow, app } from 'electron'
-import type { Startup } from 'scripts/Startup'
 import pathLib from 'path'
 import fs from 'fs'
 import { is } from '@electron-toolkit/utils'
 
 class AppRepository {
   constructor(
-    _startupObject: Startup,
     public appPath: string,
     public runningPath: string,
     public win: BrowserWindow

@@ -13,6 +13,8 @@ class DBRepository implements IDBRepository {
     const devDb = `file:../database.db${cnnParams}`
 
     this.dbPath = is.dev ? devDb : prodDb
+
+    this.startup()
   }
 
   public startup = async () => {

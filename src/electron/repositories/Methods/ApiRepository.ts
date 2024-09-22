@@ -1,21 +1,26 @@
-import type { Startup } from '../../scripts/Startup'
+import type PluginsRepository from './PluginsRepository'
 
 class ApiRepository {
-  public methods = [] as string[]
-  public repoList = {}
-  constructor(public startupObject: Startup) {
-    const { repoPluginsObject } = startupObject
+  public properties = [] as string[]
+  public methods = {}
+  constructor(public pluginsRepository: PluginsRepository) {
+    const repoList = pluginsRepository.activePlugins
 
-    this.repoList = repoPluginsObject.activePlugins
-
-    if (Object.values(this.repoList).length > 0) {
-      for (const repo of Object.getOwnPropertyNames(this.repoList)) {
-        const repoProps = Object.getOwnPropertyNames(this.repoList[repo].methods)
+    if (Object.values(repoList).length > 0) {
+      for (const repo of Object.getOwnPropertyNames(repoList)) {
+        const repoProps = Object.getOwnPropertyNames(repoList[repo].methods)
         for (const prop of repoProps) {
-          if (!this.methods.includes(prop)) this.methods.push(prop)
+          if (!this.properties.includes(prop)) this.properties.push(prop)
         }
       }
     }
+
+    this.methods = this.properties.reduce((acc, cur) => {
+      return {
+        ...acc,
+        [cur]: async ({ repo, data }) => repoList[repo].methods[cur](data)
+      }
+    }, {})
   }
 }
 

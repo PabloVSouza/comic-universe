@@ -20,7 +20,7 @@ class ApiManager {
 
     app.listen(port, () => {
       console.log('====================')
-      console.log(`Api is up on port $port`)
+      console.log(`Api is up on port ${port}`)
       console.log('====================')
     })
   }

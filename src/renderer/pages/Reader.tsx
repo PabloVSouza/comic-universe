@@ -29,10 +29,10 @@ const Reader = (): JSX.Element => {
         id: comicId,
         userId: currentUser.id
       })) as IComic
-      if (!activeComic.id) setActiveComic(comicData)
+      if (!activeComic.id || !activeComic.chapters) setActiveComic(comicData)
       return comicData
     },
-    enabled: !!currentUser.id && !activeComic.id
+    enabled: (!!currentUser.id && !activeComic.id) || !activeComic.chapters
   })
 
   const chapter = activeComic?.chapters?.find((val) => val.id == chapterId)

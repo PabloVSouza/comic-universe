@@ -1,6 +1,7 @@
 export default class enUS implements Lang {
   General: GenerlLang = {
-    inDevelopment: 'Function in development'
+    inDevelopment: 'Function in development',
+    alertConfirmButton: 'Ok'
   }
 
   Dashboard: DashboardLang = {
@@ -15,8 +16,8 @@ export default class enUS implements Lang {
     },
     contextMenu: {
       deleteComic: {
-        title: 'Delete Comic',
-        confirmMessage: 'Do you really want to delete? (All the read progress will be lost!)',
+        title: 'Do you really want to delete?',
+        confirmMessage: 'All the read progress will be lost!',
         confirmOk: 'Confirm',
         confirmCancel: 'Cancel'
       }
@@ -33,39 +34,35 @@ export default class enUS implements Lang {
     }
   }
 
-  RightNav: RightNavLang = {
+  HomeNav: HomeNavLang = {
     about: 'About This App',
     settings: 'Settings',
     darkMode: 'Dark Mode',
-    changeUser: 'Change User'
+    changeUser: 'Change User',
+    closeApp: 'Fechar App'
   }
 
   SearchComic: SearchComicLang = {
+    windowTitle: 'Search Comics',
     textPlaceholder: 'Type your Search',
     bookmarkComic: 'Bookmark',
     alreadyBookmarked: 'Bookmarked',
     availableChapters: 'Chapters Available',
-    pagination: {
-      previous: 'Previous',
-      next: 'Next'
-    }
+    noReposAvailable: 'No Repos Available'
+  }
+
+  Pagination: PaginationLang = {
+    previous: 'Previous',
+    next: 'Next'
   }
 
   Settings: SettingsLang = {
-    title: 'App Settings',
-    pages: {
-      header: 'Change Pages',
-      pageDirectionOptions: {
-        leftToRight: 'Left to Right',
-        rightToLeft: 'Right to Left'
-      }
-    },
-    wallpaper: {
-      header: 'Select Wallpaper',
-      wallpaperMode: 'Wallpaper Behaviour',
-      uploadWallpaper: 'Send a Wallpaper'
-    },
-    selectLanguage: 'Select the App Language'
+    windowTitle: 'Application Settings',
+    options: {
+      generalLabel: 'General',
+      pluginsLabel: 'Plugins',
+      userLabel: 'Users'
+    }
   }
 
   Users: UsersLang = {

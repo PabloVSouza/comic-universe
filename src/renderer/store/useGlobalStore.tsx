@@ -1,27 +1,55 @@
 import { create } from 'zustand'
+import useApi from 'api'
 
-const { invoke } = window.Electron.ipcRenderer
+const { invoke } = useApi()
 
-interface useGlobalStore {
+interface IAppParams {
+  appRunningPath: string
   appPath: string
-  menuVisible: boolean
-  toggleMenu: () => void
-  getAppPath: () => Promise<void>
+  isDev: boolean
 }
 
-const useGlobalStore = create<useGlobalStore>((set) => ({
-  appPath: '',
+interface IuseGlobalStore {
+  appParams: IAppParams
+  menuVisible: boolean
+  activeComic: IComic
+  queue: IChapter[]
+  setQueue: (newQueue: (prevQueue: IChapter[]) => IChapter[]) => void
+  getAppParams: () => Promise<void>
+  toggleMenu: () => void
+  setActiveComic: (comic: IComic) => void
+  updatePlugins: () => Promise<void>
+}
+
+const useGlobalStore = create<IuseGlobalStore>((set) => ({
+  appParams: {} as IAppParams,
   menuVisible: false,
+  repoList: [],
+  activeComic: {} as IComic,
+  queue: [],
+
+  setQueue: (newQueue) => {
+    const { queue } = useGlobalStore.getState()
+    set((state) => ({ ...state, queue: newQueue(queue) }))
+  },
+
+  getAppParams: async () => {
+    const appParams = await invoke('getAppParams')
+    set((state) => ({ ...state, appParams }))
+  },
+
+  setActiveComic: (activeComic) => set((state) => ({ ...state, activeComic })),
 
   toggleMenu: (): void => set((state) => ({ ...state, menuVisible: !state.menuVisible })),
 
-  getAppPath: async (): Promise<void> => {
-    const appPath = await invoke('getAppPath')
-    set((state) => ({ ...state, appPath }))
+  updatePlugins: async () => {
+    await invoke('installPlugins')
+    await invoke('activatePlugins')
+    await invoke('resetEvents')
   }
 }))
 
-export default useGlobalStore
+const { getAppParams } = useGlobalStore.getState()
+getAppParams()
 
-const { getAppPath } = useGlobalStore.getState()
-getAppPath()
+export default useGlobalStore

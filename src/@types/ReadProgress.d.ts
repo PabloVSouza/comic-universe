@@ -1,4 +1,4 @@
-interface ReadProgressInterface {
+interface IReadProgress {
   id?: number
   chapterId: number
   comicId: number

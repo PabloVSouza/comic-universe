@@ -71,7 +71,6 @@ I have a few possible paths to improve the app on the future, and here's my curr
 - Implement a backend for online sync.
 - Migrate from Electron to Tauri (Really far).
 - Have a unified comic list to create a relation with the comics from the plugins.
-- Migrate styling to Tailwind.
 
 And who knows how the project evolves...
 

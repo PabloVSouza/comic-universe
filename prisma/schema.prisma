@@ -8,6 +8,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Plugin {
+  id         Int     @id @default(autoincrement())
+  enabled    Boolean @default(true)
+  name       String
+  repository String
+  version    String
+  path       String
+}
+
 model Comic {
   id           Int            @id @default(autoincrement())
   siteId       String

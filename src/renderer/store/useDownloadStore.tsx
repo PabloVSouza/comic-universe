@@ -1,17 +1,18 @@
 import { create } from 'zustand'
-import useDashboardStore from './useDashboardStore'
-import { confirmAlert } from 'react-confirm-alert'
-import 'react-confirm-alert/src/react-confirm-alert.css'
+import useGlobalStore from './useGlobalStore'
 import useLang from 'lang'
+import useApi from 'api'
+import { confirmAlert } from 'components/Alert'
+import usePersistStore from './usePersistStore'
 
-const { invoke } = window.Electron.ipcRenderer
+const { invoke } = useApi()
 
 interface useDownloadStore {
-  queue: ChapterInterface[]
-  addToQueue: (chapter: ChapterInterface) => Promise<void>
-  removeFromQueue: (chapter: ChapterInterface) => Promise<void>
-  getChapterPages: (chapter: ChapterInterface) => Promise<boolean>
-  downloadChapter: (chapter: ChapterInterface) => Promise<void>
+  queue: IChapter[]
+  addToQueue: (chapter: IChapter) => Promise<void>
+  removeFromQueue: (chapter: IChapter) => Promise<void>
+  getChapterPages: (chapter: IChapter) => Promise<boolean>
+  downloadChapter: (chapter: IChapter) => Promise<void>
   getNewChapters: () => Promise<void>
 }
 
@@ -31,21 +32,25 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
   },
 
   getNewChapters: async (): Promise<void> => {
-    const { comic, getListDB } = useDashboardStore.getState()
+    const { activeComic } = useGlobalStore.getState()
+    const { currentUser } = usePersistStore.getState()
 
-    const { repo, siteId } = comic
+    const { repo, siteId } = activeComic
+    const { chapters: currentChapters } = await invoke('dbGetComicAdditionalData', {
+      id: activeComic.id,
+      userId: currentUser.id
+    })
+
     const chapters = await invoke('getChapters', { repo, data: { siteId } })
 
     const newChapters = chapters
-      .filter((val) => comic.chapters.findIndex((chapter) => val.siteId === chapter.siteId) < 0)
+      .filter((val) => currentChapters.findIndex((chapter) => val.siteId === chapter.siteId) < 0)
       .reduce((acc, cur) => {
-        return [...acc, { ...cur, comicId: comic.id, repo: comic.repo }]
+        return [...acc, { ...cur, comicId: activeComic.id, repo: activeComic.repo }]
       }, [])
 
     if (newChapters.length) {
       await invoke('dbInsertChapters', { chapters: newChapters })
-
-      await getListDB()
     } else {
       const lang = useLang()
       confirmAlert({
@@ -62,11 +67,9 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
   },
 
   getChapterPages: async (chapter): Promise<boolean> => {
-    const { siteLink } = chapter
-
     const { repo } = chapter
 
-    const pages = await invoke('getPages', { repo, data: { siteLink } })
+    const pages = await invoke('getPages', { repo, data: { chapter } })
 
     if (pages.length > 0) {
       await invoke('dbUpdateChapter', { chapter: { ...chapter, pages: JSON.stringify(pages) } })
@@ -81,11 +84,11 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
 }))
 
 const queueManager = (): void => {
-  let inProgress = [] as ChapterInterface[]
+  let inProgress = [] as IChapter[]
 
   const queueCleaner = async (): Promise<void> => {
     const { queue, getChapterPages, removeFromQueue } = useDownloadStore.getState()
-    const { getListDB, setComic } = useDashboardStore.getState()
+    const { setActiveComic, activeComic } = useGlobalStore.getState()
 
     const notInProgress = queue.filter((e) => !inProgress.includes(e))
 
@@ -97,13 +100,11 @@ const queueManager = (): void => {
           inProgress = inProgress.filter((e) => e.id !== chapter.id)
           if (result) {
             await removeFromQueue(chapter).then(() => {
-              setComic(chapter.comicId)
+              setActiveComic(activeComic)
             })
           }
         })
       }
-
-      getListDB()
     }
   }
 

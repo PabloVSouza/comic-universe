@@ -10,24 +10,22 @@ import HomeNav from 'components/HomeComponents/HomeNav'
 import HomeBlankArea from 'components/HomeComponents/HomeBlankArea'
 import WindowManager from 'components/WindowComponents/WindowManager'
 import usePersistStore from 'store/usePersistStore'
+import useGlobalStore from 'store/useGlobalStore'
 
 const Home = (): JSX.Element => {
   const { invoke } = useApi()
   const { currentUser } = usePersistStore()
   const userActive = !!currentUser.id
-
-  // Local state for the queue
-  const [queue, setQueue] = useState<IChapter[]>([])
+  const { queue, setQueue } = useGlobalStore()
+  // const [queue, setQueue] = useState<IChapter[]>([])
   const [inProgress, setInProgress] = useState<IChapter[]>([])
 
-  // Query to get all comics
   const { data: comicList } = useQuery({
     queryKey: ['comicList'],
     queryFn: async () => (await invoke('dbGetAllComics')) as IComic[],
     initialData: []
   })
 
-  // Mutation to fetch chapter pages
   const { mutate: fetchChapterPages } = useMutation({
     mutationFn: async (chapter: IChapter) => {
       const { repo } = chapter
@@ -49,10 +47,9 @@ const Home = (): JSX.Element => {
         message: 'Failed to Download some Chapters Information'
       })
     },
-    retry: 3 // Automatically retry up to 3 times if the request fails
+    retry: 3
   })
 
-  // Add chapter to the queue
   const addToQueue = (chapter: IChapter) => {
     setQueue((prevQueue) => {
       if (!prevQueue.find((item) => item.id === chapter.id)) {
@@ -62,13 +59,11 @@ const Home = (): JSX.Element => {
     })
   }
 
-  // Remove chapter from the queue
   const removeFromQueue = (chapter: IChapter) => {
     setQueue((prevQueue) => prevQueue.filter((item) => item.id !== chapter.id))
     setInProgress((prevInProgress) => prevInProgress.filter((item) => item.id !== chapter.id))
   }
 
-  // Effect to add new chapters to the queue
   useEffect(() => {
     const addChaptersToQueue = async () => {
       const noPageChapters = await invoke('dbGetAllChaptersNoPage')
@@ -80,7 +75,6 @@ const Home = (): JSX.Element => {
     }
   }, [comicList])
 
-  // Effect to handle chapter page fetching
   useEffect(() => {
     const notInProgress = queue.filter(
       (chapter) => !inProgress.find((item) => item.id === chapter.id)
@@ -94,7 +88,6 @@ const Home = (): JSX.Element => {
     }
   }, [queue, inProgress, fetchChapterPages])
 
-  // Effect to handle user status
   useEffect(() => {
     if (!userActive) openWindow({ component: 'Users', props: {} })
   }, [userActive])
@@ -109,7 +102,7 @@ const Home = (): JSX.Element => {
           {userActive && (
             <>
               <HomeComicList comicList={comicList} />
-              <HomeComicDashboard comicList={comicList} />
+              <HomeComicDashboard />
             </>
           )}
         </div>

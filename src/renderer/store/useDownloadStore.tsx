@@ -3,6 +3,7 @@ import useGlobalStore from './useGlobalStore'
 import useLang from 'lang'
 import useApi from 'api'
 import { confirmAlert } from 'components/Alert'
+import usePersistStore from './usePersistStore'
 
 const { invoke } = useApi()
 
@@ -32,14 +33,18 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
 
   getNewChapters: async (): Promise<void> => {
     const { activeComic } = useGlobalStore.getState()
+    const { currentUser } = usePersistStore.getState()
 
     const { repo, siteId } = activeComic
+    const { chapters: currentChapters } = await invoke('dbGetComicAdditionalData', {
+      id: activeComic.id,
+      userId: currentUser.id
+    })
+
     const chapters = await invoke('getChapters', { repo, data: { siteId } })
 
     const newChapters = chapters
-      .filter(
-        (val) => activeComic.chapters.findIndex((chapter) => val.siteId === chapter.siteId) < 0
-      )
+      .filter((val) => currentChapters.findIndex((chapter) => val.siteId === chapter.siteId) < 0)
       .reduce((acc, cur) => {
         return [...acc, { ...cur, comicId: activeComic.id, repo: activeComic.repo }]
       }, [])

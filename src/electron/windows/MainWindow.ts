@@ -2,10 +2,11 @@ import { shell, BrowserWindow, app } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
 import { autoUpdater } from 'electron-updater'
-import EventManager from 'repositories/EventsImplementationRepository'
-import type { Startup } from 'scripts/Startup'
+import Methods from '../repositories/Methods'
+import EventManager from 'repositories/EventManager'
+import ApiManager from '../repositories/ApiManager'
 
-const CreateMainWindow = async (startUpObjects: Startup): Promise<BrowserWindow> => {
+const CreateMainWindow = async (): Promise<BrowserWindow> => {
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
@@ -20,25 +21,22 @@ const CreateMainWindow = async (startUpObjects: Startup): Promise<BrowserWindow>
     icon: join(__dirname, '../../../resources/logo.svg')
   })
 
-  const eventManager = new EventManager(
-    startUpObjects,
-    app.getPath('userData'),
-    app.getAppPath(),
-    mainWindow
-  )
+  let eventManager: EventManager
+  const initApiEvents = async () => {
+    const methods = new Methods(app.getPath('userData'), app.getAppPath(), mainWindow)
+    await methods.starUp()
 
-  let firstLogin = false
+    eventManager = new EventManager(methods.methods)
+    new ApiManager(methods)
+  }
+
+  initApiEvents()
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
     if (!is.dev) autoUpdater.checkForUpdatesAndNotify()
 
     if (is.dev) mainWindow.webContents.openDevTools()
-
-    if (!firstLogin) {
-      mainWindow.webContents.send('changeUrl', '/users')
-      firstLogin = true
-    }
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

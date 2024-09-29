@@ -3,7 +3,7 @@ import path from 'path'
 import { PrismaInitializer } from 'prisma-shell-extension'
 import { Chapter, Comic, PrismaClient, User } from '@prisma/client'
 
-export class DBInteractionsRepository implements IDBInteractionsRepository {
+class DBRepository implements IDBRepository {
   private db = {} as PrismaClient
   private prismaInitializer = {} as PrismaInitializer
 
@@ -13,6 +13,8 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
     const devDb = `file:../database.db${cnnParams}`
 
     this.dbPath = is.dev ? devDb : prodDb
+
+    this.startup()
   }
 
   public startup = async () => {
@@ -22,7 +24,7 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
     await this.prismaInitializer.runMigration()
   }
 
-  methods: IDBInteractionsMethods = {
+  methods: IDBMethods = {
     dbRunMigrations: async () => {
       await this.prismaInitializer.runMigration()
     },
@@ -55,9 +57,7 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
     },
 
     dbGetAllComics: async (): Promise<IComic[]> => {
-      const comics = (await this.db.comic.findMany({
-        include: { chapters: true }
-      })) as IComic[]
+      const comics = (await this.db.comic.findMany({})) as IComic[]
       return new Promise((resolve) => {
         resolve(comics)
       })
@@ -181,3 +181,5 @@ export class DBInteractionsRepository implements IDBInteractionsRepository {
     }
   }
 }
+
+export default DBRepository

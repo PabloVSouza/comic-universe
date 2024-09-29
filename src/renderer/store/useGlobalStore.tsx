@@ -13,6 +13,8 @@ interface IuseGlobalStore {
   appParams: IAppParams
   menuVisible: boolean
   activeComic: IComic
+  queue: IChapter[]
+  setQueue: (newQueue: (prevQueue: IChapter[]) => IChapter[]) => void
   getAppParams: () => Promise<void>
   toggleMenu: () => void
   setActiveComic: (comic: IComic) => void
@@ -24,6 +26,12 @@ const useGlobalStore = create<IuseGlobalStore>((set) => ({
   menuVisible: false,
   repoList: [],
   activeComic: {} as IComic,
+  queue: [],
+
+  setQueue: (newQueue) => {
+    const { queue } = useGlobalStore.getState()
+    set((state) => ({ ...state, queue: newQueue(queue) }))
+  },
 
   getAppParams: async () => {
     const appParams = await invoke('getAppParams')

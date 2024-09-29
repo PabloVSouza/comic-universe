@@ -9,15 +9,14 @@ import HomeComicDashboard from 'components/HomeComponents/HomeDashboardComponent
 import HomeNav from 'components/HomeComponents/HomeNav'
 import HomeBlankArea from 'components/HomeComponents/HomeBlankArea'
 import WindowManager from 'components/WindowComponents/WindowManager'
-import usePersistStore from 'store/usePersistStore'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 import useGlobalStore from 'store/useGlobalStore'
 
 const Home = (): JSX.Element => {
   const { invoke } = useApi()
-  const { currentUser } = usePersistStore()
+  const { currentUser } = usePersistSessionStore()
   const userActive = !!currentUser.id
-  const { queue, setQueue } = useGlobalStore()
-  // const [queue, setQueue] = useState<IChapter[]>([])
+  const { queue, setQueue, activeComic, setActiveComic } = useGlobalStore()
   const [inProgress, setInProgress] = useState<IChapter[]>([])
 
   const { data: comicList } = useQuery({
@@ -91,6 +90,15 @@ const Home = (): JSX.Element => {
   useEffect(() => {
     if (!userActive) openWindow({ component: 'Users', props: {} })
   }, [userActive])
+
+  useEffect(() => {
+    const inList = comicList.includes(activeComic)
+    if (!!comicList.length) {
+      if (!activeComic.id || !inList) setActiveComic(comicList[0])
+    } else if (activeComic.id) {
+      setActiveComic({} as IComic)
+    }
+  }, [activeComic, comicList])
 
   return (
     <div className="w-full h-full flex-shrink-0 flex-grow flex flex-col justify-start items-center text-text-default">

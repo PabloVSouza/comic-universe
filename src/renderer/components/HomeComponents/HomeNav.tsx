@@ -6,6 +6,7 @@ import Image from 'components/Image'
 import useLang from 'lang'
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistStore from 'store/usePersistStore'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 
 import infoIcon from 'assets/info.svg'
 import settingsIcon from 'assets/settings.svg'
@@ -17,7 +18,8 @@ const { invoke } = useApi()
 
 const HomeNav = (): JSX.Element => {
   const { menuVisible, toggleMenu } = useGlobalStore()
-  const { switchTheme, currentUser, setCurrentUser } = usePersistStore()
+  const { switchTheme } = usePersistStore()
+  const { currentUser, setCurrentUser } = usePersistSessionStore()
 
   const texts = useLang()
   const activeUser = !!currentUser.id

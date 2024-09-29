@@ -4,8 +4,8 @@ import useApi from 'api'
 import useLang from 'lang'
 import Image from 'components/Image'
 import { confirmAlert } from 'components/Alert'
-import usePersistStore from 'store/usePersistStore'
 import useWindowManagerStore from 'store/useWindowManagerStore'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 
 import plusIcon from 'assets/plus.svg'
 import userIcon from 'assets/user.svg'
@@ -27,7 +27,7 @@ const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItemProps): J
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['userData'] })
   })
 
-  const { setCurrentUser } = usePersistStore()
+  const { setCurrentUser } = usePersistSessionStore()
   const { currentWindows, removeWindow } = useWindowManagerStore()
 
   const closeUserWindow = () => {

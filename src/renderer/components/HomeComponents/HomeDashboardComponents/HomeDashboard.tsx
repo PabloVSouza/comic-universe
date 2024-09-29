@@ -5,12 +5,12 @@ import HomeDashboardHeader from 'components/HomeComponents/HomeDashboardComponen
 import HomeDashboardNavBar from 'components/HomeComponents/HomeDashboardComponents/HomeDashboardNavBar'
 import HomeDashboardList from 'components/HomeComponents/HomeDashboardComponents/HomeDashboardList'
 import useGlobalStore from 'store/useGlobalStore'
-import usePersistStore from 'store/usePersistStore'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 
 const HomeDashboard = (): JSX.Element => {
   const { invoke } = useApi()
   const { activeComic } = useGlobalStore()
-  const { currentUser } = usePersistStore()
+  const { currentUser } = usePersistSessionStore()
 
   const { data: additionalData, isFetching } = useQuery({
     queryKey: ['activeComicData', activeComic],

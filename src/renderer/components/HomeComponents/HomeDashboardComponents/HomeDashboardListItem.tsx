@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import useApi from 'api'
 import useLang from 'lang'
 import Button from 'components/Button'
-import usePersistStore from 'store/usePersistStore'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 import useGlobalStore from 'store/useGlobalStore'
 
 import closedBook from 'assets/closed-book-icon.svg'
@@ -19,7 +19,7 @@ const HomeDashboardComicListItem = ({ item }: { item: IChapter }): JSX.Element =
 
   const texts = useLang()
 
-  const { currentUser } = usePersistStore()
+  const { currentUser } = usePersistSessionStore()
 
   const pages = item.pages ? (JSON.parse(item.pages) as IPage[]) : ([] as IPage[])
 

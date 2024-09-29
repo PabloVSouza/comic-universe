@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
 import { confirmAlert } from 'components/Alert'
 import openWindow from 'functions/openWindow'
@@ -11,9 +11,11 @@ import HomeBlankArea from 'components/HomeComponents/HomeBlankArea'
 import WindowManager from 'components/WindowComponents/WindowManager'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import useGlobalStore from 'store/useGlobalStore'
+import timeoutPromise from 'functions/timeoutPromise'
 
 const Home = (): JSX.Element => {
   const { invoke } = useApi()
+  const queryClient = useQueryClient()
   const { currentUser } = usePersistSessionStore()
   const userActive = !!currentUser.id
   const { queue, setQueue, activeComic, setActiveComic } = useGlobalStore()
@@ -28,8 +30,7 @@ const Home = (): JSX.Element => {
   const { mutate: fetchChapterPages } = useMutation({
     mutationFn: async (chapter: IChapter) => {
       const { repo } = chapter
-      const pages = await invoke('getPages', { repo, data: { chapter } })
-
+      const pages = await timeoutPromise(invoke('getPages', { repo, data: { chapter } }), 10000)
       if (pages.length > 0) {
         await invoke('dbUpdateChapter', { chapter: { ...chapter, pages: JSON.stringify(pages) } })
       }
@@ -41,6 +42,7 @@ const Home = (): JSX.Element => {
         removeFromQueue(chapter)
       }
     },
+
     onError: () => {
       confirmAlert({
         message: 'Failed to Download some Chapters Information'
@@ -65,7 +67,7 @@ const Home = (): JSX.Element => {
 
   useEffect(() => {
     const addChaptersToQueue = async () => {
-      const noPageChapters = await invoke('dbGetAllChaptersNoPage')
+      const noPageChapters = (await invoke('dbGetAllChaptersNoPage')) as IChapter[]
       noPageChapters.forEach((chapter) => addToQueue(chapter))
     }
 
@@ -86,6 +88,12 @@ const Home = (): JSX.Element => {
       })
     }
   }, [queue, inProgress, fetchChapterPages])
+
+  useEffect(() => {
+    if (queue.length === 0) {
+      queryClient.invalidateQueries({ queryKey: ['activeComicData'] })
+    }
+  }, [queue, queryClient])
 
   useEffect(() => {
     if (!userActive) openWindow({ component: 'Users', props: {} })

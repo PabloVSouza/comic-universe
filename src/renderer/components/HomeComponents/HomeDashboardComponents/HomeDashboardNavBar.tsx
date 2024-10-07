@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import Button from 'components/Button'
 import useLang from 'lang'
-import useDownloadStore from 'store/useDownloadStore'
+import useFetchData from 'hooks/useFetchData'
 
 import downloadIcon from 'assets/download-icon-2.svg'
 import comicBook from 'assets/comic-book.svg'
 import ProgressBar from 'components/ProgressBar'
+import { confirmAlert } from 'components/Alert'
 
 const HomeDashboardNavBar = ({
   comic,
@@ -16,7 +17,17 @@ const HomeDashboardNavBar = ({
 }): JSX.Element => {
   const navigate = useNavigate()
   const texts = useLang()
-  const { getNewChapters } = useDownloadStore()
+  const { fetchNewChapters } = useFetchData()
+
+  const getNewChapters = async () => {
+    const newChapters = await fetchNewChapters(comic)
+    if (newChapters.length) {
+      confirmAlert({
+        message: 'Test'
+      })
+    }
+    console.log(newChapters)
+  }
 
   const chapters = additionalData?.chapters ?? []
 

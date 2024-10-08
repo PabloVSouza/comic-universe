@@ -3,7 +3,7 @@ import useGlobalStore from './useGlobalStore'
 import useLang from 'lang'
 import useApi from 'api'
 import { confirmAlert } from 'components/Alert'
-import usePersistStore from './usePersistStore'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 
 const { invoke } = useApi()
 
@@ -33,7 +33,7 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
 
   getNewChapters: async (): Promise<void> => {
     const { activeComic } = useGlobalStore.getState()
-    const { currentUser } = usePersistStore.getState()
+    const { currentUser } = usePersistSessionStore.getState()
 
     const { repo, siteId } = activeComic
     const { chapters: currentChapters } = await invoke('dbGetComicAdditionalData', {

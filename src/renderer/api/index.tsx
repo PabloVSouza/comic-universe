@@ -3,7 +3,7 @@ import RestImplemention from './RestImplementation'
 
 const ApiList = { IpcImplementation, RestImplemention }
 
-const defaultImplementation = 'IpcImplementation' as keyof typeof ApiList
+const defaultImplementation = 'RestImplemention' as keyof typeof ApiList
 
 const useApi = (implementation: string = defaultImplementation) => {
   return {

@@ -65,7 +65,7 @@ const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItemProps): J
   }
 
   const baseStyling =
-    'w-24 rounded-full aspect-square cursor-pointer shrink-0 flex justify-center items-center !overflow-clip relative border border-white bg-light/60 hover:bg-light/80 transition-all duration-500 ease-default box-border'
+    'w-24 rounded-full aspect-square cursor-pointer shrink-0 flex justify-center items-center overflow-clip relative border border-white bg-light/60 hover:bg-light/80 transition-all duration-500 ease-default box-border'
 
   const bgStyling = 'w-full h-full absolute top-0 z-10 bg-dark'
 
@@ -80,7 +80,7 @@ const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItemProps): J
     <div className={baseStyling}>
       <Image className={bgStyling} svg src={userIcon} />
       <div onClick={(): Promise<void> => setUser()} className="w-full h-3/4 absolute top-0 z-10">
-        <p className="w-full backdrop-blur-sm text-text-dark text-center py-1 absolute bottom-0 bg-light">
+        <p className="w-full text-text-dark text-center py-1 absolute bottom-0 bg-light">
           {data?.name}
         </p>
       </div>

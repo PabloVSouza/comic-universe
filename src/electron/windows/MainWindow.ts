@@ -13,6 +13,12 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     show: false,
     autoHideMenuBar: true,
     frame: false,
+    titleBarStyle: 'hidden',
+    trafficLightPosition: {
+      x: 10,
+      y: 10
+    },
+    transparent: true,
     webPreferences: {
       webSecurity: false,
       preload: join(__dirname, '../preload/index.js'),

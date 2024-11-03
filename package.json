@@ -29,7 +29,7 @@
     "@electron/asar": "^3.2.7",
     "@formkit/auto-animate": "^0.8.2",
     "@jridgewell/resolve-uri": "^3.1.2",
-    "@prisma/client": "5.19.1",
+    "@prisma/client": "^5.21.1",
     "@tanstack/react-query": "^5.55.1",
     "axios": "^1.7.4",
     "classnames": "^2.3.2",
@@ -38,7 +38,7 @@
     "express": "^4.21.0",
     "lodash.debounce": "^4.0.8",
     "pacote": "^18.0.6",
-    "prisma-shell-extension": "^1.0.1",
+    "prisma-cli-extension": "^1.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-html-parser": "^2.0.2",
@@ -68,8 +68,8 @@
     "@typescript-eslint/parser": "^8.0.1",
     "@vitejs/plugin-react": "^4.1.1",
     "autoprefixer": "^10.4.20",
-    "electron": "^32.0.2",
-    "electron-builder": "^25.0.5",
+    "electron": "^33.0.2",
+    "electron-builder": "^25.1.8",
     "electron-icon-builder": "^2.0.1",
     "electron-vite": "^2.3.0",
     "eslint": "^9.8.0",
@@ -78,12 +78,12 @@
     "eslint-plugin-react": "^7.33.2",
     "postcss": "^8.4.41",
     "prettier": "^3.0.3",
-    "prisma": "^5.19.1",
+    "prisma": "^5.21.1",
     "sass-embedded": "^1.77.8",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.2.2",
     "vite": "^5.4.0",
     "vite-plugin-svgr": "^4.2.0"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@4.5.1"
 }

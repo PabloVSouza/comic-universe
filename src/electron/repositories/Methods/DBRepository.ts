@@ -1,6 +1,6 @@
 import { is } from '@electron-toolkit/utils'
 import path from 'path'
-import { PrismaInitializer } from 'prisma-shell-extension'
+import { PrismaInitializer } from 'prisma-cli-extension'
 import { Chapter, Comic, PrismaClient, User } from '@prisma/client'
 
 class DBRepository implements IDBRepository {

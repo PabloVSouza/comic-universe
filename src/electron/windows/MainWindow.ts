@@ -16,7 +16,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     titleBarStyle: 'hidden',
     trafficLightPosition: {
       x: 10,
-      y: 10
+      y: 20
     },
     transparent: true,
     webPreferences: {

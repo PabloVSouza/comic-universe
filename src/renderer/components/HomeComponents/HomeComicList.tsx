@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import openWindow from 'functions/openWindow'
 import useApi from 'api'
 import useLang from 'lang'
+import Button from 'components/Button'
 import { confirmAlert } from 'components/Alert'
 import { ContextMenu, openContextMenu, TContextOptions } from 'components/ContextMenu'
 import ComicListItem from 'components/HomeComponents/HomeComicListItem'
-
+import downloadIcon from 'assets/download-icon.svg'
 import deleteIcon from 'assets/trash.svg'
 
 const { invoke } = useApi()
@@ -56,6 +58,15 @@ const HomeComicList = ({ comicList }: { comicList: IComic[] }): JSX.Element => {
 
   return (
     <ul className="h-full w-60 overflow-auto flex flex-col gap-px z-20 mt-px bg-list">
+      <li className="flex justify-center items-center">
+        <Button
+          className="z-30 h-full"
+          icon={downloadIcon}
+          size="xs"
+          theme="pure"
+          onClick={() => openWindow({ component: 'Search', props: {} })}
+        />
+      </li>
       <ContextMenu options={ctxOptions} />
       {comicList.map((item) => (
         <ComicListItem

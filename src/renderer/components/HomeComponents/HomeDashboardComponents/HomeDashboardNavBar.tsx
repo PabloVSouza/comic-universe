@@ -17,16 +17,20 @@ const HomeDashboardNavBar = ({
 }): JSX.Element => {
   const navigate = useNavigate()
   const texts = useLang()
-  const { fetchNewChapters } = useFetchData()
+  const { fetchNewChapters, insertChapters } = useFetchData()
 
   const getNewChapters = async () => {
     const newChapters = await fetchNewChapters(comic)
-    if (newChapters.length) {
+    if (!newChapters.length) {
       confirmAlert({
-        message: 'Test'
+        message: 'No new chapters'
+      })
+    } else {
+      insertChapters({
+        newChapters,
+        comicId: comic.id
       })
     }
-    console.log(newChapters)
   }
 
   const chapters = additionalData?.chapters ?? []

@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
 import timeoutPromise from 'functions/timeoutPromise'
 import { confirmAlert } from 'components/Alert'
@@ -6,6 +6,7 @@ import useQueue from './useQueue'
 
 const useFetchData = () => {
   const { invoke } = useApi()
+  const queryClient = useQueryClient()
 
   const { mutateAsync: fetchNewChapters } = useMutation({
     mutationFn: async (comic: IComic) => {
@@ -22,6 +23,41 @@ const useFetchData = () => {
 
       return newChapters
     }
+  })
+
+  const { mutate: insertComic } = useMutation({
+    mutationFn: async ({
+      data,
+      comicDetails,
+      chapterData,
+      repo
+    }: {
+      data: IComic
+      comicDetails: IComic
+      chapterData: IChapter[]
+      repo: string
+    }): Promise<void> =>
+      await invoke('dbInsertComic', {
+        comic: { ...data, ...comicDetails },
+        chapters: chapterData,
+        repo
+      }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
+  })
+
+  const { mutate: insertChapters } = useMutation({
+    mutationFn: async ({
+      newChapters,
+      comicId
+    }: {
+      newChapters: IChapter[]
+      comicId: number
+    }): Promise<void> => {
+      const finalChapters = newChapters.map((val) => ({ ...val, comicId }))
+      await invoke('dbInsertChapters', { chapters: finalChapters })
+    },
+
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
   })
 
   const { mutate: fetchChapterPages } = useMutation({
@@ -50,7 +86,7 @@ const useFetchData = () => {
     retry: 3
   })
 
-  return { fetchNewChapters, fetchChapterPages }
+  return { fetchNewChapters, fetchChapterPages, insertComic, insertChapters }
 }
 
 export default useFetchData

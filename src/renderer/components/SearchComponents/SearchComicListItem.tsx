@@ -1,9 +1,9 @@
 import { LiHTMLAttributes } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
 import LoadingOverlay from 'components/LoadingOverlay'
 import { useNavigate } from 'react-router-dom'
-import ReactHtmlParser from 'react-html-parser'
+import ReactHtmlParser from 'html-react-parser'
 import classNames from 'classnames'
 
 import usePersistStore from 'store/usePersistStore'
@@ -13,6 +13,7 @@ import useLang from 'lang'
 import loading from 'assets/loading.svg'
 import Image from 'components/Image'
 import Button from 'components/Button'
+import useFetchData from 'hooks/useFetchData'
 
 interface IComicListItem extends LiHTMLAttributes<unknown> {
   data: IComic
@@ -27,8 +28,8 @@ const SearchComicListItem = ({
 }: IComicListItem): JSX.Element => {
   const texts = useLang()
   const { invoke } = useApi()
-  const queryClient = useQueryClient()
   const { repo } = usePersistStore()
+  const { insertComic } = useFetchData()
 
   const navigate = useNavigate()
 
@@ -64,16 +65,6 @@ const SearchComicListItem = ({
     enabled: active && !data.chapters
   })
 
-  const { mutate: insertComic } = useMutation({
-    mutationFn: async () =>
-      await invoke('dbInsertComic', {
-        comic: { ...data, ...comicDetails },
-        chapters: chapterData,
-        repo: repo.value
-      }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
-  })
-
   const isLoading = comicListFetching || chapterDataFetching || comicDetailsFetching
 
   const extended = active && chapterData.length > 0
@@ -87,7 +78,7 @@ const SearchComicListItem = ({
   }
 
   const addToList = (): void => {
-    insertComic()
+    insertComic({ data, comicDetails, chapterData, repo: repo.value })
     navigate('/')
   }
 

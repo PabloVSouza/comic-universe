@@ -1,7 +1,5 @@
 import classNames from 'classnames'
 import Button from 'components/Button'
-import openWindow from 'functions/openWindow'
-import downloadIcon from 'assets/download-icon.svg'
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 
@@ -17,15 +15,6 @@ const HomeTopBar = (): JSX.Element => {
   return (
     <div className="w-full h-14 flex justify-between relative shrink-0 items-center bg-default">
       <div className="[-webkit-app-region:drag] h-full w-full absolute" />
-      {userActive && (
-        <Button
-          className="z-30 h-full"
-          icon={downloadIcon}
-          size="xs"
-          theme="pure"
-          onClick={() => openWindow({ component: 'Search', props: {} })}
-        />
-      )}
       <Image
         src={logo}
         className={classNames(

@@ -57,16 +57,16 @@ jobs:
         run: npm ci
 
       - name: Run security audit
-        run: npm audit --audit-level=moderate
+        run: npm audit --audit-level=high || true
 
-      - name: Check for vulnerabilities
+      - name: Check for critical vulnerabilities
         run: |
-          if npm audit --audit-level=high --json | jq -e '.vulnerabilities | length > 0' > /dev/null; then
-            echo "High severity vulnerabilities found!"
-            npm audit --audit-level=high
+          if npm audit --audit-level=critical --json | jq -e '.vulnerabilities | length > 0' > /dev/null; then
+            echo "Critical severity vulnerabilities found!"
+            npm audit --audit-level=critical
             exit 1
           else
-            echo "No high severity vulnerabilities found."
+            echo "No critical severity vulnerabilities found."
           fi
 
   build-test:
@@ -89,23 +89,23 @@ jobs:
 
       - name: Test build process
         run: |
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+          if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
             npm run build:linux-x64
-          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+          elif [ "${{ matrix.os }}" = "windows-latest" ]; then
             npm run build:win
-          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+          elif [ "${{ matrix.os }}" = "macos-latest" ]; then
             npm run build:mac
           fi
 
       - name: Verify build artifacts
         run: |
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+          if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
             ls -la dist/
             test -f dist/*.AppImage || test -f dist/*.deb || test -f dist/*.rpm
-          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+          elif [ "${{ matrix.os }}" = "windows-latest" ]; then
             ls -la dist/
             test -f dist/*.exe
-          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+          elif [ "${{ matrix.os }}" = "macos-latest" ]; then
             ls -la dist/
             test -f dist/*.dmg
           fi

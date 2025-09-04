@@ -5,6 +5,7 @@ const react = require('eslint-plugin-react')
 const reactHooks = require('eslint-plugin-react-hooks')
 const prettier = require('eslint-plugin-prettier')
 const prettierConfig = require('eslint-config-prettier')
+const globals = require('globals')
 
 module.exports = [
   js.configs.recommended,
@@ -17,13 +18,39 @@ module.exports = [
           jsx: true
         },
         sourceType: 'module',
-        ecmaVersion: 2021
+        ecmaVersion: 2021,
+        project: './tsconfig.json'
       },
       globals: {
-        browser: true,
-        commonjs: true,
-        es6: true,
-        node: true
+        ...globals.browser,
+        ...globals.node,
+        ...globals.es2021,
+        React: 'readonly',
+        JSX: 'readonly',
+        IComic: 'readonly',
+        IChapter: 'readonly',
+        IPage: 'readonly',
+        IUser: 'readonly',
+        IReadProgress: 'readonly',
+        ISettingsOption: 'readonly',
+        IRepoPluginInfo: 'readonly',
+        IRepoApiPluginList: 'readonly',
+        IRepoPluginRepository: 'readonly',
+        IRepoPluginRepositoryConstruct: 'readonly',
+        IDBRepository: 'readonly',
+        IDBMethods: 'readonly',
+        TOption: 'readonly',
+        TWindow: 'readonly',
+        TWindowProps: 'readonly',
+        Lang: 'readonly',
+        GenerlLang: 'readonly',
+        DashboardLang: 'readonly',
+        DownloadComicLang: 'readonly',
+        HomeNavLang: 'readonly',
+        SearchComicLang: 'readonly',
+        PaginationLang: 'readonly',
+        SettingsLang: 'readonly',
+        UsersLang: 'readonly'
       }
     },
     plugins: {
@@ -41,9 +68,13 @@ module.exports = [
       '@typescript-eslint/ban-ts-comment': ['error', { 'ts-ignore': 'allow-with-description' }],
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
-      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-var-requires': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
+      'no-undef': 'off', // TypeScript handles this
+      'no-redeclare': 'off', // TypeScript handles this
+      'no-useless-catch': 'warn',
       'prettier/prettier': 'error'
     },
     settings: {

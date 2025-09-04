@@ -1,0 +1,137 @@
+import { useState, useMemo, useEffect, useRef, MutableRefObject } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import useApi from 'api'
+import debounce from 'lodash.debounce'
+import Select from 'components/Select'
+import Image from 'components/Image'
+import SearchComicList from 'components/SearchComponents/SearchComicList'
+import Loading from 'components/LoadingOverlay'
+import Pagination from 'components/Pagination'
+import useLang from 'lang'
+import usePersistStore from 'store/usePersistStore'
+
+import searchIcon from 'assets/magnifying-glass-search.svg'
+
+type TOption = {
+  value: string
+  label: string
+}
+
+const Search = (): JSX.Element => {
+  const { invoke } = useApi()
+  const queryClient = useQueryClient()
+  const [search, setSearch] = useState('')
+  const [offset, setOffset] = useState(0)
+  const { repo, setRepo } = usePersistStore()
+  const inputRef = useRef(null) as MutableRefObject<null> | MutableRefObject<HTMLInputElement>
+
+  const [noRepos, setNoRepos] = useState(true)
+
+  const { data: repoList } = useQuery({
+    queryKey: ['repoList'],
+    queryFn: async () => {
+      const repos = (await invoke('getRepoList')) as TOption[]
+      if (!!repos.length) {
+        if (!repo.value || !repos.includes(repo)) setRepo(repos[0])
+        setNoRepos(false)
+      }
+      return repos as TOption[]
+    },
+    initialData: []
+  })
+
+  const {
+    data: list,
+    isFetching,
+    isLoading,
+    isError,
+    error,
+    refetch
+  } = useQuery({
+    queryKey: ['searchList', search, repo],
+    queryFn: async () => {
+      return search.length > 0
+        ? await invoke('search', { repo: repo.value, data: { search } })
+        : await invoke('getList', { repo: repo.value });
+    },
+    initialData: [],
+    enabled: !!repoList.length
+  })
+
+  const texts = useLang()
+
+  const handleChangeRepo = (e: TOption): void => {
+    if (inputRef.current) inputRef.current.value = ''
+    if (e) setRepo(e)
+  }
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setSearch(e.target.value)
+  }
+
+  const debouncedResults = useMemo(() => {
+    return debounce(handleSearch, 500)
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      debouncedResults.cancel()
+      queryClient.invalidateQueries({ queryKey: ['repoList'] })
+    }
+  }, [])
+
+
+  return (
+    <>
+      <Loading isLoading={isFetching && !list?.length} />
+      <div className="w-full h-24 flex-shrink-0 py-6 px-11 absolute top-0 bg-modal backdrop-blur-sm shadow-basic z-10">
+        <div className="h-full w-full bg-default shadow-basic rounded flex justify-center items-center pr-4 max-w-3xl my-0 mx-auto">
+          <Select
+            value={noRepos ? { label: texts.SearchComic.noReposAvailable } : repo}
+            options={repoList}
+            onChange={(e) => handleChangeRepo(e as TOption)}
+            isDisabled={noRepos}
+          />
+          <input
+            className="flex-grow bg-transparent text-lg placeholder:text-text-default placeholder:opacity-60 pl-5"
+            placeholder={texts.SearchComic.textPlaceholder}
+            type="text"
+            onChange={debouncedResults}
+            ref={inputRef}
+          />
+          <Image
+            src={searchIcon}
+            svg
+            className="h-full aspect-square bg-text-default p-2 opacity-60"
+          />
+        </div>
+      </div>
+      <SearchComicList list={list} offset={offset} className="pt-24 pb-14" />
+      <div className="w-full flex items-center justify-center shadow-basic absolute bottom-0 h-14 bg-modal backdrop-blur-sm">
+        <Pagination
+          setOffset={setOffset}
+          list={list}
+          itemsPerPage={10}
+          className="!w-3/4 max-w-3xl"
+        />
+      </div>
+    </>
+  )
+}
+
+const windowSettings = {
+  windowProps: {
+    contentClassName: 'h-full w-full flex flex-col overflow-hidden items-center relative',
+    closeable: true,
+    titleBar: true,
+    unique: true,
+    title: useLang().SearchComic.windowTitle
+  },
+  initialStatus: {
+    startPosition: 'center',
+    width: '90%',
+    height: '90%'
+  }
+} as TWindow
+
+export default { Search, ...windowSettings }

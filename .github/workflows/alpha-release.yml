@@ -24,7 +24,7 @@ jobs:
           node-version: 20
 
       - name: Install Dependencies
-        run: yarn
+        run: npm install
 
       - name: build-linux-x64
         if: matrix.architecture == 'x64' && matrix.os == 'ubuntu-latest'
@@ -65,10 +65,10 @@ jobs:
           node-version: 20
 
       - name: Install Dependencies
-        run: yarn
+        run: npm install
 
       - name: build-win
-        run: yarn run build:win
+        run: npm run build:win
 
       - name: release
         uses: softprops/action-gh-release@v2
@@ -102,10 +102,10 @@ jobs:
           node-version: 20
 
       - name: Install Dependencies
-        run: yarn
+        run: npm install
 
       - name: build-mac-universal
-        run: yarn run build:mac
+        run: npm install build:mac
 
       - name: release
         uses: softprops/action-gh-release@v2

@@ -1,9 +1,6 @@
 name: 2.0.0 Development Release
 
 on:
-  push:
-    branches:
-      - 'dev/v2.0.0'
   pull_request:
     branches:
       - 'dev/v2.0.0'

@@ -6,7 +6,6 @@ on:
       - main
       - staging
       - 'dev/v2.0.0'
-      - 'dev/**'
   pull_request:
     branches:
       - main
@@ -15,8 +14,6 @@ on:
 jobs:
   auto-version:
     runs-on: ubuntu-latest
-    # Skip auto-version for pull requests to dev branches (handled by Beta Release workflow)
-    if: ${{ !(github.event_name == 'pull_request' && (contains(github.head_ref, 'dev/') || github.base_ref == 'dev/v2.0.0')) }}
     permissions:
       contents: write
       pull-requests: write

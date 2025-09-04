@@ -33,7 +33,7 @@ jobs:
         run: npm run typecheck
 
       - name: Run linting
-        run: npm run lint || echo "Linting completed with warnings"
+        run: npm run lint
 
       - name: Run formatting check
         run: npm run format -- --check

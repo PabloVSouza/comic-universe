@@ -11,11 +11,12 @@ on:
     branches:
       - main
       - staging
-      - 'dev/v2.0.0'
 
 jobs:
   auto-version:
     runs-on: ubuntu-latest
+    # Skip auto-version for pull requests to dev branches (handled by Beta Release workflow)
+    if: ${{ !(github.event_name == 'pull_request' && (contains(github.head_ref, 'dev/') || github.base_ref == 'dev/v2.0.0')) }}
     permissions:
       contents: write
       pull-requests: write
@@ -56,6 +57,7 @@ jobs:
 
           # Determine release type based on branch/event
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # Only create beta releases for PRs to main/staging, not dev branches
             RELEASE_TYPE="beta"
             IS_PRERELEASE="true"
             # Beta version: increment patch and add beta identifier

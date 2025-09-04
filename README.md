@@ -162,6 +162,7 @@ npm run tauri build -- --target x86_64-unknown-linux-gnu # Linux
 ### Database Setup:
 
 The SQLite database is automatically created and migrated on first run. Database files are stored in:
+
 - **Development**: Project root directory
 - **Production**: Application support directory (OS-specific)
 
@@ -170,18 +171,21 @@ The SQLite database is automatically created and migrated on first run. Database
 This Tauri port represents a complete rewrite of the original Electron application. Key changes include:
 
 ### Architecture Changes
+
 - **Backend**: Node.js → Rust with Tauri
 - **Database**: Prisma ORM → SQLx with compile-time checked queries
 - **IPC**: Electron IPC → Tauri invoke system
 - **Plugins**: Node.js modules → Rust-based plugin runners
 
 ### Performance Improvements
+
 - **Bundle Size**: ~80% reduction in application size
 - **Memory Usage**: Significantly lower memory footprint
 - **Startup Time**: Faster application startup
 - **Security**: Enhanced security through Rust's memory safety
 
 ### Development Experience
+
 - **Type Safety**: Full type safety from frontend to backend
 - **Hot Reload**: Maintained fast development cycle
 - **Cross-platform**: Native performance on all platforms

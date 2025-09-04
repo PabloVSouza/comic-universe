@@ -52,7 +52,7 @@ const Search = (): JSX.Element => {
     queryFn: async () => {
       return search.length > 0
         ? await invoke('search', { repo: repo.value, data: { search } })
-        : await invoke('getList', { repo: repo.value });
+        : await invoke('getList', { repo: repo.value })
     },
     initialData: [],
     enabled: !!repoList.length
@@ -79,7 +79,6 @@ const Search = (): JSX.Element => {
       queryClient.invalidateQueries({ queryKey: ['repoList'] })
     }
   }, [])
-
 
   return (
     <>

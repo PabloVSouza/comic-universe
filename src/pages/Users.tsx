@@ -31,7 +31,7 @@ const Users = (): JSX.Element => {
 
   const lang = useLang()
 
-  const { mutate: createUser, isLoading: isCreating } = useMutation({
+  const { mutate: createUser } = useMutation({
     mutationFn: async () => {
       addGlobalDebugLog(`Creating user with name: "${name}"`)
       const requestPayload = { request: { user: { id: 0, name, default: false } } }
@@ -50,7 +50,6 @@ const Users = (): JSX.Element => {
       addGlobalDebugLog(`❌ Failed to create user: ${error.toString()}`)
     }
   })
-
 
   return (
     <>
@@ -71,7 +70,7 @@ const Users = (): JSX.Element => {
               title={lang.Users.cancelButton}
               onClick={() => setNewUser(false)}
             />
-            
+
             <Button
               icon={confirmIcon}
               theme="pure"

@@ -1,0 +1,29 @@
+# Clippy configuration for Tauri app
+# This file configures clippy lints for the Rust backend
+
+# Allow some lints that are common in Tauri apps
+allow = [
+    "clippy::needless_pass_by_value",  # Common in Tauri command functions
+    "clippy::too_many_arguments",      # Sometimes necessary for complex commands
+    "clippy::module_name_repetitions", # Common in Tauri project structure
+]
+
+# Deny important lints
+deny = [
+    "clippy::unwrap_used",           # Prefer proper error handling
+    "clippy::expect_used",           # Prefer proper error handling
+    "clippy::panic",                 # No panics in production code
+    "clippy::todo",                  # No TODOs in production code
+    "clippy::unimplemented",         # No unimplemented in production code
+]
+
+# Set some specific configurations
+[clippy::all]
+# Set the maximum number of arguments for functions
+max-args = 8
+
+# Set the maximum number of lines for functions
+max-lines = 100
+
+# Set the maximum number of statements in a function
+max-statements = 30

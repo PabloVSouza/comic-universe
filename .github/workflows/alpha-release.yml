@@ -1,9 +1,10 @@
-name: Build/release Electron app
+name: Build/release Tauri app (Alpha)
 
 on:
   push:
     tags:
       - v*.*.*-alpha.*
+
 jobs:
   Linux:
     runs-on: ${{ matrix.os }}
@@ -23,33 +24,45 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Dependencies
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.architecture == 'arm64' && 'aarch64-unknown-linux-gnu' || 'x86_64-unknown-linux-gnu' }}
+
+      - name: Install dependencies (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Install frontend dependencies
         run: npm install
 
-      - name: build-linux-x64
+      - name: Build Tauri app (Linux x64)
         if: matrix.architecture == 'x64' && matrix.os == 'ubuntu-latest'
-        run: npm run build:linux-x64
+        run: npm run tauri build -- --target x86_64-unknown-linux-gnu
 
-      - name: build-linux-arm
+      - name: Build Tauri app (Linux ARM64)
         if: matrix.architecture == 'arm64' && matrix.os == 'ubuntu-latest'
-        run: npm run build:linux-arm
+        run: npm run tauri build -- --target aarch64-unknown-linux-gnu
 
-      - name: release
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-${{ matrix.architecture }}-alpha
+          path: src-tauri/target/*/release/bundle/
+
+      - name: Release
         uses: softprops/action-gh-release@v2
         with:
           prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: |
-            dist/*.exe
-            dist/*.zip
-            dist/*.dmg
-            dist/*.AppImage
-            dist/*.snap
-            dist/*.deb
-            dist/*.rpm
-            dist/*.tar.gz
-            dist/*.yml
+            src-tauri/target/*/release/bundle/**/*.AppImage
+            src-tauri/target/*/release/bundle/**/*.deb
+            src-tauri/target/*/release/bundle/**/*.rpm
+
   Windows:
     runs-on: windows-latest
     permissions: write-all
@@ -64,29 +77,33 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Dependencies
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Install frontend dependencies
         run: npm install
 
-      - name: build-win
-        run: npm run build:win
+      - name: Build Tauri app (Windows)
+        run: npm run tauri build -- --target x86_64-pc-windows-msvc
 
-      - name: release
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-x64-alpha
+          path: src-tauri/target/x86_64-pc-windows-msvc/release/bundle/
+
+      - name: Release
         uses: softprops/action-gh-release@v2
-
         with:
           prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: |
-            dist/*.exe
-            dist/*.zip
-            dist/*.dmg
-            dist/*.AppImage
-            dist/*.snap
-            dist/*.deb
-            dist/*.rpm
-            dist/*.tar.gz
-            dist/*.yml
+            src-tauri/target/x86_64-pc-windows-msvc/release/bundle/**/*.exe
+            src-tauri/target/x86_64-pc-windows-msvc/release/bundle/**/*.msi
+
   Mac:
     runs-on: macos-14
     permissions: write-all
@@ -101,27 +118,29 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Dependencies
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-apple-darwin,aarch64-apple-darwin
+
+      - name: Install frontend dependencies
         run: npm install
 
-      - name: build-mac-universal
-        run: npm install build:mac
+      - name: Build Tauri app (macOS Universal)
+        run: npm run tauri build -- --target universal-apple-darwin
 
-      - name: release
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-universal-alpha
+          path: src-tauri/target/universal-apple-darwin/release/bundle/
+
+      - name: Release
         uses: softprops/action-gh-release@v2
-
         with:
           prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: |
-            dist/*.exe
-            dist/*.zip
-            dist/*.dmg
-            dist/*.AppImage
-            dist/*.snap
-            dist/*.deb
-            dist/*.rpm
-            dist/*.tar.gz
-            dist/*.yml
-            dist/*.blockmap
+            src-tauri/target/universal-apple-darwin/release/bundle/**/*.dmg
+            src-tauri/target/universal-apple-darwin/release/bundle/**/*.app

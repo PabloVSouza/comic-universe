@@ -20,15 +20,14 @@ const usePersistStore = create<IusePersistStore>()(
       lang: 'ptBR',
       repo: {} as TOption,
 
-      switchTheme: (theme): void =>
-        set({ theme: theme || get().theme === 'dark' ? 'light' : 'dark' }),
+      switchTheme: (theme) => set({ theme: theme || get().theme === 'dark' ? 'light' : 'dark' }),
 
-      changeLanguage: (lang): void =>
+      changeLanguage: (lang) =>
         set({
           lang: lang || get().lang === 'ptBR' ? 'enUS' : 'ptBR'
         }),
 
-      setRepo: (repo): void => set({ repo })
+      setRepo: (repo) => set({ repo })
     }),
     {
       name: appParams.isDev ? 'comic-universe-dev' : 'comic-universe',

@@ -1,7 +1,10 @@
-name: Build/release Electron app
+name: Alpha Release (Staging Branch)
 
 on:
   push:
+    branches:
+      - staging
+      - 'dev/v2.0.0'
     tags:
       - v*.*.*-alpha.*
 jobs:
@@ -105,7 +108,7 @@ jobs:
         run: npm install
 
       - name: build-mac-universal
-        run: npm install build:mac
+        run: npm run build:mac
 
       - name: release
         uses: softprops/action-gh-release@v2

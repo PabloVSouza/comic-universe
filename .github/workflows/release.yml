@@ -1,8 +1,11 @@
-name: Build/release Electron app
+name: Stable Release (Main Branch)
 
 on:
   push:
+    branches:
+      - main
     tags:
+      - v*.*.*
       - v*.*.*-stable.*
 jobs:
   Linux:
@@ -37,7 +40,7 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v2
         with:
-          prerelease: true
+          prerelease: false
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: |
@@ -72,9 +75,8 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v2
-
         with:
-          prerelease: true
+          prerelease: false
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: |
@@ -109,9 +111,9 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v2
-
         with:
-          draft: true
+          prerelease: false
+          draft: false
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: |

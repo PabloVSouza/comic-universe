@@ -1,0 +1,86 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    # Run every Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for outdated packages
+        id: outdated
+        run: |
+          npm outdated --json > outdated.json || true
+          if [ -s outdated.json ]; then
+            echo "has-updates=true" >> $GITHUB_OUTPUT
+            echo "Found outdated packages"
+            cat outdated.json
+          else
+            echo "has-updates=false" >> $GITHUB_OUTPUT
+            echo "All packages are up to date"
+          fi
+
+      - name: Update dependencies
+        if: steps.outdated.outputs.has-updates == 'true'
+        run: |
+          # Update minor and patch versions
+          npm update
+
+          # Check for major version updates
+          npm outdated --json > major-updates.json || true
+          if [ -s major-updates.json ]; then
+            echo "Major updates available:"
+            cat major-updates.json
+          fi
+
+      - name: Run tests after update
+        if: steps.outdated.outputs.has-updates == 'true'
+        run: |
+          npm run typecheck
+          npm run lint
+          npm run build
+
+      - name: Create Pull Request
+        if: steps.outdated.outputs.has-updates == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update dependencies'
+          title: 'chore: update dependencies'
+          body: |
+            ## 🔄 Dependency Updates
+
+            This PR contains automatic dependency updates.
+
+            ### Changes
+            - Updated minor and patch versions
+            - Checked for major version updates
+
+            ### Testing
+            - [x] TypeScript compilation passes
+            - [x] Linting passes
+            - [x] Build succeeds
+
+            Please review the changes and merge if everything looks good.
+          branch: dependency-updates
+          delete-branch: true

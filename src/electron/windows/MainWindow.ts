@@ -22,7 +22,11 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     webPreferences: {
       webSecurity: false,
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      // Disable autofill to prevent DevTools console errors
+      autoplayPolicy: 'no-user-gesture-required',
+      // Additional settings to reduce DevTools noise
+      experimentalFeatures: false
     },
     icon: join(__dirname, '../../../resources/logo.svg')
   })
@@ -42,7 +46,9 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     mainWindow.show()
     if (!is.dev) autoUpdater.checkForUpdatesAndNotify()
 
-    if (is.dev) mainWindow.webContents.openDevTools()
+    if (is.dev) {
+      mainWindow.webContents.openDevTools()
+    }
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

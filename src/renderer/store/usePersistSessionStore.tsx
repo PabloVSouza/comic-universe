@@ -13,7 +13,7 @@ const usePersistSessionStore = create<IusePersistSessionStore>()(
   persist(
     (set) => ({
       currentUser: {} as IUser,
-      setCurrentUser: (currentUser): void => set({ currentUser })
+      setCurrentUser: (currentUser) => set({ currentUser })
     }),
     {
       name: appParams.isDev ? 'comic-universe-dev' : 'comic-universe',

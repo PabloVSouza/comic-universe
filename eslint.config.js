@@ -19,7 +19,7 @@ module.exports = [
         },
         sourceType: 'module',
         ecmaVersion: 2021,
-        project: './tsconfig.json'
+        project: ['./tsconfig.json', './tsconfig.web.json', './tsconfig.node.json']
       },
       globals: {
         ...globals.browser,

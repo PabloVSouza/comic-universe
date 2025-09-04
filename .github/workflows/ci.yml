@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - staging
+      - 'dev/v2.0.0'
   pull_request:
     branches:
       - main

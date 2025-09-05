@@ -14,9 +14,8 @@ import darkmodeIcon from 'assets/darkmode.svg'
 import userIcon from 'assets/user.svg'
 import exitIcon from 'assets/exit-door.svg'
 
-const { invoke } = useApi()
-
 const HomeNav = (): JSX.Element => {
+  const { invoke } = useApi()
   const { menuVisible, toggleMenu } = useGlobalStore()
   const { switchTheme } = usePersistStore()
   const { currentUser, setCurrentUser } = usePersistSessionStore()

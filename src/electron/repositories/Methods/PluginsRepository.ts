@@ -72,8 +72,7 @@ class PluginsRepository {
 
         const importPath = platform === 'win32' ? 'file://' + pluginPath : pluginPath
 
-        const newPlugin: IRepoPluginRepositoryConstruct = (await import(importPath)).default
-          .default
+        const newPlugin: IRepoPluginRepositoryConstruct = (await import(importPath)).default.default
 
         const instantiatedPlugin = new newPlugin()
 

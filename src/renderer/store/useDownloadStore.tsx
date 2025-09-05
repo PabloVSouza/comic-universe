@@ -5,33 +5,31 @@ import useApi from 'api'
 import { confirmAlert } from 'components/Alert'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 
-const { invoke } = useApi()
-
 interface useDownloadStore {
   queue: IChapter[]
-  addToQueue: (chapter: IChapter) => Promise<void>
-  removeFromQueue: (chapter: IChapter) => Promise<void>
-  getChapterPages: (chapter: IChapter) => Promise<boolean>
-  downloadChapter: (chapter: IChapter) => Promise<void>
-  getNewChapters: () => Promise<void>
+  addToQueue: (chapter: IChapter, invoke: any) => Promise<void>
+  removeFromQueue: (chapter: IChapter, invoke: any) => Promise<void>
+  getChapterPages: (chapter: IChapter, invoke: any) => Promise<boolean>
+  downloadChapter: (chapter: IChapter, invoke: any) => Promise<void>
+  getNewChapters: (invoke: any) => Promise<void>
 }
 
 const useDownloadStore = create<useDownloadStore>((set) => ({
   queue: [],
 
-  addToQueue: async (chapter): Promise<void> => {
+  addToQueue: async (chapter, invoke): Promise<void> => {
     const { queue } = useDownloadStore.getState()
     if (!queue.find((item) => item.id === chapter.id))
       set((state: useDownloadStore) => ({ queue: [...state.queue, chapter] }))
   },
 
-  removeFromQueue: async (chapter): Promise<void> => {
+  removeFromQueue: async (chapter, invoke): Promise<void> => {
     set((state: useDownloadStore) => ({
       queue: state.queue.filter((item) => item.id !== chapter.id)
     }))
   },
 
-  getNewChapters: async (): Promise<void> => {
+  getNewChapters: async (invoke): Promise<void> => {
     const { activeComic } = useGlobalStore.getState()
     const { currentUser } = usePersistSessionStore.getState()
 
@@ -66,7 +64,7 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
     return new Promise((resolve) => resolve())
   },
 
-  getChapterPages: async (chapter): Promise<boolean> => {
+  getChapterPages: async (chapter, invoke): Promise<boolean> => {
     const { repo } = chapter
 
     const pages = await invoke('getPages', { repo, data: { chapter } })
@@ -78,7 +76,7 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
     return !!pages.length
   },
 
-  downloadChapter: async (): Promise<void> => {
+  downloadChapter: async (chapter, invoke): Promise<void> => {
     return
   }
 }))

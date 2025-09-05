@@ -106,7 +106,9 @@ class AppRepository {
     },
 
     updateLanguageSettings: async (args: { languageSettings: unknown }) => {
-      return await this.settingsRepository.methods.updateLanguageSettings(args.languageSettings as Partial<LanguageSettings>)
+      return await this.settingsRepository.methods.updateLanguageSettings(
+        args.languageSettings as Partial<LanguageSettings>
+      )
     }
   }
 }

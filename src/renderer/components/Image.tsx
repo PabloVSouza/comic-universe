@@ -92,7 +92,7 @@ const Image = ({
             timeout={100}
             classNames={transitionStyles}
           >
-            {!!isLoading ? <img {...placeHolderProps} /> : <img {...lazyImageProps} />}
+            {isLoading ? <img {...placeHolderProps} /> : <img {...lazyImageProps} />}
           </CSSTransition>
         </SwitchTransition>
         <img {...loadingProps} />

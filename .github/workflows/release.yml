@@ -3,7 +3,7 @@ name: Build/release Electron app
 on:
   push:
     branches:
-      - dev/v2.0.0-ci-fixes
+      - main
   # Temporarily disabled for testing
   # push:
   #   tags:
@@ -39,8 +39,8 @@ jobs:
         run: |
           CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
           BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
-          # For testing, create a stable version with timestamp
-          STABLE_VERSION="${BASE_VERSION}.$(date +%Y%m%d%H%M%S)"
+          # For stable releases, use the base version (e.g., 2.0.0)
+          STABLE_VERSION="${BASE_VERSION}"
           echo "stable-version=$STABLE_VERSION" >> $GITHUB_OUTPUT
           echo "Stable version: $STABLE_VERSION"
 

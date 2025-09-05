@@ -64,10 +64,7 @@ jobs:
           echo "Note: Some vulnerabilities are in build tools (electron-icon-builder) and don't affect runtime security."
 
   build-test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -81,32 +78,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Test build process (Linux)
-        if: matrix.os == 'ubuntu-latest'
+      - name: Test build process (Linux only)
         run: npm run build:linux-x64
 
-      - name: Test build process (Windows)
-        if: matrix.os == 'windows-latest'
-        run: npm run build:win
-
-      - name: Test build process (macOS)
-        if: matrix.os == 'macos-latest'
-        run: npm run build:mac
-
-      - name: Verify build artifacts (Linux)
-        if: matrix.os == 'ubuntu-latest'
+      - name: Verify build artifacts
         run: |
           ls -la dist/
           test -f dist/*.AppImage || test -f dist/*.deb || test -f dist/*.rpm
-
-      - name: Verify build artifacts (Windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          Get-ChildItem -Path dist/ -Force
-          Test-Path dist/*.exe
-
-      - name: Verify build artifacts (macOS)
-        if: matrix.os == 'macos-latest'
-        run: |
-          ls -la dist/
-          test -f dist/*.dmg

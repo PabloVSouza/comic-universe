@@ -46,8 +46,14 @@ jobs:
 
       - name: Update package.json version
         run: |
-          npm version ${{ steps.stable-version.outputs.stable-version }} --no-git-tag-version
-          echo "Updated package.json to version ${{ steps.stable-version.outputs.stable-version }}"
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          STABLE_VERSION="${{ steps.stable-version.outputs.stable-version }}"
+          if [ "$CURRENT_VERSION" != "$STABLE_VERSION" ]; then
+            npm version $STABLE_VERSION --no-git-tag-version
+            echo "Updated package.json from $CURRENT_VERSION to $STABLE_VERSION"
+          else
+            echo "Version $STABLE_VERSION is already set, no update needed"
+          fi
 
       - name: Upload version files
         uses: actions/upload-artifact@v4

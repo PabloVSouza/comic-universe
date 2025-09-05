@@ -62,6 +62,23 @@ interface SettingsLang {
     userLabel: string
     pluginsLabel: string
   }
+  general: {
+    updatePreferences: string
+    autoUpdate: string
+    checkForUpdates: string
+    currentVersion: string
+    releaseTypes: string
+    stableReleases: string
+    betaReleases: string
+    alphaReleases: string
+    nightlyReleases: string
+    optInNonStable: string
+    optInDescription: string
+    saveSettings: string
+    settingsSaved: string
+    updateCheckSuccess: string
+    updateCheckError: string
+  }
 }
 
 interface UsersLang {

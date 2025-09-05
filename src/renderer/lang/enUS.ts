@@ -62,6 +62,23 @@ export default class enUS implements Lang {
       generalLabel: 'General',
       pluginsLabel: 'Plugins',
       userLabel: 'Users'
+    },
+    general: {
+      updatePreferences: 'Update Preferences',
+      autoUpdate: 'Enable Auto-Update',
+      checkForUpdates: 'Check for Updates',
+      currentVersion: 'Current Version',
+      releaseTypes: 'Release Types to Check',
+      stableReleases: 'Stable Releases',
+      betaReleases: 'Beta Releases',
+      alphaReleases: 'Alpha Releases',
+      nightlyReleases: 'Nightly Releases',
+      optInNonStable: 'Opt-in for Non-Stable Updates',
+      optInDescription: 'Allow the app to check for and install beta, alpha, and nightly releases',
+      saveSettings: 'Save Settings',
+      settingsSaved: 'Settings saved successfully',
+      updateCheckSuccess: 'Update check completed',
+      updateCheckError: 'Error checking for updates'
     }
   }
 

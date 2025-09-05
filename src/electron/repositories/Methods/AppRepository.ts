@@ -47,10 +47,35 @@ class AppRepository {
       }
       
       try {
+        // Load user's update preferences
+        const loadUpdateSettings = () => {
+          try {
+            const settings = JSON.parse(localStorage.getItem('updateSettings') || '{}')
+            return {
+              autoUpdate: settings.autoUpdate !== false,
+              optInNonStable: settings.optInNonStable || false,
+              releaseTypes: settings.releaseTypes || ['stable']
+            }
+          } catch (error) {
+            return {
+              autoUpdate: true,
+              optInNonStable: false,
+              releaseTypes: ['stable']
+            }
+          }
+        }
+        
+        const settings = loadUpdateSettings()
+        
+        if (!settings.autoUpdate) {
+          return { message: 'Auto-update is disabled in settings' }
+        }
+        
         const result = await autoUpdater.checkForUpdates()
         return { 
           message: result ? 'Update check initiated' : 'No updates available',
-          updateInfo: result?.updateInfo
+          updateInfo: result?.updateInfo,
+          settings: settings
         }
       } catch (error) {
         return { 

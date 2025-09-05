@@ -10,37 +10,85 @@ import ApiManager from '../repositories/ApiManager'
 const setupAutoUpdater = (mainWindow: BrowserWindow): void => {
   // Configure auto-updater
   autoUpdater.checkForUpdatesAndNotify = autoUpdater.checkForUpdatesAndNotify
+  
+  // Load user's update preferences
+  const loadUpdateSettings = () => {
+    try {
+      const settings = JSON.parse(localStorage.getItem('updateSettings') || '{}')
+      return {
+        autoUpdate: settings.autoUpdate !== false, // Default to true
+        optInNonStable: settings.optInNonStable || false,
+        releaseTypes: settings.releaseTypes || ['stable']
+      }
+    } catch (error) {
+      console.error('Error loading update settings:', error)
+      return {
+        autoUpdate: true,
+        optInNonStable: false,
+        releaseTypes: ['stable']
+      }
+    }
+  }
 
   // Update available
   autoUpdater.on('update-available', (info) => {
-    dialog.showMessageBox(mainWindow, {
-      type: 'info',
-      title: 'Update Available',
-      message: 'A new version is available. It will be downloaded in the background.',
-      detail: `Version ${info.version} is available. The update will be downloaded automatically.`,
-      buttons: ['OK']
-    })
+    const settings = loadUpdateSettings()
+    
+    // Check if user wants this type of update
+    const isStable = !info.version.includes('alpha') && !info.version.includes('beta') && !info.version.includes('nightly')
+    const isBeta = info.version.includes('beta')
+    const isAlpha = info.version.includes('alpha')
+    const isNightly = info.version.includes('nightly')
+    
+    let shouldShowUpdate = false
+    
+    if (isStable && settings.releaseTypes.includes('stable')) {
+      shouldShowUpdate = true
+    } else if (isBeta && settings.releaseTypes.includes('beta') && settings.optInNonStable) {
+      shouldShowUpdate = true
+    } else if (isAlpha && settings.releaseTypes.includes('alpha') && settings.optInNonStable) {
+      shouldShowUpdate = true
+    } else if (isNightly && settings.releaseTypes.includes('nightly') && settings.optInNonStable) {
+      shouldShowUpdate = true
+    }
+    
+    if (shouldShowUpdate) {
+      dialog.showMessageBox(mainWindow, {
+        type: 'info',
+        title: 'Update Available',
+        message: 'A new version is available. It will be downloaded in the background.',
+        detail: `Version ${info.version} is available. The update will be downloaded automatically.`,
+        buttons: ['OK']
+      })
+    } else {
+      console.log(`Update available (${info.version}) but user preferences don't allow this type of update`)
+    }
   })
 
   // Update downloaded
   autoUpdater.on('update-downloaded', (info) => {
-    dialog.showMessageBox(mainWindow, {
-      type: 'info',
-      title: 'Update Ready',
-      message: 'Update downloaded. The application will restart to apply the update.',
-      detail: `Version ${info.version} has been downloaded and is ready to install.`,
-      buttons: ['Restart Now', 'Later']
-    }).then((result) => {
-      if (result.response === 0) {
-        autoUpdater.quitAndInstall()
-      }
-    })
+    dialog
+      .showMessageBox(mainWindow, {
+        type: 'info',
+        title: 'Update Ready',
+        message: 'Update downloaded. The application will restart to apply the update.',
+        detail: `Version ${info.version} has been downloaded and is ready to install.`,
+        buttons: ['Restart Now', 'Later']
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          autoUpdater.quitAndInstall()
+        }
+      })
   })
 
   // Update error
   autoUpdater.on('error', (error) => {
     console.error('Auto-updater error:', error)
-    dialog.showErrorBox('Update Error', `An error occurred while checking for updates: ${error.message}`)
+    dialog.showErrorBox(
+      'Update Error',
+      `An error occurred while checking for updates: ${error.message}`
+    )
   })
 
   // Download progress

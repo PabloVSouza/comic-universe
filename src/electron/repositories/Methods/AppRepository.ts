@@ -57,7 +57,6 @@ class AppRepository {
       const isCICDVersion =
         currentVersion.includes('alpha') ||
         currentVersion.includes('beta') ||
-        currentVersion.includes('nightly') ||
         !currentVersion.includes('-')
 
       if (!isCICDVersion) {

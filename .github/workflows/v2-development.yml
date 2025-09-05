@@ -208,7 +208,7 @@ jobs:
             - Better error handling and logging
 
             ## Testing
-            This is a nightly build. Please test thoroughly and report any issues.
+            This is a development build. Please test thoroughly and report any issues.
 
             ## Installation
             Download the appropriate build for your platform from the assets below.
@@ -230,12 +230,12 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🌙 **2.0.0 Nightly Release Created**
+              body: `🚀 **2.0.0 Development Release Created**
               
               Version: \`${{ needs.prepare-release.outputs.version }}\`
               Release Type: **${{ needs.prepare-release.outputs.release-type }}**
               
-              A nightly build has been created for testing Comic Universe 2.0.0. 
+              A development build has been created for testing Comic Universe 2.0.0. 
               Download it from the [releases page](https://github.com/${{ github.repository }}/releases/tag/v${{ needs.prepare-release.outputs.version }}).
               
               Please test the new features and provide feedback!`

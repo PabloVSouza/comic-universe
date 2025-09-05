@@ -90,8 +90,7 @@ const SettingsUpdatePreferences = () => {
   const allReleaseTypeOptions = [
     { value: 'stable', label: t('Settings.general.stableReleases') },
     { value: 'beta', label: t('Settings.general.betaReleases') },
-    { value: 'alpha', label: t('Settings.general.alphaReleases') },
-    { value: 'nightly', label: t('Settings.general.nightlyReleases') }
+    { value: 'alpha', label: t('Settings.general.alphaReleases') }
   ]
 
   // Filter out already selected options

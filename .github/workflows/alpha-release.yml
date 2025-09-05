@@ -40,6 +40,7 @@ jobs:
           prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          target_commitish: ${{ github.sha }}
           files: |
             dist/*.exe
             dist/*.zip
@@ -94,6 +95,7 @@ jobs:
           prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          target_commitish: ${{ github.sha }}
           files: |
             dist/*.exe
             dist/*.zip
@@ -148,6 +150,7 @@ jobs:
           prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          target_commitish: ${{ github.sha }}
           files: |
             dist/*.exe
             dist/*.zip

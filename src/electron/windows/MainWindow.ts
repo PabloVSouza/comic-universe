@@ -13,7 +13,6 @@ const setupAutoUpdater = (
   settingsRepository: SettingsRepository
 ): void => {
   // Configure auto-updater
-  autoUpdater.checkForUpdatesAndNotify = autoUpdater.checkForUpdatesAndNotify
 
   // Load user's update preferences from file
   const loadUpdateSettings = async () => {

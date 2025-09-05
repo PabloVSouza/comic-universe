@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import Cover from 'components/Cover'
 import openWindow from 'functions/openWindow'
 import Image from 'components/Image'
-import useLang from 'lang'
+import { useTranslation } from 'react-i18next'
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistStore from 'store/usePersistStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
@@ -21,7 +21,7 @@ const HomeNav = (): JSX.Element => {
   const { switchTheme } = usePersistStore()
   const { currentUser, setCurrentUser } = usePersistSessionStore()
 
-  const texts = useLang()
+  const { t } = useTranslation()
   const activeUser = !!currentUser.id
 
   const closeApp = (): void => {
@@ -31,22 +31,22 @@ const HomeNav = (): JSX.Element => {
 
   const options = [
     {
-      label: texts.HomeNav.about,
+      label: t('HomeNav.about'),
       icon: infoIcon,
       onClick: (): void => openWindow({ component: 'About', props: {} })
     },
     {
-      label: texts.HomeNav.settings,
+      label: t('HomeNav.settings'),
       icon: settingsIcon,
       onClick: () => openWindow({ component: 'Settings', props: {} })
     },
     {
-      label: texts.HomeNav.darkMode,
+      label: t('HomeNav.darkMode'),
       icon: darkmodeIcon,
       onClick: (): void => switchTheme()
     },
     {
-      label: texts.HomeNav.changeUser,
+      label: t('HomeNav.changeUser'),
       icon: userIcon,
       onClick: (): void => setCurrentUser({} as IUser)
     }
@@ -54,7 +54,7 @@ const HomeNav = (): JSX.Element => {
 
   const closeOption = [
     {
-      label: texts.HomeNav.closeApp,
+      label: t('HomeNav.closeApp'),
       icon: exitIcon,
       onClick: closeApp
     }

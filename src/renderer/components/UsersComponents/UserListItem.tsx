@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import classNames from 'classnames'
 import useApi from 'api'
-import useLang from 'lang'
+import { useTranslation } from 'react-i18next'
 import Image from 'components/Image'
 import { confirmAlert } from 'components/Alert'
 import useWindowManagerStore from 'store/useWindowManagerStore'
@@ -18,7 +18,7 @@ interface IUsersListItemProps {
 }
 
 const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItemProps): JSX.Element => {
-  const lang = useLang()
+  const { t } = useTranslation()
   const { invoke } = useApi()
   const queryClient = useQueryClient()
 
@@ -48,15 +48,15 @@ const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItemProps): J
   const handleDeleteUser = async (): Promise<void> => {
     if (id) {
       confirmAlert({
-        title: lang.Users.deleteUser.deleteUserTitle,
-        message: lang.Users.deleteUser.deleteUserMessage,
+        title: t('Users.deleteUser.deleteUserTitle'),
+        message: t('Users.deleteUser.deleteUserMessage'),
         buttons: [
           {
-            label: lang.Users.deleteUser.confirmDeleteButton,
+            label: t('Users.deleteUser.confirmDeleteButton'),
             action: () => deleteUser(id)
           },
           {
-            label: lang.Users.deleteUser.cancelDeleteButton
+            label: t('Users.deleteUser.cancelDeleteButton')
           }
         ]
       })

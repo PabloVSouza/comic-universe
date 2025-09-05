@@ -4,7 +4,7 @@ import Cover from 'components/Cover'
 import { createPortal } from 'react-dom'
 import Button from 'components/Button'
 import usePersistStore from 'store/usePersistStore'
-import useLang from 'lang/index'
+import { useTranslation } from 'react-i18next'
 
 interface AlertButton {
   label: string
@@ -63,7 +63,7 @@ export const confirmAlert = (props: IAlertProps) => {
 
 export const AlertProvider = ({ children }: { children: ReactNode }) => {
   const [alertProps, setAlertProps] = useState<IAlertProps | null>(null)
-  const lang = useLang()
+  const { t } = useTranslation()
 
   const { theme } = usePersistStore()
 
@@ -79,7 +79,7 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const defaultButton = [
-    { label: lang.General.alertConfirmButton, action: handleClose }
+    { label: t('General.alertConfirmButton'), action: handleClose }
   ] as AlertButton[]
 
   const buttons =

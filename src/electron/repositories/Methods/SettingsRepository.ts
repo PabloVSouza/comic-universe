@@ -1,15 +1,20 @@
-import { app } from 'electron'
 import fs from 'fs'
 import path from 'path'
+import { DataPaths } from 'utils/utils'
 
-interface UpdateSettings {
+export interface UpdateSettings {
   autoUpdate: boolean
   optInNonStable: boolean
   releaseTypes: string[]
 }
 
+export interface LanguageSettings {
+  language: string
+}
+
 interface AppSettings {
   update: UpdateSettings
+  language: LanguageSettings
   // Add other settings here in the future
 }
 
@@ -20,13 +25,16 @@ class SettingsRepository {
       autoUpdate: true,
       optInNonStable: false,
       releaseTypes: ['stable']
+    },
+    language: {
+      language: 'ptBR'
     }
   }
 
   constructor() {
-    // Set the settings file path in the user data directory
-    const userDataPath = app.getPath('userData')
-    this.settingsPath = path.join(userDataPath, 'settings.json')
+    // Use the centralized data paths utility
+    DataPaths.ensureDirectoryExists(DataPaths.getSettingsPath())
+    this.settingsPath = DataPaths.getSettingsFilePath()
   }
 
   public methods = {
@@ -36,7 +44,7 @@ class SettingsRepository {
         if (fs.existsSync(this.settingsPath)) {
           const settingsData = fs.readFileSync(this.settingsPath, 'utf8')
           const settings = JSON.parse(settingsData)
-          
+
           // Merge with defaults to ensure all properties exist
           return this.mergeWithDefaults(settings)
         } else {
@@ -69,7 +77,10 @@ class SettingsRepository {
     },
 
     // Update specific settings section
-    updateSettings: async (section: keyof AppSettings, newSettings: Partial<AppSettings[keyof AppSettings]>): Promise<AppSettings> => {
+    updateSettings: async (
+      section: keyof AppSettings,
+      newSettings: Partial<AppSettings[keyof AppSettings]>
+    ): Promise<AppSettings> => {
       try {
         const currentSettings = await this.methods.loadSettings()
         const updatedSettings = {
@@ -79,7 +90,7 @@ class SettingsRepository {
             ...newSettings
           }
         }
-        
+
         await this.methods.saveSettings(updatedSettings)
         return updatedSettings
       } catch (error) {
@@ -95,9 +106,25 @@ class SettingsRepository {
     },
 
     // Update update settings specifically
-    updateUpdateSettings: async (updateSettings: Partial<UpdateSettings>): Promise<UpdateSettings> => {
+    updateUpdateSettings: async (
+      updateSettings: Partial<UpdateSettings>
+    ): Promise<UpdateSettings> => {
       const updatedSettings = await this.methods.updateSettings('update', updateSettings)
       return updatedSettings.update
+    },
+
+    // Get language settings specifically
+    getLanguageSettings: async (): Promise<LanguageSettings> => {
+      const settings = await this.methods.loadSettings()
+      return settings.language
+    },
+
+    // Update language settings specifically
+    updateLanguageSettings: async (
+      languageSettings: Partial<LanguageSettings>
+    ): Promise<LanguageSettings> => {
+      const updatedSettings = await this.methods.updateSettings('language', languageSettings)
+      return updatedSettings.language
     },
 
     // Reset settings to defaults
@@ -118,6 +145,10 @@ class SettingsRepository {
       update: {
         ...this.defaultSettings.update,
         ...(loadedSettings.update || {})
+      },
+      language: {
+        ...this.defaultSettings.language,
+        ...(loadedSettings.language || {})
       }
     }
 

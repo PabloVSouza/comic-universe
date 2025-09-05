@@ -1,178 +1,152 @@
+import { useTranslation } from 'react-i18next'
 import { useState, useEffect } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import useLang from 'lang'
+import SettingsUpdatePreferences from './SettingsUpdatePreferences'
 import useApi from 'api'
-import Button from 'components/Button'
 import Select from 'components/Select'
-
-interface UpdateSettings {
-  autoUpdate: boolean
-  optInNonStable: boolean
-  releaseTypes: string[]
-}
+import Button from 'components/Button'
+import refreshIcon from 'assets/refresh.svg'
+import { updateWindowTitles } from 'functions/openWindow'
 
 const SettingsGeneral = () => {
-  const lang = useLang()
+  const { t, i18n } = useTranslation()
   const { invoke } = useApi()
-  const [settings, setSettings] = useState<UpdateSettings>({
-    autoUpdate: true,
-    optInNonStable: false,
-    releaseTypes: ['stable']
-  })
-  const [currentVersion, setCurrentVersion] = useState<string>('')
+  const [currentLanguage, setCurrentLanguage] = useState('ptBR')
 
-  // Load current settings and version on mount
+  // Load language from settings on component mount
   useEffect(() => {
-    loadSettings()
-    loadCurrentVersion()
+    loadLanguageFromSettings()
   }, [])
 
-  const loadSettings = async () => {
+  const loadLanguageFromSettings = async () => {
     try {
-      // Load settings from file
-      const savedSettings = await invoke('getUpdateSettings')
-      setSettings(savedSettings)
+      const languageSettings = await invoke('getLanguageSettings')
+      const language = languageSettings?.language || 'ptBR'
+      setCurrentLanguage(language)
+
+      // Update i18n if different
+      if (i18n.language !== language) {
+        await i18n.changeLanguage(language)
+      }
     } catch (error) {
-      console.error('Error loading settings:', error)
+      console.error('Error loading language settings:', error)
     }
   }
 
-  const loadCurrentVersion = async () => {
-    try {
-      const version = await invoke('getAppVersion')
-      setCurrentVersion(version)
-    } catch (error) {
-      console.error('Error loading version:', error)
-      setCurrentVersion('Unknown')
+  const languageOptions = [
+    { value: 'enUS', label: 'English' },
+    { value: 'ptBR', label: 'Português' }
+  ]
+
+  const handleLanguageChange = async (selected: any) => {
+    if (selected && selected.value !== currentLanguage) {
+      console.log('Changing language from', currentLanguage, 'to:', selected.value)
+
+      try {
+        // Update settings file
+        await invoke('updateLanguageSettings', { languageSettings: { language: selected.value } })
+
+        // Update local state
+        setCurrentLanguage(selected.value)
+
+        // Update i18n
+        await i18n.changeLanguage(selected.value)
+
+        // Update window titles to reflect language change
+        // Small delay to ensure i18n has updated
+        setTimeout(() => {
+          updateWindowTitles()
+        }, 100)
+      } catch (error) {
+        console.error('Error updating language settings:', error)
+      }
     }
   }
-
-  const saveSettings = useMutation({
-    mutationFn: async (newSettings: UpdateSettings) => {
-      return await invoke('updateUpdateSettings', { updateSettings: newSettings })
-    },
-    onSuccess: () => {
-      // Show success message
-      console.log(lang.Settings.general.settingsSaved)
-    }
-  })
 
   const checkForUpdates = useMutation({
     mutationFn: async () => {
       return await invoke('checkForUpdates')
     },
-    onSuccess: (result) => {
-      console.log(lang.Settings.general.updateCheckSuccess, result)
+    onSuccess: (data) => {
+      console.log('Update check result:', data)
     },
     onError: (error) => {
-      console.error(lang.Settings.general.updateCheckError, error)
+      console.error('Error checking for updates:', error)
     }
   })
-
-  const handleSaveSettings = () => {
-    saveSettings.mutate(settings)
-  }
 
   const handleCheckForUpdates = () => {
     checkForUpdates.mutate()
   }
 
-  const handleReleaseTypeChange = (selected: any) => {
-    const selectedTypes = selected ? selected.map((item: any) => item.value) : []
-    setSettings(prev => ({
-      ...prev,
-      releaseTypes: selectedTypes
-    }))
-  }
-
-  const releaseTypeOptions = [
-    { value: 'stable', label: lang.Settings.general.stableReleases },
-    { value: 'beta', label: lang.Settings.general.betaReleases },
-    { value: 'alpha', label: lang.Settings.general.alphaReleases },
-    { value: 'nightly', label: lang.Settings.general.nightlyReleases }
-  ]
-
   return (
-    <div className="grow flex justify-center items-center p-2 flex-col gap-5">
-      <h2 className="text-2xl">{lang.Settings.general.updatePreferences}</h2>
-      
-      {/* Current Version */}
-      <div className="w-full max-w-md">
-        <label className="block text-sm font-medium mb-2">
-          {lang.Settings.general.currentVersion}
-        </label>
-        <div className="text-sm bg-default px-3 py-2 rounded-md">
-          {currentVersion}
-        </div>
+    <div className="h-full w-full flex flex-col">
+      {/* Header */}
+      <div className="flex-shrink-0 p-4">
+        <h2 className="text-2xl text-center">{t('Settings.general.title')}</h2>
       </div>
 
-      {/* Auto-Update Toggle */}
-      <div className="w-full max-w-md">
-        <label className="flex items-center space-x-3">
-          <input
-            type="checkbox"
-            checked={settings.autoUpdate}
-            onChange={(e) => setSettings(prev => ({ ...prev, autoUpdate: e.target.checked }))}
-            className="w-4 h-4"
-          />
-          <span className="text-sm font-medium">
-            {lang.Settings.general.autoUpdate}
-          </span>
-        </label>
-      </div>
-
-      {/* Release Types Multi-Select */}
-      <div className="w-full max-w-md">
-        <label className="block text-sm font-medium mb-2">
-          {lang.Settings.general.releaseTypes}
-        </label>
-        <Select
-          isMulti
-          value={releaseTypeOptions.filter(option => settings.releaseTypes.includes(option.value))}
-          onChange={handleReleaseTypeChange}
-          options={releaseTypeOptions}
-          placeholder="Select release types..."
-          className="bg-default rounded-lg"
-        />
-      </div>
-
-      {/* Opt-in for Non-Stable Updates */}
-      <div className="w-full max-w-md">
-        <label className="flex items-start space-x-3">
-          <input
-            type="checkbox"
-            checked={settings.optInNonStable}
-            onChange={(e) => setSettings(prev => ({ ...prev, optInNonStable: e.target.checked }))}
-            className="w-4 h-4 mt-0.5"
-          />
-          <div className="space-y-1">
-            <span className="text-sm font-medium">
-              {lang.Settings.general.optInNonStable}
-            </span>
-            <p className="text-xs text-gray-500">
-              {lang.Settings.general.optInDescription}
-            </p>
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto p-6">
+        <div className="max-w-md mx-auto space-y-8">
+          {/* Language Selection Section */}
+          <div>
+            <h3 className="text-xl mb-4 text-gray-800 dark:text-gray-200">
+              {t('Settings.general.language')}
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-base mb-2 text-gray-700 dark:text-gray-300">
+                  {t('Settings.general.selectLanguage')}
+                </label>
+                <Select
+                  value={languageOptions.find((option) => option.value === currentLanguage)}
+                  onChange={handleLanguageChange}
+                  options={languageOptions}
+                  className="bg-default rounded-lg"
+                />
+              </div>
+            </div>
           </div>
-        </label>
-      </div>
 
-      {/* Action Buttons */}
-      <div className="w-full max-w-md flex gap-2">
-        <Button
-          onClick={handleSaveSettings}
-          disabled={saveSettings.isPending}
-          className="flex-1"
-        >
-          {saveSettings.isPending ? 'Saving...' : lang.Settings.general.saveSettings}
-        </Button>
+          {/* Separator */}
+          <div className="border-t border-gray-200 dark:border-gray-700"></div>
 
-        <Button
-          onClick={handleCheckForUpdates}
-          disabled={checkForUpdates.isPending}
-          className="flex-1"
-        >
-          {checkForUpdates.isPending ? 'Checking...' : lang.Settings.general.checkForUpdates}
-        </Button>
+          {/* Update Preferences Section */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl text-gray-800 dark:text-gray-200">
+                {t('Settings.general.updatePreferences')}
+              </h3>
+              <Button
+                onClick={handleCheckForUpdates}
+                disabled={checkForUpdates.isPending}
+                loading={checkForUpdates.isPending}
+                icon={refreshIcon}
+                size="icon"
+                theme="pure"
+                title={
+                  checkForUpdates.isPending
+                    ? t('General.checking')
+                    : t('Settings.general.checkForUpdates')
+                }
+              />
+            </div>
+            <SettingsUpdatePreferences />
+          </div>
+
+          {/* Future sections can be added here */}
+          {/* 
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+              Other General Settings
+            </h3>
+            <div className="space-y-4">
+              // Other settings components can be added here
+            </div>
+          </div>
+          */}
+        </div>
       </div>
     </div>
   )

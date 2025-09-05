@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import Button from 'components/Button'
-import useLang from 'lang'
+import { useTranslation } from 'react-i18next'
 import useFetchData from 'hooks/useFetchData'
 
 import downloadIcon from 'assets/download-icon-2.svg'
@@ -16,7 +16,7 @@ const HomeDashboardNavBar = ({
   additionalData: IComic
 }): JSX.Element => {
   const navigate = useNavigate()
-  const texts = useLang()
+  const { t } = useTranslation()
   const { fetchNewChapters, insertChapters } = useFetchData()
 
   const getNewChapters = async () => {
@@ -58,14 +58,14 @@ const HomeDashboardNavBar = ({
           theme="pure"
           size="xxs"
           icon={downloadIcon}
-          title={texts.Dashboard.downloadMore}
+          title={t('Dashboard.downloadMore')}
           onClick={getNewChapters}
         />
         <Button
           theme="pure"
           size="xxs"
           icon={comicBook}
-          title={texts.Dashboard.continueReading}
+          title={t('Dashboard.continueReading')}
           onClick={continueReading}
         />
       </div>

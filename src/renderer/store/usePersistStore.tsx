@@ -4,10 +4,8 @@ import useGlobalStore from './useGlobalStore'
 
 interface IusePersistStore {
   theme: string
-  lang: string
   repo: TOption
   switchTheme: (theme?: string) => void
-  changeLanguage: (lang?: string) => void
   setRepo: (repo: TOption) => void
 }
 
@@ -17,16 +15,10 @@ const usePersistStore = create<IusePersistStore>()(
   persist(
     (set, get) => ({
       theme: 'dark',
-      lang: 'ptBR',
       repo: {} as TOption,
 
       switchTheme: (theme): void =>
         set({ theme: theme || get().theme === 'dark' ? 'light' : 'dark' }),
-
-      changeLanguage: (lang): void =>
-        set({
-          lang: lang || get().lang === 'ptBR' ? 'enUS' : 'ptBR'
-        }),
 
       setRepo: (repo): void => set({ repo })
     }),

@@ -2,10 +2,10 @@ import { shell, BrowserWindow, app, dialog } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
 import { autoUpdater } from 'electron-updater'
-import Methods from '../repositories/Methods'
+import Methods from 'repositories/Methods'
 import EventManager from 'repositories/EventManager'
-import ApiManager from '../repositories/ApiManager'
-import SettingsRepository from '../repositories/Methods/SettingsRepository'
+import ApiManager from 'repositories/ApiManager'
+import SettingsRepository from 'repositories/Methods/SettingsRepository'
 
 // Configure auto-updater
 const setupAutoUpdater = (
@@ -135,9 +135,19 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
 
     // Setup auto-updater with settings repository
     if (!is.dev) {
-      const settingsRepository = new SettingsRepository()
-      setupAutoUpdater(mainWindow, settingsRepository)
-      autoUpdater.checkForUpdatesAndNotify()
+      // Only setup auto-updater for CI/CD generated versions
+      const currentVersion = app.getVersion()
+      const isCICDVersion =
+        currentVersion.includes('alpha') ||
+        currentVersion.includes('beta') ||
+        currentVersion.includes('nightly') ||
+        !currentVersion.includes('-')
+
+      if (isCICDVersion) {
+        const settingsRepository = new SettingsRepository()
+        setupAutoUpdater(mainWindow, settingsRepository)
+        autoUpdater.checkForUpdatesAndNotify()
+      }
     }
   }
 

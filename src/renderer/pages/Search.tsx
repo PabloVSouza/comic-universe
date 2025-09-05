@@ -7,7 +7,7 @@ import Image from 'components/Image'
 import SearchComicList from 'components/SearchComponents/SearchComicList'
 import Loading from 'components/LoadingOverlay'
 import Pagination from 'components/Pagination'
-import useLang from 'lang'
+import { useTranslation } from 'react-i18next'
 import usePersistStore from 'store/usePersistStore'
 
 import searchIcon from 'assets/magnifying-glass-search.svg'
@@ -31,7 +31,7 @@ const Search = (): JSX.Element => {
     queryKey: ['repoList'],
     queryFn: async () => {
       const repos = (await invoke('getRepoList')) as TOption[]
-      if (!!repos.length) {
+      if (repos.length) {
         if (!repo.value || !repos.includes(repo)) setRepo(repos[0])
         setNoRepos(false)
       }
@@ -55,7 +55,7 @@ const Search = (): JSX.Element => {
     enabled: !!repoList.length
   })
 
-  const texts = useLang()
+  const { t } = useTranslation()
 
   const handleChangeRepo = (e: TOption): void => {
     if (inputRef.current) inputRef.current.value = ''
@@ -90,14 +90,14 @@ const Search = (): JSX.Element => {
       <div className="w-full h-24 flex-shrink-0 py-6 px-11 absolute top-0 bg-modal backdrop-blur-sm shadow-basic z-10">
         <div className="h-full w-full bg-default shadow-basic rounded flex justify-center items-center pr-4 max-w-3xl my-0 mx-auto">
           <Select
-            value={noRepos ? { label: texts.SearchComic.noReposAvailable } : repo}
+            value={noRepos ? { label: t('SearchComic.noReposAvailable') } : repo}
             options={repoList}
             onChange={(e) => handleChangeRepo(e as TOption)}
             isDisabled={noRepos}
           />
           <input
             className="flex-grow bg-transparent text-lg placeholder:text-text-default placeholder:opacity-60 pl-5"
-            placeholder={texts.SearchComic.textPlaceholder}
+            placeholder={t('SearchComic.textPlaceholder')}
             type="text"
             onChange={debouncedResults}
             ref={inputRef}
@@ -122,19 +122,21 @@ const Search = (): JSX.Element => {
   )
 }
 
-const windowSettings = {
-  windowProps: {
-    contentClassName: 'h-full w-full flex flex-col overflow-hidden items-center relative',
-    closeable: true,
-    titleBar: true,
-    unique: true,
-    title: useLang().SearchComic.windowTitle
-  },
-  initialStatus: {
-    startPosition: 'center',
-    width: '90%',
-    height: '90%'
-  }
-} as TWindow
+const getWindowSettings = () => {
+  return {
+    windowProps: {
+      contentClassName: 'h-full w-full flex flex-col overflow-hidden items-center relative',
+      closeable: true,
+      titleBar: true,
+      unique: true,
+      title: 'Search' // Will be translated dynamically in openWindow
+    },
+    initialStatus: {
+      startPosition: 'center',
+      width: '90%',
+      height: '90%'
+    }
+  } as TWindow
+}
 
-export default { Search, ...windowSettings }
+export default { Search, ...getWindowSettings() }

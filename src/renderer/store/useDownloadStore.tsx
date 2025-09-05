@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import useGlobalStore from './useGlobalStore'
-import useLang from 'lang'
+import { useTranslation } from 'react-i18next'
 import useApi from 'api'
 import { confirmAlert } from 'components/Alert'
 import usePersistSessionStore from 'store/usePersistSessionStore'
@@ -52,12 +52,12 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
     if (newChapters.length) {
       await invoke('dbInsertChapters', { chapters: newChapters })
     } else {
-      const lang = useLang()
+      const { t } = useTranslation()
       confirmAlert({
-        message: lang.Dashboard.newChapter.noNewChapterMessage,
+        message: t('Dashboard.newChapter.noNewChapterMessage'),
         buttons: [
           {
-            label: lang.Dashboard.newChapter.noNewChapterConfirm
+            label: t('Dashboard.newChapter.noNewChapterConfirm')
           }
         ]
       })

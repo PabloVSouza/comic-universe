@@ -5,10 +5,12 @@ import Image from 'components/Image'
 
 const buttonStyling = {
   base: 'cursor-pointer relative overflow-hidden transition-all duration-500 ease-default',
+  disabled: 'opacity-50 cursor-not-allowed',
+  loading: 'animate-spin',
   themes: {
     default: {
       button: { default: 'bg-oposite/70 px-5 py-1 rounded hover:bg-oposite', active: '' },
-      icon: { default: '', active: '' }
+      icon: { default: 'bg-text-default w-full h-full opacity-80', active: '' }
     },
     pure: {
       button: {
@@ -78,7 +80,9 @@ const buttonStyling = {
     s: 'w-20',
     m: 'w-24',
     l: 'w-44',
-    xl: 'w-48 p-5'
+    lg: 'w-16 h-16',
+    xl: 'w-48 p-5',
+    icon: 'w-8 h-8'
   },
   colors: {
     white: '!bg-zinc-100/80 hover:bg-zinc-50 text-zinc-950',
@@ -93,7 +97,9 @@ type TButton = {
   className?: string
   children?: React.ReactNode
   color?: keyof typeof buttonStyling.colors
+  disabled?: boolean
   icon?: string
+  loading?: boolean
   onClick?: () => void
   size?: keyof typeof buttonStyling.sizes
   theme?: keyof typeof buttonStyling.themes
@@ -105,7 +111,9 @@ const Button = ({
   className,
   children,
   color,
+  disabled,
   icon,
+  loading,
   onClick,
   size,
   theme = 'default',
@@ -125,13 +133,15 @@ const Button = ({
       buttonStyling.themes[theme].button.default,
       color ? buttonStyling.colors[color] : '',
       size ? buttonStyling.sizes[size] : '',
+      disabled ? buttonStyling.disabled : '',
       className,
       active ? buttonStyling.themes[theme].button.active : ''
     )
   }
 
   const customProps = {
-    onClick: () => handleClick(),
+    onClick: disabled ? undefined : () => handleClick(),
+    disabled,
     ...classProps,
     ...props
   }
@@ -142,16 +152,19 @@ const Button = ({
         <Image
           className={classNames(
             buttonStyling.themes[theme].icon.default,
-            active && buttonStyling.themes[theme].icon.active
+            active && buttonStyling.themes[theme].icon.active,
+            loading && buttonStyling.loading
           )}
           src={icon}
           svg
         />
       ) : (
+        // For themes that don't use icons (like burger), render the icon styling directly
         <div
           className={classNames(
             buttonStyling.themes[theme].icon.default,
-            active && buttonStyling.themes[theme].icon.active
+            active && buttonStyling.themes[theme].icon.active,
+            loading && buttonStyling.loading
           )}
         />
       )}

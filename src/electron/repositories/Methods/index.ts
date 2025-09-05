@@ -19,7 +19,8 @@ class Methods {
     await pluginsRepository.startUp()
     const apiRepository = new ApiRepository(pluginsRepository)
     const appRepository = new AppRepository(this.path, this.runningPath, this.win)
-    const dbRepository = new DBRepository(this.path)
+    const dbRepository = new DBRepository()
+    await dbRepository.startup()
     const settingsRepository = new SettingsRepository()
 
     this.methods = {

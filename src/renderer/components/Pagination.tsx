@@ -1,7 +1,7 @@
 import ReactPaginate from 'react-paginate'
 import { useState, useEffect } from 'react'
 import classNames from 'classnames'
-import useLang from 'lang/index'
+import { useTranslation } from 'react-i18next'
 
 interface IPaginationProps {
   setOffset: (offset: number) => void
@@ -11,7 +11,7 @@ interface IPaginationProps {
 }
 
 const Pagination = ({ setOffset, className, itemsPerPage, list, ...props }: IPaginationProps) => {
-  const lang = useLang()
+  const { t } = useTranslation()
 
   const [page, setPage] = useState(0)
   const totalPages = list.length / itemsPerPage
@@ -66,8 +66,8 @@ const Pagination = ({ setOffset, className, itemsPerPage, list, ...props }: IPag
       pageRangeDisplayed={2}
       marginPagesDisplayed={2}
       pageCount={totalPages}
-      nextLabel={lang.Pagination.next}
-      previousLabel={lang.Pagination.previous}
+      nextLabel={t('Pagination.next')}
+      previousLabel={t('Pagination.previous')}
       {...props}
     />
   ) : (

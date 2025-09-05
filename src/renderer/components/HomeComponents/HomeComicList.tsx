@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import openWindow from 'functions/openWindow'
 import useApi from 'api'
-import useLang from 'lang'
+import { useTranslation } from 'react-i18next'
 import Button from 'components/Button'
 import { confirmAlert } from 'components/Alert'
 import { ContextMenu, openContextMenu, TContextOptions } from 'components/ContextMenu'
@@ -20,7 +20,7 @@ const HomeComicList = ({ comicList }: { comicList: IComic[] }): JSX.Element => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
   })
 
-  const lang = useLang()
+  const { t } = useTranslation()
 
   const [currentCtxItem, setCurrentCtxItem] = useState({} as IComic)
 
@@ -34,18 +34,18 @@ const HomeComicList = ({ comicList }: { comicList: IComic[] }): JSX.Element => {
   }
   const ctxOptions = [
     {
-      title: lang.Dashboard.contextMenu.deleteComic.title,
+      title: t('Dashboard.contextMenu.deleteComic.title'),
       icon: deleteIcon,
       action: () => {
         confirmAlert({
-          title: lang.Dashboard.contextMenu.deleteComic.title,
-          message: lang.Dashboard.contextMenu.deleteComic.confirmMessage,
+          title: t('Dashboard.contextMenu.deleteComic.title'),
+          message: t('Dashboard.contextMenu.deleteComic.confirmMessage'),
           buttons: [
             {
-              label: lang.Dashboard.contextMenu.deleteComic.confirmCancel
+              label: t('Dashboard.contextMenu.deleteComic.confirmCancel')
             },
             {
-              label: lang.Dashboard.contextMenu.deleteComic.confirmOk,
+              label: t('Dashboard.contextMenu.deleteComic.confirmOk'),
               action: () => {
                 deleteComic(currentCtxItem)
               }

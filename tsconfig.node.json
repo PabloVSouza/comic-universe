@@ -15,6 +15,7 @@
       "preload/*": ["./src/electron/preload/*"],
       "repositories/*": ["./src/electron/repositories/*"],
       "scripts/*": ["./src/electron/scripts/*"],
+      "utils": ["./src/electron/utils/utils"],
       "utils/*":["./src/electron/utils/*"],
       "windows/*":["./src/electron/windows/*"],
     }

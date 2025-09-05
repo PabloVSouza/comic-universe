@@ -1,20 +1,19 @@
-import { is } from '@electron-toolkit/utils'
-import path from 'path'
 import { PrismaInitializer } from 'prisma-cli-extension'
 import { Chapter, Comic, PrismaClient, User } from '@prisma/client'
+import { DataPaths } from 'utils/utils'
 
 class DBRepository implements IDBRepository {
   private db = {} as PrismaClient
   private prismaInitializer = {} as PrismaInitializer
+  private dbPath: string
 
-  constructor(private dbPath: string) {
+  constructor() {
     const cnnParams = '?socket_timeout=10&connection_limit=1'
-    const prodDb = `file:${path.join(this.dbPath, 'db', 'database.db')}${cnnParams}`
-    const devDb = `file:../database.db${cnnParams}`
 
-    this.dbPath = is.dev ? devDb : prodDb
-
-    this.startup()
+    // Use the centralized data paths utility
+    DataPaths.ensureDirectoryExists(DataPaths.getDatabasePath())
+    const dbFilePath = DataPaths.getDatabaseFilePath()
+    this.dbPath = `file:${dbFilePath}${cnnParams}`
   }
 
   public startup = async () => {

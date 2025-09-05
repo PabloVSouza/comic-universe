@@ -1,6 +1,6 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
 import { PlatformPath } from 'path'
-import { IDBInteractionsRepository } from '../electron/repositories/Implementations/DBImplementations/IDBInteractionsRepository'
+import { IDBInteractionsRepository } from 'repositories/Implementations/DBImplementations/IDBInteractionsRepository'
 
 declare global {
   interface Window {

@@ -8,7 +8,7 @@ import classNames from 'classnames'
 
 import usePersistStore from 'store/usePersistStore'
 
-import useLang from 'lang'
+import { useTranslation } from 'react-i18next'
 
 import loading from 'assets/loading.svg'
 import Image from 'components/Image'
@@ -26,7 +26,7 @@ const SearchComicListItem = ({
   activeComic,
   setActiveComic
 }: IComicListItem): JSX.Element => {
-  const texts = useLang()
+  const { t } = useTranslation()
   const { invoke } = useApi()
   const { repo } = usePersistStore()
   const { insertComic } = useFetchData()
@@ -107,7 +107,7 @@ const SearchComicListItem = ({
           {extended && (
             <>
               <p className="mt-2">
-                {chapterData.length} {texts.SearchComic.availableChapters}
+                {chapterData.length} {t('SearchComic.availableChapters')}
               </p>
               <div className="flex-grow h-px flex justify-center items-center my-2">
                 <p className="overflow-auto max-h-full">{ReactHtmlParser(comicData.synopsis)}</p>
@@ -119,9 +119,7 @@ const SearchComicListItem = ({
                   onClick={addToList}
                   disabled={existsInDB}
                 >
-                  {existsInDB
-                    ? texts.SearchComic.alreadyBookmarked
-                    : texts.SearchComic.bookmarkComic}
+                  {existsInDB ? t('SearchComic.alreadyBookmarked') : t('SearchComic.bookmarkComic')}
                 </Button>
               </div>
             </>

@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import ReactHtmlParser from 'react-html-parser'
+import ReactHtmlParser from 'html-react-parser'
 import Image from 'components/Image'
 import FixFilePaths from 'functions/fixFilePaths'
 import useGlobalStore from 'store/useGlobalStore'

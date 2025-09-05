@@ -1,8 +1,13 @@
-import HtmlParser from 'react-html-parser'
+import { FC } from 'react'
+import HtmlParser from 'html-react-parser'
 import FixFilePaths from 'functions/fixFilePaths'
 import Image from 'components/Image'
 
-const HomeDashboardHeader = ({ comic }: { comic: IComic }): JSX.Element => {
+type HomeDashboardHeaderProps = {
+  comic: IComic
+}
+
+const HomeDashboardHeader: FC<HomeDashboardHeaderProps> = ({ comic }) => {
   const cover = FixFilePaths(comic.cover)
 
   return (

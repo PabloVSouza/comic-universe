@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 import classNames from 'classnames'
 import useApi from 'api'
-import useLang from 'lang'
+import { useTranslation } from 'react-i18next'
 import Button from 'components/Button'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import useGlobalStore from 'store/useGlobalStore'
@@ -17,7 +17,7 @@ const HomeDashboardComicListItem = ({ item }: { item: IChapter }): JSX.Element =
   const navigate = useNavigate()
   const { activeComic } = useGlobalStore()
 
-  const texts = useLang()
+  const { t } = useTranslation()
 
   const { currentUser } = usePersistSessionStore()
 
@@ -89,7 +89,7 @@ const HomeDashboardComicListItem = ({ item }: { item: IChapter }): JSX.Element =
           theme="pure"
           size="xxs"
           icon={closedBook}
-          title={texts.Dashboard.resetProgress}
+          title={t('Dashboard.resetProgress')}
           onClick={() => mutation.mutate(0)}
         />
       </div>
@@ -98,7 +98,7 @@ const HomeDashboardComicListItem = ({ item }: { item: IChapter }): JSX.Element =
           theme="pure"
           size="xxs"
           icon={bookStack}
-          title={texts.Dashboard.setComplete}
+          title={t('Dashboard.setComplete')}
           onClick={() => mutation.mutate(totalPages)}
         />
       </div>

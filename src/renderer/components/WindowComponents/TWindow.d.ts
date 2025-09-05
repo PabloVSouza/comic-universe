@@ -5,6 +5,7 @@ type TWindow = {
   windowProps: TWindowProps
   windowStatus: TWindowStatus
   initialStatus: TInitialStatus
+  originalContainerSize?: { width: number; height: number }
 }
 
 type TWindowStatus = {

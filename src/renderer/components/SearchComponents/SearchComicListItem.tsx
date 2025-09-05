@@ -1,18 +1,19 @@
 import { LiHTMLAttributes } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
 import LoadingOverlay from 'components/LoadingOverlay'
 import { useNavigate } from 'react-router-dom'
-import ReactHtmlParser from 'react-html-parser'
+import ReactHtmlParser from 'html-react-parser'
 import classNames from 'classnames'
 
 import usePersistStore from 'store/usePersistStore'
 
-import useLang from 'lang'
+import { useTranslation } from 'react-i18next'
 
 import loading from 'assets/loading.svg'
 import Image from 'components/Image'
 import Button from 'components/Button'
+import useFetchData from 'hooks/useFetchData'
 
 interface IComicListItem extends LiHTMLAttributes<unknown> {
   data: IComic
@@ -25,10 +26,10 @@ const SearchComicListItem = ({
   activeComic,
   setActiveComic
 }: IComicListItem): JSX.Element => {
-  const texts = useLang()
+  const { t } = useTranslation()
   const { invoke } = useApi()
-  const queryClient = useQueryClient()
   const { repo } = usePersistStore()
+  const { insertComic } = useFetchData()
 
   const navigate = useNavigate()
 
@@ -64,16 +65,6 @@ const SearchComicListItem = ({
     enabled: active && !data.chapters
   })
 
-  const { mutate: insertComic } = useMutation({
-    mutationFn: async () =>
-      await invoke('dbInsertComic', {
-        comic: { ...data, ...comicDetails },
-        chapters: chapterData,
-        repo: repo.value
-      }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
-  })
-
   const isLoading = comicListFetching || chapterDataFetching || comicDetailsFetching
 
   const extended = active && chapterData.length > 0
@@ -87,7 +78,7 @@ const SearchComicListItem = ({
   }
 
   const addToList = (): void => {
-    insertComic()
+    insertComic({ data, comicDetails, chapterData, repo: repo.value })
     navigate('/')
   }
 
@@ -116,7 +107,7 @@ const SearchComicListItem = ({
           {extended && (
             <>
               <p className="mt-2">
-                {chapterData.length} {texts.SearchComic.availableChapters}
+                {chapterData.length} {t('SearchComic.availableChapters')}
               </p>
               <div className="flex-grow h-px flex justify-center items-center my-2">
                 <p className="overflow-auto max-h-full">{ReactHtmlParser(comicData.synopsis)}</p>
@@ -128,9 +119,7 @@ const SearchComicListItem = ({
                   onClick={addToList}
                   disabled={existsInDB}
                 >
-                  {existsInDB
-                    ? texts.SearchComic.alreadyBookmarked
-                    : texts.SearchComic.bookmarkComic}
+                  {existsInDB ? t('SearchComic.alreadyBookmarked') : t('SearchComic.bookmarkComic')}
                 </Button>
               </div>
             </>

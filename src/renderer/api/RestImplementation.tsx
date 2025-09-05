@@ -4,7 +4,7 @@ const api = axios.create({
 })
 
 const RestImplementation = {
-  invoke: async (method: string, args) => {
+  invoke: async (method: string, args: any) => {
     const { data } = await api.post(method, args)
     return data
   },

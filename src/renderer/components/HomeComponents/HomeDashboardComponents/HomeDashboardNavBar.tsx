@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import Button from 'components/Button'
-import useLang from 'lang'
-import useDownloadStore from 'store/useDownloadStore'
+import { useTranslation } from 'react-i18next'
+import useFetchData from 'hooks/useFetchData'
 
 import downloadIcon from 'assets/download-icon-2.svg'
 import comicBook from 'assets/comic-book.svg'
 import ProgressBar from 'components/ProgressBar'
+import { confirmAlert } from 'components/Alert'
 
 const HomeDashboardNavBar = ({
   comic,
@@ -15,8 +16,22 @@ const HomeDashboardNavBar = ({
   additionalData: IComic
 }): JSX.Element => {
   const navigate = useNavigate()
-  const texts = useLang()
-  const { getNewChapters } = useDownloadStore()
+  const { t } = useTranslation()
+  const { fetchNewChapters, insertChapters } = useFetchData()
+
+  const getNewChapters = async () => {
+    const newChapters = await fetchNewChapters(comic)
+    if (!newChapters.length) {
+      confirmAlert({
+        message: 'No new chapters'
+      })
+    } else {
+      insertChapters({
+        newChapters,
+        comicId: comic.id
+      })
+    }
+  }
 
   const chapters = additionalData?.chapters ?? []
 
@@ -43,14 +58,14 @@ const HomeDashboardNavBar = ({
           theme="pure"
           size="xxs"
           icon={downloadIcon}
-          title={texts.Dashboard.downloadMore}
+          title={t('Dashboard.downloadMore')}
           onClick={getNewChapters}
         />
         <Button
           theme="pure"
           size="xxs"
           icon={comicBook}
-          title={texts.Dashboard.continueReading}
+          title={t('Dashboard.continueReading')}
           onClick={continueReading}
         />
       </div>

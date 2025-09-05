@@ -4,6 +4,7 @@ import ApiRepository from './ApiRepository'
 import AppRepository from './AppRepository'
 import DBRepository from './DBRepository'
 import PluginsRepository from './PluginsRepository'
+import SettingsRepository from './SettingsRepository'
 
 class Methods {
   public methods = {}
@@ -18,13 +19,16 @@ class Methods {
     await pluginsRepository.startUp()
     const apiRepository = new ApiRepository(pluginsRepository)
     const appRepository = new AppRepository(this.path, this.runningPath, this.win)
-    const dbRepository = new DBRepository(this.path)
+    const dbRepository = new DBRepository()
+    await dbRepository.startup()
+    const settingsRepository = new SettingsRepository()
 
     this.methods = {
       ...apiRepository.methods,
       ...appRepository.methods,
       ...dbRepository.methods,
-      ...pluginsRepository.methods
+      ...pluginsRepository.methods,
+      ...settingsRepository.methods
     }
   }
 }

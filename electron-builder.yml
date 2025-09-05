@@ -2,6 +2,10 @@ appId: com.electron.app
 productName: Comic Universe
 directories:
   buildResources: build
+publish:
+  provider: github
+  owner: PabloVSouza
+  repo: comic-universe
 files:
   - '**/*'
   - '!**/.vscode/*'

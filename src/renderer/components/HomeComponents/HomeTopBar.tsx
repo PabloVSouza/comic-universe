@@ -1,31 +1,20 @@
 import classNames from 'classnames'
 import Button from 'components/Button'
-import openWindow from 'functions/openWindow'
-import downloadIcon from 'assets/download-icon.svg'
 import useGlobalStore from 'store/useGlobalStore'
-import usePersistStore from 'store/usePersistStore'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 
 import Image from 'components/Image'
 import logo from 'assets/logo.svg'
 
 const HomeTopBar = (): JSX.Element => {
   const { toggleMenu, menuVisible } = useGlobalStore((state) => state)
-  const { currentUser } = usePersistStore()
+  const { currentUser } = usePersistSessionStore()
 
   const userActive = !!currentUser.id
 
   return (
     <div className="w-full h-14 flex justify-between relative shrink-0 items-center bg-default">
       <div className="[-webkit-app-region:drag] h-full w-full absolute" />
-      {userActive && (
-        <Button
-          className="z-30 h-full"
-          icon={downloadIcon}
-          size="xs"
-          theme="pure"
-          onClick={() => openWindow({ component: 'Search', props: {} })}
-        />
-      )}
       <Image
         src={logo}
         className={classNames(

@@ -3,7 +3,7 @@ import SettingsList from 'components/SettingsComponents/SettingsList'
 import SettingsGeneral from 'components/SettingsComponents/SettingsGeneral'
 import SettingsUser from 'components/SettingsComponents/SettingsUser'
 import SettingsPlugin from 'components/SettingsComponents/SettingsPlugin'
-import useLang from 'lang'
+import { useTranslation } from 'react-i18next'
 
 import pluginIcon from 'assets/plugin.svg'
 import userIcon from 'assets/user.svg'
@@ -12,23 +12,23 @@ import settingsIcon from 'assets/settings.svg'
 const Settings = (): ReactElement => {
   const [activeOption, setActiveOption] = useState('general')
 
-  const lang = useLang()
+  const { t } = useTranslation()
 
   const settingsOptions: ISettingsOption[] = [
     {
-      label: lang.Settings.options.generalLabel,
+      label: t('Settings.options.generalLabel'),
       tag: 'general',
       icon: settingsIcon,
       onClick: () => setActiveOption('general')
     },
     {
-      label: lang.Settings.options.userLabel,
+      label: t('Settings.options.userLabel'),
       icon: userIcon,
       tag: 'user',
       onClick: () => setActiveOption('user')
     },
     {
-      label: lang.Settings.options.pluginsLabel,
+      label: t('Settings.options.pluginsLabel'),
       icon: pluginIcon,
       tag: 'plugins',
       onClick: () => setActiveOption('plugins')
@@ -55,20 +55,22 @@ const Settings = (): ReactElement => {
   )
 }
 
-const windowSettings = {
-  windowProps: {
-    className: 'overflow-auto',
-    contentClassName: 'size-full flex',
-    titleBar: true,
-    closeable: true,
-    unique: true,
-    title: useLang().Settings.windowTitle
-  },
-  initialStatus: {
-    startPosition: 'center',
-    width: 750,
-    height: 500
-  }
-} as TWindow
+const getWindowSettings = () => {
+  return {
+    windowProps: {
+      className: 'overflow-auto',
+      contentClassName: 'size-full flex',
+      titleBar: true,
+      closeable: true,
+      unique: true,
+      title: 'Settings' // Will be translated dynamically in openWindow
+    },
+    initialStatus: {
+      startPosition: 'center',
+      width: 750,
+      height: 500
+    }
+  } as TWindow
+}
 
-export default { Settings, ...windowSettings }
+export default { Settings, ...getWindowSettings() }

@@ -7,6 +7,8 @@ import 'css/main.css'
 import usePersistStore from 'store/usePersistStore'
 import classNames from 'classnames'
 import { AlertProvider } from 'components/Alert'
+import { I18nextProvider } from 'react-i18next'
+import i18n from './i18n'
 
 import wallpaper from 'assets/wallpaper.webp'
 
@@ -35,11 +37,13 @@ const Main = ({ children }: Props): JSX.Element => {
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <QueryClientProvider client={queryClient}>
     <HashRouter>
-      <Main>
-        <AlertProvider>
-          <Routes />
-        </AlertProvider>
-      </Main>
+      <I18nextProvider i18n={i18n}>
+        <Main>
+          <AlertProvider>
+            <Routes />
+          </AlertProvider>
+        </Main>
+      </I18nextProvider>
     </HashRouter>
   </QueryClientProvider>
 )

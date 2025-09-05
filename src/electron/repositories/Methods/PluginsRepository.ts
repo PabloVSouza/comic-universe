@@ -1,23 +1,20 @@
-import { app, BrowserWindow } from 'electron'
+import { BrowserWindow } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import path from 'path'
 import fs from 'fs'
-import CreateDirectory from 'utils/CreateDirectory'
+import { CreateDirectory, githubApi, ComicUniverseApi, DownloadFile, DataPaths } from 'utils/utils'
 import { extract } from 'pacote'
-import githubApi from 'utils/GithubApi'
-import ComicUniverseApi from 'utils/ComicUniverseApi'
-import DownloadFile from 'utils/DownloadFile'
 
 class PluginsRepository {
-  private pluginsProdPath = path.join(app.getPath('userData'), 'plugins')
-
   public activePlugins = {} as { [key: string]: IRepoPluginRepository }
 
-  private pluginsDevPath = './plugins'
-
-  private pluginsFinalPath = is.dev ? this.pluginsDevPath : this.pluginsProdPath
+  private get pluginsFinalPath(): string {
+    return DataPaths.getPluginsPath()
+  }
 
   public startUp = async () => {
+    // Reset DataPaths cache to ensure fresh path resolution
+    DataPaths.resetCache()
     if (!this.methods.verifyPluginFolderExists()) CreateDirectory(this.pluginsFinalPath)
     await this.methods.installPlugins()
     await this.methods.activatePlugins()
@@ -70,8 +67,7 @@ class PluginsRepository {
 
       try {
         for (const plugin of pluginsList) {
-          const partialPath = path.join(this.pluginsFinalPath, plugin.name, plugin.path)
-          const pluginPath = is.dev ? path.join('..', '..', partialPath) : partialPath
+          const pluginPath = path.join(this.pluginsFinalPath, plugin.name, plugin.path)
 
           const { platform } = process
 
@@ -89,7 +85,7 @@ class PluginsRepository {
         }
 
         const win = BrowserWindow.getAllWindows()[0]
-        if (!!win) win.webContents.send('updateRepos')
+        if (win) win.webContents.send('updateRepos')
       } catch (e) {
         throw e
       }

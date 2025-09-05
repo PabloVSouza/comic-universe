@@ -5,7 +5,7 @@ import Image from 'components/Image'
 import useApi from 'api'
 import FixFilePaths from 'functions/fixFilePaths'
 import useGlobalStore from 'store/useGlobalStore'
-import usePersistStore from 'store/usePersistStore'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 import ReaderZoomWindow, { IMousePos } from 'components/ZoomWindow'
 
 import loading from 'assets/loading.svg'
@@ -16,7 +16,7 @@ const Reader = (): JSX.Element => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const { activeComic, setActiveComic } = useGlobalStore()
-  const { currentUser } = usePersistStore()
+  const { currentUser } = usePersistSessionStore()
   const [mousePos, setMousePos] = useState<IMousePos>({} as IMousePos)
   const [zoomVisible, setZoomVisible] = useState(false)
   const comicId = Number(useParams().comicId)

@@ -16,6 +16,8 @@ type TuseWindowManagerStore = {
   setPosition: (id: string, param: { top: number; left: number }) => void
   setSize: (id: string, param: { width: number; height: number }) => void
   changeWindowParam: (id: string, param: { [key: string]: unknown }) => void
+  updateWindowProps: (id: string, props: Partial<TWindowProps>) => void
+  adjustWindowPositions: () => void
   removeMovingResizing: () => void
   mouseCapture: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }
@@ -28,7 +30,13 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
 
   addWindow: (window): void => {
     set((state: TuseWindowManagerStore) => {
-      state.currentWindows.push(window)
+      // Store the original container size when window is created
+      const windowWithOriginalSize = {
+        ...window,
+        originalContainerSize: { ...state.containerSize }
+      }
+
+      state.currentWindows.push(windowWithOriginalSize)
       state.portalsRef[window.id] = Portals.createHtmlPortalNode({
         attributes: {
           class: window.windowProps.contentClassName ?? ''
@@ -102,7 +110,17 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
 
   setContainerSize: (size): void => {
     set((state) => {
+      const oldSize = state.containerSize
       state.containerSize = size
+
+      // If container size changed, adjust window positions
+      if (oldSize.width !== size.width || oldSize.height !== size.height) {
+        // Use setTimeout to ensure the state update is complete before adjusting positions
+        setTimeout(() => {
+          const { adjustWindowPositions } = useWindowManagerStore.getState()
+          adjustWindowPositions()
+        }, 0)
+      }
 
       return { ...state }
     })
@@ -144,6 +162,121 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
     }
 
     set((state) => ({ ...state, currentWindows: currentWindows }))
+  },
+
+  updateWindowProps: (id, props): void => {
+    set((state) => {
+      const updatedWindows = state.currentWindows.map((window) => {
+        if (window.id === id) {
+          return {
+            ...window,
+            windowProps: {
+              ...window.windowProps,
+              ...props
+            }
+          }
+        }
+        return window
+      })
+      return { ...state, currentWindows: updatedWindows }
+    })
+  },
+
+  adjustWindowPositions: (): void => {
+    set((state) => {
+      const { currentWindows, containerSize } = state
+      const updatedWindows = currentWindows.map((window) => {
+        const { top, left, width, height } = window.windowStatus
+        const { isMaximized } = window.windowStatus
+        const { initialStatus } = window
+
+        // Skip maximized windows
+        if (isMaximized) {
+          return window
+        }
+
+        // Check if window is outside container bounds
+        const isOutsideBounds =
+          left + width > containerSize.width ||
+          left < 0 ||
+          top + height > containerSize.height ||
+          top < 0
+
+        if (!isOutsideBounds) {
+          // Window is still within bounds, no adjustment needed
+          return window
+        }
+
+        let newTop = top
+        let newLeft = left
+
+        // Try to maintain proportional position first
+        if (window.originalContainerSize) {
+          const { width: oldWidth, height: oldHeight } = window.originalContainerSize
+          const widthRatio = containerSize.width / oldWidth
+          const heightRatio = containerSize.height / oldHeight
+
+          // Calculate proportional position
+          const proportionalLeft = left * widthRatio
+          const proportionalTop = top * heightRatio
+
+          // Check if proportional position fits within bounds
+          if (
+            proportionalLeft >= 0 &&
+            proportionalLeft + width <= containerSize.width &&
+            proportionalTop >= 0 &&
+            proportionalTop + height <= containerSize.height
+          ) {
+            newLeft = proportionalLeft
+            newTop = proportionalTop
+            console.log(
+              `Using proportional position for ${window.component.name}: (${left}, ${top}) -> (${newLeft}, ${newTop})`
+            )
+          } else {
+            // Proportional position doesn't fit, use fallback to initial position
+            newLeft =
+              initialStatus.startPosition === 'center'
+                ? Math.max(0, (containerSize.width - width) / 2)
+                : Number(initialStatus.left) || 0
+            newTop =
+              initialStatus.startPosition === 'center'
+                ? Math.max(0, (containerSize.height - height) / 2)
+                : Number(initialStatus.top) || 0
+            console.log(
+              `Using fallback position for ${window.component.name}: (${left}, ${top}) -> (${newLeft}, ${newTop})`
+            )
+          }
+        } else {
+          // No original container size, use fallback to initial position
+          newLeft =
+            initialStatus.startPosition === 'center'
+              ? Math.max(0, (containerSize.width - width) / 2)
+              : Number(initialStatus.left) || 0
+          newTop =
+            initialStatus.startPosition === 'center'
+              ? Math.max(0, (containerSize.height - height) / 2)
+              : Number(initialStatus.top) || 0
+          console.log(
+            `Using fallback position for ${window.component.name}: (${left}, ${top}) -> (${newLeft}, ${newTop})`
+          )
+        }
+
+        // Ensure position is within bounds (safety check)
+        newLeft = Math.max(0, Math.min(newLeft, containerSize.width - width))
+        newTop = Math.max(0, Math.min(newTop, containerSize.height - height))
+
+        return {
+          ...window,
+          windowStatus: {
+            ...window.windowStatus,
+            top: newTop,
+            left: newLeft
+          }
+        }
+      })
+
+      return { ...state, currentWindows: updatedWindows }
+    })
   },
 
   mouseCapture: (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {

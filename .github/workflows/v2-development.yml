@@ -1,4 +1,4 @@
-name: 2.0.0 Nightly Release
+name: 2.0.0 Development Release
 
 on:
   push:
@@ -42,13 +42,13 @@ jobs:
           BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            # PR: Create beta version
-            NEW_VERSION="${BASE_VERSION}-beta.$(date +%Y%m%d%H%M%S)"
-            RELEASE_TYPE="beta"
-          else
-            # Push: Create alpha version
+            # PR: Create alpha version (instável, em desenvolvimento)
             NEW_VERSION="${BASE_VERSION}-alpha.$(date +%Y%m%d%H%M%S)"
             RELEASE_TYPE="alpha"
+          else
+            # Push: Create beta version (mais estável, testado)
+            NEW_VERSION="${BASE_VERSION}-beta.$(date +%Y%m%d%H%M%S)"
+            RELEASE_TYPE="beta"
           fi
 
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
@@ -184,16 +184,16 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
 
-      - name: Create nightly release
+      - name: Create development release
         if: needs.prepare-release.outputs.version != ''
         uses: softprops/action-gh-release@v2
         with:
           tag_name: 'v${{ needs.prepare-release.outputs.version }}'
-          name: '2.0.0 Nightly Release ${{ needs.prepare-release.outputs.version }}'
+          name: '2.0.0 Development Release ${{ needs.prepare-release.outputs.version }}'
           body: |
-            ## 🌙 2.0.0 Nightly Release
+            ## 🚀 2.0.0 Development Release
 
-            This is a nightly build for Comic Universe 2.0.0 development.
+            This is a development build for Comic Universe 2.0.0.
 
             **Release Type:** ${{ needs.prepare-release.outputs.release-type }}
             **Branch:** `${{ github.ref_name }}`

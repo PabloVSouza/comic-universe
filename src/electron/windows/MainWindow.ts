@@ -8,10 +8,13 @@ import ApiManager from '../repositories/ApiManager'
 import SettingsRepository from '../repositories/Methods/SettingsRepository'
 
 // Configure auto-updater
-const setupAutoUpdater = (mainWindow: BrowserWindow, settingsRepository: SettingsRepository): void => {
+const setupAutoUpdater = (
+  mainWindow: BrowserWindow,
+  settingsRepository: SettingsRepository
+): void => {
   // Configure auto-updater
   autoUpdater.checkForUpdatesAndNotify = autoUpdater.checkForUpdatesAndNotify
-  
+
   // Load user's update preferences from file
   const loadUpdateSettings = async () => {
     try {
@@ -129,7 +132,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
 
     eventManager = new EventManager(methods.methods)
     new ApiManager(methods)
-    
+
     // Setup auto-updater with settings repository
     if (!is.dev) {
       const settingsRepository = new SettingsRepository()

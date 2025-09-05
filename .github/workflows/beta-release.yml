@@ -49,9 +49,17 @@ jobs:
           npm version ${{ steps.beta-version.outputs.beta-version }} --no-git-tag-version
           echo "Updated package.json to version ${{ steps.beta-version.outputs.beta-version }}"
 
-      - name: Build application
+      - name: Build application (Linux)
         run: |
-          npm run build
+          npm run build:linux-x64
+
+      - name: Build application (Windows)
+        run: |
+          npm run build:win
+
+      - name: Build application (macOS)
+        run: |
+          npm run build:mac
 
       - name: Create beta release
         uses: softprops/action-gh-release@v2
@@ -75,6 +83,12 @@ jobs:
 
             ## Installation
             Download the appropriate build for your platform from the assets below.
+          files: |
+            dist/*.AppImage
+            dist/*.deb
+            dist/*.rpm
+            dist/*.exe
+            dist/*.dmg
           draft: false
           prerelease: true
         env:

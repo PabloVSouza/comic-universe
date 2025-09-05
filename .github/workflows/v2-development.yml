@@ -62,9 +62,17 @@ jobs:
           npm version ${{ steps.dev-version.outputs.version }} --no-git-tag-version
           echo "Updated package.json to version ${{ steps.dev-version.outputs.version }}"
 
-      - name: Build application
+      - name: Build application (Linux)
         run: |
-          npm run build
+          npm run build:linux-x64
+
+      - name: Build application (Windows)
+        run: |
+          npm run build:win
+
+      - name: Build application (macOS)
+        run: |
+          npm run build:mac
 
       - name: Create development release
         if: steps.dev-version.outputs.version != steps.current-version.outputs.current-version
@@ -92,6 +100,12 @@ jobs:
 
             ## Installation
             Download the appropriate build for your platform from the assets below.
+          files: |
+            dist/*.AppImage
+            dist/*.deb
+            dist/*.rpm
+            dist/*.exe
+            dist/*.dmg
           draft: false
           prerelease: true
         env:

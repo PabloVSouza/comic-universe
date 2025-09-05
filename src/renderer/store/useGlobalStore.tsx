@@ -1,7 +1,4 @@
 import { create } from 'zustand'
-import useApi from 'api'
-
-const { invoke } = useApi()
 
 interface IAppParams {
   appRunningPath: string
@@ -15,10 +12,10 @@ interface IuseGlobalStore {
   activeComic: IComic
   queue: IChapter[]
   setQueue: (newQueue: (prevQueue: IChapter[]) => IChapter[]) => void
-  getAppParams: () => Promise<void>
+  getAppParams: (invoke: (method: string, args?: unknown) => Promise<unknown>) => Promise<void>
   toggleMenu: () => void
   setActiveComic: (comic: IComic) => void
-  updatePlugins: () => Promise<void>
+  updatePlugins: (invoke: (method: string, args?: unknown) => Promise<unknown>) => Promise<void>
 }
 
 const useGlobalStore = create<IuseGlobalStore>((set) => ({
@@ -33,8 +30,8 @@ const useGlobalStore = create<IuseGlobalStore>((set) => ({
     set((state) => ({ ...state, queue: newQueue(queue) }))
   },
 
-  getAppParams: async () => {
-    const appParams = await invoke('getAppParams')
+  getAppParams: async (invoke) => {
+    const appParams = (await invoke('getAppParams')) as IAppParams
     set((state) => ({ ...state, appParams }))
   },
 
@@ -42,14 +39,11 @@ const useGlobalStore = create<IuseGlobalStore>((set) => ({
 
   toggleMenu: (): void => set((state) => ({ ...state, menuVisible: !state.menuVisible })),
 
-  updatePlugins: async () => {
+  updatePlugins: async (invoke) => {
     await invoke('installPlugins')
     await invoke('activatePlugins')
     await invoke('resetEvents')
   }
 }))
-
-const { getAppParams } = useGlobalStore.getState()
-getAppParams()
 
 export default useGlobalStore

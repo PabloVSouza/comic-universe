@@ -1,19 +1,18 @@
 import { create } from 'zustand'
 import useGlobalStore from './useGlobalStore'
-import { useTranslation } from 'react-i18next'
-import useApi from 'api'
 import { confirmAlert } from 'components/Alert'
 import usePersistSessionStore from 'store/usePersistSessionStore'
-
-const { invoke } = useApi()
 
 interface useDownloadStore {
   queue: IChapter[]
   addToQueue: (chapter: IChapter) => Promise<void>
   removeFromQueue: (chapter: IChapter) => Promise<void>
-  getChapterPages: (chapter: IChapter) => Promise<boolean>
-  downloadChapter: (chapter: IChapter) => Promise<void>
-  getNewChapters: () => Promise<void>
+  getChapterPages: (
+    chapter: IChapter,
+    invoke: (method: string, args?: unknown) => Promise<unknown>
+  ) => Promise<boolean>
+  downloadChapter: () => Promise<void>
+  getNewChapters: (invoke: (method: string, args?: unknown) => Promise<unknown>) => Promise<void>
 }
 
 const useDownloadStore = create<useDownloadStore>((set) => ({
@@ -31,33 +30,32 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
     }))
   },
 
-  getNewChapters: async (): Promise<void> => {
+  getNewChapters: async (invoke): Promise<void> => {
     const { activeComic } = useGlobalStore.getState()
     const { currentUser } = usePersistSessionStore.getState()
 
     const { repo, siteId } = activeComic
-    const { chapters: currentChapters } = await invoke('dbGetComicAdditionalData', {
+    const { chapters: currentChapters } = (await invoke('dbGetComicAdditionalData', {
       id: activeComic.id,
       userId: currentUser.id
-    })
+    })) as { chapters: IChapter[] }
 
-    const chapters = await invoke('getChapters', { repo, data: { siteId } })
+    const chapters = (await invoke('getChapters', { repo, data: { siteId } })) as IChapter[]
 
     const newChapters = chapters
       .filter((val) => currentChapters.findIndex((chapter) => val.siteId === chapter.siteId) < 0)
       .reduce((acc, cur) => {
         return [...acc, { ...cur, comicId: activeComic.id, repo: activeComic.repo }]
-      }, [])
+      }, [] as IChapter[])
 
     if (newChapters.length) {
       await invoke('dbInsertChapters', { chapters: newChapters })
     } else {
-      const { t } = useTranslation()
       confirmAlert({
-        message: t('Dashboard.newChapter.noNewChapterMessage'),
+        message: 'No new chapters found',
         buttons: [
           {
-            label: t('Dashboard.newChapter.noNewChapterConfirm')
+            label: 'OK'
           }
         ]
       })
@@ -66,10 +64,10 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
     return new Promise((resolve) => resolve())
   },
 
-  getChapterPages: async (chapter): Promise<boolean> => {
+  getChapterPages: async (chapter, invoke): Promise<boolean> => {
     const { repo } = chapter
 
-    const pages = await invoke('getPages', { repo, data: { chapter } })
+    const pages = (await invoke('getPages', { repo, data: { chapter } })) as IPage[]
 
     if (pages.length > 0) {
       await invoke('dbUpdateChapter', { chapter: { ...chapter, pages: JSON.stringify(pages) } })
@@ -82,41 +80,5 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
     return
   }
 }))
-
-const queueManager = (): void => {
-  let inProgress = [] as IChapter[]
-
-  const queueCleaner = async (): Promise<void> => {
-    const { queue, getChapterPages, removeFromQueue } = useDownloadStore.getState()
-    const { setActiveComic, activeComic } = useGlobalStore.getState()
-
-    const notInProgress = queue.filter((e) => !inProgress.includes(e))
-
-    inProgress = [...inProgress, ...notInProgress]
-
-    if (inProgress.length) {
-      for (const chapter of notInProgress) {
-        getChapterPages(chapter).then(async (result) => {
-          inProgress = inProgress.filter((e) => e.id !== chapter.id)
-          if (result) {
-            await removeFromQueue(chapter).then(() => {
-              setActiveComic(activeComic)
-            })
-          }
-        })
-      }
-    }
-  }
-
-  setInterval(
-    async () => {
-      await queueCleaner()
-    },
-    2000,
-    []
-  )
-}
-
-queueManager()
 
 export default useDownloadStore

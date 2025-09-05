@@ -140,15 +140,16 @@ class SettingsRepository {
   }
 
   // Helper method to merge loaded settings with defaults
-  private mergeWithDefaults(loadedSettings: any): AppSettings {
+  private mergeWithDefaults(loadedSettings: unknown): AppSettings {
+    const settings = loadedSettings as Partial<AppSettings>
     const merged: AppSettings = {
       update: {
         ...this.defaultSettings.update,
-        ...(loadedSettings.update || {})
+        ...(settings.update || {})
       },
       language: {
         ...this.defaultSettings.language,
-        ...(loadedSettings.language || {})
+        ...(settings.language || {})
       }
     }
 

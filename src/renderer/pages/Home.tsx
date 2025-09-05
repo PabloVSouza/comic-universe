@@ -40,7 +40,7 @@ const Home = (): JSX.Element => {
 
   useEffect(() => {
     const inList = comicList.includes(activeComic)
-    if (!!comicList.length) {
+    if (comicList.length) {
       if (!activeComic.id || !inList) setActiveComic(comicList[0])
     } else if (activeComic.id) {
       setActiveComic({} as IComic)

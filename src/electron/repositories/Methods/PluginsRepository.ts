@@ -65,30 +65,25 @@ class PluginsRepository {
     activatePlugins: async () => {
       const pluginsList = this.methods.getPluginInfoList()
 
-      try {
-        for (const plugin of pluginsList) {
-          const pluginPath = path.join(this.pluginsFinalPath, plugin.name, plugin.path)
+      for (const plugin of pluginsList) {
+        const pluginPath = path.join(this.pluginsFinalPath, plugin.name, plugin.path)
 
-          const { platform } = process
+        const { platform } = process
 
-          const importPath = platform === 'win32' ? 'file://' + pluginPath : pluginPath
+        const importPath = platform === 'win32' ? 'file://' + pluginPath : pluginPath
 
-          const newPlugin: IRepoPluginRepositoryConstruct = (await import(importPath)).default
-            .default
+        const newPlugin: IRepoPluginRepositoryConstruct = (await import(importPath)).default.default
 
-          const instantiatedPlugin = new newPlugin()
+        const instantiatedPlugin = new newPlugin()
 
-          this.activePlugins = {
-            ...this.activePlugins,
-            [instantiatedPlugin.RepoTag]: instantiatedPlugin
-          }
+        this.activePlugins = {
+          ...this.activePlugins,
+          [instantiatedPlugin.RepoTag]: instantiatedPlugin
         }
-
-        const win = BrowserWindow.getAllWindows()[0]
-        if (win) win.webContents.send('updateRepos')
-      } catch (e) {
-        throw e
       }
+
+      const win = BrowserWindow.getAllWindows()[0]
+      if (win) win.webContents.send('updateRepos')
     },
 
     updatePlugins: async () => {

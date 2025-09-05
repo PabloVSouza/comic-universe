@@ -17,7 +17,7 @@ const SettingsPluginListItem = ({ plugin }: { plugin: IRepoPluginInfo }) => {
             {t('General.author')}: {plugin.author}
           </span>
         </p>
-        <a href={plugin.repository} target="_blank">
+        <a href={plugin.repository} target="_blank" rel="noreferrer">
           <u>{t('General.githubRepository')}</u>
         </a>
       </div>

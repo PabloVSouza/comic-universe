@@ -69,6 +69,12 @@ jobs:
     permissions: write-all
     env:
       GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      # Code signing environment variables
+      CSC_LINK: ${{ secrets.CSC_LINK }}
+      CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
     strategy:
       matrix:
         include:
@@ -98,6 +104,22 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
+
+      - name: Generate Self-Signed Certificates
+        if: matrix.os == 'windows-latest' || matrix.os == 'macos-14'
+        run: |
+          # Create certificates directory
+          mkdir -p certificates
+          
+          # Generate self-signed certificate
+          openssl req -x509 -newkey rsa:2048 -keyout certificates/cert-key.pem -out certificates/cert.pem -days 365 -nodes -subj "/C=US/ST=CA/L=San Francisco/O=Comic Universe/CN=Comic Universe"
+          
+          # Convert to PKCS#12 format
+          openssl pkcs12 -export -out certificates/cert.p12 -inkey certificates/cert-key.pem -in certificates/cert.pem -name "Comic Universe" -passout pass:comicuniverse
+          
+          # Set environment variables for electron-builder
+          echo "CSC_LINK=certificates/cert.p12" >> $GITHUB_ENV
+          echo "CSC_KEY_PASSWORD=comicuniverse" >> $GITHUB_ENV
 
       - name: build-linux-x64
         if: matrix.architecture == 'x64' && matrix.os == 'ubuntu-latest'

@@ -23,6 +23,7 @@
     "build:linux-arm": "npm run prisma:generate && electron-vite build && electron-builder --linux --arm64 --config",
     "build:mac": "npm run prisma:generate && electron-vite build && electron-builder --mac --universal --config",
     "setup:codesigning": "./scripts/setup-codesigning.sh",
+    "setup:github-secrets": "./scripts/setup-github-secrets.sh",
     "build:win:unsigned": "CSC_LINK=\"\" npm run build:win",
     "build:mac:unsigned": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run build:mac"
   },

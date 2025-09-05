@@ -1,6 +1,19 @@
 # Code Signing Guide for Comic Universe
 
-This guide explains how to set up free code signing for the Comic Universe Electron application across different platforms.
+This guide explains how to set up code signing for the Comic Universe Electron application across different platforms.
+
+## 🚀 CI/CD Code Signing (Recommended)
+
+**The CI/CD pipeline automatically handles code signing!** See [CI_CD_CODE_SIGNING.md](./CI_CD_CODE_SIGNING.md) for details.
+
+The GitHub Actions workflow automatically:
+- Generates self-signed certificates for each build
+- Signs Windows and macOS applications
+- Handles all the complexity for you
+
+## 🛠️ Local Development Code Signing
+
+This section covers manual code signing setup for local development.
 
 ## Overview
 

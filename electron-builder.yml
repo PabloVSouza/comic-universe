@@ -33,17 +33,12 @@ asarUnpack:
 win:
   executableName: comic-universe
   # Code signing configuration for Windows
-  # For Microsoft Partner Center free certificate:
-  # certificateFile: "path/to/your/certificate.p12"
-  # certificatePassword: "your_certificate_password"
-
-  # For self-signed (not recommended):
-  # certificateFile: "path/to/your/certificate.p12"
-  # certificatePassword: "your_certificate_password"
-
+  # cscLink: "certificates/windows-cert.p12"  # Local development
+  # cscKeyPassword: "comicuniverse"           # Local development
+  
   # Signing level (0 = none, 1 = basic, 2 = extended)
-  sign: null # Set to 1 or 2 when certificate is available
-
+  sign: 1 # Basic signing with self-signed certificate
+  
   # Time stamping server
   signAndEditExecutable: false
   signDlls: false
@@ -62,11 +57,10 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
 
   # Code signing configuration for macOS
-  identity: null # Set to your certificate identity when available
-  # For Apple Developer Program ($99/year):
-  # identity: "Developer ID Application: Your Name (TEAM_ID)"
-  # For self-signed (free but shows warnings):
-  # identity: "Developer ID Application: Your Name"
+  identity: "Developer ID Application: Comic Universe"
+  # Certificate file for self-signed certificate (uses environment variables in CI/CD)
+  # cscLink: "certificates/macos-cert.p12"  # Local development
+  # cscKeyPassword: "comicuniverse"         # Local development
 
   # Notarization (requires Apple Developer Program)
   notarize: false # Set to true when you have Apple Developer Program access

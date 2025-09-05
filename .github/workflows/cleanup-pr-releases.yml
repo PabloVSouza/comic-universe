@@ -93,7 +93,7 @@ jobs:
               repo: context.repo.repo,
               body: `🧹 **PR Release Cleanup**
               
-              PR #${prNumber} has been closed without merging. Any associated beta/alpha releases have been automatically cleaned up.
+              PR #${prNumber} has been closed without merging. Any associated beta/nightly releases have been automatically cleaned up.
               
               **Branch:** \`${prHeadRef}\`
               **Status:** Closed (not merged)

@@ -10,7 +10,7 @@ This PR tests the fixed cleanup workflow to ensure it properly handles release d
 This PR will be closed without merging to test the automatic cleanup functionality.
 
 ## Expected Results
-- Beta/nightly releases should be created successfully
+- Beta releases should be created successfully
 - Cleanup workflow should complete successfully (no failures)
 - Releases should be automatically deleted when PR is closed
 - No error messages about missing releases or permission issues

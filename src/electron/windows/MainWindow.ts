@@ -35,11 +35,9 @@ const setupAutoUpdater = (
     // Check if user wants this type of update
     const isStable =
       !info.version.includes('alpha') &&
-      !info.version.includes('beta') &&
-      !info.version.includes('nightly')
+      !info.version.includes('beta')
     const isBeta = info.version.includes('beta')
     const isAlpha = info.version.includes('alpha')
-    const isNightly = info.version.includes('nightly')
 
     let shouldShowUpdate = false
 
@@ -48,8 +46,6 @@ const setupAutoUpdater = (
     } else if (isBeta && settings.releaseTypes.includes('beta') && settings.optInNonStable) {
       shouldShowUpdate = true
     } else if (isAlpha && settings.releaseTypes.includes('alpha') && settings.optInNonStable) {
-      shouldShowUpdate = true
-    } else if (isNightly && settings.releaseTypes.includes('nightly') && settings.optInNonStable) {
       shouldShowUpdate = true
     }
 
@@ -139,7 +135,6 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
       const isCICDVersion =
         currentVersion.includes('alpha') ||
         currentVersion.includes('beta') ||
-        currentVersion.includes('nightly') ||
         !currentVersion.includes('-')
 
       if (isCICDVersion) {

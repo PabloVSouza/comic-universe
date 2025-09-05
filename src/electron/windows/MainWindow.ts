@@ -10,16 +10,14 @@ import ApiManager from '../repositories/ApiManager'
 const setupAutoUpdater = (mainWindow: BrowserWindow): void => {
   // Configure auto-updater
   autoUpdater.checkForUpdatesAndNotify = autoUpdater.checkForUpdatesAndNotify
-  
-  // Load user's update preferences
-  const loadUpdateSettings = () => {
+
+  // Load user's update preferences from file
+  const loadUpdateSettings = async () => {
     try {
-      const settings = JSON.parse(localStorage.getItem('updateSettings') || '{}')
-      return {
-        autoUpdate: settings.autoUpdate !== false, // Default to true
-        optInNonStable: settings.optInNonStable || false,
-        releaseTypes: settings.releaseTypes || ['stable']
-      }
+      // Import the settings repository methods
+      const { invoke } = await import('@tauri-apps/api/core')
+      const settings = await invoke('getUpdateSettings')
+      return settings
     } catch (error) {
       console.error('Error loading update settings:', error)
       return {
@@ -31,17 +29,20 @@ const setupAutoUpdater = (mainWindow: BrowserWindow): void => {
   }
 
   // Update available
-  autoUpdater.on('update-available', (info) => {
-    const settings = loadUpdateSettings()
-    
+  autoUpdater.on('update-available', async (info) => {
+    const settings = await loadUpdateSettings()
+
     // Check if user wants this type of update
-    const isStable = !info.version.includes('alpha') && !info.version.includes('beta') && !info.version.includes('nightly')
+    const isStable =
+      !info.version.includes('alpha') &&
+      !info.version.includes('beta') &&
+      !info.version.includes('nightly')
     const isBeta = info.version.includes('beta')
     const isAlpha = info.version.includes('alpha')
     const isNightly = info.version.includes('nightly')
-    
+
     let shouldShowUpdate = false
-    
+
     if (isStable && settings.releaseTypes.includes('stable')) {
       shouldShowUpdate = true
     } else if (isBeta && settings.releaseTypes.includes('beta') && settings.optInNonStable) {
@@ -51,7 +52,7 @@ const setupAutoUpdater = (mainWindow: BrowserWindow): void => {
     } else if (isNightly && settings.releaseTypes.includes('nightly') && settings.optInNonStable) {
       shouldShowUpdate = true
     }
-    
+
     if (shouldShowUpdate) {
       dialog.showMessageBox(mainWindow, {
         type: 'info',
@@ -61,7 +62,9 @@ const setupAutoUpdater = (mainWindow: BrowserWindow): void => {
         buttons: ['OK']
       })
     } else {
-      console.log(`Update available (${info.version}) but user preferences don't allow this type of update`)
+      console.log(
+        `Update available (${info.version}) but user preferences don't allow this type of update`
+      )
     }
   })
 

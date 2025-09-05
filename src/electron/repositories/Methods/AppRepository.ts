@@ -3,13 +3,18 @@ import pathLib from 'path'
 import fs from 'fs'
 import { is } from '@electron-toolkit/utils'
 import { autoUpdater } from 'electron-updater'
+import SettingsRepository from './SettingsRepository'
 
 class AppRepository {
+  private settingsRepository: SettingsRepository
+
   constructor(
     public appPath: string,
     public runningPath: string,
     public win: BrowserWindow
-  ) {}
+  ) {
+    this.settingsRepository = new SettingsRepository()
+  }
 
   public methods = {
     getAppData: () => {
@@ -47,25 +52,8 @@ class AppRepository {
       }
       
       try {
-        // Load user's update preferences
-        const loadUpdateSettings = () => {
-          try {
-            const settings = JSON.parse(localStorage.getItem('updateSettings') || '{}')
-            return {
-              autoUpdate: settings.autoUpdate !== false,
-              optInNonStable: settings.optInNonStable || false,
-              releaseTypes: settings.releaseTypes || ['stable']
-            }
-          } catch (error) {
-            return {
-              autoUpdate: true,
-              optInNonStable: false,
-              releaseTypes: ['stable']
-            }
-          }
-        }
-        
-        const settings = loadUpdateSettings()
+        // Load user's update preferences from file
+        const settings = await this.settingsRepository.methods.getUpdateSettings()
         
         if (!settings.autoUpdate) {
           return { message: 'Auto-update is disabled in settings' }

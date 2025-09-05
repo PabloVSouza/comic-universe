@@ -29,11 +29,9 @@ const SettingsGeneral = () => {
 
   const loadSettings = async () => {
     try {
-      // Load settings from localStorage or default values
-      const savedSettings = localStorage.getItem('updateSettings')
-      if (savedSettings) {
-        setSettings(JSON.parse(savedSettings))
-      }
+      // Load settings from file
+      const savedSettings = await invoke<UpdateSettings>('getUpdateSettings')
+      setSettings(savedSettings)
     } catch (error) {
       console.error('Error loading settings:', error)
     }
@@ -51,8 +49,7 @@ const SettingsGeneral = () => {
 
   const saveSettings = useMutation({
     mutationFn: async (newSettings: UpdateSettings) => {
-      localStorage.setItem('updateSettings', JSON.stringify(newSettings))
-      return newSettings
+      return await invoke<UpdateSettings>('updateUpdateSettings', { updateSettings: newSettings })
     },
     onSuccess: () => {
       // Show success message

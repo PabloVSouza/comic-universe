@@ -10,25 +10,34 @@ Code signing is important for:
 - Enabling automatic updates
 - Meeting platform requirements
 
-## Free Code Signing Options
+## Code Signing Options
+
+### Truly Free Options (Limited)
+
+Unfortunately, **truly free code signing for macOS is very limited**:
+
+1. **Self-signed certificates** (free but users see security warnings)
+2. **No code signing** (users will see "unidentified developer" warnings)
+3. **Community certificates** (rare and not officially supported)
+
+### Paid Options (Recommended for Production)
 
 ### 1. macOS Code Signing
 
-#### Option A: GitHub Sponsors + Apple Developer Program (Recommended)
-- **Cost**: Free with GitHub Sponsors
+#### Option A: Apple Developer Program (Paid)
+- **Cost**: $99/year (required for official certificates)
 - **Requirements**: 
-  - GitHub Sponsors account
-  - Apply for free Apple Developer Program membership
+  - Apple Developer Program membership ($99/year)
 - **Benefits**: 
   - Official Apple certificates
   - Notarization support
   - No security warnings
+  - App Store distribution
 
 **Steps:**
-1. Set up GitHub Sponsors
-2. Apply for free Apple Developer Program membership
-3. Create a Developer ID Application certificate
-4. Update `electron-builder.yml`:
+1. Sign up for Apple Developer Program ($99/year)
+2. Create a Developer ID Application certificate
+3. Update `electron-builder.yml`:
    ```yaml
    mac:
      identity: "Developer ID Application: Your Name (TEAM_ID)"
@@ -37,14 +46,14 @@ Code signing is important for:
      gatekeeperAssess: true
    ```
 
-#### Option B: Self-Signed Certificate (Not Recommended)
+#### Option B: Self-Signed Certificate (Free but Not Recommended)
 - **Cost**: Free
 - **Limitations**: Users will see security warnings
 - **Use case**: Development/testing only
 
 ### 2. Windows Code Signing
 
-#### Option A: Microsoft Partner Center (Recommended)
+#### Option A: Microsoft Partner Center (Free for Open Source)
 - **Cost**: Free for qualifying open source projects
 - **Requirements**: 
   - Apply through Microsoft Partner Center

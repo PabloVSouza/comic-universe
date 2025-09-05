@@ -8,10 +8,11 @@ publish:
   repo: comic-universe
 
 # Code signing configuration
-# For free code signing, you can use:
-# 1. GitHub Sponsors + Apple Developer Program (macOS)
-# 2. Microsoft Partner Center (Windows)
-# 3. Self-signed certificates (not recommended for production)
+# For code signing options:
+# 1. Apple Developer Program ($99/year) - macOS official certificates
+# 2. Microsoft Partner Center (Windows) - Free for open source projects
+# 3. Self-signed certificates (free but shows security warnings)
+# 4. No code signing (free but shows "unidentified developer" warnings)
 
 files:
   - '**/*'
@@ -62,9 +63,9 @@ mac:
 
   # Code signing configuration for macOS
   identity: null # Set to your certificate identity when available
-  # For GitHub Sponsors + Apple Developer Program:
+  # For Apple Developer Program ($99/year):
   # identity: "Developer ID Application: Your Name (TEAM_ID)"
-  # For self-signed (not recommended):
+  # For self-signed (free but shows warnings):
   # identity: "Developer ID Application: Your Name"
 
   # Notarization (requires Apple Developer Program)

@@ -56,19 +56,20 @@ setup_macos() {
     
     echo ""
     echo "macOS Code Signing Options:"
-    echo "1. GitHub Sponsors + Apple Developer Program (Recommended)"
-    echo "2. Self-signed certificate (Not recommended for production)"
-    echo "3. Skip macOS setup"
+    echo "1. Apple Developer Program ($99/year - Recommended for production)"
+    echo "2. Self-signed certificate (Free but shows security warnings)"
+    echo "3. No code signing (Free but shows 'unidentified developer' warnings)"
+    echo "4. Skip macOS setup"
     
-    read -p "Choose an option (1-3): " choice
+    read -p "Choose an option (1-4): " choice
     
     case $choice in
         1)
-            print_status "Setting up GitHub Sponsors + Apple Developer Program..."
+            print_status "Setting up Apple Developer Program ($99/year)..."
             echo ""
             echo "Steps to complete:"
-            echo "1. Set up GitHub Sponsors: https://github.com/sponsors"
-            echo "2. Apply for free Apple Developer Program membership"
+            echo "1. Sign up for Apple Developer Program at https://developer.apple.com/programs/"
+            echo "2. Pay the $99/year fee"
             echo "3. Create a Developer ID Application certificate"
             echo "4. Update electron-builder.yml with your certificate identity"
             echo ""
@@ -92,6 +93,12 @@ setup_macos() {
             fi
             ;;
         3)
+            print_status "No code signing - users will see 'unidentified developer' warnings"
+            print_success "Keep current configuration:"
+            echo "  identity: null"
+            echo "  notarize: false"
+            ;;
+        4)
             print_status "Skipping macOS setup"
             ;;
         *)

@@ -35,10 +35,10 @@ win:
   # Code signing configuration for Windows
   # cscLink: "certificates/windows-cert.p12"  # Local development
   # cscKeyPassword: "comicuniverse"           # Local development
-  
+
   # Signing level (0 = none, 1 = basic, 2 = extended)
   sign: 1 # Basic signing with self-signed certificate
-  
+
   # Time stamping server
   signAndEditExecutable: false
   signDlls: false
@@ -57,7 +57,7 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
 
   # Code signing configuration for macOS
-  identity: "Developer ID Application: Comic Universe"
+  identity: 'Developer ID Application: Comic Universe'
   # Certificate file for self-signed certificate (uses environment variables in CI/CD)
   # cscLink: "certificates/macos-cert.p12"  # Local development
   # cscKeyPassword: "comicuniverse"         # Local development

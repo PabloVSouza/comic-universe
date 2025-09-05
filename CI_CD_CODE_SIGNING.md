@@ -11,13 +11,19 @@ The CI/CD pipeline automatically generates self-signed certificates and signs th
 1. **Automatic Certificate Generation**: The CI/CD pipeline generates fresh self-signed certificates for each build
 2. **Environment Variables**: Certificates are created and used via environment variables
 3. **Multi-Platform Support**: Works for both Windows and macOS builds
-4. **No Manual Intervention**: Everything happens automatically in the cloud
+4. **Multi-Version Support**: Handles alpha, beta, and stable releases
+5. **No Manual Intervention**: Everything happens automatically in the cloud
 
 ## Current Setup
 
 ### GitHub Actions Workflow
 
 The `.github/workflows/release.yml` file has been updated to include:
+
+#### Triggers
+- **Stable releases**: Push to `main` branch
+- **Tagged releases**: Push tags matching `v*.*.*`, `v*.*.*-alpha*`, `v*.*.*-beta*`
+- **Automatic version detection**: Determines if release is alpha, beta, or stable
 
 ```yaml
 - name: Generate Self-Signed Certificates
@@ -46,6 +52,47 @@ The workflow uses these environment variables:
 - `APPLE_ID`: Apple Developer ID (for future notarization)
 - `APPLE_ID_PASSWORD`: Apple Developer password
 - `APPLE_TEAM_ID`: Apple Developer Team ID
+
+## Creating Releases
+
+### Using the Release Script
+
+The easiest way to create releases is using the provided script:
+
+```bash
+npm run create:release
+```
+
+This script will:
+1. Ask you to choose release type (alpha/beta/stable)
+2. Generate the appropriate version number
+3. Update package.json
+4. Create and push a git tag
+5. Trigger the CI/CD pipeline
+
+### Manual Release Creation
+
+You can also create releases manually:
+
+```bash
+# Create alpha release
+git tag v2.0.0-alpha.1
+git push origin v2.0.0-alpha.1
+
+# Create beta release  
+git tag v2.0.0-beta.1
+git push origin v2.0.0-beta.1
+
+# Create stable release
+git tag v2.0.0
+git push origin v2.0.0
+```
+
+### Release Types
+
+- **Alpha**: Experimental features, for internal testing
+- **Beta**: Feature complete, for public testing
+- **Stable**: Production ready, for general use
 
 ## Benefits of CI/CD Code Signing
 

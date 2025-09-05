@@ -24,6 +24,7 @@
     "build:mac": "npm run prisma:generate && electron-vite build && electron-builder --mac --universal --config",
     "setup:codesigning": "./scripts/setup-codesigning.sh",
     "setup:github-secrets": "./scripts/setup-github-secrets.sh",
+    "create:release": "./scripts/create-release.sh",
     "build:win:unsigned": "CSC_LINK=\"\" npm run build:win",
     "build:mac:unsigned": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run build:mac"
   },

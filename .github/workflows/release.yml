@@ -24,8 +24,11 @@ jobs:
         with:
           node-version: 20
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Get current version
         id: current-version
@@ -46,7 +49,7 @@ jobs:
 
       - name: Update package.json version
         run: |
-          npm version ${{ steps.stable-version.outputs.stable-version }} --no-git-tag-version
+          yarn version --new-version ${{ steps.stable-version.outputs.stable-version }} --no-git-tag-version
           echo "Updated package.json to version ${{ steps.stable-version.outputs.stable-version }}"
 
       - name: Upload version files
@@ -55,7 +58,7 @@ jobs:
           name: version-files
           path: |
             package.json
-            package-lock.json
+            yarn.lock
 
   Build:
     runs-on: ${{ matrix.os }}
@@ -83,24 +86,27 @@ jobs:
         with:
           node-version: 20
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install Dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: build-linux-x64
         if: matrix.architecture == 'x64' && matrix.os == 'ubuntu-latest'
-        run: npm run build:linux-x64
+        run: yarn run build:linux-x64
 
       - name: build-linux-arm
         if: matrix.architecture == 'arm64' && matrix.os == 'ubuntu-latest'
-        run: npm run build:linux-arm
+        run: yarn run build:linux-arm
 
       - name: build-win-x64
         if: matrix.architecture == 'x64' && matrix.os == 'windows-latest'
-        run: npm run build:win-x64
+        run: yarn run build:win-x64
 
       - name: build-win-arm
         if: matrix.architecture == 'arm64' && matrix.os == 'windows-latest'
-        run: npm run build:win-arm
+        run: yarn run build:win-arm
 
       - name: build-mac-universal
         if: matrix.architecture == 'arm64' && matrix.os == 'macos-14'

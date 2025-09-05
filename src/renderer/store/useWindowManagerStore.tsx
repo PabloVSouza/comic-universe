@@ -237,11 +237,11 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
             newLeft =
               initialStatus.startPosition === 'center'
                 ? Math.max(0, (containerSize.width - width) / 2)
-                : initialStatus.left || 0
+                : Number(initialStatus.left) || 0
             newTop =
               initialStatus.startPosition === 'center'
                 ? Math.max(0, (containerSize.height - height) / 2)
-                : initialStatus.top || 0
+                : Number(initialStatus.top) || 0
             console.log(
               `Using fallback position for ${window.component.name}: (${left}, ${top}) -> (${newLeft}, ${newTop})`
             )
@@ -251,11 +251,11 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
           newLeft =
             initialStatus.startPosition === 'center'
               ? Math.max(0, (containerSize.width - width) / 2)
-              : initialStatus.left || 0
+              : Number(initialStatus.left) || 0
           newTop =
             initialStatus.startPosition === 'center'
               ? Math.max(0, (containerSize.height - height) / 2)
-              : initialStatus.top || 0
+              : Number(initialStatus.top) || 0
           console.log(
             `Using fallback position for ${window.component.name}: (${left}, ${top}) -> (${newLeft}, ${newTop})`
           )

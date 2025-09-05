@@ -162,7 +162,6 @@ const SettingsGeneral = () => {
           onClick={handleSaveSettings}
           disabled={saveSettings.isPending}
           className="flex-1"
-          theme="pure"
         >
           {saveSettings.isPending ? 'Saving...' : lang.Settings.general.saveSettings}
         </Button>
@@ -171,7 +170,6 @@ const SettingsGeneral = () => {
           onClick={handleCheckForUpdates}
           disabled={checkForUpdates.isPending}
           className="flex-1"
-          theme="pure"
         >
           {checkForUpdates.isPending ? 'Checking...' : lang.Settings.general.checkForUpdates}
         </Button>

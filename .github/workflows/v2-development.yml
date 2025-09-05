@@ -70,7 +70,7 @@ jobs:
             package.json
             package-lock.json
 
-  build-and-release:
+  build-linux:
     runs-on: ubuntu-latest
     needs: prepare-release
     steps:
@@ -95,15 +95,88 @@ jobs:
       - name: Build application (Linux)
         run: npm run build:linux-x64
 
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-builds
+          path: dist/*.AppImage
+
+  build-windows:
+    runs-on: windows-latest
+    needs: prepare-release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download version files
+        uses: actions/download-artifact@v4
+        with:
+          name: version-files
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Build application (Windows)
         run: npm run build:win
-        env:
-          PUBLISH_FOR_PULL_REQUEST: true
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-builds
+          path: dist/*.exe
+
+  build-macos:
+    runs-on: macos-latest
+    needs: prepare-release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download version files
+        uses: actions/download-artifact@v4
+        with:
+          name: version-files
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Build application (macOS)
         run: npm run build:mac
-        env:
-          PUBLISH_FOR_PULL_REQUEST: true
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-builds
+          path: dist/*.dmg
+
+  nightly-release:
+    runs-on: ubuntu-latest
+    needs: [prepare-release, build-linux, build-windows, build-macos]
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
 
       - name: Create nightly release
         if: needs.prepare-release.outputs.version != ''
@@ -134,11 +207,9 @@ jobs:
             ## Installation
             Download the appropriate build for your platform from the assets below.
           files: |
-            dist/*.AppImage
-            dist/*.deb
-            dist/*.rpm
-            dist/*.exe
-            dist/*.dmg
+            linux-builds/*
+            windows-builds/*
+            macos-builds/*
           draft: false
           prerelease: true
         env:

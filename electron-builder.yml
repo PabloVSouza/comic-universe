@@ -6,6 +6,13 @@ publish:
   provider: github
   owner: PabloVSouza
   repo: comic-universe
+
+# Code signing configuration
+# For free code signing, you can use:
+# 1. GitHub Sponsors + Apple Developer Program (macOS)
+# 2. Microsoft Partner Center (Windows)
+# 3. Self-signed certificates (not recommended for production)
+
 files:
   - '**/*'
   - '!**/.vscode/*'
@@ -24,6 +31,21 @@ asarUnpack:
   - prisma/**/*
 win:
   executableName: comic-universe
+  # Code signing configuration for Windows
+  # For Microsoft Partner Center free certificate:
+  # certificateFile: "path/to/your/certificate.p12"
+  # certificatePassword: "your_certificate_password"
+
+  # For self-signed (not recommended):
+  # certificateFile: "path/to/your/certificate.p12"
+  # certificatePassword: "your_certificate_password"
+
+  # Signing level (0 = none, 1 = basic, 2 = extended)
+  sign: null # Set to 1 or 2 when certificate is available
+
+  # Time stamping server
+  signAndEditExecutable: false
+  signDlls: false
 nsis:
   artifactName: ${name}-${version}-win-${arch}.${ext}
   shortcutName: ${productName}
@@ -37,6 +59,22 @@ mac:
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+
+  # Code signing configuration for macOS
+  identity: null # Set to your certificate identity when available
+  # For GitHub Sponsors + Apple Developer Program:
+  # identity: "Developer ID Application: Your Name (TEAM_ID)"
+  # For self-signed (not recommended):
+  # identity: "Developer ID Application: Your Name"
+
+  # Notarization (requires Apple Developer Program)
+  notarize: false # Set to true when you have Apple Developer Program access
+
+  # Hardened runtime (required for notarization)
+  hardenedRuntime: true
+
+  # Gatekeeper assessment (required for notarization)
+  gatekeeperAssess: false
 dmg:
   artifactName: ${name}-${version}-mac-${arch}.${ext}
   backgroundColor: '#a0aef8'

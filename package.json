@@ -21,7 +21,10 @@
     "build:win": "npm run prisma:generate && npm run build && electron-builder --win --config",
     "build:linux-x64": "npm run prisma:generate && electron-vite build && electron-builder --linux --config",
     "build:linux-arm": "npm run prisma:generate && electron-vite build && electron-builder --linux --arm64 --config",
-    "build:mac": "npm run prisma:generate && electron-vite build && electron-builder --mac --universal --config"
+    "build:mac": "npm run prisma:generate && electron-vite build && electron-builder --mac --universal --config",
+    "setup:codesigning": "./scripts/setup-codesigning.sh",
+    "build:win:unsigned": "CSC_LINK=\"\" npm run build:win",
+    "build:mac:unsigned": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run build:mac"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",

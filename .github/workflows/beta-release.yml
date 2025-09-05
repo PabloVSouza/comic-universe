@@ -149,7 +149,7 @@ jobs:
           name: macos-builds
           path: dist/*.dmg
 
-  create-beta-release:
+  beta-release:
     runs-on: ubuntu-latest
     needs: [prepare-beta, build-linux, build-windows, build-macos]
     permissions:

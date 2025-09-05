@@ -1,0 +1,118 @@
+name: 2.0.0 Development Release
+
+on:
+  push:
+    branches:
+      - 'dev/v2.0.0'
+  pull_request:
+    branches:
+      - 'dev/v2.0.0'
+
+jobs:
+  development-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get current version
+        id: current-version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "current-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "Current version: $CURRENT_VERSION"
+
+      - name: Generate development version
+        id: dev-version
+        run: |
+          CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
+          BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # PR: Create beta version
+            NEW_VERSION="${BASE_VERSION}-beta.$(date +%Y%m%d%H%M%S)"
+            RELEASE_TYPE="beta"
+          else
+            # Push: Create alpha version
+            NEW_VERSION="${BASE_VERSION}-alpha.$(date +%Y%m%d%H%M%S)"
+            RELEASE_TYPE="alpha"
+          fi
+
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "release-type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
+          echo "New version: $NEW_VERSION"
+          echo "Release type: $RELEASE_TYPE"
+
+      - name: Update package.json version
+        if: steps.dev-version.outputs.version != steps.current-version.outputs.current-version
+        run: |
+          npm version ${{ steps.dev-version.outputs.version }} --no-git-tag-version
+          echo "Updated package.json to version ${{ steps.dev-version.outputs.version }}"
+
+      - name: Build application
+        run: |
+          npm run build
+
+      - name: Create development release
+        if: steps.dev-version.outputs.version != steps.current-version.outputs.current-version
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: 'v${{ steps.dev-version.outputs.version }}'
+          name: '2.0.0 Development Release ${{ steps.dev-version.outputs.version }}'
+          body: |
+            ## 🚀 2.0.0 Development Release
+
+            This is a development release for Comic Universe 2.0.0.
+
+            **Release Type:** ${{ steps.dev-version.outputs.release-type }}
+            **Branch:** `${{ github.ref_name }}`
+            **Commit:** `${{ github.sha }}`
+
+            ## What's New in 2.0.0
+            - Updated dependencies to latest versions
+            - Improved CI/CD pipeline
+            - Enhanced development workflow
+            - Better error handling and logging
+
+            ## Testing
+            This is a development release. Please test thoroughly and report any issues.
+
+            ## Installation
+            Download the appropriate build for your platform from the assets below.
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **2.0.0 Development Release Created**
+              
+              Version: \`${{ steps.dev-version.outputs.version }}\`
+              Release Type: **${{ steps.dev-version.outputs.release-type }}**
+              
+              A development release has been created for testing Comic Universe 2.0.0. 
+              Download it from the [releases page](https://github.com/${{ github.repository }}/releases/tag/v${{ steps.dev-version.outputs.version }}).
+              
+              Please test the new features and provide feedback!`
+            })

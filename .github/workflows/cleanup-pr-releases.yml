@@ -40,23 +40,27 @@ jobs:
           echo "Looking for releases related to PR #$PR_NUMBER..."
           
           # Get all releases
-          RELEASES=$(gh release list --limit 100 --json tagName,isPrerelease,body)
+          RELEASES=$(gh release list --limit 100 --json tagName,isPrerelease)
           
-          # Find releases that mention this PR number in the body
-          echo "$RELEASES" | jq -r '.[] | select(.body | contains("PR #'$PR_NUMBER'")) | .tagName' | while read -r TAG; do
+          # Find releases that mention this PR number by checking each release individually
+          echo "$RELEASES" | jq -r '.[] | .tagName' | while read -r TAG; do
             if [ -n "$TAG" ]; then
-              echo "Found release $TAG related to PR #$PR_NUMBER"
-              
-              # Delete the release
-              echo "Deleting release $TAG..."
-              gh release delete "$TAG" --yes
-              
-              # Delete the tag
-              echo "Deleting tag $TAG..."
-              git tag -d "$TAG" 2>/dev/null || true
-              git push origin ":refs/tags/$TAG" 2>/dev/null || true
-              
-              echo "Successfully cleaned up release $TAG"
+              # Get the release body for this specific tag
+              RELEASE_BODY=$(gh release view "$TAG" --json body -q '.body' 2>/dev/null || echo "")
+              if [[ "$RELEASE_BODY" == *"PR #$PR_NUMBER"* ]]; then
+                echo "Found release $TAG related to PR #$PR_NUMBER"
+                
+                # Delete the release
+                echo "Deleting release $TAG..."
+                gh release delete "$TAG" --yes
+                
+                # Delete the tag
+                echo "Deleting tag $TAG..."
+                git tag -d "$TAG" 2>/dev/null || true
+                git push origin ":refs/tags/$TAG" 2>/dev/null || true
+                
+                echo "Successfully cleaned up release $TAG"
+              fi
             fi
           done
           

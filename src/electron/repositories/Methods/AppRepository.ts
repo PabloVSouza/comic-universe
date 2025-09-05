@@ -2,6 +2,7 @@ import { BrowserWindow, app } from 'electron'
 import pathLib from 'path'
 import fs from 'fs'
 import { is } from '@electron-toolkit/utils'
+import { autoUpdater } from 'electron-updater'
 
 class AppRepository {
   constructor(
@@ -38,6 +39,29 @@ class AppRepository {
 
     closeWindow: () => {
       app.quit()
+    },
+
+    checkForUpdates: async () => {
+      if (is.dev) {
+        return { message: 'Updates are not checked in development mode' }
+      }
+      
+      try {
+        const result = await autoUpdater.checkForUpdates()
+        return { 
+          message: result ? 'Update check initiated' : 'No updates available',
+          updateInfo: result?.updateInfo
+        }
+      } catch (error) {
+        return { 
+          message: 'Error checking for updates',
+          error: error instanceof Error ? error.message : 'Unknown error'
+        }
+      }
+    },
+
+    getAppVersion: () => {
+      return app.getVersion()
     }
   }
 }

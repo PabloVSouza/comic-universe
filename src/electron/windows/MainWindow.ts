@@ -1,10 +1,56 @@
-import { shell, BrowserWindow, app } from 'electron'
+import { shell, BrowserWindow, app, dialog } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
 import { autoUpdater } from 'electron-updater'
 import Methods from '../repositories/Methods'
 import EventManager from 'repositories/EventManager'
 import ApiManager from '../repositories/ApiManager'
+
+// Configure auto-updater
+const setupAutoUpdater = (mainWindow: BrowserWindow): void => {
+  // Configure auto-updater
+  autoUpdater.checkForUpdatesAndNotify = autoUpdater.checkForUpdatesAndNotify
+
+  // Update available
+  autoUpdater.on('update-available', (info) => {
+    dialog.showMessageBox(mainWindow, {
+      type: 'info',
+      title: 'Update Available',
+      message: 'A new version is available. It will be downloaded in the background.',
+      detail: `Version ${info.version} is available. The update will be downloaded automatically.`,
+      buttons: ['OK']
+    })
+  })
+
+  // Update downloaded
+  autoUpdater.on('update-downloaded', (info) => {
+    dialog.showMessageBox(mainWindow, {
+      type: 'info',
+      title: 'Update Ready',
+      message: 'Update downloaded. The application will restart to apply the update.',
+      detail: `Version ${info.version} has been downloaded and is ready to install.`,
+      buttons: ['Restart Now', 'Later']
+    }).then((result) => {
+      if (result.response === 0) {
+        autoUpdater.quitAndInstall()
+      }
+    })
+  })
+
+  // Update error
+  autoUpdater.on('error', (error) => {
+    console.error('Auto-updater error:', error)
+    dialog.showErrorBox('Update Error', `An error occurred while checking for updates: ${error.message}`)
+  })
+
+  // Download progress
+  autoUpdater.on('download-progress', (progressObj) => {
+    const message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`
+    console.log(message)
+    // You can send this to the renderer process if you want to show progress in the UI
+    mainWindow.webContents.send('update-download-progress', progressObj)
+  })
+}
 
 const CreateMainWindow = async (): Promise<BrowserWindow> => {
   const mainWindow = new BrowserWindow({
@@ -40,7 +86,10 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
-    if (!is.dev) autoUpdater.checkForUpdatesAndNotify()
+    if (!is.dev) {
+      setupAutoUpdater(mainWindow)
+      autoUpdater.checkForUpdatesAndNotify()
+    }
 
     if (is.dev) mainWindow.webContents.openDevTools()
   })

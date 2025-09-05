@@ -11,8 +11,6 @@ on:
 jobs:
   beta-release:
     runs-on: ubuntu-latest
-    # Only run if this is the latest commit (prevents multiple releases for same PR)
-    if: github.event.pull_request.head.sha == github.sha
     permissions:
       contents: write
       pull-requests: write

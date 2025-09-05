@@ -1,0 +1,103 @@
+name: Cleanup PR Releases
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  cleanup-releases:
+    runs-on: ubuntu-latest
+    # Only run if PR was closed without merging
+    if: github.event.pull_request.merged == false
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get PR information
+        id: pr-info
+        run: |
+          PR_NUMBER="${{ github.event.number }}"
+          PR_HEAD_REF="${{ github.head_ref }}"
+          PR_BASE_REF="${{ github.base_ref }}"
+          PR_MERGED="${{ github.event.pull_request.merged }}"
+          
+          echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "pr-head-ref=$PR_HEAD_REF" >> $GITHUB_OUTPUT
+          echo "pr-base-ref=$PR_BASE_REF" >> $GITHUB_OUTPUT
+          echo "pr-merged=$PR_MERGED" >> $GITHUB_OUTPUT
+          
+          echo "PR #$PR_NUMBER closed without merging: $PR_HEAD_REF -> $PR_BASE_REF"
+
+      - name: Find and delete PR-related releases
+        run: |
+          PR_NUMBER="${{ steps.pr-info.outputs.pr-number }}"
+          PR_HEAD_REF="${{ steps.pr-info.outputs.pr-head-ref }}"
+          
+          echo "Looking for releases related to PR #$PR_NUMBER..."
+          
+          # Get all releases
+          RELEASES=$(gh release list --limit 100 --json tagName,isPrerelease,body)
+          
+          # Find releases that mention this PR number in the body
+          echo "$RELEASES" | jq -r '.[] | select(.body | contains("PR #'$PR_NUMBER'")) | .tagName' | while read -r TAG; do
+            if [ -n "$TAG" ]; then
+              echo "Found release $TAG related to PR #$PR_NUMBER"
+              
+              # Delete the release
+              echo "Deleting release $TAG..."
+              gh release delete "$TAG" --yes
+              
+              # Delete the tag
+              echo "Deleting tag $TAG..."
+              git tag -d "$TAG" 2>/dev/null || true
+              git push origin ":refs/tags/$TAG" 2>/dev/null || true
+              
+              echo "Successfully cleaned up release $TAG"
+            fi
+          done
+          
+          # Also look for releases with branch name in tag (for dev releases)
+          if [[ "$PR_HEAD_REF" == "dev/v2.0.0-cicd-clean" ]]; then
+            echo "Looking for dev releases with branch-specific tags..."
+            echo "$RELEASES" | jq -r '.[] | select(.tagName | contains("beta") or contains("alpha")) | .tagName' | while read -r TAG; do
+              if [ -n "$TAG" ]; then
+                echo "Found potential dev release $TAG"
+                # Check if this release was created recently (within last 24 hours)
+                RELEASE_DATE=$(gh release view "$TAG" --json createdAt -q '.createdAt')
+                CURRENT_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+                
+                # Simple check: if release is very recent, it might be from this PR
+                echo "Release $TAG created at: $RELEASE_DATE"
+                echo "Current time: $CURRENT_DATE"
+              fi
+            done
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on closed PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.issue.number;
+            const prHeadRef = context.payload.pull_request.head.ref;
+            const prMerged = context.payload.pull_request.merged;
+            
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🧹 **PR Release Cleanup**
+              
+              PR #${prNumber} has been closed without merging. Any associated beta/alpha releases have been automatically cleaned up.
+              
+              **Branch:** \`${prHeadRef}\`
+              **Status:** Closed (not merged)
+              **Reason:** Releases are only cleaned up when PRs are closed without merging to keep the releases page organized.
+              
+              If this PR gets reopened, new releases will be created automatically.`
+            });

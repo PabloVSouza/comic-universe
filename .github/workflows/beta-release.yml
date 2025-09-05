@@ -129,6 +129,7 @@ jobs:
             **PR:** #${{ github.event.number }}
             **Branch:** `${{ github.head_ref }}`
             **Target:** `${{ github.base_ref }}`
+            **Auto-cleanup:** This release will be automatically deleted if PR #${{ github.event.number }} is closed without merging.
 
             ## Changes
             ${{ github.event.pull_request.body }}

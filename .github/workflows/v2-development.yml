@@ -192,6 +192,8 @@ jobs:
             **Release Type:** ${{ needs.prepare-release.outputs.release-type }}
             **Branch:** `${{ github.ref_name }}`
             **Commit:** `${{ github.sha }}`
+            ${{ github.event_name == 'pull_request' && format('**PR:** #{0}', github.event.number) || '' }}
+            ${{ github.event_name == 'pull_request' && format('**Auto-cleanup:** This release will be automatically deleted if PR #{0} is closed without merging.', github.event.number) || '' }}
 
             ## What's New in 2.0.0
             - Updated dependencies to latest versions

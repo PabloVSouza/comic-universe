@@ -66,10 +66,14 @@ jobs:
       - name: Build application (Windows)
         run: |
           npm run build:win
+        env:
+          PUBLISH_FOR_PULL_REQUEST: true
 
       - name: Build application (macOS)
         run: |
           npm run build:mac
+        env:
+          PUBLISH_FOR_PULL_REQUEST: true
 
       - name: Create beta release
         uses: softprops/action-gh-release@v2

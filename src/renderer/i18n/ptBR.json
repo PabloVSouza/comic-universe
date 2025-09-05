@@ -1,0 +1,99 @@
+{
+  "General": {
+    "inDevelopment": "Função em desenvolvimento",
+    "alertConfirmButton": "Ok",
+    "version": "Versão",
+    "author": "Autor",
+    "license": "Licença",
+    "githubRepository": "Repositório Github",
+    "checking": "Verificando...",
+    "selectedReleaseTypes": "Tipos de Release Selecionados:"
+  },
+  "Dashboard": {
+    "setComplete": "Definir como Lido",
+    "resetProgress": "Remover Progresso",
+    "read": "Lido",
+    "continueReading": "Continuar de onde Parou",
+    "downloadMore": "Baixar mais Capítulos",
+    "newChapter": {
+      "noNewChapterMessage": "Não existem novos capítulos",
+      "noNewChapterConfirm": "Ok"
+    },
+    "contextMenu": {
+      "deleteComic": {
+        "title": "Deseja mesmo apagar?",
+        "confirmMessage": "Todo o progresso de leitura será apagado!",
+        "confirmOk": "Confirmar",
+        "confirmCancel": "Cancelar"
+      }
+    }
+  },
+  "DownloadComic": {
+    "chaptersTitle": "Capítulos",
+    "navigation": {
+      "downloadQueue": "Na fila",
+      "downloadButton": "Baixar agora",
+      "addToQueue": "Adicionar todos na fila",
+      "removeFromQueue": "Remover todos da fila"
+    }
+  },
+  "HomeNav": {
+    "about": "Sobre este App",
+    "settings": "Configurações",
+    "darkMode": "Modo Noturno",
+    "changeUser": "Trocar de Usuário",
+    "closeApp": "Fechar App"
+  },
+  "SearchComic": {
+    "windowTitle": "Busca de Quadrinhos",
+    "textPlaceholder": "Digite sua Busca",
+    "bookmarkComic": "Favoritar",
+    "alreadyBookmarked": "Favoritado",
+    "availableChapters": "Capítulos Disponíveis",
+    "noReposAvailable": "Sem Repositórios"
+  },
+  "Pagination": {
+    "previous": "Anterior",
+    "next": "Próxima"
+  },
+  "Settings": {
+    "windowTitle": "Configurações",
+    "options": {
+      "generalLabel": "Geral",
+      "pluginsLabel": "Plugins",
+      "userLabel": "Usuário"
+    },
+    "general": {
+      "title": "Configurações Gerais",
+      "language": "Idioma",
+      "selectLanguage": "Selecionar Idioma",
+      "updatePreferences": "Preferências de Atualização",
+      "autoUpdate": "Ativar Atualização Automática",
+      "checkForUpdates": "Verificar Atualizações",
+      "currentVersion": "Versão Atual",
+      "releaseTypes": "Tipos de Release para Verificar",
+      "stableReleases": "Releases Estáveis",
+      "betaReleases": "Releases Beta",
+      "alphaReleases": "Releases Alpha",
+      "optInNonStable": "Optar por Atualizações Não-Estáveis",
+      "optInDescription": "Permitir que o app verifique e instale releases beta e alpha",
+      "saveSettings": "Salvar Configurações",
+      "settingsSaved": "Configurações salvas com sucesso",
+      "updateCheckSuccess": "Verificação de atualização concluída",
+      "updateCheckError": "Erro ao verificar atualizações"
+    }
+  },
+  "Users": {
+    "header": "Selecione o seu Usuário",
+    "createButton": "Criar Usuário",
+    "saveButton": "Salvar Usuário",
+    "cancelButton": "Cancelar",
+    "namePlaceholder": "Nome do Usuário",
+    "deleteUser": {
+      "deleteUserTitle": "Apagar este usuário?",
+      "deleteUserMessage": "Todo o progresso de leitura será perdido!",
+      "confirmDeleteButton": "Sim",
+      "cancelDeleteButton": "Não"
+    }
+  }
+}

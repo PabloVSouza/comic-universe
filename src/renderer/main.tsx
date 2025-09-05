@@ -1,37 +1,49 @@
-import { ReactNode, useEffect } from 'react'
+import { ReactNode } from 'react'
 import { HashRouter } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
 import ReactDOM from 'react-dom/client'
 import Routes from 'routes'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import 'css/main.css'
 import usePersistStore from 'store/usePersistStore'
-
-import style from 'scss/main/style.module.scss'
-import themes from 'scss/main/themes.module.scss'
-
 import classNames from 'classnames'
+import { AlertProvider } from 'components/Alert'
+import { I18nextProvider } from 'react-i18next'
+import i18n from './i18n'
+
+import wallpaper from 'assets/wallpaper.webp'
 
 interface Props {
   children: ReactNode
 }
 
+const queryClient = new QueryClient()
+
 const Main = ({ children }: Props): JSX.Element => {
   const { theme } = usePersistStore()
-  const navigate = useNavigate()
 
-  useEffect(() => {
-    const { on } = window.Electron.ipcRenderer
-    on('changeUrl', (_event, url) => {
-      navigate(url)
-    })
-  }, [])
-
-  return <div className={classNames(themes[theme], style.main)}>{children}</div>
+  return (
+    <div
+      className={classNames(
+        'h-[calc(100dvh)] w-screen bg-cover bg-center bg-no-repeat flex justify-center items-center relative overflow-hidden',
+        theme
+      )}
+      style={{ backgroundImage: `url(${wallpaper}` }}
+    >
+      {children}
+    </div>
+  )
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <HashRouter>
-    <Main>
-      <Routes />
-    </Main>
-  </HashRouter>
+  <QueryClientProvider client={queryClient}>
+    <HashRouter>
+      <I18nextProvider i18n={i18n}>
+        <Main>
+          <AlertProvider>
+            <Routes />
+          </AlertProvider>
+        </Main>
+      </I18nextProvider>
+    </HashRouter>
+  </QueryClientProvider>
 )

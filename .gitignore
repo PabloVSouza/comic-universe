@@ -6,4 +6,7 @@ out
 *.db-journal
 .env
 **/.DS_Store
-plugins
+/plugins*
+.yarn/
+dev-data/
+

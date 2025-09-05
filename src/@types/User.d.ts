@@ -1,4 +1,4 @@
-interface UserInterface {
+interface IUser {
   id?: number
   name: string
   default?: boolean

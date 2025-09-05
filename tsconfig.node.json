@@ -5,18 +5,19 @@
     "src/electron/preload/*",
     "electron.vite.config.*",
     "src/@types/*.d.ts"
-  ],
+,   "src/**/*.d.ts"  ],
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"],
-    "baseUrl": "src/eletron",
+    "resolveJsonModule": true,
     "paths": {
-      "lib/*": ["./lib/*"],
-      "utils/*":["./utils/*"],
-      "repositories/*": ["./repositories/*"],
-      "main/*": ["./main/*"],
-      "preload/*": ["./preload/*"],
-      "events/*": ["./events/*"],
+      "main/*": ["./src/electron/main/*"],
+      "preload/*": ["./src/electron/preload/*"],
+      "repositories/*": ["./src/electron/repositories/*"],
+      "scripts/*": ["./src/electron/scripts/*"],
+      "utils": ["./src/electron/utils/utils"],
+      "utils/*":["./src/electron/utils/*"],
+      "windows/*":["./src/electron/windows/*"],
     }
   }
 }

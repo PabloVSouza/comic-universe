@@ -1,4 +1,4 @@
-interface ComicInterface {
+interface IComic {
   id: number
   siteId: string
   name: string
@@ -12,7 +12,6 @@ interface ComicInterface {
   siteLink: string
   synopsis: string
   year?: string
-  type: string
-  chapters: Chapter[]
-  ReadProgress: ReadProgress[]
+  type: 'hq' | 'manga' | 'manhwa' | 'manhua'
+  chapters: IChapter[]
 }

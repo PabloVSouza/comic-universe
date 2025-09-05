@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import CreateMainWindow from '../windows/MainWindow'
+import CreateMainWindow from 'windows/MainWindow'
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron')

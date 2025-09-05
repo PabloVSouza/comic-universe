@@ -1,23 +1,27 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
-  "include": [
-    "src/env.d.ts",
-    "src/**/*",
-    "src/**/*.tsx",
-    "src/@types/*.d.ts"
-  ],
+  "include": ["src/env.d.ts", "src/**/*", "src/**/*.tsx", "src/@types/*.d.ts"],
   "compilerOptions": {
     "composite": true,
     "jsx": "react-jsx",
     "baseUrl": "src/renderer",
     "paths": {
+      "main/*": ["../../src/electron/main/*"],
+      "preload/*": ["../../src/electron/preload/*"],
+      "repositories/*": ["../../src/electron/repositories/*"],
+      "scripts/*": ["../../src/electron/scripts/*"],
+      "utils/*": ["../../src/electron/utils/*"],
+      "windows/*": ["../../src/electron/windows/*"],
+
       "assets/*": ["./assets/*"],
       "components/*": ["./components/*"],
-      "electron/*":["./electron/*"],
-      "hooks/*": [".hooks/*"],
+      "electron/*": ["./electron/*"],
+      "hooks/*": ["./hooks/*"],
       "pages/*": ["./pages/*"],
+      "lang/*": ["./lang/*"],
+      "functions/*": ["./functions/*"],
       "routes/*": ["./routes/*"],
-      "scss/*": ["./scss/*"],
+      "css/*": ["./css/*"],
       "store/*": ["./store/*"],
       "@types/*": ["./@types/*"]
     }

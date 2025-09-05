@@ -104,7 +104,7 @@ jobs:
 
       - name: build-mac-universal
         if: matrix.architecture == 'arm64' && matrix.os == 'macos-14'
-        run: yarn run build:mac
+        run: npm run build:mac
 
       - name: release
         uses: softprops/action-gh-release@v2

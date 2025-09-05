@@ -9,8 +9,21 @@ on:
       - 'dev/v2.0.0'
 
 jobs:
+  wait-for-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for CI to complete
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: ${{ github.sha }}
+          check-name: 'test'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+          allowed-conclusions: success
+
   development-release:
     runs-on: ubuntu-latest
+    needs: wait-for-ci
     permissions:
       contents: write
       pull-requests: write

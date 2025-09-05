@@ -6,6 +6,14 @@ publish:
   provider: github
   owner: PabloVSouza
   repo: comic-universe
+
+# Code signing configuration
+# For code signing options:
+# 1. Apple Developer Program ($99/year) - macOS official certificates
+# 2. Microsoft Partner Center (Windows) - Free for open source projects
+# 3. Self-signed certificates (free but shows security warnings)
+# 4. No code signing (free but shows "unidentified developer" warnings)
+
 files:
   - '**/*'
   - '!**/.vscode/*'
@@ -24,6 +32,16 @@ asarUnpack:
   - prisma/**/*
 win:
   executableName: comic-universe
+  # Code signing configuration for Windows
+  # cscLink: "certificates/windows-cert.p12"  # Local development
+  # cscKeyPassword: "comicuniverse"           # Local development
+
+  # Publisher name for Windows code signing
+  publisherName: 'Comic Universe'
+
+  # Time stamping server
+  signAndEditExecutable: false
+  signDlls: false
 nsis:
   artifactName: ${name}-${version}-win-${arch}.${ext}
   shortcutName: ${productName}
@@ -37,6 +55,21 @@ mac:
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+
+  # Code signing configuration for macOS
+  identity: 'Comic Universe'
+  # Certificate file for self-signed certificate (uses environment variables in CI/CD)
+  # cscLink: "certificates/macos-cert.p12"  # Local development
+  # cscKeyPassword: "comicuniverse"         # Local development
+
+  # Notarization (requires Apple Developer Program)
+  notarize: false # Set to true when you have Apple Developer Program access
+
+  # Hardened runtime (required for notarization)
+  hardenedRuntime: true
+
+  # Gatekeeper assessment (required for notarization)
+  gatekeeperAssess: false
 dmg:
   artifactName: ${name}-${version}-mac-${arch}.${ext}
   backgroundColor: '#a0aef8'

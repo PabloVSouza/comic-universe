@@ -5,8 +5,19 @@ out
 *.db
 *.db-journal
 .env
+.env.codesigning
 **/.DS_Store
 /plugins*
 .yarn/
 dev-data/
+
+# Code signing certificates and keys
+*.p12
+*.pfx
+*.cer
+*.crt
+*.key
+*.pem
+certificates/
+certs/
 

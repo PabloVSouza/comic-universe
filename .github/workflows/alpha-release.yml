@@ -40,6 +40,7 @@ jobs:
           prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          target_commitish: ${{ github.sha }}
           files: |
             dist/*.exe
             dist/*.zip
@@ -55,6 +56,8 @@ jobs:
     permissions: write-all
     env:
       GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      # Force code signing for PR builds
+      CSC_FOR_PULL_REQUEST: true
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
@@ -67,6 +70,21 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Generate Self-Signed Certificate
+        run: |
+          # Create certificates directory
+          mkdir -p certificates
+          
+          # Generate self-signed certificate
+          openssl req -x509 -newkey rsa:2048 -keyout certificates/cert-key.pem -out certificates/cert.pem -days 365 -nodes -subj "/C=US/ST=CA/L=San Francisco/O=Comic Universe/CN=Comic Universe"
+          
+          # Convert to PKCS#12 format
+          openssl pkcs12 -export -out certificates/cert.p12 -inkey certificates/cert-key.pem -in certificates/cert.pem -name "Comic Universe" -passout pass:comicuniverse
+          
+          # Set environment variables for electron-builder
+          echo "CSC_LINK=certificates/cert.p12" >> $env:GITHUB_ENV
+          echo "CSC_KEY_PASSWORD=comicuniverse" >> $env:GITHUB_ENV
+
       - name: build-win
         run: npm run build:win
 
@@ -77,6 +95,7 @@ jobs:
           prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          target_commitish: ${{ github.sha }}
           files: |
             dist/*.exe
             dist/*.zip
@@ -92,6 +111,8 @@ jobs:
     permissions: write-all
     env:
       GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      # Force code signing for PR builds
+      CSC_FOR_PULL_REQUEST: true
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
@@ -104,8 +125,23 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Generate Self-Signed Certificate
+        run: |
+          # Create certificates directory
+          mkdir -p certificates
+          
+          # Generate self-signed certificate
+          openssl req -x509 -newkey rsa:2048 -keyout certificates/cert-key.pem -out certificates/cert.pem -days 365 -nodes -subj "/C=US/ST=CA/L=San Francisco/O=Comic Universe/CN=Comic Universe"
+          
+          # Convert to PKCS#12 format
+          openssl pkcs12 -export -out certificates/cert.p12 -inkey certificates/cert-key.pem -in certificates/cert.pem -name "Comic Universe" -passout pass:comicuniverse
+          
+          # Set environment variables for electron-builder
+          echo "CSC_LINK=certificates/cert.p12" >> $GITHUB_ENV
+          echo "CSC_KEY_PASSWORD=comicuniverse" >> $GITHUB_ENV
+
       - name: build-mac-universal
-        run: npm install build:mac
+        run: npm run build:mac
 
       - name: release
         uses: softprops/action-gh-release@v2
@@ -114,6 +150,7 @@ jobs:
           prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          target_commitish: ${{ github.sha }}
           files: |
             dist/*.exe
             dist/*.zip

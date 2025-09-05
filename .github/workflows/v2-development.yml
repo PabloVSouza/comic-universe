@@ -134,8 +134,8 @@ jobs:
           # Create certificates directory
           mkdir -p certificates
           
-          # Create config file for certificate with proper key usage
-          cat > certificates/cert.conf << EOF
+          # Create config file for certificate with proper key usage (PowerShell compatible)
+          @"
           [req]
           distinguished_name = req_distinguished_name
           x509_extensions = v3_req
@@ -152,7 +152,7 @@ jobs:
           keyUsage = critical, digitalSignature, keyEncipherment
           extendedKeyUsage = critical, codeSigning
           subjectKeyIdentifier = hash
-          EOF
+          "@ | Out-File -FilePath certificates/cert.conf -Encoding utf8
           
           # Generate self-signed certificate with proper extensions
           openssl req -x509 -newkey rsa:2048 -keyout certificates/cert-key.pem -out certificates/cert.pem -days 365 -nodes -config certificates/cert.conf -extensions v3_req
@@ -229,6 +229,13 @@ jobs:
           
           # Convert to PKCS#12 format
           openssl pkcs12 -export -out certificates/cert.p12 -inkey certificates/cert-key.pem -in certificates/cert.pem -name "Comic Universe" -passout pass:comicuniverse
+          
+          # Import certificate into keychain for macOS code signing
+          security create-keychain -p "" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security import certificates/cert.p12 -k build.keychain -P comicuniverse -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
           
           # Set environment variables for electron-builder
           echo "CSC_LINK=certificates/cert.p12" >> $GITHUB_ENV

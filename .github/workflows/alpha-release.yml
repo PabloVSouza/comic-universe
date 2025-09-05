@@ -55,9 +55,8 @@ jobs:
     permissions: write-all
     env:
       GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      # Code signing environment variables
-      CSC_LINK: ${{ secrets.CSC_LINK }}
-      CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+      # Force code signing for PR builds
+      CSC_FOR_PULL_REQUEST: true
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
@@ -110,12 +109,8 @@ jobs:
     permissions: write-all
     env:
       GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      # Code signing environment variables
-      CSC_LINK: ${{ secrets.CSC_LINK }}
-      CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-      APPLE_ID: ${{ secrets.APPLE_ID }}
-      APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      # Force code signing for PR builds
+      CSC_FOR_PULL_REQUEST: true
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4

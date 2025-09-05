@@ -65,18 +65,27 @@ jobs:
           done
           
           # Also look for releases with branch name in tag (for dev releases)
+          # Skip this section if we already found and deleted releases above
           if [[ "$PR_HEAD_REF" == "dev/v2.0.0-cicd-clean" ]]; then
-            echo "Looking for dev releases with branch-specific tags..."
-            echo "$RELEASES" | jq -r '.[] | select(.tagName | contains("beta") or contains("alpha")) | .tagName' | while read -r TAG; do
+            echo "Looking for additional dev releases with branch-specific tags..."
+            # Get fresh list of releases since some might have been deleted above
+            REMAINING_RELEASES=$(gh release list --limit 100 --json tagName,isPrerelease)
+            echo "$REMAINING_RELEASES" | jq -r '.[] | select(.tagName | contains("beta") or contains("alpha")) | .tagName' | while read -r TAG; do
               if [ -n "$TAG" ]; then
                 echo "Found potential dev release $TAG"
-                # Check if this release was created recently (within last 24 hours)
-                RELEASE_DATE=$(gh release view "$TAG" --json createdAt -q '.createdAt')
-                CURRENT_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
                 
-                # Simple check: if release is very recent, it might be from this PR
-                echo "Release $TAG created at: $RELEASE_DATE"
-                echo "Current time: $CURRENT_DATE"
+                # Check if this release still exists before trying to get its details
+                if gh release view "$TAG" >/dev/null 2>&1; then
+                  # Check if this release was created recently (within last 24 hours)
+                  RELEASE_DATE=$(gh release view "$TAG" --json createdAt -q '.createdAt')
+                  CURRENT_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+                  
+                  # Simple check: if release is very recent, it might be from this PR
+                  echo "Release $TAG created at: $RELEASE_DATE"
+                  echo "Current time: $CURRENT_DATE"
+                else
+                  echo "Release $TAG no longer exists, skipping..."
+                fi
               fi
             done
           fi

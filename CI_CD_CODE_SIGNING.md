@@ -16,14 +16,19 @@ The CI/CD pipeline automatically generates self-signed certificates and signs th
 
 ## Current Setup
 
-### GitHub Actions Workflow
+### GitHub Actions Workflows
 
-The `.github/workflows/release.yml` file has been updated to include:
+The following workflow files have been updated to include code signing:
+
+#### Workflow Files
+- **`release.yml`**: Stable releases from `main` branch
+- **`alpha-release.yml`**: Alpha releases from tags matching `v*.*.*-alpha.*`
+- **`beta-release.yml`**: Beta releases from pull requests to `main`/`staging`
 
 #### Triggers
 - **Stable releases**: Push to `main` branch
-- **Tagged releases**: Push tags matching `v*.*.*`, `v*.*.*-alpha*`, `v*.*.*-beta*`
-- **Automatic version detection**: Determines if release is alpha, beta, or stable
+- **Alpha releases**: Push tags matching `v*.*.*-alpha.*`
+- **Beta releases**: Pull requests to `main` or `staging` branches
 
 ```yaml
 - name: Generate Self-Signed Certificates

@@ -4,17 +4,15 @@ on:
   push:
     branches:
       - main
-    tags:
-      - 'v*.*.*'
-      - 'v*.*.*-alpha*'
-      - 'v*.*.*-beta*'
+  # Temporarily disabled for testing
+  # push:
+  #   tags:
+  #     - v*.*.*
 jobs:
-  prepare-release:
+  prepare-stable:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.release-version.outputs.release-version }}
-      version-type: ${{ steps.release-version.outputs.version-type }}
-      is-prerelease: ${{ steps.release-version.outputs.is-prerelease }}
+      version: ${{ steps.stable-version.outputs.stable-version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,55 +34,25 @@ jobs:
           echo "current-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           echo "Current version: $CURRENT_VERSION"
 
-      - name: Determine release version and type
-        id: release-version
+      - name: Generate stable version
+        id: stable-version
         run: |
           CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
-          
-          # Check if this is a tag push or branch push
-          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref_type }}" == "tag" ]]; then
-            # This is a tag push - use the tag name
-            TAG_NAME="${{ github.ref_name }}"
-            RELEASE_VERSION="${TAG_NAME#v}"  # Remove 'v' prefix
-            
-            # Determine version type
-            if [[ "$RELEASE_VERSION" == *"-alpha"* ]]; then
-              VERSION_TYPE="alpha"
-              IS_PRERELEASE="true"
-            elif [[ "$RELEASE_VERSION" == *"-beta"* ]]; then
-              VERSION_TYPE="beta"
-              IS_PRERELEASE="true"
-            else
-              VERSION_TYPE="stable"
-              IS_PRERELEASE="false"
-            fi
-          else
-            # This is a branch push - use package.json version
-            RELEASE_VERSION="$CURRENT_VERSION"
-            BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
-            
-            # For branch pushes, always treat as stable
-            VERSION_TYPE="stable"
-            IS_PRERELEASE="false"
-            RELEASE_VERSION="${BASE_VERSION}"
-          fi
-          
-          echo "release-version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
-          echo "version-type=$VERSION_TYPE" >> $GITHUB_OUTPUT
-          echo "is-prerelease=$IS_PRERELEASE" >> $GITHUB_OUTPUT
-          echo "Release version: $RELEASE_VERSION"
-          echo "Version type: $VERSION_TYPE"
-          echo "Is prerelease: $IS_PRERELEASE"
+          BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
+          # For stable releases, use the base version (e.g., 2.0.0)
+          STABLE_VERSION="${BASE_VERSION}"
+          echo "stable-version=$STABLE_VERSION" >> $GITHUB_OUTPUT
+          echo "Stable version: $STABLE_VERSION"
 
       - name: Update package.json version
         run: |
           CURRENT_VERSION=$(node -p "require('./package.json').version")
-          RELEASE_VERSION="${{ steps.release-version.outputs.release-version }}"
-          if [ "$CURRENT_VERSION" != "$RELEASE_VERSION" ]; then
-            npm version $RELEASE_VERSION --no-git-tag-version
-            echo "Updated package.json from $CURRENT_VERSION to $RELEASE_VERSION"
+          STABLE_VERSION="${{ steps.stable-version.outputs.stable-version }}"
+          if [ "$CURRENT_VERSION" != "$STABLE_VERSION" ]; then
+            npm version $STABLE_VERSION --no-git-tag-version
+            echo "Updated package.json from $CURRENT_VERSION to $STABLE_VERSION"
           else
-            echo "Version $RELEASE_VERSION is already set, no update needed"
+            echo "Version $STABLE_VERSION is already set, no update needed"
           fi
 
       - name: Upload version files
@@ -97,7 +65,7 @@ jobs:
 
   Build:
     runs-on: ${{ matrix.os }}
-    needs: prepare-release
+    needs: prepare-stable
     permissions: write-all
     env:
       GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
@@ -172,24 +140,23 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: 'v${{ needs.prepare-release.outputs.version }}'
-          name: '${{ needs.prepare-release.outputs.version-type == "stable" && "🚀 Stable Release" || needs.prepare-release.outputs.version-type == "beta" && "🧪 Beta Release" || "⚡ Alpha Release" }} v${{ needs.prepare-release.outputs.version }}'
+          tag_name: 'v${{ needs.prepare-stable.outputs.version }}'
+          name: 'Stable Release v${{ needs.prepare-stable.outputs.version }}'
           body: |
-            ## ${{ needs.prepare-release.outputs.version-type == "stable" && "🚀 Stable Release" || needs.prepare-release.outputs.version-type == "beta" && "🧪 Beta Release" || "⚡ Alpha Release" }} v${{ needs.prepare-release.outputs.version }}
+            ## 🚀 Stable Release v${{ needs.prepare-stable.outputs.version }}
 
-            ${{ needs.prepare-release.outputs.version-type == "stable" && "This is a stable release of Comic Universe." || needs.prepare-release.outputs.version-type == "beta" && "This is a beta release of Comic Universe. Please test thoroughly and report any issues." || "This is an alpha release of Comic Universe. This is experimental software - use at your own risk." }}
+            This is a stable release of Comic Universe 2.0.0.
 
-            **Version:** ${{ needs.prepare-release.outputs.version }}
-            **Type:** ${{ needs.prepare-release.outputs.version-type }}
+            **Version:** ${{ needs.prepare-stable.outputs.version }}
             **Branch:** `${{ github.ref_name }}`
             **Commit:** `${{ github.sha }}`
 
-            ## What's New
+            ## What's New in 2.0.0
             - Updated dependencies to latest versions
             - Improved CI/CD pipeline with automatic code signing
             - Enhanced development workflow
             - Better error handling and logging
-            - Standardized release nomenclature (alpha/beta/stable)
+            - Standardized release nomenclature (alpha/beta)
 
             ## Installation
             Download the appropriate build for your platform from the assets below.
@@ -198,7 +165,7 @@ jobs:
             All builds are automatically signed with self-signed certificates. Users may see security warnings - this is normal for self-signed certificates.
 
             ## Testing
-            ${{ needs.prepare-release.outputs.version-type == "stable" && "This is a stable release. Please test thoroughly and report any issues." || needs.prepare-release.outputs.version-type == "beta" && "This is a beta release. Please test thoroughly and report any issues." || "This is an alpha release. This is experimental software - use at your own risk." }}
+            This is a stable release. Please test thoroughly and report any issues.
           files: |
             dist/*.exe
             dist/*.zip
@@ -211,6 +178,6 @@ jobs:
             dist/*.yml
             dist/*.blockmap
           draft: false
-          prerelease: ${{ needs.prepare-release.outputs.is-prerelease }}
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

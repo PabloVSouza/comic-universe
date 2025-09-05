@@ -89,6 +89,10 @@ jobs:
   build-windows:
     runs-on: windows-latest
     needs: prepare-beta
+    env:
+      # Code signing environment variables
+      CSC_LINK: ${{ secrets.CSC_LINK }}
+      CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -107,6 +111,21 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Generate Self-Signed Certificate
+        run: |
+          # Create certificates directory
+          mkdir -p certificates
+          
+          # Generate self-signed certificate
+          openssl req -x509 -newkey rsa:2048 -keyout certificates/cert-key.pem -out certificates/cert.pem -days 365 -nodes -subj "/C=US/ST=CA/L=San Francisco/O=Comic Universe/CN=Comic Universe"
+          
+          # Convert to PKCS#12 format
+          openssl pkcs12 -export -out certificates/cert.p12 -inkey certificates/cert-key.pem -in certificates/cert.pem -name "Comic Universe" -passout pass:comicuniverse
+          
+          # Set environment variables for electron-builder
+          echo "CSC_LINK=certificates/cert.p12" >> $env:GITHUB_ENV
+          echo "CSC_KEY_PASSWORD=comicuniverse" >> $env:GITHUB_ENV
 
       - name: Build application (Windows)
         run: npm run build:win
@@ -120,6 +139,13 @@ jobs:
   build-macos:
     runs-on: macos-latest
     needs: prepare-beta
+    env:
+      # Code signing environment variables
+      CSC_LINK: ${{ secrets.CSC_LINK }}
+      CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -138,6 +164,21 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Generate Self-Signed Certificate
+        run: |
+          # Create certificates directory
+          mkdir -p certificates
+          
+          # Generate self-signed certificate
+          openssl req -x509 -newkey rsa:2048 -keyout certificates/cert-key.pem -out certificates/cert.pem -days 365 -nodes -subj "/C=US/ST=CA/L=San Francisco/O=Comic Universe/CN=Comic Universe"
+          
+          # Convert to PKCS#12 format
+          openssl pkcs12 -export -out certificates/cert.p12 -inkey certificates/cert-key.pem -in certificates/cert.pem -name "Comic Universe" -passout pass:comicuniverse
+          
+          # Set environment variables for electron-builder
+          echo "CSC_LINK=certificates/cert.p12" >> $GITHUB_ENV
+          echo "CSC_KEY_PASSWORD=comicuniverse" >> $GITHUB_ENV
 
       - name: Build application (macOS)
         run: npm run build:mac
@@ -186,6 +227,9 @@ jobs:
 
             ## Installation
             Download the appropriate build for your platform from the assets below.
+
+            ## Code Signing
+            All builds are automatically signed with self-signed certificates. Users may see security warnings - this is normal for self-signed certificates.
           files: |
             linux-builds/*
             windows-builds/*

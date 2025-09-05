@@ -16,7 +16,7 @@ const DownloadFile = async (path: string, url: string): Promise<string> => {
   const fileStream = fs.createWriteStream(path + fileName)
 
   // Use pipeline to handle streaming the data to the file
-  await pipeline(response.body as any, fileStream)
+  await pipeline(response.body as NodeJS.ReadableStream, fileStream)
 
   return path + fileName
 }

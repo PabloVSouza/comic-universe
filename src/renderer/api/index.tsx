@@ -7,7 +7,7 @@ const defaultImplementation = 'IpcImplementation' as keyof typeof ApiList
 
 const useApi = (implementation: string = defaultImplementation) => {
   return {
-    invoke: async (method: string, args?: any) => {
+    invoke: async (method: string, args?: unknown) => {
       return await ApiList[implementation].invoke(method, args)
     }
   }

@@ -10,9 +10,8 @@ import ComicListItem from 'components/HomeComponents/HomeComicListItem'
 import downloadIcon from 'assets/download-icon.svg'
 import deleteIcon from 'assets/trash.svg'
 
-const { invoke } = useApi()
-
 const HomeComicList = ({ comicList }: { comicList: IComic[] }): JSX.Element => {
+  const { invoke } = useApi()
   const queryClient = useQueryClient()
 
   const { mutate: deleteComic } = useMutation({

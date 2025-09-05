@@ -5,19 +5,17 @@ import { autoUpdater } from 'electron-updater'
 import Methods from '../repositories/Methods'
 import EventManager from 'repositories/EventManager'
 import ApiManager from '../repositories/ApiManager'
+import SettingsRepository from '../repositories/Methods/SettingsRepository'
 
 // Configure auto-updater
-const setupAutoUpdater = (mainWindow: BrowserWindow): void => {
+const setupAutoUpdater = (mainWindow: BrowserWindow, settingsRepository: SettingsRepository): void => {
   // Configure auto-updater
   autoUpdater.checkForUpdatesAndNotify = autoUpdater.checkForUpdatesAndNotify
-
+  
   // Load user's update preferences from file
   const loadUpdateSettings = async () => {
     try {
-      // Import the settings repository methods
-      const { invoke } = await import('@tauri-apps/api/core')
-      const settings = await invoke('getUpdateSettings')
-      return settings
+      return await settingsRepository.methods.getUpdateSettings()
     } catch (error) {
       console.error('Error loading update settings:', error)
       return {
@@ -131,17 +129,19 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
 
     eventManager = new EventManager(methods.methods)
     new ApiManager(methods)
+    
+    // Setup auto-updater with settings repository
+    if (!is.dev) {
+      const settingsRepository = new SettingsRepository()
+      setupAutoUpdater(mainWindow, settingsRepository)
+      autoUpdater.checkForUpdatesAndNotify()
+    }
   }
 
   initApiEvents()
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
-    if (!is.dev) {
-      setupAutoUpdater(mainWindow)
-      autoUpdater.checkForUpdatesAndNotify()
-    }
-
     if (is.dev) mainWindow.webContents.openDevTools()
   })
 

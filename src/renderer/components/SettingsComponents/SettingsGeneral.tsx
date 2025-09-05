@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { invoke } from '@tauri-apps/api/core'
 import { useMutation } from '@tanstack/react-query'
 import useLang from 'lang'
+import useApi from 'api'
 import Button from 'components/Button'
 import Select from 'components/Select'
 
@@ -13,13 +13,13 @@ interface UpdateSettings {
 
 const SettingsGeneral = () => {
   const lang = useLang()
+  const { invoke } = useApi()
   const [settings, setSettings] = useState<UpdateSettings>({
     autoUpdate: true,
     optInNonStable: false,
     releaseTypes: ['stable']
   })
   const [currentVersion, setCurrentVersion] = useState<string>('')
-  const [isLoading, setIsLoading] = useState(false)
 
   // Load current settings and version on mount
   useEffect(() => {
@@ -30,7 +30,7 @@ const SettingsGeneral = () => {
   const loadSettings = async () => {
     try {
       // Load settings from file
-      const savedSettings = await invoke<UpdateSettings>('getUpdateSettings')
+      const savedSettings = await invoke('getUpdateSettings')
       setSettings(savedSettings)
     } catch (error) {
       console.error('Error loading settings:', error)
@@ -39,7 +39,7 @@ const SettingsGeneral = () => {
 
   const loadCurrentVersion = async () => {
     try {
-      const version = await invoke<string>('getAppVersion')
+      const version = await invoke('getAppVersion')
       setCurrentVersion(version)
     } catch (error) {
       console.error('Error loading version:', error)
@@ -49,7 +49,7 @@ const SettingsGeneral = () => {
 
   const saveSettings = useMutation({
     mutationFn: async (newSettings: UpdateSettings) => {
-      return await invoke<UpdateSettings>('updateUpdateSettings', { updateSettings: newSettings })
+      return await invoke('updateUpdateSettings', { updateSettings: newSettings })
     },
     onSuccess: () => {
       // Show success message
@@ -77,7 +77,8 @@ const SettingsGeneral = () => {
     checkForUpdates.mutate()
   }
 
-  const handleReleaseTypeChange = (selectedTypes: string[]) => {
+  const handleReleaseTypeChange = (selected: any) => {
+    const selectedTypes = selected ? selected.map((item: any) => item.value) : []
     setSettings(prev => ({
       ...prev,
       releaseTypes: selectedTypes
@@ -131,7 +132,7 @@ const SettingsGeneral = () => {
           <Select
             isMulti
             value={releaseTypeOptions.filter(option => settings.releaseTypes.includes(option.value))}
-            onChange={(selected) => handleReleaseTypeChange(selected?.map(item => item.value) || [])}
+            onChange={handleReleaseTypeChange}
             options={releaseTypeOptions}
             placeholder="Select release types..."
             className="text-sm"

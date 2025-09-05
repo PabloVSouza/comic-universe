@@ -7,7 +7,10 @@ interface useDownloadStore {
   queue: IChapter[]
   addToQueue: (chapter: IChapter) => Promise<void>
   removeFromQueue: (chapter: IChapter) => Promise<void>
-  getChapterPages: (chapter: IChapter, invoke: (method: string, args?: unknown) => Promise<unknown>) => Promise<boolean>
+  getChapterPages: (
+    chapter: IChapter,
+    invoke: (method: string, args?: unknown) => Promise<unknown>
+  ) => Promise<boolean>
   downloadChapter: () => Promise<void>
   getNewChapters: (invoke: (method: string, args?: unknown) => Promise<unknown>) => Promise<void>
 }
@@ -32,18 +35,18 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
     const { currentUser } = usePersistSessionStore.getState()
 
     const { repo, siteId } = activeComic
-    const { chapters: currentChapters } = await invoke('dbGetComicAdditionalData', {
+    const { chapters: currentChapters } = (await invoke('dbGetComicAdditionalData', {
       id: activeComic.id,
       userId: currentUser.id
-    })
+    })) as { chapters: IChapter[] }
 
-    const chapters = await invoke('getChapters', { repo, data: { siteId } })
+    const chapters = (await invoke('getChapters', { repo, data: { siteId } })) as IChapter[]
 
     const newChapters = chapters
       .filter((val) => currentChapters.findIndex((chapter) => val.siteId === chapter.siteId) < 0)
       .reduce((acc, cur) => {
         return [...acc, { ...cur, comicId: activeComic.id, repo: activeComic.repo }]
-      }, [])
+      }, [] as IChapter[])
 
     if (newChapters.length) {
       await invoke('dbInsertChapters', { chapters: newChapters })
@@ -64,7 +67,7 @@ const useDownloadStore = create<useDownloadStore>((set) => ({
   getChapterPages: async (chapter, invoke): Promise<boolean> => {
     const { repo } = chapter
 
-    const pages = await invoke('getPages', { repo, data: { chapter } })
+    const pages = (await invoke('getPages', { repo, data: { chapter } })) as IPage[]
 
     if (pages.length > 0) {
       await invoke('dbUpdateChapter', { chapter: { ...chapter, pages: JSON.stringify(pages) } })

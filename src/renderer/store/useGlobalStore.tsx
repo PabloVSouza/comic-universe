@@ -31,7 +31,7 @@ const useGlobalStore = create<IuseGlobalStore>((set) => ({
   },
 
   getAppParams: async (invoke) => {
-    const appParams = await invoke('getAppParams')
+    const appParams = (await invoke('getAppParams')) as IAppParams
     set((state) => ({ ...state, appParams }))
   },
 

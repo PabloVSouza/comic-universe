@@ -17,10 +17,10 @@ const usePersistStore = create<IusePersistStore>()(
       theme: 'dark',
       repo: {} as TOption,
 
-      switchTheme: (theme): void =>
+      switchTheme: (theme) =>
         set({ theme: theme || get().theme === 'dark' ? 'light' : 'dark' }),
 
-      setRepo: (repo): void => set({ repo })
+      setRepo: (repo) => set({ repo })
     }),
     {
       name: appParams.isDev ? 'comic-universe-dev' : 'comic-universe',

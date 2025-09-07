@@ -37,7 +37,7 @@
     "cors": "^2.8.5",
     "drizzle-orm": "^0.44.5",
     "electron-updater": "^6.1.4",
-    "express": "^4.21.0",
+    "express": "^5.1.0",
     "html-react-parser": "^5.2.3",
     "i18next": "^25.5.0",
     "i18next-browser-languagedetector": "^8.2.0",

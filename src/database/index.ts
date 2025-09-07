@@ -1,63 +1,59 @@
-import Database from 'better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import { runMigrations } from './migrations';
-import * as schema from './schema';
+// ORM-agnostic database architecture
+import { databaseFactory } from './factories/DatabaseFactory'
+import { IDatabaseRepository, IDatabaseConfig } from './interfaces/IDatabaseRepository'
 
-let db: any = null;
-let sqlite: any = null;
+// Global repository instance
+let repository: IDatabaseRepository | null = null
 
-export async function initializeDatabase(dbPath: string): Promise<any> {
-  if (db) {
+export async function initializeDatabase(dbPath: string): Promise<IDatabaseRepository> {
+  if (repository) {
     console.log('Database already initialized');
-    return db;
+    return repository;
   }
 
   try {
-    console.log(`Initializing database at: ${dbPath}`);
+    console.log(`Initializing ORM-agnostic database at: ${dbPath}`);
 
-    // Create database connection
-    sqlite = new Database(dbPath);
-    
-    // Enable foreign keys
-    sqlite.pragma('foreign_keys = ON');
-    
-    // Create Drizzle instance
-    db = drizzle(sqlite, { schema });
+    const config: IDatabaseConfig = {
+      dbPath,
+      enableForeignKeys: true,
+      enableWAL: false,
+      connectionTimeout: 10000
+    }
 
-    // Run migrations
-    await runMigrations(db);
+    // Create and initialize repository using factory
+    repository = await databaseFactory.createAndInitializeRepository(config);
 
-    console.log('✅ Database initialized successfully');
-    return db;
+    console.log('✅ ORM-agnostic database initialized successfully');
+    return repository;
   } catch (error) {
     console.error('❌ Failed to initialize database:', error);
     throw error;
   }
 }
 
-export function getDatabase() {
-  if (!db) {
+export function getDatabase(): IDatabaseRepository {
+  if (!repository) {
     throw new Error('Database not initialized. Call initializeDatabase() first.');
   }
-  return db;
+  return repository;
 }
 
-export function getSqlite() {
-  if (!sqlite) {
-    throw new Error('SQLite not initialized. Call initializeDatabase() first.');
-  }
-  return sqlite;
-}
-
-export function closeDatabase() {
-  if (sqlite) {
-    sqlite.close();
-    sqlite = null;
-    db = null;
+export function closeDatabase(): void {
+  if (repository) {
+    repository.close();
+    repository = null;
     console.log('Database connection closed');
   }
 }
 
-// Export schema and service for use in other files
+// Export the factory for advanced usage
+export { databaseFactory }
+
+// Export interfaces and implementations
+export * from './interfaces/IDatabaseRepository'
+export * from './implementations/DrizzleDatabaseRepository'
+export * from './factories/DatabaseFactory'
+
+// Legacy exports for backward compatibility (deprecated)
 export * from './schema'
-export { getDbService, dbService } from './service'

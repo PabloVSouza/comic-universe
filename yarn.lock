@@ -219,10 +219,10 @@
   resolved "https://registry.npmjs.org/@electron-toolkit/tsconfig/-/tsconfig-1.0.1.tgz"
   integrity sha512-M0Mol3odspvtCuheyujLNAW7bXq7KFNYVMRtpjFa4ZfES4MuklXBC7Nli/omvc+PRKlrklgAGx3l4VakjNo8jg==
 
-"@electron-toolkit/utils@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/@electron-toolkit/utils/-/utils-3.0.0.tgz"
-  integrity sha512-GaXHDhiT7KCvMJjXdp/QqpYinq69T/Pdl49Z1XLf8mKGf63dnsODMWyrmIjEQ0z/vG7dO8qF3fvmI6Eb2lUNZA==
+"@electron-toolkit/utils@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.npmjs.org/@electron-toolkit/utils/-/utils-4.0.0.tgz"
+  integrity sha512-qXSntwEzluSzKl4z5yFNBknmPGjPa3zFhE4mp9+h0cgokY5ornAeP+CJQDBhKsL1S58aOQfcwkD3NwLZCl+64g==
 
 "@electron/asar@^3.2.1", "@electron/asar@^3.2.7", "@electron/asar@3.2.18":
   version "3.2.18"
@@ -273,7 +273,15 @@
     tar "^6.2.1"
     which "^2.0.2"
 
-"@electron/notarize@^2.1.0", "@electron/notarize@2.5.0":
+"@electron/notarize@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@electron/notarize/-/notarize-3.1.0.tgz"
+  integrity sha512-DHePlWvmUKTNok2+yoOp2ZZ+3ZaLlDWdWD43BfzZhRlUPrBs+EwXDBq3kTJlO+jw2KZzeC3GGlypgw4HQZTD5w==
+  dependencies:
+    debug "^4.4.0"
+    promise-retry "^2.0.1"
+
+"@electron/notarize@2.5.0":
   version "2.5.0"
   resolved "https://registry.npmjs.org/@electron/notarize/-/notarize-2.5.0.tgz"
   integrity sha512-jNT8nwH1f9X5GEITXaQ8IF/KdskvIkOFfB2CvwumsveVidzpSc+mvhhTMdAGSYF3O+Nq49lJ7y+ssODRXu06+A==
@@ -3304,7 +3312,7 @@ debug@^2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2, debug@^4.3.3, debug@^4.3.4, debug@4:
+debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2, debug@^4.3.3, debug@^4.3.4, debug@^4.4.0, debug@4:
   version "4.4.1"
   resolved "https://registry.npmjs.org/debug/-/debug-4.4.1.tgz"
   integrity sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==
@@ -4035,10 +4043,10 @@ escape-string-regexp@^4.0.0:
   resolved "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz"
   integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
 
-eslint-config-prettier@^9.0.0, "eslint-config-prettier@>= 7.0.0 <10.0.0 || >=10.1.0":
-  version "9.1.2"
-  resolved "https://registry.npmjs.org/eslint-config-prettier/-/eslint-config-prettier-9.1.2.tgz"
-  integrity sha512-iI1f+D2ViGn+uvv5HuHVUamg8ll4tN+JRHGc6IJi4TP9Kl976C57fzPXgseXNs8v0iA8aSJpHsTWjDb9QJamGQ==
+eslint-config-prettier@^10.1.8, "eslint-config-prettier@>= 7.0.0 <10.0.0 || >=10.1.0":
+  version "10.1.8"
+  resolved "https://registry.npmjs.org/eslint-config-prettier/-/eslint-config-prettier-10.1.8.tgz"
+  integrity sha512-82GZUjRS0p/jganf6q1rEO25VSoHH0hKPCTrgillPjdI/3bgBhAE1QzHrHTizjpRvy6pGAvKjDJtk2pF9NDq8w==
 
 eslint-plugin-prettier@^5.0.1:
   version "5.5.4"
@@ -4800,10 +4808,10 @@ globals@^14.0.0:
   resolved "https://registry.npmjs.org/globals/-/globals-14.0.0.tgz"
   integrity sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==
 
-globals@^15.0.0:
-  version "15.15.0"
-  resolved "https://registry.npmjs.org/globals/-/globals-15.15.0.tgz"
-  integrity sha512-7ACyT3wmyp3I61S4fG682L0VA2RGD9otkqGJIwNUMF1SWUombIIk+af1unuDYgMm082aHYwD+mzJvv9Iu8dsgg==
+globals@^16.3.0:
+  version "16.3.0"
+  resolved "https://registry.npmjs.org/globals/-/globals-16.3.0.tgz"
+  integrity sha512-bqWEnJ1Nt3neqx2q5SFfGS8r/ahumIakg3HcwtNlrVlwXIeNumWn/c7Pn/wKzGhf6SaW6H6uWXLqC30STCMchQ==
 
 globalthis@^1.0.1, globalthis@^1.0.4:
   version "1.0.4"

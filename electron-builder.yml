@@ -23,8 +23,45 @@ files:
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
   - '!*.code-workspace'
+  - '!node_modules/prisma/**'
+  - '!node_modules/@prisma/**'
+  - '!node_modules/.prisma/**'
+  - '!node_modules/drizzle-kit/**'
+  - '!node_modules/@types/**'
+  - '!node_modules/typescript/**'
+  - '!node_modules/eslint/**'
+  - '!node_modules/prettier/**'
+  - '!node_modules/vite/**'
+  - '!node_modules/electron-vite/**'
+  - '!node_modules/electron-builder/**'
+  - '!node_modules/electron-icon-builder/**'
+  - '!node_modules/sass-embedded/**'
+  - '!node_modules/tailwindcss/**'
+  - '!node_modules/autoprefixer/**'
+  - '!node_modules/postcss/**'
+  - '!node_modules/vite-plugin-svgr/**'
+  - '!node_modules/@vitejs/**'
+  - '!node_modules/@typescript-eslint/**'
+  - '!node_modules/eslint-plugin-**'
+  - '!node_modules/globals/**'
+  - '!node_modules/@rollup/**'
+  - '!node_modules/rollup/**'
+  - '!node_modules/@jridgewell/**'
+  - '!node_modules/@electron/notarize/**'
+  - '!node_modules/@electron-toolkit/tsconfig/**'
+  - '!node_modules/@types/better-sqlite3/**'
+  - '!node_modules/@types/cors/**'
+  - '!node_modules/@types/express/**'
+  - '!node_modules/@types/lodash.debounce/**'
+  - '!node_modules/@types/node/**'
+  - '!node_modules/@types/pacote/**'
+  - '!node_modules/@types/react/**'
+  - '!node_modules/@types/react-dom/**'
+  - '!node_modules/@types/uuid/**'
+  - '!node_modules/better-sqlite3/build/Release/test_extension.node'
 asarUnpack:
-  - resources/*
+  - 'node_modules/better-sqlite3/build/Release/better_sqlite3.node'
+  - 'resources/*'
 win:
   executableName: comic-universe
   # Code signing configuration for Windows
@@ -77,3 +114,8 @@ linux:
 appImage:
   artifactName: ${name}-${version}-linux-${arch}.${ext}
 npmRebuild: true
+# Optimize build size
+compression: maximum
+removePackageScripts: true
+removePackageKeywords: true
+removePackageEngines: true

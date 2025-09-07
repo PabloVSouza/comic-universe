@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/pablovsouza/comic-universe/blob/master/src/renderer/assets/icon.svg?raw=true" width="200">
+  <img src="https://github.com/pablovsouza/comic-universe/blob/main/src/renderer/assets/icon.svg?raw=true" width="200">
   <h1>Comic Universe</h1>
   <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
   <a href="https://github.com/pablovsouza/comic-universe/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" /></a>
@@ -59,18 +59,21 @@ After studying for a long time and trying different solutions, the app has evolv
 ## Key Features
 
 ### 🗄️ **Modern Database Architecture**
+
 - **ORM-Agnostic Design**: Built with interfaces that allow switching between different ORMs
 - **Drizzle ORM**: Lightweight, type-safe, and performant database operations
 - **Automatic Migrations**: Seamless database schema updates
 - **Type Safety**: Full TypeScript support with zero `any` types
 
 ### 📊 **Comprehensive Logging & Error Handling**
+
 - **Structured Logging**: Winston-based logging with daily rotation
 - **Error Boundaries**: Robust error handling throughout the application
 - **Performance Monitoring**: Operation duration tracking and metrics
 - **Development vs Production**: Different logging configurations for each environment
 
 ### 🔌 **Plugin System**
+
 - **Dynamic Plugin Loading**: Add new comic repositories without code changes
 - **Plugin Template**: Ready-to-use template for developing new plugins
 - **Repository Management**: Centralized plugin and repository handling

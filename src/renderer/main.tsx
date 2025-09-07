@@ -8,7 +8,7 @@ import usePersistStore from 'store/usePersistStore'
 import classNames from 'classnames'
 import { AlertProvider } from 'components/Alert'
 import { I18nextProvider } from 'react-i18next'
-import i18n from './i18n'
+import i18n from './i18n/index'
 
 import wallpaper from 'assets/wallpaper.webp'
 
@@ -18,7 +18,7 @@ interface Props {
 
 const queryClient = new QueryClient()
 
-const Main = ({ children }: Props): JSX.Element => {
+const Main = ({ children }: Props): React.JSX.Element => {
   const { theme } = usePersistStore()
 
   return (
@@ -27,7 +27,7 @@ const Main = ({ children }: Props): JSX.Element => {
         'h-[calc(100dvh)] w-screen bg-cover bg-center bg-no-repeat flex justify-center items-center relative overflow-hidden',
         theme
       )}
-      style={{ backgroundImage: `url(${wallpaper}` }}
+      style={{ backgroundImage: `url(${wallpaper})` }}
     >
       {children}
     </div>

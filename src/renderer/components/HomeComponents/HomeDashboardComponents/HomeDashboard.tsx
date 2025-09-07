@@ -7,7 +7,7 @@ import HomeDashboardList from 'components/HomeComponents/HomeDashboardComponents
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 
-const HomeDashboard = (): JSX.Element => {
+const HomeDashboard = (): React.JSX.Element => {
   const { invoke } = useApi()
   const { activeComic } = useGlobalStore()
   const { currentUser } = usePersistSessionStore()

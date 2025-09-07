@@ -17,7 +17,7 @@ interface IUsersListItemProps {
   newUserAction?: () => void
 }
 
-const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItemProps): JSX.Element => {
+const UsersListItem = ({ data, newUser, newUserAction }: IUsersListItemProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { invoke } = useApi()
   const queryClient = useQueryClient()

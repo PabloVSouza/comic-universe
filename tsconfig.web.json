@@ -4,6 +4,7 @@
   "compilerOptions": {
     "composite": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "react",
     "baseUrl": "src/renderer",
     "paths": {
       "main/*": ["../../src/electron/main/*"],

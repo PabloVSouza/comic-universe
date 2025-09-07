@@ -11,7 +11,7 @@ import ReaderZoomWindow, { IMousePos } from 'components/ZoomWindow'
 import loading from 'assets/loading.svg'
 import Cover from 'components/Cover'
 
-const Reader = (): JSX.Element => {
+const Reader = (): React.JSX.Element => {
   const navigate = useNavigate()
   const { invoke } = useApi()
   const queryClient = useQueryClient()

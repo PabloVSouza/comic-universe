@@ -6,7 +6,7 @@ import usePersistSessionStore from 'store/usePersistSessionStore'
 import Image from 'components/Image'
 import logo from 'assets/logo.svg'
 
-const HomeTopBar = (): JSX.Element => {
+const HomeTopBar = (): React.JSX.Element => {
   const { toggleMenu, menuVisible } = useGlobalStore((state) => state)
   const { currentUser } = usePersistSessionStore()
 

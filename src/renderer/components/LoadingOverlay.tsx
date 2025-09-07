@@ -13,7 +13,7 @@ interface ILoadingProps {
   }
 }
 
-const LoadingOverlay = ({ isLoading, message, progress }: ILoadingProps): JSX.Element => {
+const LoadingOverlay = ({ isLoading, message, progress }: ILoadingProps): React.JSX.Element => {
   return (
     <Cover visible={isLoading}>
       {message ? (

@@ -2,7 +2,7 @@ import DashboardListItem from 'components/HomeComponents/HomeDashboardComponents
 import LoadingOverlay from 'components/LoadingOverlay'
 import useGlobalStore from 'store/useGlobalStore'
 
-const HomeDashboardComicList = ({ additionalData }: { additionalData: IComic }): JSX.Element => {
+const HomeDashboardComicList = ({ additionalData }: { additionalData: IComic }): React.JSX.Element => {
   const chapters = additionalData.chapters
   const { queue } = useGlobalStore()
 

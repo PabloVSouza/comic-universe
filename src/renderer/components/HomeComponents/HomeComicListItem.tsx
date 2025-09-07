@@ -7,7 +7,7 @@ import useGlobalStore from 'store/useGlobalStore'
 const ComicListItem = ({
   item,
   ...props
-}: { item: IComic } & Partial<React.LiHTMLAttributes<HTMLLIElement>>): JSX.Element => {
+}: { item: IComic } & Partial<React.LiHTMLAttributes<HTMLLIElement>>): React.JSX.Element => {
   const { activeComic, setActiveComic } = useGlobalStore()
 
   const active = activeComic.id === item.id

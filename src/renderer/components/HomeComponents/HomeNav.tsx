@@ -14,7 +14,7 @@ import darkmodeIcon from 'assets/darkmode.svg'
 import userIcon from 'assets/user.svg'
 import exitIcon from 'assets/exit-door.svg'
 
-const HomeNav = (): JSX.Element => {
+const HomeNav = (): React.JSX.Element => {
   const { invoke } = useApi()
   const { menuVisible, toggleMenu } = useGlobalStore()
   const { switchTheme } = usePersistStore()

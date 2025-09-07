@@ -6,7 +6,7 @@ const UsersList = ({
 }: {
   list: IUser[]
   newUserAction: () => void
-}): JSX.Element => {
+}): React.JSX.Element => {
   return (
     <div className="overflow-auto grow w-full flex flex-nowrap gap-2 justify-center px-2 items-center">
       <UsersListItem newUser newUserAction={newUserAction} />

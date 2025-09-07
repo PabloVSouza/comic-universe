@@ -6,7 +6,7 @@ import LoadingOverlay from 'components/LoadingOverlay'
 
 import appIcon from 'assets/icon.svg'
 
-const About = (): JSX.Element => {
+const About = (): React.JSX.Element => {
   const { invoke } = useApi()
   const { t } = useTranslation()
   const { data: appData, isLoading: appDataLoading } = useQuery({

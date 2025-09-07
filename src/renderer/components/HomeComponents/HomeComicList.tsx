@@ -10,7 +10,7 @@ import ComicListItem from 'components/HomeComponents/HomeComicListItem'
 import downloadIcon from 'assets/download-icon.svg'
 import deleteIcon from 'assets/trash.svg'
 
-const HomeComicList = ({ comicList }: { comicList: IComic[] }): JSX.Element => {
+const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Element => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
 

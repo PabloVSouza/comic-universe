@@ -10,7 +10,7 @@ import useGlobalStore from 'store/useGlobalStore'
 import closedBook from 'assets/closed-book-icon.svg'
 import bookStack from 'assets/book-stack.svg'
 
-const HomeDashboardComicListItem = ({ item }: { item: IChapter }): JSX.Element => {
+const HomeDashboardComicListItem = ({ item }: { item: IChapter }): React.JSX.Element => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const navigate = useNavigate()

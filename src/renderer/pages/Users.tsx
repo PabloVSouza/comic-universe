@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import confirmIcon from 'assets/confirm.svg'
 import cancelIcon from 'assets/cancel.svg'
 
-const Users = (): JSX.Element => {
+const Users = (): React.JSX.Element => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
 

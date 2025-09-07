@@ -1,4 +1,4 @@
-import { MutableRefObject, ReactElement, ReactNode, useRef, useEffect } from 'react'
+import { ReactElement, ReactNode, useRef, useEffect } from 'react'
 import * as Portals from 'react-reverse-portal'
 import classNames from 'classnames'
 // import MinimizedBar from 'components/WindowComponents/MinimizedBar'
@@ -11,13 +11,13 @@ type TWindowManager = {
 }
 
 const WindowManager = ({ children, className }: TWindowManager): ReactElement => {
-  const containerRef = useRef() as MutableRefObject<HTMLDivElement> | null
+  const containerRef = useRef<HTMLDivElement>(null)
   const { currentWindows, portalsRef, mouseCapture, removeMovingResizing, setContainerSize } =
     useWindowManagerStore()
 
   const updateSize = (): void => {
-    const height = containerRef?.current.offsetHeight ?? 0
-    const width = containerRef?.current.offsetWidth ?? 0
+    const height = containerRef.current?.offsetHeight ?? 0
+    const width = containerRef.current?.offsetWidth ?? 0
     setContainerSize({ height, width })
   }
 

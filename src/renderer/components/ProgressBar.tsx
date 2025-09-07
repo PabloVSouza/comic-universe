@@ -11,7 +11,7 @@ const ProgressBar = ({
   total: number
   showPercentage?: boolean
   className?: string
-}): JSX.Element => {
+}): React.JSX.Element => {
   const percentage = Math.round((100 / total) * current)
 
   return (

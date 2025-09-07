@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, MutableRefObject } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import classNames from 'classnames'
 import SearchComicListItem from 'components/SearchComponents/SearchComicListItem'
 
@@ -14,8 +14,8 @@ const SearchComicList = ({
   list,
   itemsPerPage = 10,
   offset
-}: ISearchComicList): JSX.Element => {
-  const refScrollElement = useRef() as MutableRefObject<HTMLUListElement>
+}: ISearchComicList): React.JSX.Element => {
+  const refScrollElement = useRef<HTMLUListElement>(null)
   const endOffset = offset + itemsPerPage
   const currentItems = list?.slice(offset, endOffset)
 

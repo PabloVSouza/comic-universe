@@ -14,7 +14,7 @@ const HomeDashboardNavBar = ({
 }: {
   comic: IComic
   additionalData: IComic
-}): JSX.Element => {
+}): React.JSX.Element => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { fetchNewChapters, insertChapters } = useFetchData()

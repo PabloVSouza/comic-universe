@@ -14,7 +14,7 @@ import useQueue from 'hooks/useQueue'
 import useFetchData from 'hooks/useFetchData'
 import { addChaptersToQueue } from 'functions/queueUtils'
 
-const Home = (): JSX.Element => {
+const Home = (): React.JSX.Element => {
   const { invoke } = useApi()
   const { currentUser } = usePersistSessionStore()
   const userActive = !!currentUser.id

@@ -18,7 +18,7 @@ interface Props {
 
 const queryClient = new QueryClient()
 
-const Main = ({ children }: Props): JSX.Element => {
+const Main = ({ children }: Props): React.JSX.Element => {
   const { theme } = usePersistStore()
 
   return (

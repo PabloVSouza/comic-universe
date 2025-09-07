@@ -17,7 +17,7 @@ type TOption = {
   label: string
 }
 
-const Search = (): JSX.Element => {
+const Search = (): React.JSX.Element => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const [search, setSearch] = useState('')

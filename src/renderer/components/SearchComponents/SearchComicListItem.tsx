@@ -25,7 +25,7 @@ const SearchComicListItem = ({
   data,
   activeComic,
   setActiveComic
-}: IComicListItem): JSX.Element => {
+}: IComicListItem): React.JSX.Element => {
   const { t } = useTranslation()
   const { invoke } = useApi()
   const { repo } = usePersistStore()

@@ -8,7 +8,7 @@ interface Cover {
   index?: string
 }
 
-const Cover = ({ className, children, visible, index, ...props }: Cover): JSX.Element => {
+const Cover = ({ className, children, visible, index, ...props }: Cover): React.JSX.Element => {
   return (
     <div
       className={classNames(

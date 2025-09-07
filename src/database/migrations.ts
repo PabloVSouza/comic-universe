@@ -4,26 +4,21 @@ export const migrations = [
   {
     version: 1,
     name: 'initial_schema',
-    up: sql`
-      -- Create Plugin table
-      CREATE TABLE IF NOT EXISTS "Plugin" (
+    statements: [
+      sql`CREATE TABLE IF NOT EXISTS "Plugin" (
         "id" INTEGER PRIMARY KEY AUTOINCREMENT,
         "enabled" BOOLEAN DEFAULT true NOT NULL,
         "name" TEXT NOT NULL,
         "repository" TEXT NOT NULL,
         "version" TEXT NOT NULL,
         "path" TEXT NOT NULL
-      );
-
-      -- Create User table
-      CREATE TABLE IF NOT EXISTS "User" (
+      )`,
+      sql`CREATE TABLE IF NOT EXISTS "User" (
         "id" INTEGER PRIMARY KEY AUTOINCREMENT,
         "name" TEXT NOT NULL,
         "default" BOOLEAN DEFAULT false NOT NULL
-      );
-
-      -- Create Comic table
-      CREATE TABLE IF NOT EXISTS "Comic" (
+      )`,
+      sql`CREATE TABLE IF NOT EXISTS "Comic" (
         "id" INTEGER PRIMARY KEY AUTOINCREMENT,
         "siteId" TEXT NOT NULL,
         "name" TEXT NOT NULL,
@@ -38,10 +33,8 @@ export const migrations = [
         "year" TEXT,
         "synopsis" TEXT NOT NULL,
         "type" TEXT NOT NULL
-      );
-
-      -- Create Chapter table
-      CREATE TABLE IF NOT EXISTS "Chapter" (
+      )`,
+      sql`CREATE TABLE IF NOT EXISTS "Chapter" (
         "id" INTEGER PRIMARY KEY AUTOINCREMENT,
         "comicId" INTEGER NOT NULL,
         "siteId" TEXT NOT NULL,
@@ -55,10 +48,8 @@ export const migrations = [
         "offline" BOOLEAN DEFAULT false NOT NULL,
         "language" TEXT,
         FOREIGN KEY ("comicId") REFERENCES "Comic" ("id")
-      );
-
-      -- Create ReadProgress table
-      CREATE TABLE IF NOT EXISTS "ReadProgress" (
+      )`,
+      sql`CREATE TABLE IF NOT EXISTS "ReadProgress" (
         "id" INTEGER PRIMARY KEY AUTOINCREMENT,
         "chapterId" INTEGER NOT NULL,
         "comicId" INTEGER NOT NULL,
@@ -68,15 +59,13 @@ export const migrations = [
         FOREIGN KEY ("chapterId") REFERENCES "Chapter" ("id"),
         FOREIGN KEY ("comicId") REFERENCES "Comic" ("id"),
         FOREIGN KEY ("userId") REFERENCES "User" ("id")
-      );
-
-      -- Create schema_migrations table
-      CREATE TABLE IF NOT EXISTS "schema_migrations" (
+      )`,
+      sql`CREATE TABLE IF NOT EXISTS "schema_migrations" (
         "version" INTEGER PRIMARY KEY,
         "name" TEXT NOT NULL,
         "applied_at" DATETIME DEFAULT CURRENT_TIMESTAMP
-      );
-    `
+      )`
+    ]
   }
 ];
 
@@ -106,7 +95,11 @@ export async function runMigrations(db: any) {
       console.log(`Running migration ${migration.version}: ${migration.name}...`);
       
       try {
-        await db.run(migration.up);
+        // Run each statement individually
+        for (const statement of migration.statements) {
+          await db.run(statement);
+        }
+        
         await db.run(sql`
           INSERT INTO schema_migrations (version, name) VALUES (${migration.version}, ${migration.name})
         `);

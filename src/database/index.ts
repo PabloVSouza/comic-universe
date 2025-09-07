@@ -4,7 +4,7 @@ import { runMigrations } from './migrations';
 import * as schema from './schema';
 
 let db: any = null;
-let sqlite: Database.Database | null = null;
+let sqlite: any = null;
 
 export async function initializeDatabase(dbPath: string): Promise<any> {
   if (db) {

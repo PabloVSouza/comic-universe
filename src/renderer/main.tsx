@@ -17,6 +17,30 @@ interface Props {
 
 const queryClient = new QueryClient()
 
+// Apply theme immediately on app startup to prevent flash
+const applyInitialTheme = () => {
+  const savedTheme = localStorage.getItem('comic-universe-dev') || localStorage.getItem('comic-universe')
+  if (savedTheme) {
+    try {
+      const parsed = JSON.parse(savedTheme)
+      if (parsed.state?.theme === 'dark') {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    } catch (e) {
+      // Default to dark theme if parsing fails
+      document.documentElement.classList.add('dark')
+    }
+  } else {
+    // Default to dark theme
+    document.documentElement.classList.add('dark')
+  }
+}
+
+// Apply theme immediately
+applyInitialTheme()
+
 const Main = ({ children }: Props): React.JSX.Element => {
   const { theme } = usePersistStore()
 

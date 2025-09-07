@@ -1,24 +1,18 @@
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
-import { app } from 'electron';
-import path from 'path';
 import { runMigrations } from './migrations';
 import * as schema from './schema';
 
 let db: any = null;
 let sqlite: Database.Database | null = null;
 
-export async function initializeDatabase(): Promise<any> {
+export async function initializeDatabase(dbPath: string): Promise<any> {
   if (db) {
     console.log('Database already initialized');
     return db;
   }
 
   try {
-    // Get the user data directory
-    const userDataPath = app.getPath('userData');
-    const dbPath = path.join(userDataPath, 'database.db');
-    
     console.log(`Initializing database at: ${dbPath}`);
 
     // Create database connection

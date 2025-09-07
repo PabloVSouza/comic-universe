@@ -12,8 +12,9 @@ class DBRepository implements IDBRepository {
   }
 
   public startup = async () => {
-    // Initialize Drizzle database
-    this.db = await initializeDatabase()
+    // Initialize Drizzle database with custom path
+    const dbPath = DataPaths.getDatabaseFilePath()
+    this.db = await initializeDatabase(dbPath)
   }
 
   methods: IDBMethods = {

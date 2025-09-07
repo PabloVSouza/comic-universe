@@ -229,18 +229,18 @@ export class DatabaseService {
 }
 
 // Export a function to get the service instance
-let _dbService: DatabaseService | null = null;
+let _dbService: DatabaseService | null = null
 
 export function getDbService(): DatabaseService {
   if (!_dbService) {
-    _dbService = new DatabaseService();
+    _dbService = new DatabaseService()
   }
-  return _dbService;
+  return _dbService
 }
 
 // For backward compatibility, export a getter
 export const dbService = {
   get instance() {
-    return getDbService();
+    return getDbService()
   }
-};
+}

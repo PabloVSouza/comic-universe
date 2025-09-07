@@ -66,4 +66,4 @@ export function closeDatabase() {
 
 // Export schema and service for use in other files
 export * from './schema'
-export { dbService } from './service'
+export { getDbService, dbService } from './service'

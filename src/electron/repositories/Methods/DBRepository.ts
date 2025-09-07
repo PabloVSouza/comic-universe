@@ -1,4 +1,4 @@
-import { initializeDatabase, dbService } from '../../../database'
+import { initializeDatabase, getDbService } from '../../../database'
 import { DataPaths } from 'utils/utils'
 import { eq, isNull } from 'drizzle-orm'
 import { comics, chapters, readProgress } from '../../../database'
@@ -34,14 +34,14 @@ class DBRepository implements IDBRepository {
 
     //Comics
     dbGetComic: async ({ id }): Promise<IComic> => {
-      const comic = await dbService.getComicById(id)
+      const comic = await getDbService().getComicById(id)
       return new Promise((resolve) => {
         resolve(comic as IComic)
       })
     },
 
     dbGetComicAdditionalData: async ({ id, userId }): Promise<IComic> => {
-      const comicData = await dbService.getComicWithProgress(id, userId)
+      const comicData = await getDbService().getComicWithProgress(id, userId)
       if (!comicData) {
         throw new Error(`Comic with id ${id} not found`)
       }
@@ -49,9 +49,9 @@ class DBRepository implements IDBRepository {
       // Transform the data to match the expected interface
       const comic = {
         ...comicData.comic,
-        chapters: comicData.chapters.map(chapter => ({
+        chapters: comicData.chapters.map((chapter) => ({
           ...chapter,
-          ReadProgress: comicData.progress.filter(p => p.chapterId === chapter.id)
+          ReadProgress: comicData.progress.filter((p) => p.chapterId === chapter.id)
         }))
       }
 
@@ -61,7 +61,7 @@ class DBRepository implements IDBRepository {
     },
 
     dbGetAllComics: async (): Promise<IComic[]> => {
-      const comics = await dbService.getAllComics()
+      const comics = await getDbService().getAllComics()
       return new Promise((resolve) => {
         resolve(comics as IComic[])
       })
@@ -69,14 +69,14 @@ class DBRepository implements IDBRepository {
 
     dbInsertComic: async ({ comic, chapters, repo }): Promise<void> => {
       // Create the comic
-      const newComic = await dbService.createComic({
+      const newComic = await getDbService().createComic({
         ...comic,
         repo
       })
 
       // Create the chapters
       for (const chapter of chapters) {
-        await dbService.createChapter({
+        await getDbService().createChapter({
           ...chapter,
           comicId: newComic.id,
           repo
@@ -90,15 +90,15 @@ class DBRepository implements IDBRepository {
 
     dbDeleteComic: async ({ comic }): Promise<void> => {
       const comicId = comic.id
-      
+
       // Delete read progress first
       await this.db.delete(readProgress).where(eq(readProgress.comicId, comicId))
-      
+
       // Delete chapters
       await this.db.delete(chapters).where(eq(chapters.comicId, comicId))
-      
+
       // Delete comic
-      await dbService.deleteComic(comicId)
+      await getDbService().deleteComic(comicId)
 
       return new Promise((resolve) => resolve())
     },
@@ -112,7 +112,7 @@ class DBRepository implements IDBRepository {
     },
 
     dbGetChapters: async ({ comicId }): Promise<IChapter[]> => {
-      const chapters = await dbService.getChaptersByComicId(comicId)
+      const chapters = await getDbService().getChaptersByComicId(comicId)
       return new Promise((resolve) => {
         resolve(chapters as IChapter[])
       })
@@ -120,7 +120,7 @@ class DBRepository implements IDBRepository {
 
     dbInsertChapters: async ({ chapters }): Promise<void> => {
       for (const chapter of chapters) {
-        await dbService.createChapter(chapter)
+        await getDbService().createChapter(chapter)
       }
       return new Promise((resolve) => {
         resolve()
@@ -128,7 +128,7 @@ class DBRepository implements IDBRepository {
     },
 
     dbUpdateChapter: async ({ chapter }): Promise<IChapter> => {
-      const updatedChapter = await dbService.updateChapter(chapter.id, chapter)
+      const updatedChapter = await getDbService().updateChapter(chapter.id, chapter)
       if (!updatedChapter) {
         throw new Error(`Chapter with id ${chapter.id} not found`)
       }
@@ -142,13 +142,16 @@ class DBRepository implements IDBRepository {
     dbGetReadProgress: async (search: any): Promise<IReadProgress[]> => {
       // Handle different search patterns
       let progress: any[] = []
-      
+
       if (search.userId && search.comicId) {
-        progress = await dbService.getReadProgressByComic(search.comicId, search.userId)
+        progress = await getDbService().getReadProgressByComic(search.comicId, search.userId)
       } else if (search.userId) {
-        progress = await dbService.getReadProgressByUser(search.userId)
+        progress = await getDbService().getReadProgressByUser(search.userId)
       } else if (search.chapterId && search.userId) {
-        const singleProgress = await dbService.getReadProgressByChapter(search.chapterId, search.userId)
+        const singleProgress = await getDbService().getReadProgressByChapter(
+          search.chapterId,
+          search.userId
+        )
         progress = singleProgress ? [singleProgress] : []
       } else {
         // Fallback to raw query for complex searches
@@ -162,9 +165,9 @@ class DBRepository implements IDBRepository {
 
     dbUpdateReadProgress: async ({ readProgress }): Promise<void> => {
       if (!readProgress.id) {
-        await dbService.createReadProgress(readProgress)
+        await getDbService().createReadProgress(readProgress)
       } else {
-        await dbService.updateReadProgress(readProgress.id, readProgress)
+        await getDbService().updateReadProgress(readProgress.id, readProgress)
       }
 
       return new Promise((resolve) => resolve())
@@ -172,7 +175,7 @@ class DBRepository implements IDBRepository {
 
     //Users
     dbGetAllUsers: async (): Promise<IUser[]> => {
-      const users = await dbService.getAllUsers()
+      const users = await getDbService().getAllUsers()
       return new Promise((resolve) => {
         resolve(users as IUser[])
       })
@@ -182,12 +185,12 @@ class DBRepository implements IDBRepository {
       let userData: any
 
       if (user.id) {
-        userData = await dbService.updateUser(user.id, user)
+        userData = await getDbService().updateUser(user.id, user)
         if (!userData) {
           throw new Error(`User with id ${user.id} not found`)
         }
       } else {
-        userData = await dbService.createUser(user)
+        userData = await getDbService().createUser(user)
       }
 
       return new Promise((resolve) => {
@@ -198,10 +201,10 @@ class DBRepository implements IDBRepository {
     dbDeleteUser: async ({ id }): Promise<void> => {
       // Delete read progress first
       await this.db.delete(readProgress).where(eq(readProgress.userId, id))
-      
+
       // Delete user
-      await dbService.deleteUser(id)
-      
+      await getDbService().deleteUser(id)
+
       return new Promise((resolve) => {
         resolve()
       })

@@ -10,6 +10,7 @@
     "composite": true,
     "types": ["electron-vite/node"],
     "resolveJsonModule": true,
+    "moduleResolution": "bundler",
     "paths": {
       "main/*": ["./src/electron/main/*"],
       "preload/*": ["./src/electron/preload/*"],

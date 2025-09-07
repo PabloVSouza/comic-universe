@@ -7,6 +7,7 @@ This guide explains how to set up code signing for the Comic Universe Electron a
 **The CI/CD pipeline automatically handles code signing!** See [CI_CD_CODE_SIGNING.md](./CI_CD_CODE_SIGNING.md) for details.
 
 The GitHub Actions workflow automatically:
+
 - Generates self-signed certificates for each build
 - Signs Windows and macOS applications
 - Handles all the complexity for you
@@ -18,6 +19,7 @@ This section covers manual code signing setup for local development.
 ## Overview
 
 Code signing is important for:
+
 - Building user trust
 - Preventing security warnings
 - Enabling automatic updates
@@ -38,28 +40,31 @@ Unfortunately, **truly free code signing for macOS is very limited**:
 ### 1. macOS Code Signing
 
 #### Option A: Apple Developer Program (Paid)
+
 - **Cost**: $99/year (required for official certificates)
-- **Requirements**: 
+- **Requirements**:
   - Apple Developer Program membership ($99/year)
-- **Benefits**: 
+- **Benefits**:
   - Official Apple certificates
   - Notarization support
   - No security warnings
   - App Store distribution
 
 **Steps:**
+
 1. Sign up for Apple Developer Program ($99/year)
 2. Create a Developer ID Application certificate
 3. Update `electron-builder.yml`:
    ```yaml
    mac:
-     identity: "Developer ID Application: Your Name (TEAM_ID)"
+     identity: 'Developer ID Application: Your Name (TEAM_ID)'
      notarize: true
      hardenedRuntime: true
      gatekeeperAssess: true
    ```
 
 #### Option B: Self-Signed Certificate (Free but Not Recommended)
+
 - **Cost**: Free
 - **Limitations**: Users will see security warnings
 - **Use case**: Development/testing only
@@ -67,26 +72,29 @@ Unfortunately, **truly free code signing for macOS is very limited**:
 ### 2. Windows Code Signing
 
 #### Option A: Microsoft Partner Center (Free for Open Source)
+
 - **Cost**: Free for qualifying open source projects
-- **Requirements**: 
+- **Requirements**:
   - Apply through Microsoft Partner Center
   - Project must meet open source criteria
-- **Benefits**: 
+- **Benefits**:
   - Official Microsoft certificates
   - No security warnings
 
 **Steps:**
+
 1. Apply for free certificate through Microsoft Partner Center
 2. Download your certificate (.p12 file)
 3. Update `electron-builder.yml`:
    ```yaml
    win:
-     certificateFile: "path/to/your/certificate.p12"
-     certificatePassword: "your_certificate_password"
+     certificateFile: 'path/to/your/certificate.p12'
+     certificatePassword: 'your_certificate_password'
      sign: 1
    ```
 
 #### Option B: Self-Signed Certificate (Not Recommended)
+
 - **Cost**: Free
 - **Limitations**: Users will see security warnings
 - **Use case**: Development/testing only
@@ -94,6 +102,7 @@ Unfortunately, **truly free code signing for macOS is very limited**:
 ### 3. Linux Code Signing
 
 Linux doesn't require code signing in the same way as Windows/macOS, but you can:
+
 - Sign packages with GPG
 - Use package repositories
 - Implement update mechanisms
@@ -147,6 +156,7 @@ npm run build:linux-x64
 ### Debug Mode
 
 To build without code signing for testing:
+
 ```bash
 # macOS
 CSC_IDENTITY_AUTO_DISCOVERY=false npm run build:mac

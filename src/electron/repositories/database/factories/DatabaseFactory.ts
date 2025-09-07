@@ -11,7 +11,9 @@ export class DatabaseFactory implements IDatabaseFactory {
   private static instance: DatabaseFactory
   private currentORM: SupportedORM = 'drizzle'
 
-  private constructor() {}
+  private constructor() {
+    // Private constructor for singleton pattern
+  }
 
   static getInstance(): DatabaseFactory {
     if (!DatabaseFactory.instance) {

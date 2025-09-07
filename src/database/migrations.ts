@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm'
 
 export const migrations = [
   {
@@ -67,10 +67,10 @@ export const migrations = [
       )`
     ]
   }
-];
+]
 
 export async function runMigrations(db: any) {
-  console.log('Starting database migrations...');
+  console.log('Starting database migrations...')
 
   // Create migrations table if it doesn't exist
   await db.run(sql`
@@ -79,37 +79,37 @@ export async function runMigrations(db: any) {
       name TEXT NOT NULL,
       applied_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
-  `);
+  `)
 
   // Get current version
   const currentVersionResult = await db.get(sql`
     SELECT MAX(version) as version FROM schema_migrations
-  `);
-  
-  const currentVersion = currentVersionResult?.version || 0;
-  console.log(`Current database version: ${currentVersion}`);
+  `)
+
+  const currentVersion = currentVersionResult?.version || 0
+  console.log(`Current database version: ${currentVersion}`)
 
   // Run pending migrations
   for (const migration of migrations) {
     if (migration.version > currentVersion) {
-      console.log(`Running migration ${migration.version}: ${migration.name}...`);
-      
+      console.log(`Running migration ${migration.version}: ${migration.name}...`)
+
       try {
         // Run each statement individually
         for (const statement of migration.statements) {
-          await db.run(statement);
+          await db.run(statement)
         }
-        
+
         await db.run(sql`
           INSERT INTO schema_migrations (version, name) VALUES (${migration.version}, ${migration.name})
-        `);
-        console.log(`✅ Migration ${migration.version} completed successfully`);
+        `)
+        console.log(`✅ Migration ${migration.version} completed successfully`)
       } catch (error) {
-        console.error(`❌ Migration ${migration.version} failed:`, error);
-        throw error;
+        console.error(`❌ Migration ${migration.version} failed:`, error)
+        throw error
       }
     }
   }
 
-  console.log('Database migrations completed successfully');
+  console.log('Database migrations completed successfully')
 }

@@ -178,7 +178,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       const db = this.getDb()
       await db.select().from(comics).limit(1)
       return true
-    } catch (error) {
+    } catch {
       return false
     }
   }
@@ -399,11 +399,11 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
     if (search.userId && search.comicId) {
       progress = await this.getReadProgressByComic(search.comicId, search.userId)
-    } else if (search.userId) {
-      progress = await this.getReadProgressByUser(search.userId)
     } else if (search.chapterId && search.userId) {
       const singleProgress = await this.getReadProgressByChapter(search.chapterId, search.userId)
       progress = singleProgress ? [singleProgress] : []
+    } else if (search.userId) {
+      progress = await this.getReadProgressByUser(search.userId)
     } else {
       // Fallback to raw query for complex searches
       progress = await db.select().from(readProgress).where(search)

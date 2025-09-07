@@ -24,24 +24,24 @@ jobs:
           PR_HEAD_REF="${{ github.head_ref }}"
           PR_BASE_REF="${{ github.base_ref }}"
           PR_MERGED="${{ github.event.pull_request.merged }}"
-          
+
           echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
           echo "pr-head-ref=$PR_HEAD_REF" >> $GITHUB_OUTPUT
           echo "pr-base-ref=$PR_BASE_REF" >> $GITHUB_OUTPUT
           echo "pr-merged=$PR_MERGED" >> $GITHUB_OUTPUT
-          
+
           echo "PR #$PR_NUMBER closed without merging: $PR_HEAD_REF -> $PR_BASE_REF"
 
       - name: Find and delete PR-related releases
         run: |
           PR_NUMBER="${{ steps.pr-info.outputs.pr-number }}"
           PR_HEAD_REF="${{ steps.pr-info.outputs.pr-head-ref }}"
-          
+
           echo "Looking for releases related to PR #$PR_NUMBER..."
-          
+
           # Get all releases
           RELEASES=$(gh release list --limit 100 --json tagName,isPrerelease)
-          
+
           # Find releases that mention this PR number by checking each release individually
           echo "$RELEASES" | jq -r '.[] | .tagName' | while read -r TAG; do
             if [ -n "$TAG" ]; then
@@ -63,7 +63,7 @@ jobs:
               fi
             fi
           done
-          
+
           # Also look for releases with branch name in tag (for dev releases)
           # Skip this section if we already found and deleted releases above
           if [[ "$PR_HEAD_REF" == "dev/v2.0.0-cicd-clean" ]]; then

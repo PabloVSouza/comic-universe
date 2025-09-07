@@ -1,5 +1,5 @@
 @import './fonts/roboto/roboto.css';
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @layer base {
   * {
@@ -32,16 +32,35 @@
 }
 
 @layer utilities {
-  /* Dark mode color overrides */
-  .dark {
-    --color-text-default: #fafafa;
-    --color-text-oposite: #18181b;
-    --color-default: rgba(9, 9, 11, 0.7);
-    --color-oposite: rgba(248, 250, 252, 0.8);
-    --color-list: rgba(9, 9, 11, 0.7);
-    --color-list-item: rgba(9, 9, 11, 0.7);
-    --color-list-item-hover: rgba(248, 250, 252, 0.6);
-    --color-list-item-active: rgba(248, 250, 252, 0.8);
-    --color-modal: rgba(39, 39, 42, 0.5);
-  }
+  /* Light theme colors */
+  .bg-default { background-color: rgba(228, 228, 231, 0.7); }
+  .bg-oposite { background-color: rgba(248, 250, 252, 0.8); }
+  .bg-list { background-color: rgba(212, 212, 216, 0.7); }
+  .bg-list-item { background-color: rgba(244, 244, 245, 0.7); }
+  .bg-list-item-hover { background-color: rgba(226, 232, 240, 0.8); }
+  .bg-list-item-active { background-color: rgba(241, 245, 249, 0.8); }
+  .bg-modal { background-color: rgba(228, 228, 231, 0.5); }
+  .bg-dark { background-color: rgba(9, 9, 11, 0.7); }
+  .bg-light { background-color: rgba(248, 250, 252, 0.8); }
+  
+  .text-text-default { color: #18181b; }
+  .text-text-oposite { color: #18181b; }
+  .text-text-dark { color: #18181b; }
+  .text-text-light { color: #fafafa; }
+  
+  /* Dark theme overrides */
+  .dark .bg-default { background-color: rgba(9, 9, 11, 0.7); }
+  .dark .bg-oposite { background-color: rgba(248, 250, 252, 0.8); }
+  .dark .bg-list { background-color: rgba(9, 9, 11, 0.7); }
+  .dark .bg-list-item { background-color: rgba(9, 9, 11, 0.7); }
+  .dark .bg-list-item-hover { background-color: rgba(248, 250, 252, 0.6); }
+  .dark .bg-list-item-active { background-color: rgba(248, 250, 252, 0.8); }
+  .dark .bg-modal { background-color: rgba(39, 39, 42, 0.5); }
+  .dark .bg-dark { background-color: rgba(9, 9, 11, 0.7); }
+  .dark .bg-light { background-color: rgba(248, 250, 252, 0.8); }
+  
+  .dark .text-text-default { color: #fafafa; }
+  .dark .text-text-oposite { color: #18181b; }
+  .dark .text-text-dark { color: #18181b; }
+  .dark .text-text-light { color: #fafafa; }
 }

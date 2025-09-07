@@ -23,13 +23,8 @@ files:
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
   - '!*.code-workspace'
-  - from: 'node_modules/.prisma/'
-    to: 'node_modules/.prisma/'
 asarUnpack:
   - resources/*
-  - node_modules/.prisma/**/*
-  - node_modules/@prisma/**/*
-  - prisma/**/*
 win:
   executableName: comic-universe
   # Code signing configuration for Windows

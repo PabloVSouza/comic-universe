@@ -1,6 +1,6 @@
-import { createThemes } from 'tw-colors'
-import colors from 'tailwindcss/colors'
-import plugin from 'tailwindcss/plugin'
+const { createThemes } = require('tw-colors')
+const colors = require('tailwindcss/colors')
+const plugin = require('tailwindcss/plugin')
 
 const addTransparency = (color, transparency) => {
   const splitColor = color.substring(1)

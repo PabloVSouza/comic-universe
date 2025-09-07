@@ -80,12 +80,8 @@ win:
   # cscLink: "certificates/windows-cert.p12"  # Local development
   # cscKeyPassword: "comicuniverse"           # Local development
 
-  # Publisher name for Windows code signing
-  publisherName: 'Comic Universe'
-
   # Time stamping server
   signAndEditExecutable: false
-  signDlls: false
 nsis:
   artifactName: ${name}-${version}-win-${arch}.${ext}
   shortcutName: ${productName}

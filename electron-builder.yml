@@ -118,4 +118,3 @@ npmRebuild: true
 compression: maximum
 removePackageScripts: true
 removePackageKeywords: true
-removePackageEngines: true

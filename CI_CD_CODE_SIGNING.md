@@ -21,11 +21,13 @@ The CI/CD pipeline automatically generates self-signed certificates and signs th
 The following workflow files have been updated to include code signing:
 
 #### Workflow Files
+
 - **`release.yml`**: Stable releases from `main` branch
 - **`alpha-release.yml`**: Alpha releases from tags matching `v*.*.*-alpha.*`
 - **`beta-release.yml`**: Beta releases from pull requests to `main`/`staging`
 
 #### Triggers
+
 - **Stable releases**: Push to `main` branch
 - **Alpha releases**: Push tags matching `v*.*.*-alpha.*`
 - **Beta releases**: Pull requests to `main` or `staging` branches
@@ -36,13 +38,13 @@ The following workflow files have been updated to include code signing:
   run: |
     # Create certificates directory
     mkdir -p certificates
-    
+
     # Generate self-signed certificate
     openssl req -x509 -newkey rsa:2048 -keyout certificates/cert-key.pem -out certificates/cert.pem -days 365 -nodes -subj "/C=US/ST=CA/L=San Francisco/O=Comic Universe/CN=Comic Universe"
-    
+
     # Convert to PKCS#12 format
     openssl pkcs12 -export -out certificates/cert.p12 -inkey certificates/cert-key.pem -in certificates/cert.pem -name "Comic Universe" -passout pass:comicuniverse
-    
+
     # Set environment variables for electron-builder
     echo "CSC_LINK=certificates/cert.p12" >> $GITHUB_ENV
     echo "CSC_KEY_PASSWORD=comicuniverse" >> $GITHUB_ENV
@@ -69,6 +71,7 @@ npm run create:release
 ```
 
 This script will:
+
 1. Ask you to choose release type (alpha/beta/stable)
 2. Generate the appropriate version number
 3. Update package.json
@@ -84,7 +87,7 @@ You can also create releases manually:
 git tag v2.0.0-alpha.1
 git push origin v2.0.0-alpha.1
 
-# Create beta release  
+# Create beta release
 git tag v2.0.0-beta.1
 git push origin v2.0.0-beta.1
 
@@ -122,6 +125,7 @@ If you want to use official certificates (no security warnings), you can:
 ### For macOS (Apple Developer Program - $99/year)
 
 1. **Set up GitHub Secrets**:
+
    ```
    APPLE_ID: your-apple-id@example.com
    APPLE_ID_PASSWORD: your-app-specific-password
@@ -131,7 +135,7 @@ If you want to use official certificates (no security warnings), you can:
 2. **Update electron-builder.yml**:
    ```yaml
    mac:
-     identity: "Developer ID Application: Your Name (TEAM_ID)"
+     identity: 'Developer ID Application: Your Name (TEAM_ID)'
      notarize: true
    ```
 
@@ -139,6 +143,7 @@ If you want to use official certificates (no security warnings), you can:
 
 1. **Apply for free certificate** through Microsoft Partner Center
 2. **Set up GitHub Secrets**:
+
    ```
    CSC_LINK: base64-encoded-certificate-content
    CSC_KEY_PASSWORD: your-certificate-password
@@ -151,19 +156,21 @@ If you want to use official certificates (no security warnings), you can:
 For local development, you can still use the local certificates:
 
 1. **Generate local certificates**:
+
    ```bash
    ./scripts/create-simple-certs.sh
    ```
 
 2. **Update electron-builder.yml** (uncomment the local paths):
+
    ```yaml
    mac:
-     cscLink: "certificates/macos-cert.p12"
-     cscKeyPassword: "comicuniverse"
-   
+     cscLink: 'certificates/macos-cert.p12'
+     cscKeyPassword: 'comicuniverse'
+
    win:
-     cscLink: "certificates/windows-cert.p12"
-     cscKeyPassword: "comicuniverse"
+     cscLink: 'certificates/windows-cert.p12'
+     cscKeyPassword: 'comicuniverse'
    ```
 
 3. **Build locally**:
@@ -192,10 +199,12 @@ For local development, you can still use the local certificates:
 ### Common Issues
 
 1. **Certificate generation fails**:
+
    - Check if OpenSSL is available in the CI environment
    - Verify the certificate generation commands
 
 2. **Code signing fails**:
+
    - Check environment variables are set correctly
    - Verify certificate format and password
 
@@ -208,6 +217,7 @@ For local development, you can still use the local certificates:
 To debug code signing issues:
 
 1. **Add debug output** to the workflow:
+
    ```yaml
    - name: Debug Certificate
      run: |

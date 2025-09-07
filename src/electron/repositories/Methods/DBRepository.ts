@@ -1,54 +1,51 @@
-import { PrismaInitializer } from 'prisma-cli-extension'
-import { Chapter, Comic, PrismaClient, User } from '@prisma/client'
+import { initializeDatabase, IDatabaseRepository } from '../database'
 import { DataPaths } from 'utils/utils'
 
 class DBRepository implements IDBRepository {
-  private db = {} as PrismaClient
-  private prismaInitializer = {} as PrismaInitializer
-  private dbPath: string
+  private repository!: IDatabaseRepository
 
   constructor() {
-    const cnnParams = '?socket_timeout=10&connection_limit=1'
-
     // Use the centralized data paths utility
     DataPaths.ensureDirectoryExists(DataPaths.getDatabasePath())
-    const dbFilePath = DataPaths.getDatabaseFilePath()
-    this.dbPath = `file:${dbFilePath}${cnnParams}`
   }
 
   public startup = async () => {
-    this.prismaInitializer = new PrismaInitializer(this.dbPath, '20240805000921_plugin_table')
-    await this.prismaInitializer.initializePrisma()
-    this.db = this.prismaInitializer.prisma
-    await this.prismaInitializer.runMigration()
+    // Initialize ORM-agnostic database with custom path
+    const dbPath = DataPaths.getDatabaseFilePath()
+    this.repository = await initializeDatabase(dbPath)
   }
 
   methods: IDBMethods = {
     dbRunMigrations: async () => {
-      await this.prismaInitializer.runMigration()
+      await this.repository.runMigrations()
     },
 
     dbVerifyMigrations: async () => {
-      return await this.prismaInitializer.verifyMigration(this.db)
+      return await this.repository.verifyMigrations()
     },
 
     //Comics
     dbGetComic: async ({ id }): Promise<IComic> => {
-      const comic = await this.db.comic.findUnique({ where: { id } })
+      const comic = await this.repository.getComicById(id)
       return new Promise((resolve) => {
         resolve(comic as IComic)
       })
     },
 
     dbGetComicAdditionalData: async ({ id, userId }): Promise<IComic> => {
-      const comic = await this.db.comic.findUnique({
-        where: { id },
-        include: {
-          chapters: {
-            include: { ReadProgress: { where: { userId } } }
-          }
-        }
-      })
+      const comicData = await this.repository.getComicWithProgress(id, userId)
+      if (!comicData) {
+        throw new Error(`Comic with id ${id} not found`)
+      }
+
+      // Transform the data to match the expected interface
+      const comic = {
+        ...comicData.comic,
+        chapters: comicData.chapters.map((chapter) => ({
+          ...chapter,
+          ReadProgress: comicData.progress.filter((p) => p.chapterId === chapter.id)
+        }))
+      }
 
       return new Promise((resolve) => {
         resolve(comic as IComic)
@@ -56,124 +53,102 @@ class DBRepository implements IDBRepository {
     },
 
     dbGetAllComics: async (): Promise<IComic[]> => {
-      const comics = (await this.db.comic.findMany({})) as IComic[]
+      const comics = await this.repository.getAllComics()
       return new Promise((resolve) => {
-        resolve(comics)
+        resolve(comics as IComic[])
       })
     },
 
     dbInsertComic: async ({ comic, chapters, repo }): Promise<void> => {
-      const newComic = await this.db.comic.create({
-        data: { ...comic, repo } as Comic
-      })
-
-      for (const chapter of chapters) {
-        await this.db.chapter.create({
-          data: { ...chapter, comicId: newComic.id, repo } as Chapter
-        })
-      }
-
+      await this.repository.createComic(comic, chapters, repo)
       return new Promise((resolve) => {
         resolve()
       })
     },
 
     dbDeleteComic: async ({ comic }): Promise<void> => {
-      const comicId = comic.id
-      await this.db.readProgress.deleteMany({
-        where: { comicId }
-      })
-
-      await this.db.chapter.deleteMany({
-        where: { comicId }
-      })
-
-      await this.db.comic.delete({
-        where: {
-          id: comicId
-        }
-      })
-
+      await this.repository.deleteComic(comic.id)
       return new Promise((resolve) => resolve())
     },
 
     //Chapters
     dbGetAllChaptersNoPage: async (): Promise<IChapter[]> => {
-      const chapters = (await this.db.chapter.findMany({
-        where: { pages: null }
-      })) as IChapter[]
+      const chapters = await this.repository.getAllChaptersNoPage()
       return new Promise((resolve) => {
-        resolve(chapters)
+        resolve(chapters as IChapter[])
       })
     },
 
     dbGetChapters: async ({ comicId }): Promise<IChapter[]> => {
-      const chapters = await this.db.chapter.findMany({ where: { comicId } })
+      const chapters = await this.repository.getChaptersByComicId(comicId)
       return new Promise((resolve) => {
         resolve(chapters as IChapter[])
       })
     },
 
     dbInsertChapters: async ({ chapters }): Promise<void> => {
-      for (const chapter of chapters) {
-        await this.db.chapter.create({ data: chapter as Chapter })
-      }
+      await this.repository.createChapters(chapters)
       return new Promise((resolve) => {
         resolve()
       })
     },
 
     dbUpdateChapter: async ({ chapter }): Promise<IChapter> => {
-      const updatedChapter = (await this.db.chapter.update({
-        where: { id: chapter.id },
-        data: chapter as Chapter
-      })) as IChapter
+      const updatedChapter = await this.repository.updateChapter(chapter.id, chapter)
+      if (!updatedChapter) {
+        throw new Error(`Chapter with id ${chapter.id} not found`)
+      }
 
       return new Promise((resolve) => {
-        resolve(updatedChapter)
+        resolve(updatedChapter as IChapter)
       })
     },
 
     //Read Progress
-    dbGetReadProgress: async (search): Promise<IReadProgress[]> => {
-      //@ts-ignore Multiple ways of searching
-      const readProgress = await this.db.readProgress.findMany({ where: search })
+    dbGetReadProgress: async (search: any): Promise<IReadProgress[]> => {
+      const progress = await this.repository.getReadProgress(search)
       return new Promise((resolve) => {
-        resolve(readProgress as IReadProgress[])
+        resolve(progress as IReadProgress[])
       })
     },
 
     dbUpdateReadProgress: async ({ readProgress }): Promise<void> => {
-      if (!readProgress.id) await this.db.readProgress.create({ data: readProgress })
-      if (readProgress.id)
-        await this.db.readProgress.update({ where: { id: readProgress.id }, data: readProgress })
+      if (!readProgress.id) {
+        await this.repository.createReadProgress(readProgress)
+      } else {
+        await this.repository.updateReadProgress(readProgress.id, readProgress)
+      }
 
       return new Promise((resolve) => resolve())
     },
 
     //Users
     dbGetAllUsers: async (): Promise<IUser[]> => {
-      const users = await this.db.user.findMany()
+      const users = await this.repository.getAllUsers()
       return new Promise((resolve) => {
         resolve(users as IUser[])
       })
     },
 
     dbUpdateUser: async ({ user }): Promise<IUser> => {
-      const userData = user as User
+      let userData: any
 
-      const newData = user.id
-        ? await this.db.user.update({ where: { id: user.id }, data: userData })
-        : await this.db.user.create({ data: userData })
+      if (user.id) {
+        userData = await this.repository.updateUser(user.id, user)
+        if (!userData) {
+          throw new Error(`User with id ${user.id} not found`)
+        }
+      } else {
+        userData = await this.repository.createUser(user)
+      }
 
       return new Promise((resolve) => {
-        resolve(newData)
+        resolve(userData as IUser)
       })
     },
 
     dbDeleteUser: async ({ id }): Promise<void> => {
-      await this.db.readProgress.deleteMany({ where: { userId: id } })
-      await this.db.user.delete({ where: { id } })
+      await this.repository.deleteUser(id)
       return new Promise((resolve) => {
         resolve()
       })

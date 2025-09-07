@@ -33,9 +33,7 @@ const setupAutoUpdater = (
     const settings = await loadUpdateSettings()
 
     // Check if user wants this type of update
-    const isStable =
-      !info.version.includes('alpha') &&
-      !info.version.includes('beta')
+    const isStable = !info.version.includes('alpha') && !info.version.includes('beta')
     const isBeta = info.version.includes('beta')
     const isAlpha = info.version.includes('alpha')
 

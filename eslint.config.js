@@ -58,9 +58,9 @@ module.exports = [
     },
     plugins: {
       '@typescript-eslint': typescript,
-      'react': react,
+      react: react,
       'react-hooks': reactHooks,
-      'prettier': prettier
+      prettier: prettier
     },
     rules: {
       ...typescript.configs.recommended.rules,
@@ -96,13 +96,6 @@ module.exports = [
     }
   },
   {
-    ignores: [
-      'node_modules/**',
-      'out/**',
-      'dist/**',
-      'build/**',
-      '*.config.js',
-      '*.config.ts'
-    ]
+    ignores: ['node_modules/**', 'out/**', 'dist/**', 'build/**', '*.config.js', '*.config.ts']
   }
 ]

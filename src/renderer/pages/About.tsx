@@ -37,9 +37,9 @@ const About = (): JSX.Element => {
           {t('General.license')}: {appData?.license}
         </p>
         {/* eslint-disable-next-line prettier/prettier */}
-        {appData?.description.split('. ').map((description) => (
-          <p key={description}>{description}.</p>
-        ))}
+        {appData?.description
+          .split('. ')
+          .map((description) => <p key={description}>{description}.</p>)}
         <a href={appData?.repository} target="_blank" rel="noreferrer" className="mt-2">
           <u>{t('General.githubRepository')}</u>
         </a>

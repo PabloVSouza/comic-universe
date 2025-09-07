@@ -17,12 +17,20 @@ export interface IDatabaseRepository {
   createComic(comic: IComic, chapters: IChapter[], repo: string): Promise<void>
   updateComic(id: number, comic: Partial<IComic>): Promise<IComic | undefined>
   deleteComic(id: number): Promise<void>
-  getComicWithChapters(comicId: number): Promise<{ comic: IComic; chapters: IChapter[] } | undefined>
-  getComicWithProgress(comicId: number, userId: number): Promise<{
-    comic: IComic;
-    chapters: IChapter[];
-    progress: IReadProgress[];
-  } | undefined>
+  getComicWithChapters(
+    comicId: number
+  ): Promise<{ comic: IComic; chapters: IChapter[] } | undefined>
+  getComicWithProgress(
+    comicId: number,
+    userId: number
+  ): Promise<
+    | {
+        comic: IComic
+        chapters: IChapter[]
+        progress: IReadProgress[]
+      }
+    | undefined
+  >
 
   // Chapter operations
   getAllChaptersNoPage(): Promise<IChapter[]>
@@ -48,7 +56,10 @@ export interface IDatabaseRepository {
   getReadProgressByChapter(chapterId: number, userId: number): Promise<IReadProgress | undefined>
   getReadProgress(search: any): Promise<IReadProgress[]>
   createReadProgress(progress: IReadProgress): Promise<IReadProgress>
-  updateReadProgress(id: number, progress: Partial<IReadProgress>): Promise<IReadProgress | undefined>
+  updateReadProgress(
+    id: number,
+    progress: Partial<IReadProgress>
+  ): Promise<IReadProgress | undefined>
   deleteReadProgress(id: number): Promise<void>
 
   // Plugin operations

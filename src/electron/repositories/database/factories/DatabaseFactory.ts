@@ -1,4 +1,8 @@
-import { IDatabaseRepository, IDatabaseConfig, IDatabaseFactory } from '../interfaces/IDatabaseRepository'
+import {
+  IDatabaseRepository,
+  IDatabaseConfig,
+  IDatabaseFactory
+} from '../interfaces/IDatabaseRepository'
 import { DrizzleDatabaseRepository } from '../implementations/DrizzleDatabaseRepository'
 
 export type SupportedORM = 'drizzle' | 'prisma' | 'typeorm' | 'sequelize'

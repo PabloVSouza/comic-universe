@@ -1,15 +1,6 @@
 import { eq, and, isNull, asc } from 'drizzle-orm'
-import { 
-  IDatabaseRepository, 
-  IMigration 
-} from '../interfaces/IDatabaseRepository'
-import { 
-  comics, 
-  chapters, 
-  users, 
-  readProgress, 
-  plugins
-} from '../schema'
+import { IDatabaseRepository, IMigration } from '../interfaces/IDatabaseRepository'
+import { comics, chapters, users, readProgress, plugins } from '../../../../database/schema'
 import { sql } from 'drizzle-orm'
 import Database from 'better-sqlite3'
 import { drizzle } from 'drizzle-orm/better-sqlite3'
@@ -27,15 +18,14 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     try {
       console.log(`Initializing Drizzle database at: ${dbPath}`)
 
-
       // Create database connection
       this.sqlite = new Database(dbPath)
-      
+
       // Enable foreign keys
       this.sqlite.pragma('foreign_keys = ON')
-      
+
       // Create Drizzle instance
-      this.db = drizzle(this.sqlite, { 
+      this.db = drizzle(this.sqlite, {
         schema: { comics, chapters, users, readProgress, plugins }
       })
 
@@ -87,7 +77,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     const currentVersionResult = await db.get(sql`
       SELECT MAX(version) as version FROM schema_migrations
     `)
-    
+
     const currentVersion = currentVersionResult?.version || 0
     console.log(`Current database version: ${currentVersion}`)
 
@@ -166,7 +156,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     for (const migration of migrations) {
       if (migration.version > currentVersion) {
         console.log(`Running migration ${migration.version}: ${migration.name}...`)
-        
+
         try {
           await migration.up()
           await db.run(sql`
@@ -213,12 +203,15 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async createComic(comic: IComic, chapters: IChapter[], repo: string): Promise<void> {
     const db = this.getDb()
-    
+
     // Create the comic
-    const newComic = await db.insert(comics).values({
-      ...comic,
-      repo
-    }).returning()
+    const newComic = await db
+      .insert(comics)
+      .values({
+        ...comic,
+        repo
+      })
+      .returning()
 
     // Create the chapters
     for (const chapter of chapters) {
@@ -238,18 +231,20 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async deleteComic(id: number): Promise<void> {
     const db = this.getDb()
-    
+
     // Delete read progress first
     await db.delete(readProgress).where(eq(readProgress.comicId, id))
-    
+
     // Delete chapters
     await db.delete(chapters).where(eq(chapters.comicId, id))
-    
+
     // Delete comic
     await db.delete(comics).where(eq(comics.id, id))
   }
 
-  async getComicWithChapters(comicId: number): Promise<{ comic: IComic; chapters: IChapter[] } | undefined> {
+  async getComicWithChapters(
+    comicId: number
+  ): Promise<{ comic: IComic; chapters: IChapter[] } | undefined> {
     const comic = await this.getComicById(comicId)
     if (!comic) return undefined
 
@@ -257,11 +252,17 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     return { comic, chapters }
   }
 
-  async getComicWithProgress(comicId: number, userId: number): Promise<{
-    comic: IComic;
-    chapters: IChapter[];
-    progress: IReadProgress[];
-  } | undefined> {
+  async getComicWithProgress(
+    comicId: number,
+    userId: number
+  ): Promise<
+    | {
+        comic: IComic
+        chapters: IChapter[]
+        progress: IReadProgress[]
+      }
+    | undefined
+  > {
     const comicData = await this.getComicWithChapters(comicId)
     if (!comicData) return undefined
 
@@ -280,7 +281,11 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async getChaptersByComicId(comicId: number): Promise<IChapter[]> {
     const db = this.getDb()
-    return await db.select().from(chapters).where(eq(chapters.comicId, comicId)).orderBy(asc(chapters.number))
+    return await db
+      .select()
+      .from(chapters)
+      .where(eq(chapters.comicId, comicId))
+      .orderBy(asc(chapters.number))
   }
 
   async getChapterById(id: number): Promise<IChapter | undefined> {
@@ -351,10 +356,10 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async deleteUser(id: number): Promise<void> {
     const db = this.getDb()
-    
+
     // Delete read progress first
     await db.delete(readProgress).where(eq(readProgress.userId, id))
-    
+
     // Delete user
     await db.delete(users).where(eq(users.id, id))
   }
@@ -367,25 +372,31 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async getReadProgressByComic(comicId: number, userId: number): Promise<IReadProgress[]> {
     const db = this.getDb()
-    return await db.select().from(readProgress).where(
-      and(eq(readProgress.comicId, comicId), eq(readProgress.userId, userId))
-    )
+    return await db
+      .select()
+      .from(readProgress)
+      .where(and(eq(readProgress.comicId, comicId), eq(readProgress.userId, userId)))
   }
 
-  async getReadProgressByChapter(chapterId: number, userId: number): Promise<IReadProgress | undefined> {
+  async getReadProgressByChapter(
+    chapterId: number,
+    userId: number
+  ): Promise<IReadProgress | undefined> {
     const db = this.getDb()
-    const result = await db.select().from(readProgress).where(
-      and(eq(readProgress.chapterId, chapterId), eq(readProgress.userId, userId))
-    ).limit(1)
+    const result = await db
+      .select()
+      .from(readProgress)
+      .where(and(eq(readProgress.chapterId, chapterId), eq(readProgress.userId, userId)))
+      .limit(1)
     return result[0]
   }
 
   async getReadProgress(search: any): Promise<IReadProgress[]> {
     const db = this.getDb()
-    
+
     // Handle different search patterns
     let progress: any[] = []
-    
+
     if (search.userId && search.comicId) {
       progress = await this.getReadProgressByComic(search.comicId, search.userId)
     } else if (search.userId) {
@@ -407,9 +418,16 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     return result[0]
   }
 
-  async updateReadProgress(id: number, progress: Partial<IReadProgress>): Promise<IReadProgress | undefined> {
+  async updateReadProgress(
+    id: number,
+    progress: Partial<IReadProgress>
+  ): Promise<IReadProgress | undefined> {
     const db = this.getDb()
-    const result = await db.update(readProgress).set(progress).where(eq(readProgress.id, id)).returning()
+    const result = await db
+      .update(readProgress)
+      .set(progress)
+      .where(eq(readProgress.id, id))
+      .returning()
     return result[0]
   }
 
@@ -432,7 +450,11 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async getEnabledPlugins(): Promise<IPlugin[]> {
     const db = this.getDb()
-    return await db.select().from(plugins).where(eq(plugins.enabled, true)).orderBy(asc(plugins.name))
+    return await db
+      .select()
+      .from(plugins)
+      .where(eq(plugins.enabled, true))
+      .orderBy(asc(plugins.name))
   }
 
   async createPlugin(plugin: IPlugin): Promise<IPlugin> {

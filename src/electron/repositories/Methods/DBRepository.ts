@@ -1,4 +1,4 @@
-import { initializeDatabase, IDatabaseRepository } from '../../../database'
+import { initializeDatabase, IDatabaseRepository } from '../database'
 import { DataPaths } from 'utils/utils'
 
 class DBRepository implements IDBRepository {

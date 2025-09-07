@@ -59,6 +59,18 @@ files:
   - '!node_modules/@types/react-dom/**'
   - '!node_modules/@types/uuid/**'
   - '!node_modules/better-sqlite3/build/Release/test_extension.node'
+  - '!node_modules/**/test/**'
+  - '!node_modules/**/tests/**'
+  - '!node_modules/**/docs/**'
+  - '!node_modules/**/examples/**'
+  - '!node_modules/**/demo/**'
+  - '!node_modules/**/sample/**'
+  - '!node_modules/**/*.md'
+  - '!node_modules/**/*.txt'
+  - '!node_modules/**/*.map'
+  - '!node_modules/**/CHANGELOG*'
+  - '!node_modules/**/LICENSE*'
+  - '!node_modules/**/README*'
 asarUnpack:
   - 'node_modules/better-sqlite3/build/Release/better_sqlite3.node'
   - 'resources/*'
@@ -105,6 +117,11 @@ mac:
 dmg:
   artifactName: ${name}-${version}-mac-${arch}.${ext}
   backgroundColor: '#a0aef8'
+  # Optimize DMG creation speed
+  format: UDZO
+  window:
+    width: 540
+    height: 380
 linux:
   target:
     - AppImage
@@ -114,7 +131,9 @@ linux:
 appImage:
   artifactName: ${name}-${version}-linux-${arch}.${ext}
 npmRebuild: true
-# Optimize build size
-compression: maximum
+# Optimize build size and speed
+compression: normal
 removePackageScripts: true
 removePackageKeywords: true
+generateUpdatesFilesForAllChannels: false
+buildDependenciesFromSource: false

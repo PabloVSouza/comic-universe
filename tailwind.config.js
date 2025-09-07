@@ -1,17 +1,3 @@
-const { createThemes } = require('tw-colors')
-const colors = require('tailwindcss/colors')
-const plugin = require('tailwindcss/plugin')
-
-const addTransparency = (color, transparency) => {
-  const splitColor = color.substring(1)
-
-  const hexTransparency = Math.round((transparency * 100 * 255) / 100).toString(16)
-
-  const finalColor = `#${splitColor}${hexTransparency}`
-
-  return finalColor
-}
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/renderer/index.html', './src/renderer/**/*.{js,ts,jsx,tsx}'],
@@ -37,53 +23,24 @@ module.exports = {
       },
       boxShadow: {
         basic: '3px 7px 16px -5px rgba(0, 0, 0, 0.75)'
+      },
+      colors: {
+        // Custom theme colors for light mode
+        'text-dark': '#18181b',
+        'text-light': '#fafafa',
+        'text-default': '#18181b',
+        'text-oposite': '#18181b',
+        'default': 'rgba(228, 228, 231, 0.7)',
+        'oposite': 'rgba(248, 250, 252, 0.8)',
+        'list': 'rgba(212, 212, 216, 0.7)',
+        'list-item': 'rgba(244, 244, 245, 0.7)',
+        'list-item-hover': 'rgba(226, 232, 240, 0.8)',
+        'list-item-active': 'rgba(241, 245, 249, 0.8)',
+        'modal': 'rgba(228, 228, 231, 0.5)',
+        'dark': 'rgba(9, 9, 11, 0.7)',
+        'light': 'rgba(248, 250, 252, 0.8)'
       }
     }
   },
-
-  plugins: [
-    plugin(function ({ matchUtilities, theme }) {
-      matchUtilities(
-        {
-          'translate-3d': (value) => ({
-            '--tw-translate-3d': value,
-            transform: `translate3d(${value},${value},${value})`
-          })
-        },
-        { values: theme('translate'), supportsNegativeValues: true }
-      )
-    }),
-    createThemes({
-      light: {
-        'text-dark': colors.zinc[900],
-        'text-light': colors.zinc[50],
-        dark: addTransparency(colors.zinc[950], 0.7),
-        light: addTransparency(colors.slate[50], 0.8),
-        'text-default': colors.zinc[900],
-        'text-oposite': colors.zinc[900],
-        default: addTransparency(colors.zinc[200], 0.7),
-        oposite: addTransparency(colors.slate[50], 0.8),
-        list: addTransparency(colors.zinc[300], 0.7),
-        'list-item': addTransparency(colors.zinc[100], 0.7),
-        'list-item-hover': addTransparency(colors.slate[200], 0.8),
-        'list-item-active': addTransparency(colors.slate[100], 0.8),
-        modal: addTransparency(colors.zinc[200], 0.5)
-      },
-      dark: {
-        'text-dark': colors.zinc[900],
-        'text-light': colors.zinc[50],
-        dark: addTransparency(colors.zinc[950], 0.7),
-        light: addTransparency(colors.slate[50], 0.8),
-        'text-default': colors.zinc[50],
-        'text-oposite': colors.zinc[900],
-        default: addTransparency(colors.zinc[950], 0.7),
-        oposite: addTransparency(colors.slate[50], 0.8),
-        list: addTransparency(colors.zinc[950], 0.7),
-        'list-item': addTransparency(colors.zinc[950], 0.7),
-        'list-item-hover': addTransparency(colors.slate[50], 0.6),
-        'list-item-active': addTransparency(colors.slate[50], 0.8),
-        modal: addTransparency(colors.zinc[800], 0.5)
-      }
-    })
-  ]
+  plugins: []
 }

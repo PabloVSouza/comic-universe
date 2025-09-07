@@ -1,11 +1,9 @@
 @import './fonts/roboto/roboto.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   * {
-    @apply font-roboto;
+    font-family: 'Roboto', sans-serif;
     @apply font-thin;
     @apply outline-none;
     @apply [-webkit-app-region:no-drag];
@@ -30,5 +28,20 @@
   video {
     max-width: unset;
     height: unset;
+  }
+}
+
+@layer utilities {
+  /* Dark mode color overrides */
+  .dark {
+    --color-text-default: #fafafa;
+    --color-text-oposite: #18181b;
+    --color-default: rgba(9, 9, 11, 0.7);
+    --color-oposite: rgba(248, 250, 252, 0.8);
+    --color-list: rgba(9, 9, 11, 0.7);
+    --color-list-item: rgba(9, 9, 11, 0.7);
+    --color-list-item-hover: rgba(248, 250, 252, 0.6);
+    --color-list-item-active: rgba(248, 250, 252, 0.8);
+    --color-modal: rgba(39, 39, 42, 0.5);
   }
 }

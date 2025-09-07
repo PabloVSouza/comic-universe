@@ -30,15 +30,15 @@ module.exports = {
         'text-light': '#fafafa',
         'text-default': '#18181b',
         'text-oposite': '#18181b',
-        'default': 'rgba(228, 228, 231, 0.7)',
-        'oposite': 'rgba(248, 250, 252, 0.8)',
-        'list': 'rgba(212, 212, 216, 0.7)',
+        default: 'rgba(228, 228, 231, 0.7)',
+        oposite: 'rgba(248, 250, 252, 0.8)',
+        list: 'rgba(212, 212, 216, 0.7)',
         'list-item': 'rgba(244, 244, 245, 0.7)',
         'list-item-hover': 'rgba(226, 232, 240, 0.8)',
         'list-item-active': 'rgba(241, 245, 249, 0.8)',
-        'modal': 'rgba(228, 228, 231, 0.5)',
-        'dark': 'rgba(9, 9, 11, 0.7)',
-        'light': 'rgba(248, 250, 252, 0.8)'
+        modal: 'rgba(228, 228, 231, 0.5)',
+        dark: 'rgba(9, 9, 11, 0.7)',
+        light: 'rgba(248, 250, 252, 0.8)'
       }
     }
   },

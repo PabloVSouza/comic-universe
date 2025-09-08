@@ -38,19 +38,20 @@ const SettingsGeneral = () => {
     { value: 'ptBR', label: 'Português' }
   ]
 
-  const handleLanguageChange = async (selected: any) => {
-    if (selected && selected.value !== currentLanguage) {
-      console.log('Changing language from', currentLanguage, 'to:', selected.value)
+  const handleLanguageChange = async (selected: unknown) => {
+    const selectedOption = selected as { value: string; label: string }
+    if (selectedOption && selectedOption.value !== currentLanguage) {
+      console.log('Changing language from', currentLanguage, 'to:', selectedOption.value)
 
       try {
         // Update settings file
-        await invoke('updateLanguageSettings', { languageSettings: { language: selected.value } })
+        await invoke('updateLanguageSettings', { languageSettings: { language: selectedOption.value } })
 
         // Update local state
-        setCurrentLanguage(selected.value)
+        setCurrentLanguage(selectedOption.value)
 
         // Update i18n
-        await i18n.changeLanguage(selected.value)
+        await i18n.changeLanguage(selectedOption.value)
 
         // Update window titles to reflect language change
         // Small delay to ensure i18n has updated

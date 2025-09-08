@@ -7,7 +7,7 @@ interface IPaginationProps {
   setOffset: (offset: number) => void
   itemsPerPage: number
   className?: string
-  list: any[]
+  list: unknown[]
 }
 
 const Pagination = ({ setOffset, className, itemsPerPage, list, ...props }: IPaginationProps) => {

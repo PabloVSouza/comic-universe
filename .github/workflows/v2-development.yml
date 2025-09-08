@@ -274,6 +274,17 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
 
+      - name: Verify artifacts
+        run: |
+          echo "Checking downloaded artifacts..."
+          ls -la
+          echo "Linux builds:"
+          ls -la linux-builds/ || echo "No linux-builds directory"
+          echo "Windows builds:"
+          ls -la windows-builds/ || echo "No windows-builds directory"
+          echo "macOS builds:"
+          ls -la macos-builds/ || echo "No macos-builds directory"
+
       - name: Generate release notes
         run: |
           # Get the base commit for comparison
@@ -313,6 +324,7 @@ jobs:
       - name: Create development release
         if: needs.prepare-release.outputs.version != ''
         uses: softprops/action-gh-release@v2
+        continue-on-error: false
         with:
           tag_name: 'v${{ needs.prepare-release.outputs.version }}'
           name: '2.0.0 Development Release ${{ needs.prepare-release.outputs.version }}'
@@ -324,6 +336,9 @@ jobs:
             macos-builds/*
           draft: false
           prerelease: true
+          overwrite: true
+          generate_release_notes: false
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

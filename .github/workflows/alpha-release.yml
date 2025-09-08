@@ -44,6 +44,7 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v2
+        continue-on-error: false
         with:
           prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
@@ -60,6 +61,10 @@ jobs:
             dist/*.rpm
             dist/*.tar.gz
             dist/*.yml
+            dist/*.blockmap
+          overwrite: true
+          generate_release_notes: false
+          fail_on_unmatched_files: false
   Windows:
     runs-on: windows-latest
     permissions: write-all

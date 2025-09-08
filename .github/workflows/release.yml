@@ -164,6 +164,7 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v2
+        continue-on-error: false
         with:
           tag_name: 'v${{ needs.prepare-stable.outputs.version }}'
           name: 'Stable Release v${{ needs.prepare-stable.outputs.version }}'
@@ -181,5 +182,8 @@ jobs:
             dist/*.blockmap
           draft: false
           prerelease: false
+          overwrite: true
+          generate_release_notes: false
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

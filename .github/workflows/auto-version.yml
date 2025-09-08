@@ -52,17 +52,39 @@ jobs:
           BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
 
           # Determine release type based on branch/event
+          # Get the latest release to determine next build number
+          LATEST_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[0].tag_name // "v0.0.0"')
+          echo "Latest release: $LATEST_RELEASE"
+          
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             # Only create beta releases for PRs to main/staging, not dev branches
             RELEASE_TYPE="beta"
             IS_PRERELEASE="true"
-            # Beta version: increment patch and add beta identifier
-            NEW_VERSION="${BASE_VERSION}-beta.$(date +%Y%m%d%H%M%S)"
+            # Extract build number from latest release or start from 1
+            # Handle both old timestamp format and new semantic format
+            if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
+              BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
+            elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
+              # Old timestamp format - start from 1
+              BUILD_NUMBER=1
+            else
+              BUILD_NUMBER=1
+            fi
+            NEW_VERSION="${BASE_VERSION}-beta.${BUILD_NUMBER}"
           elif [[ "${{ github.ref }}" == "refs/heads/staging" ]] || [[ "${{ github.ref }}" == "refs/heads/dev/v2.0.0" ]]; then
             RELEASE_TYPE="alpha"
             IS_PRERELEASE="true"
-            # Alpha version: increment patch and add alpha identifier
-            NEW_VERSION="${BASE_VERSION}-alpha.$(date +%Y%m%d%H%M%S)"
+            # Extract build number from latest release or start from 1
+            # Handle both old timestamp format and new semantic format
+            if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
+              BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
+            elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
+              # Old timestamp format - start from 1
+              BUILD_NUMBER=1
+            else
+              BUILD_NUMBER=1
+            fi
+            NEW_VERSION="${BASE_VERSION}-alpha.${BUILD_NUMBER}"
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             RELEASE_TYPE="stable"
             IS_PRERELEASE="false"
@@ -71,8 +93,17 @@ jobs:
           else
             RELEASE_TYPE="dev"
             IS_PRERELEASE="true"
-            # Dev version: increment patch and add dev identifier
-            NEW_VERSION="${BASE_VERSION}-dev.$(date +%Y%m%d%H%M%S)"
+            # Extract build number from latest release or start from 1
+            # Handle both old timestamp format and new semantic format
+            if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta|dev)\.([0-9]+) ]]; then
+              BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
+            elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta|dev)\.([0-9]{14}) ]]; then
+              # Old timestamp format - start from 1
+              BUILD_NUMBER=1
+            else
+              BUILD_NUMBER=1
+            fi
+            NEW_VERSION="${BASE_VERSION}-dev.${BUILD_NUMBER}"
           fi
 
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT

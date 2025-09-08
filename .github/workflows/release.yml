@@ -137,35 +137,37 @@ jobs:
         if: matrix.architecture == 'arm64' && matrix.os == 'macos-14'
         run: npm run build:mac
 
+      - name: Generate release notes
+        run: |
+          # Get the previous stable tag or use HEAD~20 as fallback
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 --match="v*.*.*" HEAD~1 2>/dev/null || echo "HEAD~20")
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "## 🚀 Stable Release v${{ needs.prepare-stable.outputs.version }}" >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "This is a stable release of Comic Universe ${{ needs.prepare-stable.outputs.version }}." >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "**Version:** ${{ needs.prepare-stable.outputs.version }}" >> $GITHUB_ENV
+          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_ENV
+          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          ./scripts/generate-release-notes.sh $PREVIOUS_TAG HEAD >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "## Installation" >> $GITHUB_ENV
+          echo "Download the appropriate build for your platform from the assets below." >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "## Code Signing" >> $GITHUB_ENV
+          echo "All builds are automatically signed with self-signed certificates. Users may see security warnings - this is normal for self-signed certificates." >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "## Testing" >> $GITHUB_ENV
+          echo "This is a stable release. Please test thoroughly and report any issues." >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: 'v${{ needs.prepare-stable.outputs.version }}'
           name: 'Stable Release v${{ needs.prepare-stable.outputs.version }}'
-          body: |
-            ## 🚀 Stable Release v${{ needs.prepare-stable.outputs.version }}
-
-            This is a stable release of Comic Universe 2.0.0.
-
-            **Version:** ${{ needs.prepare-stable.outputs.version }}
-            **Branch:** `${{ github.ref_name }}`
-            **Commit:** `${{ github.sha }}`
-
-            ## What's New in 2.0.0
-            - Updated dependencies to latest versions
-            - Improved CI/CD pipeline with automatic code signing
-            - Enhanced development workflow
-            - Better error handling and logging
-            - Standardized release nomenclature (alpha/beta)
-
-            ## Installation
-            Download the appropriate build for your platform from the assets below.
-
-            ## Code Signing
-            All builds are automatically signed with self-signed certificates. Users may see security warnings - this is normal for self-signed certificates.
-
-            ## Testing
-            This is a stable release. Please test thoroughly and report any issues.
+          body: ${{ env.RELEASE_NOTES }}
           files: |
             dist/*.exe
             dist/*.zip

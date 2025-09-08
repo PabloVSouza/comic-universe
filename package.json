@@ -90,5 +90,4 @@
     "vite": "^7.1.4",
     "vite-plugin-svgr": "^4.2.0"
   },
-  "packageManager": "yarn@4.5.1"
 }

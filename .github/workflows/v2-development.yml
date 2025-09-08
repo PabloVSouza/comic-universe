@@ -41,13 +41,29 @@ jobs:
           CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
           BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
 
+          # Get the latest release to determine next build number
+          LATEST_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[0].tag_name // "v0.0.0"')
+          echo "Latest release: $LATEST_RELEASE"
+
+          # Extract build number from latest release or start from 1
+          # Handle both old timestamp format and new semantic format
+          if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
+            # Old timestamp format - start from 1
+            BUILD_NUMBER=1
+          elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
+            # New semantic format - increment build number
+            BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
+          else
+            BUILD_NUMBER=1
+          fi
+
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             # PR: Create alpha version (instável, em desenvolvimento)
-            NEW_VERSION="${BASE_VERSION}-alpha.$(date +%Y%m%d%H%M%S)"
+            NEW_VERSION="${BASE_VERSION}-alpha.${BUILD_NUMBER}"
             RELEASE_TYPE="alpha"
           else
             # Push: Create beta version (mais estável, testado)
-            NEW_VERSION="${BASE_VERSION}-beta.$(date +%Y%m%d%H%M%S)"
+            NEW_VERSION="${BASE_VERSION}-beta.${BUILD_NUMBER}"
             RELEASE_TYPE="beta"
           fi
 
@@ -101,7 +117,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linux-builds
-          path: dist/*.AppImage
+          path: |
+            dist/*.AppImage
+            dist/*.yml
+            dist/*.blockmap
 
   build-windows:
     runs-on: windows-latest
@@ -171,7 +190,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-builds
-          path: dist/*.exe
+          path: |
+            dist/*.exe
+            dist/*.yml
+            dist/*.blockmap
 
   build-macos:
     runs-on: macos-latest
@@ -248,7 +270,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: macos-builds
-          path: dist/*.dmg
+          path: |
+            dist/*.dmg
+            dist/*.zip
+            dist/*.yml
+            dist/*.blockmap
 
   nightly-release:
     runs-on: ubuntu-latest
@@ -265,41 +291,70 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
 
+      - name: Verify artifacts
+        run: |
+          echo "Checking downloaded artifacts..."
+          ls -la
+          echo "Linux builds:"
+          ls -la linux-builds/ || echo "No linux-builds directory"
+          echo "Windows builds:"
+          ls -la windows-builds/ || echo "No windows-builds directory"
+          echo "macOS builds:"
+          ls -la macos-builds/ || echo "No macos-builds directory"
+
+      - name: Generate release notes
+        run: |
+          # Get the base commit for comparison
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BASE_COMMIT="${{ github.event.pull_request.base.sha }}"
+            HEAD_COMMIT="${{ github.event.pull_request.head.sha }}"
+          else
+            # For push events, compare with previous commit
+            BASE_COMMIT="HEAD~1"
+            HEAD_COMMIT="HEAD"
+          fi
+
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "## 🚀 2.0.0 Development Release" >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "This is a development build for Comic Universe 2.0.0." >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "**Release Type:** ${{ needs.prepare-release.outputs.release-type }}" >> $GITHUB_ENV
+          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_ENV
+          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_ENV
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "**PR:** #${{ github.event.number }}" >> $GITHUB_ENV
+            echo "**Auto-cleanup:** This release will be automatically deleted if PR #${{ github.event.number }} is closed without merging." >> $GITHUB_ENV
+          fi
+          echo "" >> $GITHUB_ENV
+          echo "## Changes" >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          ./scripts/generate-release-notes.sh $BASE_COMMIT $HEAD_COMMIT >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "## Testing" >> $GITHUB_ENV
+          echo "This is a development build. Please test thoroughly and report any issues." >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "## Installation" >> $GITHUB_ENV
+          echo "Download the appropriate build for your platform from the assets below." >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Create development release
         if: needs.prepare-release.outputs.version != ''
         uses: softprops/action-gh-release@v2
+        continue-on-error: true
         with:
           tag_name: 'v${{ needs.prepare-release.outputs.version }}'
           name: '2.0.0 Development Release ${{ needs.prepare-release.outputs.version }}'
           target_commitish: ${{ github.event.pull_request.head.sha || github.sha }}
-          body: |
-            ## 🚀 2.0.0 Development Release
-
-            This is a development build for Comic Universe 2.0.0.
-
-            **Release Type:** ${{ needs.prepare-release.outputs.release-type }}
-            **Branch:** `${{ github.ref_name }}`
-            **Commit:** `${{ github.sha }}`
-            ${{ github.event_name == 'pull_request' && format('**PR:** #{0}', github.event.number) || '' }}
-            ${{ github.event_name == 'pull_request' && format('**Auto-cleanup:** This release will be automatically deleted if PR #{0} is closed without merging.', github.event.number) || '' }}
-
-            ## What's New in 2.0.0
-            - Updated dependencies to latest versions
-            - Improved CI/CD pipeline
-            - Enhanced development workflow
-            - Better error handling and logging
-
-            ## Testing
-            This is a development build. Please test thoroughly and report any issues.
-
-            ## Installation
-            Download the appropriate build for your platform from the assets below.
+          body: ${{ env.RELEASE_NOTES }}
           files: |
             linux-builds/*
             windows-builds/*
             macos-builds/*
           draft: false
           prerelease: true
+          generate_release_notes: false
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

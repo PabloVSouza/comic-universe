@@ -34,13 +34,23 @@ jobs:
         if: matrix.architecture == 'arm64' && matrix.os == 'ubuntu-latest'
         run: npm run build:linux-arm
 
+      - name: Generate release notes
+        run: |
+          # Get the previous tag or use HEAD~10 as fallback
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "HEAD~10")
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          ./scripts/generate-release-notes.sh $PREVIOUS_TAG HEAD >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: release
         uses: softprops/action-gh-release@v2
+        continue-on-error: true
         with:
           prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
           target_commitish: ${{ github.sha }}
+          body: ${{ env.RELEASE_NOTES }}
           files: |
             dist/*.exe
             dist/*.zip
@@ -51,6 +61,9 @@ jobs:
             dist/*.rpm
             dist/*.tar.gz
             dist/*.yml
+            dist/*.blockmap
+          generate_release_notes: false
+          fail_on_unmatched_files: false
   Windows:
     runs-on: windows-latest
     permissions: write-all

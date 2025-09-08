@@ -105,7 +105,7 @@ class DBRepository implements IDBRepository {
     },
 
     //Read Progress
-    dbGetReadProgress: async (search: any): Promise<IReadProgress[]> => {
+    dbGetReadProgress: async (search: Record<string, unknown>): Promise<IReadProgress[]> => {
       const progress = await this.repository.getReadProgress(search)
       return new Promise((resolve) => {
         resolve(progress as IReadProgress[])
@@ -131,7 +131,7 @@ class DBRepository implements IDBRepository {
     },
 
     dbUpdateUser: async ({ user }): Promise<IUser> => {
-      let userData: any
+      let userData: IUser | undefined
 
       if (user.id) {
         userData = await this.repository.updateUser(user.id, user)

@@ -54,7 +54,7 @@ export interface IDatabaseRepository {
   getReadProgressByUser(userId: number): Promise<IReadProgress[]>
   getReadProgressByComic(comicId: number, userId: number): Promise<IReadProgress[]>
   getReadProgressByChapter(chapterId: number, userId: number): Promise<IReadProgress | undefined>
-  getReadProgress(search: any): Promise<IReadProgress[]>
+  getReadProgress(search: Record<string, unknown>): Promise<IReadProgress[]>
   createReadProgress(progress: IReadProgress): Promise<IReadProgress>
   updateReadProgress(
     id: number,

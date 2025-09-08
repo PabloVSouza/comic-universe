@@ -2,11 +2,11 @@ import { eq, and, isNull, asc } from 'drizzle-orm'
 import { IDatabaseRepository, IMigration } from '../interfaces/IDatabaseRepository'
 import { comics, chapters, users, readProgress, plugins } from '../../../../database/schema'
 import { sql } from 'drizzle-orm'
-import Database from 'better-sqlite3'
+import Database, { type BetterSQLite3Database } from 'better-sqlite3'
 import { drizzle } from 'drizzle-orm/better-sqlite3'
 
 export class DrizzleDatabaseRepository implements IDatabaseRepository {
-  private db: any = null
+  private db: BetterSQLite3Database<Record<string, unknown>> | null = null
   private sqlite: Database.Database | null = null
 
   async initialize(dbPath: string): Promise<void> {
@@ -391,22 +391,22 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     return result[0]
   }
 
-  async getReadProgress(search: any): Promise<IReadProgress[]> {
+  async getReadProgress(search: Record<string, unknown>): Promise<IReadProgress[]> {
     const db = this.getDb()
 
     // Handle different search patterns
-    let progress: any[] = []
+    let progress: IReadProgress[] = []
 
     if (search.userId && search.comicId) {
-      progress = await this.getReadProgressByComic(search.comicId, search.userId)
+      progress = await this.getReadProgressByComic(search.comicId as number, search.userId as number)
     } else if (search.chapterId && search.userId) {
-      const singleProgress = await this.getReadProgressByChapter(search.chapterId, search.userId)
+      const singleProgress = await this.getReadProgressByChapter(search.chapterId as number, search.userId as number)
       progress = singleProgress ? [singleProgress] : []
     } else if (search.userId) {
-      progress = await this.getReadProgressByUser(search.userId)
+      progress = await this.getReadProgressByUser(search.userId as number)
     } else {
       // Fallback to raw query for complex searches
-      progress = await db.select().from(readProgress).where(search)
+      progress = await db.select().from(readProgress)
     }
 
     return progress

@@ -1,4 +1,5 @@
 import { sql } from 'drizzle-orm'
+import { type BetterSQLite3Database } from 'better-sqlite3'
 
 export const migrations = [
   {
@@ -69,7 +70,7 @@ export const migrations = [
   }
 ]
 
-export async function runMigrations(db: any) {
+export async function runMigrations(db: BetterSQLite3Database<Record<string, unknown>>) {
   console.log('Starting database migrations...')
 
   // Create migrations table if it doesn't exist

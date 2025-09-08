@@ -84,7 +84,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linux-builds
-          path: dist/*.AppImage
+          path: |
+            dist/*.AppImage
+            dist/*.yml
+            dist/*.blockmap
 
   build-windows:
     runs-on: windows-latest
@@ -133,7 +136,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-builds
-          path: dist/*.exe
+          path: |
+            dist/*.exe
+            dist/*.yml
+            dist/*.blockmap
 
   build-macos:
     runs-on: macos-latest
@@ -182,7 +188,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: macos-builds
-          path: dist/*.dmg
+          path: |
+            dist/*.dmg
+            dist/*.yml
+            dist/*.blockmap
 
   beta-release:
     runs-on: ubuntu-latest

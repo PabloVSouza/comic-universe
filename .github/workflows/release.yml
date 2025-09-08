@@ -182,7 +182,6 @@ jobs:
             dist/*.blockmap
           draft: false
           prerelease: false
-          overwrite: true
           generate_release_notes: false
           fail_on_unmatched_files: false
         env:

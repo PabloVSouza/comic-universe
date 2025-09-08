@@ -351,7 +351,6 @@ jobs:
             macos-builds/*
           draft: false
           prerelease: true
-          overwrite: true
           generate_release_notes: false
           fail_on_unmatched_files: false
         env:

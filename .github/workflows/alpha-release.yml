@@ -62,7 +62,6 @@ jobs:
             dist/*.tar.gz
             dist/*.yml
             dist/*.blockmap
-          overwrite: true
           generate_release_notes: false
           fail_on_unmatched_files: false
   Windows:

@@ -55,7 +55,7 @@ jobs:
           # Get the latest release to determine next build number
           LATEST_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[0].tag_name // "v0.0.0"')
           echo "Latest release: $LATEST_RELEASE"
-          
+
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             # Only create beta releases for PRs to main/staging, not dev branches
             RELEASE_TYPE="beta"

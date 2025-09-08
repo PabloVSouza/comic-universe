@@ -13,6 +13,9 @@ const setupAutoUpdater = (
   settingsRepository: SettingsRepository
 ): void => {
   // Configure auto-updater
+  // Disable differential download to avoid signature verification issues
+  autoUpdater.disableDifferentialDownload = true
+  autoUpdater.disableWebInstaller = true
 
   // Load user's update preferences from file
   const loadUpdateSettings = async () => {

@@ -106,7 +106,7 @@ mac:
   notarize: false # Set to true when you have Apple Developer Program access
 
   # Hardened runtime (required for notarization)
-  hardenedRuntime: true
+  hardenedRuntime: false
 
   # Gatekeeper assessment (required for notarization)
   gatekeeperAssess: false

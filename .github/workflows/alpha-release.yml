@@ -44,7 +44,7 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v2
-        continue-on-error: false
+        continue-on-error: true
         with:
           prerelease: true
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}

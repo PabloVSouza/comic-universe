@@ -164,7 +164,7 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v2
-        continue-on-error: false
+        continue-on-error: true
         with:
           tag_name: 'v${{ needs.prepare-stable.outputs.version }}'
           name: 'Stable Release v${{ needs.prepare-stable.outputs.version }}'

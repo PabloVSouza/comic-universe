@@ -256,7 +256,7 @@ jobs:
 
       - name: Create beta release
         uses: softprops/action-gh-release@v2
-        continue-on-error: false
+        continue-on-error: true
         with:
           tag_name: 'v${{ needs.prepare-beta.outputs.version }}'
           name: 'Beta Release ${{ needs.prepare-beta.outputs.version }}'

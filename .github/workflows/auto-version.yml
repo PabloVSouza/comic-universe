@@ -62,11 +62,12 @@ jobs:
             IS_PRERELEASE="true"
             # Extract build number from latest release or start from 1
             # Handle both old timestamp format and new semantic format
-            if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
-              BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
-            elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
+            if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
               # Old timestamp format - start from 1
               BUILD_NUMBER=1
+            elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
+              # New semantic format - increment build number
+              BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
             else
               BUILD_NUMBER=1
             fi
@@ -76,11 +77,12 @@ jobs:
             IS_PRERELEASE="true"
             # Extract build number from latest release or start from 1
             # Handle both old timestamp format and new semantic format
-            if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
-              BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
-            elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
+            if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
               # Old timestamp format - start from 1
               BUILD_NUMBER=1
+            elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
+              # New semantic format - increment build number
+              BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
             else
               BUILD_NUMBER=1
             fi
@@ -95,11 +97,12 @@ jobs:
             IS_PRERELEASE="true"
             # Extract build number from latest release or start from 1
             # Handle both old timestamp format and new semantic format
-            if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta|dev)\.([0-9]+) ]]; then
-              BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
-            elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta|dev)\.([0-9]{14}) ]]; then
+            if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta|dev)\.([0-9]{14}) ]]; then
               # Old timestamp format - start from 1
               BUILD_NUMBER=1
+            elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta|dev)\.([0-9]+) ]]; then
+              # New semantic format - increment build number
+              BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
             else
               BUILD_NUMBER=1
             fi

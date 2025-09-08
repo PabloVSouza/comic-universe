@@ -44,18 +44,19 @@ jobs:
           # Get the latest release to determine next build number
           LATEST_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[0].tag_name // "v0.0.0"')
           echo "Latest release: $LATEST_RELEASE"
-          
+
           # Extract build number from latest release or start from 1
           # Handle both old timestamp format and new semantic format
-          if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
-            BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
-          elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
+          if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
             # Old timestamp format - start from 1
             BUILD_NUMBER=1
+          elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
+            # New semantic format - increment build number
+            BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
           else
             BUILD_NUMBER=1
           fi
-          
+
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             # PR: Create alpha version (instável, em desenvolvimento)
             NEW_VERSION="${BASE_VERSION}-alpha.${BUILD_NUMBER}"
@@ -311,7 +312,7 @@ jobs:
             BASE_COMMIT="HEAD~1"
             HEAD_COMMIT="HEAD"
           fi
-          
+
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "## 🚀 2.0.0 Development Release" >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV

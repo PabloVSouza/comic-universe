@@ -272,6 +272,7 @@ jobs:
           name: macos-builds
           path: |
             dist/*.dmg
+            dist/*.zip
             dist/*.yml
             dist/*.blockmap
 

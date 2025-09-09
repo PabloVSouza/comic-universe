@@ -25,7 +25,7 @@ const HomeDashboard = (): React.JSX.Element => {
   return (
     <div className="h-full w-full grow flex flex-col gap-px bg-default z-10 mt-px">
       <LoadingOverlay isLoading={isFetching} />
-      {!!activeComic.id && !!additionalData?.chapters.length && (
+      {!!activeComic.id && !!additionalData?.chapters?.length && (
         <>
           <HomeDashboardHeader comic={activeComic} />
           <HomeDashboardNavBar comic={activeComic} additionalData={additionalData} />

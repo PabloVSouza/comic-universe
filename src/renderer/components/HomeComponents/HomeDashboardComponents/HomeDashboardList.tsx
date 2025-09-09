@@ -3,7 +3,7 @@ import LoadingOverlay from 'components/LoadingOverlay'
 import useGlobalStore from 'store/useGlobalStore'
 
 const HomeDashboardComicList = ({ additionalData }: { additionalData: IComic }): React.JSX.Element => {
-  const chapters = additionalData.chapters
+  const chapters = additionalData.chapters || []
   const { queue } = useGlobalStore()
 
   const inQueue = chapters.some(

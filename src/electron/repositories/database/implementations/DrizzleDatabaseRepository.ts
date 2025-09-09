@@ -4,6 +4,7 @@ import { comics, chapters, users, readProgress, plugins } from '../../../../data
 import { sql } from 'drizzle-orm'
 import Database, { type BetterSQLite3Database } from 'better-sqlite3'
 import { drizzle } from 'drizzle-orm/better-sqlite3'
+import DebugLogger from '../../../utils/DebugLogger'
 
 export class DrizzleDatabaseRepository implements IDatabaseRepository {
   private db: BetterSQLite3Database<Record<string, unknown>> | null = null
@@ -204,9 +205,9 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async createComic(comic: IComic, chapterList: IChapter[], repo: string): Promise<void> {
     const db = this.getDb()
 
-    console.log('createComic called with:', { comic, chapterList, repo })
-    console.log('chapterList type:', typeof chapterList, 'is array:', Array.isArray(chapterList))
-    console.log('chapterList length:', chapterList?.length)
+    await DebugLogger.log('createComic called with:', { comic, chapterList, repo })
+    await DebugLogger.log('chapterList type:', typeof chapterList, 'is array:', Array.isArray(chapterList))
+    await DebugLogger.log('chapterList length:', chapterList?.length)
 
     // Create the comic - exclude id and chapters from the insert
     const { id, chapters: _, ...comicData } = comic
@@ -228,7 +229,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       type: comicData.type
     }
 
-    console.log('Inserting comic with data:', cleanComicData)
+    await DebugLogger.log('Inserting comic with data:', cleanComicData)
 
     const newComic = await db.insert(comics).values(cleanComicData).returning()
 
@@ -252,13 +253,13 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
           comicId: newComic[0].id
         }
 
-        console.log('Inserting chapter with data:', cleanChapterData)
-
+        await DebugLogger.log('Inserting chapter with data:', cleanChapterData)
+        
         try {
           await db.insert(chapters).values(cleanChapterData)
         } catch (error) {
-          console.error('Error inserting chapter:', error)
-          console.error('Chapter data:', cleanChapterData)
+          await DebugLogger.error('Error inserting chapter:', error)
+          await DebugLogger.error('Chapter data:', cleanChapterData)
           throw error
         }
       }

@@ -12,9 +12,14 @@ export interface LanguageSettings {
   language: string
 }
 
+export interface DebugSettings {
+  enableDebugLogging: boolean
+}
+
 interface AppSettings {
   update: UpdateSettings
   language: LanguageSettings
+  debug: DebugSettings
   // Add other settings here in the future
 }
 
@@ -28,6 +33,9 @@ class SettingsRepository {
     },
     language: {
       language: 'ptBR'
+    },
+    debug: {
+      enableDebugLogging: false
     }
   }
 
@@ -127,6 +135,20 @@ class SettingsRepository {
       return updatedSettings.language
     },
 
+    // Get debug settings specifically
+    getDebugSettings: async (): Promise<DebugSettings> => {
+      const settings = await this.methods.loadSettings()
+      return settings.debug
+    },
+
+    // Update debug settings specifically
+    updateDebugSettings: async (
+      debugSettings: Partial<DebugSettings>
+    ): Promise<DebugSettings> => {
+      const updatedSettings = await this.methods.updateSettings('debug', debugSettings)
+      return updatedSettings.debug
+    },
+
     // Reset settings to defaults
     resetSettings: async (): Promise<AppSettings> => {
       await this.methods.saveSettings(this.defaultSettings)
@@ -150,6 +172,10 @@ class SettingsRepository {
       language: {
         ...this.defaultSettings.language,
         ...(settings.language || {})
+      },
+      debug: {
+        ...this.defaultSettings.debug,
+        ...(settings.debug || {})
       }
     }
 

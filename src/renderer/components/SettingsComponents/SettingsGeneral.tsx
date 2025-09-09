@@ -12,10 +12,12 @@ const SettingsGeneral = () => {
   const { t, i18n } = useTranslation()
   const { invoke } = useApi()
   const [currentLanguage, setCurrentLanguage] = useState('ptBR')
+  const [debugLoggingEnabled, setDebugLoggingEnabled] = useState(false)
 
-  // Load language from settings on component mount
+  // Load settings on component mount
   useEffect(() => {
     loadLanguageFromSettings()
+    loadDebugSettings()
   }, [])
 
   const loadLanguageFromSettings = async () => {
@@ -30,6 +32,16 @@ const SettingsGeneral = () => {
       }
     } catch (error) {
       console.error('Error loading language settings:', error)
+    }
+  }
+
+  const loadDebugSettings = async () => {
+    try {
+      const debugSettings = await invoke('getDebugSettings')
+      const enabled = debugSettings?.enableDebugLogging || false
+      setDebugLoggingEnabled(enabled)
+    } catch (error) {
+      console.error('Error loading debug settings:', error)
     }
   }
 
@@ -80,6 +92,18 @@ const SettingsGeneral = () => {
     checkForUpdates.mutate()
   }
 
+  const handleDebugLoggingToggle = async () => {
+    try {
+      const newValue = !debugLoggingEnabled
+      await invoke('updateDebugSettings', { 
+        debugSettings: { enableDebugLogging: newValue } 
+      })
+      setDebugLoggingEnabled(newValue)
+    } catch (error) {
+      console.error('Error updating debug settings:', error)
+    }
+  }
+
   return (
     <div className="h-full w-full flex flex-col">
       {/* Header */}
@@ -106,6 +130,40 @@ const SettingsGeneral = () => {
                   options={languageOptions}
                   className="bg-default rounded-lg"
                 />
+              </div>
+            </div>
+          </div>
+
+          {/* Separator */}
+          <div className="border-t border-gray-200 dark:border-gray-700"></div>
+
+          {/* Debug Settings Section */}
+          <div>
+            <h3 className="text-xl mb-4 text-gray-800 dark:text-gray-200">
+              Debug Settings
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className="block text-base text-gray-700 dark:text-gray-300">
+                    Enable Debug Logging
+                  </label>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Show detailed debug information in the console
+                  </p>
+                </div>
+                <button
+                  onClick={handleDebugLoggingToggle}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                    debugLoggingEnabled ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      debugLoggingEnabled ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
               </div>
             </div>
           </div>

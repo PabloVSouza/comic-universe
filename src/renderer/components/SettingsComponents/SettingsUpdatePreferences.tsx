@@ -67,17 +67,25 @@ const SettingsUpdatePreferences = () => {
 
   const handleReleaseTypeChange = (selected: unknown) => {
     const selectedArray = selected as TOption[]
+    console.log('Selected array:', selectedArray)
+    console.log('Current releaseTypes:', settings.releaseTypes)
+    
     if (selectedArray && selectedArray.length > 0) {
       // Get the newly selected item (the last one in the array)
       const newSelection = selectedArray[selectedArray.length - 1].value
+      console.log('New selection:', newSelection)
+      
       // Only add if it's not already selected
       if (!settings.releaseTypes.includes(newSelection)) {
         const newSettings = {
           ...settings,
           releaseTypes: [...settings.releaseTypes, newSelection]
         }
+        console.log('Adding new item. New releaseTypes:', newSettings.releaseTypes)
         setSettings(newSettings)
         autoSave(newSettings)
+      } else {
+        console.log('Item already selected, not adding')
       }
     }
   }

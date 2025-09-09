@@ -204,6 +204,10 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async createComic(comic: IComic, chapters: IChapter[], repo: string): Promise<void> {
     const db = this.getDb()
 
+    console.log('createComic called with:', { comic, chapters, repo })
+    console.log('chapters type:', typeof chapters, 'is array:', Array.isArray(chapters))
+    console.log('chapters length:', chapters?.length)
+
     // Create the comic - exclude id and chapters from the insert
     const { id, chapters: _, ...comicData } = comic
     
@@ -232,27 +236,35 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       .returning()
 
     // Create the chapters
-    for (const chapter of chapters) {
-      const { id: chapterId, comicId: _, Comic, ReadProgress, ...chapterData } = chapter
-      
-      // Filter out undefined values for chapters
-      const cleanChapterData = {
-        siteId: chapterData.siteId,
-        siteLink: chapterData.siteLink || null,
-        releaseId: chapterData.releaseId || null,
-        repo,
-        name: chapterData.name || null,
-        number: chapterData.number,
-        pages: chapterData.pages || null,
-        date: chapterData.date || null,
-        offline: chapterData.offline || false,
-        language: chapterData.language || null,
-        comicId: newComic[0].id
+    if (chapters && chapters.length > 0) {
+      for (const chapter of chapters) {
+        const { id: chapterId, comicId: _, Comic, ReadProgress, ...chapterData } = chapter
+        
+        // Filter out undefined values for chapters
+        const cleanChapterData = {
+          siteId: chapterData.siteId,
+          siteLink: chapterData.siteLink || null,
+          releaseId: chapterData.releaseId || null,
+          repo,
+          name: chapterData.name || null,
+          number: chapterData.number,
+          pages: chapterData.pages || null,
+          date: chapterData.date || null,
+          offline: chapterData.offline || false,
+          language: chapterData.language || null,
+          comicId: newComic[0].id
+        }
+        
+        console.log('Inserting chapter with data:', cleanChapterData)
+        
+        try {
+          await db.insert(chapters).values(cleanChapterData)
+        } catch (error) {
+          console.error('Error inserting chapter:', error)
+          console.error('Chapter data:', cleanChapterData)
+          throw error
+        }
       }
-      
-      console.log('Inserting chapter with data:', cleanChapterData)
-      
-      await db.insert(chapters).values(cleanChapterData)
     }
   }
 

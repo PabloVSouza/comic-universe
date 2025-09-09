@@ -201,16 +201,16 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     return result[0]
   }
 
-  async createComic(comic: IComic, chapters: IChapter[], repo: string): Promise<void> {
+  async createComic(comic: IComic, chapterList: IChapter[], repo: string): Promise<void> {
     const db = this.getDb()
 
-    console.log('createComic called with:', { comic, chapters, repo })
-    console.log('chapters type:', typeof chapters, 'is array:', Array.isArray(chapters))
-    console.log('chapters length:', chapters?.length)
+    console.log('createComic called with:', { comic, chapterList, repo })
+    console.log('chapterList type:', typeof chapterList, 'is array:', Array.isArray(chapterList))
+    console.log('chapterList length:', chapterList?.length)
 
     // Create the comic - exclude id and chapters from the insert
     const { id, chapters: _, ...comicData } = comic
-    
+
     // Filter out undefined values and ensure required fields are present
     const cleanComicData = {
       siteId: comicData.siteId,
@@ -229,17 +229,14 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     }
 
     console.log('Inserting comic with data:', cleanComicData)
-    
-    const newComic = await db
-      .insert(comics)
-      .values(cleanComicData)
-      .returning()
+
+    const newComic = await db.insert(comics).values(cleanComicData).returning()
 
     // Create the chapters
-    if (chapters && chapters.length > 0) {
-      for (const chapter of chapters) {
+    if (chapterList && chapterList.length > 0) {
+      for (const chapter of chapterList) {
         const { id: chapterId, comicId: _, Comic, ReadProgress, ...chapterData } = chapter
-        
+
         // Filter out undefined values for chapters
         const cleanChapterData = {
           siteId: chapterData.siteId,
@@ -254,9 +251,9 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
           language: chapterData.language || null,
           comicId: newComic[0].id
         }
-        
+
         console.log('Inserting chapter with data:', cleanChapterData)
-        
+
         try {
           await db.insert(chapters).values(cleanChapterData)
         } catch (error) {
@@ -445,9 +442,15 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     let progress: IReadProgress[] = []
 
     if (search.userId && search.comicId) {
-      progress = await this.getReadProgressByComic(search.comicId as number, search.userId as number)
+      progress = await this.getReadProgressByComic(
+        search.comicId as number,
+        search.userId as number
+      )
     } else if (search.chapterId && search.userId) {
-      const singleProgress = await this.getReadProgressByChapter(search.chapterId as number, search.userId as number)
+      const singleProgress = await this.getReadProgressByChapter(
+        search.chapterId as number,
+        search.userId as number
+      )
       progress = singleProgress ? [singleProgress] : []
     } else if (search.userId) {
       progress = await this.getReadProgressByUser(search.userId as number)

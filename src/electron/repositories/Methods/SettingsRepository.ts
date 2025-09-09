@@ -113,12 +113,12 @@ class SettingsRepository {
       return settings.update
     },
 
-    // Update update settings specifically
-    updateUpdateSettings: async (
+    // Update update settings specifically - moved to AppRepository to avoid IPC conflicts
+    updateUpdateSettingsInternal: async (
       updateSettings: Partial<UpdateSettings>
     ): Promise<UpdateSettings> => {
       try {
-        console.log('updateUpdateSettings called with:', updateSettings)
+        console.log('updateUpdateSettingsInternal called with:', updateSettings)
         const currentSettings = await this.methods.loadSettings()
         console.log('Current settings:', currentSettings)
         const updatedSettings = {

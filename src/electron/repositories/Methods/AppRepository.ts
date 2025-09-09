@@ -118,9 +118,10 @@ class AppRepository {
     updateUpdateSettings: async (args: { updateSettings: unknown }) => {
       console.log('AppRepository updateUpdateSettings received args:', args)
       console.log('AppRepository passing to SettingsRepository:', args.updateSettings)
-      return await this.settingsRepository.methods.updateUpdateSettings(
-        args.updateSettings as Partial<UpdateSettings>
-      )
+      // Ensure we're passing only the updateSettings part, not the entire args object
+      const updateSettingsData = args.updateSettings as Partial<UpdateSettings>
+      console.log('AppRepository extracted updateSettingsData:', updateSettingsData)
+      return await this.settingsRepository.methods.updateUpdateSettingsInternal(updateSettingsData)
     }
   }
 }

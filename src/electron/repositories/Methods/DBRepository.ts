@@ -67,6 +67,9 @@ class DBRepository implements IDBRepository {
     },
 
     dbDeleteComic: async ({ comic }): Promise<void> => {
+      if (!comic.id) {
+        throw new Error('Cannot delete comic: comic ID is required')
+      }
       await this.repository.deleteComic(comic.id)
       return new Promise((resolve) => resolve())
     },
@@ -94,6 +97,9 @@ class DBRepository implements IDBRepository {
     },
 
     dbUpdateChapter: async ({ chapter }): Promise<IChapter> => {
+      if (!chapter.id) {
+        throw new Error('Cannot update chapter: chapter ID is required')
+      }
       const updatedChapter = await this.repository.updateChapter(chapter.id, chapter)
       if (!updatedChapter) {
         throw new Error(`Chapter with id ${chapter.id} not found`)

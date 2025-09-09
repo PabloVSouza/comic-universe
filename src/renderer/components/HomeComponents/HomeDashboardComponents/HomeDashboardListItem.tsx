@@ -26,7 +26,7 @@ const HomeDashboardComicListItem = ({ item }: { item: IChapter }): React.JSX.Ele
 
   const totalPages = pages.length
 
-  const chapterProgress = item.ReadProgress[0]
+  const chapterProgress = item.ReadProgress?.[0]
 
   const percentage = chapterProgress
     ? Math.round((100 / chapterProgress.totalPages) * chapterProgress.page)
@@ -40,7 +40,8 @@ const HomeDashboardComicListItem = ({ item }: { item: IChapter }): React.JSX.Ele
 
   const mutation = useMutation({
     mutationFn: async (page: number) => {
-      const ReadProgress = item.ReadProgress[0]
+      const ReadProgress = item.ReadProgress?.[0]
+      if (!ReadProgress) return
       await invoke('dbUpdateReadProgress', {
         readProgress: {
           ...ReadProgress,

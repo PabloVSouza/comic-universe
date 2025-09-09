@@ -12,9 +12,14 @@ export interface LanguageSettings {
   language: string
 }
 
+export interface DebugSettings {
+  enableDebugLogging: boolean
+}
+
 interface AppSettings {
   update: UpdateSettings
   language: LanguageSettings
+  debug: DebugSettings
   // Add other settings here in the future
 }
 
@@ -28,6 +33,9 @@ class SettingsRepository {
     },
     language: {
       language: 'ptBR'
+    },
+    debug: {
+      enableDebugLogging: false
     }
   }
 
@@ -105,12 +113,25 @@ class SettingsRepository {
       return settings.update
     },
 
-    // Update update settings specifically
-    updateUpdateSettings: async (
+    // Update update settings specifically - moved to AppRepository to avoid IPC conflicts
+    updateUpdateSettingsInternal: async (
       updateSettings: Partial<UpdateSettings>
     ): Promise<UpdateSettings> => {
-      const updatedSettings = await this.methods.updateSettings('update', updateSettings)
-      return updatedSettings.update
+      try {
+        const currentSettings = await this.methods.loadSettings()
+        const updatedSettings = {
+          ...currentSettings,
+          update: {
+            ...currentSettings.update,
+            ...updateSettings
+          }
+        }
+        await this.methods.saveSettings(updatedSettings)
+        return updatedSettings.update
+      } catch (error) {
+        console.error('Error updating update settings:', error)
+        throw error
+      }
     },
 
     // Get language settings specifically
@@ -125,6 +146,18 @@ class SettingsRepository {
     ): Promise<LanguageSettings> => {
       const updatedSettings = await this.methods.updateSettings('language', languageSettings)
       return updatedSettings.language
+    },
+
+    // Get debug settings specifically
+    getDebugSettings: async (): Promise<DebugSettings> => {
+      const settings = await this.methods.loadSettings()
+      return settings.debug
+    },
+
+    // Update debug settings specifically
+    updateDebugSettings: async (debugSettings: Partial<DebugSettings>): Promise<DebugSettings> => {
+      const updatedSettings = await this.methods.updateSettings('debug', debugSettings)
+      return updatedSettings.debug
     },
 
     // Reset settings to defaults
@@ -150,6 +183,10 @@ class SettingsRepository {
       language: {
         ...this.defaultSettings.language,
         ...(settings.language || {})
+      },
+      debug: {
+        ...this.defaultSettings.debug,
+        ...(settings.debug || {})
       }
     }
 

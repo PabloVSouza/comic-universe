@@ -47,7 +47,6 @@ const SettingsUpdatePreferences = () => {
   const autoSave = async (newSettings: UpdateSettings) => {
     try {
       await invoke('updateUpdateSettings', { updateSettings: newSettings })
-      console.log('Settings auto-saved')
     } catch (error) {
       console.error('Error auto-saving settings:', error)
     }
@@ -66,15 +65,20 @@ const SettingsUpdatePreferences = () => {
   }
 
   const handleReleaseTypeChange = (selected: unknown) => {
-    const selectedArray = selected as TOption[]
-    if (selectedArray && selectedArray.length > 0) {
-      const newSelection = selectedArray[selectedArray.length - 1].value
-      const newSettings = {
-        ...settings,
-        releaseTypes: [...settings.releaseTypes, newSelection]
+    const selectedOption = selected as TOption
+    
+    if (selectedOption && selectedOption.value) {
+      const newSelection = selectedOption.value
+      
+      // Only add if it's not already selected
+      if (!settings.releaseTypes.includes(newSelection)) {
+        const newSettings = {
+          ...settings,
+          releaseTypes: [...settings.releaseTypes, newSelection]
+        }
+        setSettings(newSettings)
+        autoSave(newSettings)
       }
-      setSettings(newSettings)
-      autoSave(newSettings)
     }
   }
 
@@ -129,7 +133,6 @@ const SettingsUpdatePreferences = () => {
           {t('Settings.general.releaseTypes')}
         </label>
         <Select
-          isMulti
           value={null}
           onChange={handleReleaseTypeChange}
           options={releaseTypeOptions}

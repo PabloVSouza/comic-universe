@@ -26,10 +26,12 @@ const HomeDashboardNavBar = ({
         message: 'No new chapters'
       })
     } else {
-      insertChapters({
-        newChapters,
-        comicId: comic.id
-      })
+      if (comic.id) {
+        insertChapters({
+          newChapters,
+          comicId: comic.id
+        })
+      }
     }
   }
 
@@ -40,12 +42,12 @@ const HomeDashboardNavBar = ({
   }, 0)
 
   const totalRead = chapters.reduce((prev, cur) => {
-    return cur.ReadProgress.length ? prev + cur.ReadProgress[0].page : prev
+    return cur.ReadProgress?.length ? prev + cur.ReadProgress[0].page : prev
   }, 0)
 
   const continueReading = (): void => {
     const lastRead = chapters.reduce((prev, cur) => {
-      return cur.ReadProgress.length && cur.ReadProgress[0].page > 0 ? cur : prev
+      return cur.ReadProgress?.length && cur.ReadProgress[0].page > 0 ? cur : prev
     }, chapters[0])
 
     navigate(`reader/${comic.id}/${lastRead.id}`)

@@ -206,22 +206,53 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
     // Create the comic - exclude id and chapters from the insert
     const { id, chapters: _, ...comicData } = comic
+    
+    // Filter out undefined values and ensure required fields are present
+    const cleanComicData = {
+      siteId: comicData.siteId,
+      name: comicData.name,
+      cover: comicData.cover,
+      repo,
+      author: comicData.author || null,
+      artist: comicData.artist || null,
+      publisher: comicData.publisher || null,
+      status: comicData.status || null,
+      genres: comicData.genres || null,
+      siteLink: comicData.siteLink || null,
+      year: comicData.year || null,
+      synopsis: comicData.synopsis,
+      type: comicData.type
+    }
+
+    console.log('Inserting comic with data:', cleanComicData)
+    
     const newComic = await db
       .insert(comics)
-      .values({
-        ...comicData,
-        repo
-      })
+      .values(cleanComicData)
       .returning()
 
     // Create the chapters
     for (const chapter of chapters) {
       const { id: chapterId, comicId: _, Comic, ReadProgress, ...chapterData } = chapter
-      await db.insert(chapters).values({
-        ...chapterData,
-        comicId: newComic[0].id,
-        repo
-      })
+      
+      // Filter out undefined values for chapters
+      const cleanChapterData = {
+        siteId: chapterData.siteId,
+        siteLink: chapterData.siteLink || null,
+        releaseId: chapterData.releaseId || null,
+        repo,
+        name: chapterData.name || null,
+        number: chapterData.number,
+        pages: chapterData.pages || null,
+        date: chapterData.date || null,
+        offline: chapterData.offline || false,
+        language: chapterData.language || null,
+        comicId: newComic[0].id
+      }
+      
+      console.log('Inserting chapter with data:', cleanChapterData)
+      
+      await db.insert(chapters).values(cleanChapterData)
     }
   }
 

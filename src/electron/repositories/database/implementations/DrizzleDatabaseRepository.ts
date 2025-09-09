@@ -204,19 +204,21 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async createComic(comic: IComic, chapters: IChapter[], repo: string): Promise<void> {
     const db = this.getDb()
 
-    // Create the comic
+    // Create the comic - exclude id and chapters from the insert
+    const { id, chapters: _, ...comicData } = comic
     const newComic = await db
       .insert(comics)
       .values({
-        ...comic,
+        ...comicData,
         repo
       })
       .returning()
 
     // Create the chapters
     for (const chapter of chapters) {
+      const { id: chapterId, comicId: _, Comic, ReadProgress, ...chapterData } = chapter
       await db.insert(chapters).values({
-        ...chapter,
+        ...chapterData,
         comicId: newComic[0].id,
         repo
       })
@@ -302,14 +304,16 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async createChapter(chapter: IChapter): Promise<IChapter> {
     const db = this.getDb()
-    const result = await db.insert(chapters).values(chapter).returning()
+    const { id, Comic, ReadProgress, ...chapterData } = chapter
+    const result = await db.insert(chapters).values(chapterData).returning()
     return result[0]
   }
 
   async createChapters(chapters: IChapter[]): Promise<void> {
     const db = this.getDb()
     for (const chapter of chapters) {
-      await db.insert(chapters).values(chapter)
+      const { id, Comic, ReadProgress, ...chapterData } = chapter
+      await db.insert(chapters).values(chapterData)
     }
   }
 

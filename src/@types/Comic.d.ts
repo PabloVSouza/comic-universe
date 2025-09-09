@@ -1,5 +1,5 @@
 interface IComic {
-  id: number
+  id?: number
   siteId: string
   name: string
   cover: string
@@ -9,9 +9,9 @@ interface IComic {
   publisher?: string | null
   status?: string | null
   genres?: string | null
-  siteLink: string
+  siteLink?: string | null
   synopsis: string
-  year?: string
+  year?: string | null
   type: 'hq' | 'manga' | 'manhwa' | 'manhua'
-  chapters: IChapter[]
+  chapters?: IChapter[]
 }

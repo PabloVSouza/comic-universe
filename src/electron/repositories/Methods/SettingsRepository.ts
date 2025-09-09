@@ -118,9 +118,7 @@ class SettingsRepository {
       updateSettings: Partial<UpdateSettings>
     ): Promise<UpdateSettings> => {
       try {
-        console.log('updateUpdateSettingsInternal called with:', updateSettings)
         const currentSettings = await this.methods.loadSettings()
-        console.log('Current settings:', currentSettings)
         const updatedSettings = {
           ...currentSettings,
           update: {
@@ -128,7 +126,6 @@ class SettingsRepository {
             ...updateSettings
           }
         }
-        console.log('Updated settings:', updatedSettings)
         await this.methods.saveSettings(updatedSettings)
         return updatedSettings.update
       } catch (error) {
@@ -158,9 +155,7 @@ class SettingsRepository {
     },
 
     // Update debug settings specifically
-    updateDebugSettings: async (
-      debugSettings: Partial<DebugSettings>
-    ): Promise<DebugSettings> => {
+    updateDebugSettings: async (debugSettings: Partial<DebugSettings>): Promise<DebugSettings> => {
       const updatedSettings = await this.methods.updateSettings('debug', debugSettings)
       return updatedSettings.debug
     },

@@ -22,9 +22,7 @@ const SettingsUpdatePreferences = () => {
   useEffect(() => {
     const loadSettings = async () => {
       try {
-        console.log('Loading settings from file...')
         const savedSettings = await invoke('getUpdateSettings')
-        console.log('Loaded settings:', savedSettings)
         setSettings(savedSettings as UpdateSettings)
       } catch (error) {
         console.error('Error loading settings:', error)
@@ -48,9 +46,7 @@ const SettingsUpdatePreferences = () => {
   // Auto-save function
   const autoSave = async (newSettings: UpdateSettings) => {
     try {
-      console.log('Auto-saving settings:', newSettings)
       await invoke('updateUpdateSettings', { updateSettings: newSettings })
-      console.log('Settings auto-saved successfully')
     } catch (error) {
       console.error('Error auto-saving settings:', error)
     }
@@ -70,24 +66,18 @@ const SettingsUpdatePreferences = () => {
 
   const handleReleaseTypeChange = (selected: unknown) => {
     const selectedOption = selected as TOption
-    console.log('Selected option:', selectedOption)
-    console.log('Current releaseTypes:', settings.releaseTypes)
-
+    
     if (selectedOption && selectedOption.value) {
       const newSelection = selectedOption.value
-      console.log('New selection:', newSelection)
-
+      
       // Only add if it's not already selected
       if (!settings.releaseTypes.includes(newSelection)) {
         const newSettings = {
           ...settings,
           releaseTypes: [...settings.releaseTypes, newSelection]
         }
-        console.log('Adding new item. New releaseTypes:', newSettings.releaseTypes)
         setSettings(newSettings)
         autoSave(newSettings)
-      } else {
-        console.log('Item already selected, not adding')
       }
     }
   }

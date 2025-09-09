@@ -42,6 +42,17 @@ const SettingsGeneral = () => {
       setDebugLoggingEnabled(enabled)
     } catch (error) {
       console.error('Error loading debug settings:', error)
+      // Retry after a short delay in case IPC handlers aren't ready yet
+      setTimeout(() => {
+        invoke('getDebugSettings')
+          .then(debugSettings => {
+            const enabled = debugSettings?.enableDebugLogging || false
+            setDebugLoggingEnabled(enabled)
+          })
+          .catch(retryError => {
+            console.error('Retry failed for debug settings:', retryError)
+          })
+      }, 1000)
     }
   }
 

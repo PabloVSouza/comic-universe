@@ -31,11 +31,11 @@ export class FallbackUpdateManager {
 
   private setupIpcHandlers(): void {
     // Handle download requests from renderer
-    ipcMain.handle('download-update-manually', async (event, options: FallbackUpdateOptions) => {
+    ipcMain.handle('download-update-manually', async (_event, options: FallbackUpdateOptions) => {
       return await this.downloadUpdateManually(options)
     })
 
-    ipcMain.handle('check-update-fallback', async (event) => {
+    ipcMain.handle('check-update-fallback', async (_event) => {
       return await this.checkForFallbackUpdate()
     })
   }
@@ -103,7 +103,7 @@ export class FallbackUpdateManager {
         return await this.downloadUpdateManually({
           downloadUrl: this.getDownloadUrl(updateInfo),
           version: updateInfo.version,
-          releaseNotes: updateInfo.releaseNotes,
+          releaseNotes: typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : undefined,
           isPrerelease:
             updateInfo.releaseName?.includes('beta') ||
             updateInfo.releaseName?.includes('alpha') ||
@@ -114,7 +114,7 @@ export class FallbackUpdateManager {
         return await this.downloadUpdateInBackground({
           downloadUrl: this.getDownloadUrl(updateInfo),
           version: updateInfo.version,
-          releaseNotes: updateInfo.releaseNotes,
+          releaseNotes: typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : undefined,
           isPrerelease:
             updateInfo.releaseName?.includes('beta') ||
             updateInfo.releaseName?.includes('alpha') ||
@@ -133,7 +133,7 @@ export class FallbackUpdateManager {
   /**
    * Attempt auto-update with timeout
    */
-  private async attemptAutoUpdate(updateInfo: UpdateInfo): Promise<UpdateFallbackResult> {
+  private async attemptAutoUpdate(_updateInfo: UpdateInfo): Promise<UpdateFallbackResult> {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Auto-update timeout'))
@@ -202,7 +202,7 @@ export class FallbackUpdateManager {
         return await this.downloadUpdateManually({
           downloadUrl: this.getDownloadUrl(updateInfo),
           version: updateInfo.version,
-          releaseNotes: updateInfo.releaseNotes,
+          releaseNotes: typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : undefined,
           isPrerelease:
             updateInfo.releaseName?.includes('beta') ||
             updateInfo.releaseName?.includes('alpha') ||
@@ -213,7 +213,7 @@ export class FallbackUpdateManager {
         return await this.downloadUpdateInBackground({
           downloadUrl: this.getDownloadUrl(updateInfo),
           version: updateInfo.version,
-          releaseNotes: updateInfo.releaseNotes,
+          releaseNotes: typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : undefined,
           isPrerelease:
             updateInfo.releaseName?.includes('beta') ||
             updateInfo.releaseName?.includes('alpha') ||
@@ -240,7 +240,7 @@ export class FallbackUpdateManager {
   ): Promise<UpdateFallbackResult> {
     try {
       // Show download progress dialog
-      const progressDialog = await dialog.showMessageBox(this.mainWindow, {
+      await dialog.showMessageBox(this.mainWindow, {
         type: 'info',
         title: 'Downloading Update',
         message: 'Opening download page...',

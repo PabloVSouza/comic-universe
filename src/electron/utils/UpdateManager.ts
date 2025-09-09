@@ -282,10 +282,6 @@ export class UpdateManager {
     autoUpdater.checkForUpdatesAndNotify()
   }
 
-  public checkForUpdatesAndNotify(): void {
-    autoUpdater.checkForUpdatesAndNotify()
-  }
-
   public getCurrentVersion(): string {
     return app.getVersion()
   }

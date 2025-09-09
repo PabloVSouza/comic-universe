@@ -10,7 +10,7 @@ const globals = require('globals')
 module.exports = [
   js.configs.recommended,
   {
-    ignores: ['dev-data/**/*', 'dist/**/*', 'out/**/*', 'node_modules/**/*']
+    ignores: ['dev-data/**/*', 'dist/**/*', 'out/**/*', 'node_modules/**/*', 'scripts/**/*']
   },
   {
     files: ['**/*.{js,jsx,ts,tsx}'],

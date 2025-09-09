@@ -206,11 +206,16 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     const db = this.getDb()
 
     await DebugLogger.log('createComic called with:', { comic, chapterList, repo })
-    await DebugLogger.log('chapterList type:', typeof chapterList, 'is array:', Array.isArray(chapterList))
+    await DebugLogger.log(
+      'chapterList type:',
+      typeof chapterList,
+      'is array:',
+      Array.isArray(chapterList)
+    )
     await DebugLogger.log('chapterList length:', chapterList?.length)
 
     // Create the comic - exclude id and chapters from the insert
-    const { id, chapters: _, ...comicData } = comic
+    const { id: _id, chapters: _chapters, ...comicData } = comic
 
     // Filter out undefined values and ensure required fields are present
     const cleanComicData = {
@@ -236,7 +241,13 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     // Create the chapters
     if (chapterList && chapterList.length > 0) {
       for (const chapter of chapterList) {
-        const { id: chapterId, comicId: _, Comic, ReadProgress, ...chapterData } = chapter
+        const {
+          id: _chapterId,
+          comicId: _comicId,
+          Comic: _Comic,
+          ReadProgress: _ReadProgress,
+          ...chapterData
+        } = chapter
 
         // Filter out undefined values for chapters
         const cleanChapterData = {
@@ -254,7 +265,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
         }
 
         await DebugLogger.log('Inserting chapter with data:', cleanChapterData)
-        
+
         try {
           await db.insert(chapters).values(cleanChapterData)
         } catch (error) {
@@ -345,7 +356,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async createChapter(chapter: IChapter): Promise<IChapter> {
     const db = this.getDb()
-    const { id, Comic, ReadProgress, ...chapterData } = chapter
+    const { id: _id, Comic: _Comic, ReadProgress: _ReadProgress, ...chapterData } = chapter
     const result = await db.insert(chapters).values(chapterData).returning()
     return result[0]
   }
@@ -353,7 +364,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async createChapters(chapters: IChapter[]): Promise<void> {
     const db = this.getDb()
     for (const chapter of chapters) {
-      const { id, Comic, ReadProgress, ...chapterData } = chapter
+      const { id: _id, Comic: _Comic, ReadProgress: _ReadProgress, ...chapterData } = chapter
       await db.insert(chapters).values(chapterData)
     }
   }

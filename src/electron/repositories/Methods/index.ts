@@ -30,6 +30,9 @@ class Methods {
       ...pluginsRepository.methods,
       ...settingsRepository.methods
     }
+
+    // Debug: Log available methods to verify debug settings are included
+    console.log('Available IPC methods:', Object.keys(this.methods).filter(key => key.includes('Debug')))
   }
 }
 

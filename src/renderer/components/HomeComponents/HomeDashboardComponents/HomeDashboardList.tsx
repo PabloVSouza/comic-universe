@@ -2,7 +2,11 @@ import DashboardListItem from 'components/HomeComponents/HomeDashboardComponents
 import LoadingOverlay from 'components/LoadingOverlay'
 import useGlobalStore from 'store/useGlobalStore'
 
-const HomeDashboardComicList = ({ additionalData }: { additionalData: IComic }): React.JSX.Element => {
+const HomeDashboardComicList = ({
+  additionalData
+}: {
+  additionalData: IComic
+}): React.JSX.Element => {
   const chapters = additionalData.chapters || []
   const { queue } = useGlobalStore()
 
@@ -13,7 +17,9 @@ const HomeDashboardComicList = ({ additionalData }: { additionalData: IComic }):
   return (
     <ul className="grow overflow-auto flex flex-col items-start gap-px">
       <LoadingOverlay isLoading={inQueue} />
-      {additionalData?.chapters?.map((item) => <DashboardListItem key={item.id} item={item} />)}
+      {additionalData?.chapters?.map((item) => (
+        <DashboardListItem key={item.id} item={item} />
+      ))}
     </ul>
   )
 }

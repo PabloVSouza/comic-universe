@@ -19,7 +19,8 @@ const queryClient = new QueryClient()
 
 // Apply theme immediately on app startup to prevent flash
 const applyInitialTheme = () => {
-  const savedTheme = localStorage.getItem('comic-universe-dev') || localStorage.getItem('comic-universe')
+  const savedTheme =
+    localStorage.getItem('comic-universe-dev') || localStorage.getItem('comic-universe')
   if (savedTheme) {
     try {
       const parsed = JSON.parse(savedTheme)

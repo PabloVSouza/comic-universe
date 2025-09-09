@@ -9,7 +9,7 @@ on:
       force_check:
         description: 'Force certificate check regardless of schedule'
         required: false
-        default: 'false'
+        default: false
         type: boolean
 
 jobs:

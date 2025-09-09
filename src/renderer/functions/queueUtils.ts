@@ -4,7 +4,7 @@ export const addChaptersToQueue = async (
   invoke: (method: string, params?: unknown) => Promise<unknown>
 ): Promise<void> => {
   if (comicList && comicList.length > 0) {
-    const noPageChapters = await invoke('dbGetAllChaptersNoPage') as IChapter[]
+    const noPageChapters = (await invoke('dbGetAllChaptersNoPage')) as IChapter[]
     noPageChapters.forEach((chapter) => addToQueue(chapter))
   }
 }

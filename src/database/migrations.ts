@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm'
-import { type BetterSQLite3Database } from 'better-sqlite3'
+import { type BetterSQLite3Database } from 'drizzle-orm/better-sqlite3'
 
 export const migrations = [
   {

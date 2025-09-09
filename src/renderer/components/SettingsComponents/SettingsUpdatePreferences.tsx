@@ -66,13 +66,12 @@ const SettingsUpdatePreferences = () => {
   }
 
   const handleReleaseTypeChange = (selected: unknown) => {
-    const selectedArray = selected as TOption[]
-    console.log('Selected array:', selectedArray)
+    const selectedOption = selected as TOption
+    console.log('Selected option:', selectedOption)
     console.log('Current releaseTypes:', settings.releaseTypes)
     
-    if (selectedArray && selectedArray.length > 0) {
-      // Get the newly selected item (the last one in the array)
-      const newSelection = selectedArray[selectedArray.length - 1].value
+    if (selectedOption && selectedOption.value) {
+      const newSelection = selectedOption.value
       console.log('New selection:', newSelection)
       
       // Only add if it's not already selected
@@ -141,7 +140,6 @@ const SettingsUpdatePreferences = () => {
           {t('Settings.general.releaseTypes')}
         </label>
         <Select
-          isMulti
           value={null}
           onChange={handleReleaseTypeChange}
           options={releaseTypeOptions}

@@ -93,7 +93,7 @@ const Reader = (): React.JSX.Element => {
       }
 
       if (page === totalPages) {
-        if (chapterIndex === chapters.length - 1) navigate('/')
+        if (chapterIndex === (chapters?.length || 0) - 1) navigate('/')
 
         if (chapterIndex < (activeComic.chapters?.length || 0) - 1)
           navigate(`/reader/${comicId}/${activeComic.chapters?.[chapterIndex + 1]?.id}`)

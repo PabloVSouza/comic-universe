@@ -26,10 +26,12 @@ const HomeDashboardNavBar = ({
         message: 'No new chapters'
       })
     } else {
-      insertChapters({
-        newChapters,
-        comicId: comic.id
-      })
+      if (comic.id) {
+        insertChapters({
+          newChapters,
+          comicId: comic.id
+        })
+      }
     }
   }
 

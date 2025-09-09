@@ -22,7 +22,8 @@ export class DatabaseFactory implements IDatabaseFactory {
     return DatabaseFactory.instance
   }
 
-  createRepository(): IDatabaseRepository {
+  createRepository(_config: IDatabaseConfig): IDatabaseRepository {
+    // Create repository based on current ORM
     switch (this.currentORM) {
       case 'drizzle':
         return new DrizzleDatabaseRepository()

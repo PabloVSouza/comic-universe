@@ -119,12 +119,6 @@ class AppRepository {
       return await this.settingsRepository.methods.updateUpdateSettings(
         args.updateSettings as Partial<UpdateSettings>
       )
-    },
-
-    // App version method
-    getAppVersion: async () => {
-      const appData = this.methods.getAppData()
-      return appData.version
     }
   }
 }

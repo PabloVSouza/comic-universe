@@ -72,11 +72,11 @@ const SettingsUpdatePreferences = () => {
     const selectedOption = selected as TOption
     console.log('Selected option:', selectedOption)
     console.log('Current releaseTypes:', settings.releaseTypes)
-    
+
     if (selectedOption && selectedOption.value) {
       const newSelection = selectedOption.value
       console.log('New selection:', newSelection)
-      
+
       // Only add if it's not already selected
       if (!settings.releaseTypes.includes(newSelection)) {
         const newSettings = {

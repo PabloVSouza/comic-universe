@@ -3,7 +3,7 @@ import pathLib from 'path'
 import fs from 'fs'
 import { is } from '@electron-toolkit/utils'
 import { autoUpdater } from 'electron-updater'
-import SettingsRepository, { LanguageSettings } from './SettingsRepository'
+import SettingsRepository, { LanguageSettings, UpdateSettings } from './SettingsRepository'
 
 class AppRepository {
   private settingsRepository: SettingsRepository
@@ -108,6 +108,23 @@ class AppRepository {
       return await this.settingsRepository.methods.updateLanguageSettings(
         args.languageSettings as Partial<LanguageSettings>
       )
+    },
+
+    // Update settings methods
+    getUpdateSettings: async () => {
+      return await this.settingsRepository.methods.getUpdateSettings()
+    },
+
+    updateUpdateSettings: async (args: { updateSettings: unknown }) => {
+      return await this.settingsRepository.methods.updateUpdateSettings(
+        args.updateSettings as Partial<UpdateSettings>
+      )
+    },
+
+    // App version method
+    getAppVersion: async () => {
+      const appData = this.methods.getAppData()
+      return appData.version
     }
   }
 }

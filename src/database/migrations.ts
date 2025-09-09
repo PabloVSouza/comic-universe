@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm'
-import { type BetterSQLite3Database } from 'better-sqlite3'
+import { type BetterSQLite3Database } from 'drizzle-orm/better-sqlite3'
 
 export const migrations = [
   {
@@ -83,9 +83,9 @@ export async function runMigrations(db: BetterSQLite3Database<Record<string, unk
   `)
 
   // Get current version
-  const currentVersionResult = await db.get(sql`
+  const currentVersionResult = (await db.get(sql`
     SELECT MAX(version) as version FROM schema_migrations
-  `)
+  `)) as { version: number } | undefined
 
   const currentVersion = currentVersionResult?.version || 0
   console.log(`Current database version: ${currentVersion}`)

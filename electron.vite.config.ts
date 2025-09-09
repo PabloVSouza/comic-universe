@@ -18,7 +18,8 @@ export default defineConfig({
         repositories: resolve('src/electron/repositories'),
         scripts: resolve('src/electron/scripts'),
         utils: resolve('src/electron/utils'),
-        windows: resolve('src/electron/windows')
+        windows: resolve('src/electron/windows'),
+        database: resolve('src/database')
       }
     }
   },

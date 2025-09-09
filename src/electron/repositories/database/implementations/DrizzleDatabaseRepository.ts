@@ -1,10 +1,10 @@
 import { eq, and, isNull, asc } from 'drizzle-orm'
 import { IDatabaseRepository, IMigration } from '../interfaces/IDatabaseRepository'
-import { comics, chapters, users, readProgress, plugins } from '../../../../database/schema'
+import { comics, chapters, users, readProgress, plugins } from 'database/schema'
 import { sql } from 'drizzle-orm'
-import Database, { type BetterSQLite3Database } from 'better-sqlite3'
-import { drizzle } from 'drizzle-orm/better-sqlite3'
-import DebugLogger from '../../../utils/DebugLogger'
+import Database from 'better-sqlite3'
+import { drizzle, type BetterSQLite3Database } from 'drizzle-orm/better-sqlite3'
+import DebugLogger from 'utils/DebugLogger'
 
 export class DrizzleDatabaseRepository implements IDatabaseRepository {
   private db: BetterSQLite3Database<Record<string, unknown>> | null = null
@@ -75,9 +75,9 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     `)
 
     // Get current version
-    const currentVersionResult = await db.get(sql`
+    const currentVersionResult = (await db.get(sql`
       SELECT MAX(version) as version FROM schema_migrations
-    `)
+    `)) as { version: number } | undefined
 
     const currentVersion = currentVersionResult?.version || 0
     console.log(`Current database version: ${currentVersion}`)
@@ -187,30 +187,36 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   // Comic operations
   async getAllComics(): Promise<IComic[]> {
     const db = this.getDb()
-    return await db.select().from(comics).orderBy(asc(comics.name))
+    const results = await db.select().from(comics).orderBy(asc(comics.name))
+    return results as IComic[]
   }
 
   async getComicById(id: number): Promise<IComic | undefined> {
     const db = this.getDb()
     const result = await db.select().from(comics).where(eq(comics.id, id)).limit(1)
-    return result[0]
+    return result[0] as IComic | undefined
   }
 
   async getComicBySiteId(siteId: string): Promise<IComic | undefined> {
     const db = this.getDb()
     const result = await db.select().from(comics).where(eq(comics.siteId, siteId)).limit(1)
-    return result[0]
+    return result[0] as IComic | undefined
   }
 
   async createComic(comic: IComic, chapterList: IChapter[], repo: string): Promise<void> {
     const db = this.getDb()
 
     await DebugLogger.log('createComic called with:', { comic, chapterList, repo })
-    await DebugLogger.log('chapterList type:', typeof chapterList, 'is array:', Array.isArray(chapterList))
+    await DebugLogger.log(
+      'chapterList type:',
+      typeof chapterList,
+      'is array:',
+      Array.isArray(chapterList)
+    )
     await DebugLogger.log('chapterList length:', chapterList?.length)
 
     // Create the comic - exclude id and chapters from the insert
-    const { id, chapters: _, ...comicData } = comic
+    const { id: _id, chapters: _chapters, ...comicData } = comic
 
     // Filter out undefined values and ensure required fields are present
     const cleanComicData = {
@@ -236,7 +242,13 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     // Create the chapters
     if (chapterList && chapterList.length > 0) {
       for (const chapter of chapterList) {
-        const { id: chapterId, comicId: _, Comic, ReadProgress, ...chapterData } = chapter
+        const {
+          id: _chapterId,
+          comicId: _comicId,
+          Comic: _Comic,
+          ReadProgress: _ReadProgress,
+          ...chapterData
+        } = chapter
 
         // Filter out undefined values for chapters
         const cleanChapterData = {
@@ -254,7 +266,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
         }
 
         await DebugLogger.log('Inserting chapter with data:', cleanChapterData)
-        
+
         try {
           await db.insert(chapters).values(cleanChapterData)
         } catch (error) {
@@ -269,7 +281,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async updateComic(id: number, comic: Partial<IComic>): Promise<IComic | undefined> {
     const db = this.getDb()
     const result = await db.update(comics).set(comic).where(eq(comics.id, id)).returning()
-    return result[0]
+    return result[0] as IComic | undefined
   }
 
   async deleteComic(id: number): Promise<void> {
@@ -345,16 +357,31 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async createChapter(chapter: IChapter): Promise<IChapter> {
     const db = this.getDb()
-    const { id, Comic, ReadProgress, ...chapterData } = chapter
-    const result = await db.insert(chapters).values(chapterData).returning()
-    return result[0]
+    const { id: _id, Comic: _Comic, ReadProgress: _ReadProgress, ...chapterData } = chapter
+
+    // Ensure comicId is defined
+    if (!chapterData.comicId) {
+      throw new Error('comicId is required for chapter creation')
+    }
+
+    const result = await db
+      .insert(chapters)
+      .values(chapterData as any)
+      .returning()
+    return result[0] as IChapter
   }
 
-  async createChapters(chapters: IChapter[]): Promise<void> {
+  async createChapters(chapterList: IChapter[]): Promise<void> {
     const db = this.getDb()
-    for (const chapter of chapters) {
-      const { id, Comic, ReadProgress, ...chapterData } = chapter
-      await db.insert(chapters).values(chapterData)
+    for (const chapter of chapterList) {
+      const { id: _id, Comic: _Comic, ReadProgress: _ReadProgress, ...chapterData } = chapter
+
+      // Ensure comicId is defined
+      if (!chapterData.comicId) {
+        throw new Error('comicId is required for chapter creation')
+      }
+
+      await db.insert(chapters).values(chapterData as any)
     }
   }
 

@@ -7,7 +7,7 @@ class DebugLogger {
 
   private static async initialize() {
     if (this.initialized) return
-    
+
     try {
       if (!this.settingsRepository) {
         this.settingsRepository = new SettingsRepository()

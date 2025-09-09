@@ -2,6 +2,7 @@
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
   "include": [
     "src/electron/**/*",
+    "src/database/**/*",
     "electron.vite.config.*",
     "src/@types/*.d.ts",
     "src/**/*.d.ts"
@@ -19,6 +20,7 @@
       "utils": ["./src/electron/utils/utils"],
       "utils/*":["./src/electron/utils/*"],
       "windows/*":["./src/electron/windows/*"],
+      "database/*": ["./src/database/*"]
     }
   }
 }

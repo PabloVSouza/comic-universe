@@ -1,0 +1,47 @@
+# Setup Consistent Certificate for Auto-Updater Compatibility
+# This workflow step can be reused across all build workflows
+
+name: Setup Consistent Certificate
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: 'Operating system'
+        required: true
+        type: string
+    outputs:
+      cert-setup:
+        description: 'Certificate setup status'
+        value: ${{ jobs.setup-cert.outputs.status }}
+
+jobs:
+  setup-cert:
+    runs-on: ${{ inputs.os }}
+    outputs:
+      status: ${{ steps.setup.outputs.status }}
+    steps:
+      - name: Setup Consistent Certificate
+        id: setup
+        run: |
+          # Create certificates directory
+          mkdir -p certificates
+          
+          # Decode the base64 certificate from GitHub Secrets
+          echo "${{ secrets.CSC_LINK_BASE64 }}" | base64 -d > certificates/cert.p12
+          
+          # Set environment variables for electron-builder
+          echo "CSC_LINK=certificates/cert.p12" >> $GITHUB_ENV
+          echo "CSC_KEY_PASSWORD=${{ secrets.CSC_KEY_PASSWORD }}" >> $GITHUB_ENV
+          
+          # For macOS, import certificate to keychain
+          if [[ "${{ inputs.os }}" == "macos-latest" ]]; then
+            security create-keychain -p "" build.keychain
+            security default-keychain -s build.keychain
+            security unlock-keychain -p "" build.keychain
+            security import certificates/cert.p12 -k build.keychain -P "${{ secrets.CSC_KEY_PASSWORD }}" -T /usr/bin/codesign
+            security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+          fi
+          
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "✅ Consistent certificate setup completed"

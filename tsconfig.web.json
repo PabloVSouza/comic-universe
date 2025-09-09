@@ -13,6 +13,7 @@
       "scripts/*": ["../../src/electron/scripts/*"],
       "utils/*": ["../../src/electron/utils/*"],
       "windows/*": ["../../src/electron/windows/*"],
+      "database/*": ["../../src/database/*"],
 
       "assets/*": ["./assets/*"],
       "components/*": ["./components/*"],

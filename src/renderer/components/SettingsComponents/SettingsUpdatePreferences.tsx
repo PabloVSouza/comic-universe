@@ -66,10 +66,10 @@ const SettingsUpdatePreferences = () => {
 
   const handleReleaseTypeChange = (selected: unknown) => {
     const selectedOption = selected as TOption
-    
+
     if (selectedOption && selectedOption.value) {
       const newSelection = selectedOption.value
-      
+
       // Only add if it's not already selected
       if (!settings.releaseTypes.includes(newSelection)) {
         const newSettings = {

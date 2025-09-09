@@ -21,7 +21,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install Dependencies
         run: npm install
@@ -78,7 +78,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install Dependencies
         run: npm install
@@ -133,21 +133,52 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install Dependencies
         run: npm install
 
-      - name: Generate Self-Signed Certificate
+      - name: Generate Consistent Self-Signed Certificate
         run: |
           # Create certificates directory
           mkdir -p certificates
 
-          # Generate self-signed certificate
-          openssl req -x509 -newkey rsa:2048 -keyout certificates/cert-key.pem -out certificates/cert.pem -days 365 -nodes -subj "/C=US/ST=CA/L=San Francisco/O=Comic Universe/CN=Comic Universe"
+          # Use a fixed seed for consistent certificate generation
+          # This ensures the same certificate is generated every time
+          CERT_SEED="comic-universe-consistent-cert-2024"
+          
+          # Create config file for certificate with proper key usage
+          cat > certificates/cert.conf << EOF
+          [req]
+          distinguished_name = req_distinguished_name
+          x509_extensions = v3_req
+          prompt = no
+
+          [req_distinguished_name]
+          C = US
+          ST = CA
+          L = San Francisco
+          O = Comic Universe
+          CN = Comic Universe
+
+          [v3_req]
+          keyUsage = critical, digitalSignature, keyEncipherment
+          extendedKeyUsage = critical, codeSigning
+          subjectKeyIdentifier = hash
+          EOF
+
+          # Generate self-signed certificate with consistent seed
+          openssl req -x509 -newkey rsa:2048 -keyout certificates/cert-key.pem -out certificates/cert.pem -days 365 -nodes -config certificates/cert.conf -extensions v3_req -subj "/C=US/ST=CA/L=San Francisco/O=Comic Universe/CN=Comic Universe" -passin pass:$CERT_SEED
 
           # Convert to PKCS#12 format
           openssl pkcs12 -export -out certificates/cert.p12 -inkey certificates/cert-key.pem -in certificates/cert.pem -name "Comic Universe" -passout pass:comicuniverse
+
+          # Import certificate into keychain for macOS code signing
+          security create-keychain -p "" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security import certificates/cert.p12 -k build.keychain -P comicuniverse -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
 
           # Set environment variables for electron-builder
           echo "CSC_LINK=certificates/cert.p12" >> $GITHUB_ENV

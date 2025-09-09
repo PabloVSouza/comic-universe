@@ -1,0 +1,234 @@
+name: Certificate Expiration Monitor
+
+on:
+  schedule:
+    # Run every Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      force_check:
+        description: 'Force certificate check regardless of schedule'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  check-certificate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check Certificate Expiration
+        id: cert-check
+        run: |
+          echo "🔍 Checking certificate expiration..."
+
+          # Create a temporary certificate to check expiration
+          mkdir -p temp-cert
+
+          # Generate a test certificate with the same parameters
+          cat > temp-cert/cert.conf << EOF
+          [req]
+          distinguished_name = req_distinguished_name
+          x509_extensions = v3_req
+          prompt = no
+
+          [req_distinguished_name]
+          C = US
+          ST = CA
+          L = San Francisco
+          O = Comic Universe
+          CN = Comic Universe
+
+          [v3_req]
+          keyUsage = critical, digitalSignature, keyEncipherment
+          extendedKeyUsage = critical, codeSigning
+          subjectKeyIdentifier = hash
+          EOF
+
+          # Generate test certificate
+          openssl req -x509 -newkey rsa:2048 -keyout temp-cert/cert-key.pem -out temp-cert/cert.pem -days 365 -nodes -config temp-cert/cert.conf -extensions v3_req -subj "/C=US/ST=CA/L=San Francisco/O=Comic Universe/CN=Comic Universe"
+
+          # Convert to PKCS#12
+          openssl pkcs12 -export -out temp-cert/cert.p12 -inkey temp-cert/cert-key.pem -in temp-cert/cert.pem -name "Comic Universe" -passout pass:comicuniverse
+
+          # Check expiration
+          CERT_EXPIRY=$(openssl pkcs12 -in temp-cert/cert.p12 -passin pass:comicuniverse -nokeys -clcerts | openssl x509 -noout -enddate | cut -d= -f2)
+          CERT_EXPIRY_EPOCH=$(date -d "$CERT_EXPIRY" +%s)
+          CURRENT_EPOCH=$(date +%s)
+          DAYS_UNTIL_EXPIRY=$(( (CERT_EXPIRY_EPOCH - CURRENT_EPOCH) / 86400 ))
+
+          echo "Certificate expires on: $CERT_EXPIRY"
+          echo "Days until expiry: $DAYS_UNTIL_EXPIRY"
+
+          # Set outputs
+          echo "expiry_date=$CERT_EXPIRY" >> $GITHUB_OUTPUT
+          echo "days_until_expiry=$DAYS_UNTIL_EXPIRY" >> $GITHUB_OUTPUT
+
+          # Determine status
+          if [[ $DAYS_UNTIL_EXPIRY -gt 30 ]]; then
+            echo "status=healthy" >> $GITHUB_OUTPUT
+            echo "message=Certificate is valid for $DAYS_UNTIL_EXPIRY days" >> $GITHUB_OUTPUT
+          elif [[ $DAYS_UNTIL_EXPIRY -gt 0 ]]; then
+            echo "status=warning" >> $GITHUB_OUTPUT
+            echo "message=Certificate expires in $DAYS_UNTIL_EXPIRY days - renewal recommended" >> $GITHUB_OUTPUT
+          else
+            echo "status=critical" >> $GITHUB_OUTPUT
+            echo "message=Certificate has expired $(( -DAYS_UNTIL_EXPIRY )) days ago - immediate renewal required" >> $GITHUB_OUTPUT
+          fi
+
+          # Clean up
+          rm -rf temp-cert
+
+      - name: Create Issue for Certificate Renewal
+        if: steps.cert-check.outputs.status == 'warning' || steps.cert-check.outputs.status == 'critical'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ steps.cert-check.outputs.status }}';
+            const message = '${{ steps.cert-check.outputs.message }}';
+            const expiryDate = '${{ steps.cert-check.outputs.expiry_date }}';
+            const daysUntilExpiry = '${{ steps.cert-check.outputs.days_until_expiry }}';
+
+            const title = status === 'critical' 
+              ? '🚨 URGENT: Code Signing Certificate Has Expired'
+              : '⚠️ Code Signing Certificate Expires Soon';
+
+            const body = `## ${title}
+
+            **Status:** ${status.toUpperCase()}
+            **Message:** ${message}
+            **Expiry Date:** ${expiryDate}
+            **Days Until Expiry:** ${daysUntilExpiry}
+
+            ## Impact
+
+            ${status === 'critical' ? `
+            - ❌ **New builds will fail** - CI/CD pipeline cannot sign applications
+            - ❌ **Auto-updater is broken** - Users cannot update to new versions
+            - ❌ **Security warnings** - Users see expired certificate warnings
+            - ❌ **Installation blocked** - New installations may be blocked
+            ` : `
+            - ⚠️ **Auto-updater will break** when certificate expires
+            - ⚠️ **New builds will fail** after expiration
+            - ⚠️ **Users will see security warnings**
+            `}
+
+            ## Solution
+
+            1. **Run the renewal script:**
+               \`\`\`bash
+               ./scripts/renew-certificate.sh
+               \`\`\`
+
+            2. **Update GitHub Secrets:**
+               - Go to repository settings > Secrets and variables > Actions
+               - Update \`CSC_LINK_BASE64\` with the new certificate
+               - Keep \`CSC_KEY_PASSWORD\` as \`comicuniverse\`
+
+            3. **Test the fix:**
+               - Create a new build to verify signing works
+               - Test auto-updater functionality
+
+            ## Prevention
+
+            - Set up calendar reminders for certificate renewal
+            - Consider upgrading to official certificates for production
+            - Monitor certificate expiration regularly
+
+            ---
+            *This issue was automatically created by the Certificate Expiration Monitor workflow.*`;
+
+            // Check if an issue already exists
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'certificate-expiration'
+            });
+
+            const hasExistingIssue = existingIssues.data.some(issue => 
+              issue.title.includes('Code Signing Certificate')
+            );
+
+            if (!hasExistingIssue) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['certificate-expiration', 'urgent', 'maintenance']
+              });
+              
+              console.log('Certificate expiration issue created');
+            } else {
+              console.log('Certificate expiration issue already exists');
+            }
+
+      - name: Comment on Existing Issue
+        if: steps.cert-check.outputs.status == 'critical'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const message = '${{ steps.cert-check.outputs.message }}';
+            const expiryDate = '${{ steps.cert-check.outputs.expiry_date }}';
+            const daysUntilExpiry = '${{ steps.cert-check.outputs.days_until_expiry }}';
+
+            // Find existing certificate expiration issues
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'certificate-expiration'
+            });
+
+            for (const issue of existingIssues.data) {
+              if (issue.title.includes('Code Signing Certificate')) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: `🚨 **CRITICAL UPDATE**
+                  
+                  The certificate has now **EXPIRED**!
+                  
+                  - **Expiry Date:** ${expiryDate}
+                  - **Days Overdue:** ${Math.abs(parseInt(daysUntilExpiry))}
+                  
+                  **Immediate action required:**
+                  1. Run \`./scripts/renew-certificate.sh\`
+                  2. Update GitHub Secrets
+                  3. Create new build to test
+                  
+                  *This comment was automatically added by the Certificate Expiration Monitor.*`
+                });
+                break;
+              }
+            }
+
+      - name: Summary
+        run: |
+          echo "## Certificate Status Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** ${{ steps.cert-check.outputs.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Message:** ${{ steps.cert-check.outputs.message }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Expiry Date:** ${{ steps.cert-check.outputs.expiry_date }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Days Until Expiry:** ${{ steps.cert-check.outputs.days_until_expiry }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ steps.cert-check.outputs.status }}" == "healthy" ]]; then
+            echo "✅ Certificate is healthy and valid" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ steps.cert-check.outputs.status }}" == "warning" ]]; then
+            echo "⚠️ Certificate expires soon - renewal recommended" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "🚨 Certificate has expired - immediate action required" >> $GITHUB_STEP_SUMMARY
+          fi

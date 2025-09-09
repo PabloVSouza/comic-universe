@@ -17,8 +17,7 @@ const usePersistStore = create<IusePersistStore>()(
       theme: 'dark',
       repo: {} as TOption,
 
-      switchTheme: (theme) =>
-        set({ theme: theme || get().theme === 'dark' ? 'light' : 'dark' }),
+      switchTheme: (theme) => set({ theme: theme || get().theme === 'dark' ? 'light' : 'dark' }),
 
       setRepo: (repo) => set({ repo })
     }),

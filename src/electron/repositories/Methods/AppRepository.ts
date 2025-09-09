@@ -116,6 +116,8 @@ class AppRepository {
     },
 
     updateUpdateSettings: async (args: { updateSettings: unknown }) => {
+      console.log('AppRepository updateUpdateSettings received args:', args)
+      console.log('AppRepository passing to SettingsRepository:', args.updateSettings)
       return await this.settingsRepository.methods.updateUpdateSettings(
         args.updateSettings as Partial<UpdateSettings>
       )

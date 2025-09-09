@@ -23,6 +23,9 @@
     "setup:codesigning": "./scripts/setup-codesigning.sh",
     "setup:github-secrets": "./scripts/setup-github-secrets.sh",
     "create:release": "./scripts/create-release.sh",
+    "cert:check": "./scripts/renew-certificate.sh",
+    "cert:setup": "./scripts/setup-consistent-cert.sh",
+    "test:fallback": "node scripts/test-fallback-update.js",
     "build:win:unsigned": "CSC_LINK=\"\" npm run build:win",
     "build:mac:unsigned": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run build:mac"
   },

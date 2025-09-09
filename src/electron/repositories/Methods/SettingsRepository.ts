@@ -117,8 +117,21 @@ class SettingsRepository {
     updateUpdateSettings: async (
       updateSettings: Partial<UpdateSettings>
     ): Promise<UpdateSettings> => {
-      const updatedSettings = await this.methods.updateSettings('update', updateSettings)
-      return updatedSettings.update
+      try {
+        const currentSettings = await this.methods.loadSettings()
+        const updatedSettings = {
+          ...currentSettings,
+          update: {
+            ...currentSettings.update,
+            ...updateSettings
+          }
+        }
+        await this.methods.saveSettings(updatedSettings)
+        return updatedSettings.update
+      } catch (error) {
+        console.error('Error updating update settings:', error)
+        throw error
+      }
     },
 
     // Get language settings specifically

@@ -15,12 +15,18 @@ export interface VersionInfo {
   isOldVersion: boolean
 }
 
+interface SettingsRepository {
+  methods: {
+    getUpdateSettings(): Promise<UpdateSettings | null>
+  }
+}
+
 export class UpdateManager {
   private mainWindow: BrowserWindow
-  private settingsRepository: any
+  private settingsRepository: SettingsRepository
   private updateSettings: UpdateSettings | null = null
 
-  constructor(mainWindow: BrowserWindow, settingsRepository: any) {
+  constructor(mainWindow: BrowserWindow, settingsRepository: SettingsRepository) {
     this.mainWindow = mainWindow
     this.settingsRepository = settingsRepository
     this.setupAutoUpdater()
@@ -50,7 +56,12 @@ export class UpdateManager {
     }
 
     try {
-      this.updateSettings = await this.settingsRepository.methods.getUpdateSettings()
+      const settings = await this.settingsRepository.methods.getUpdateSettings()
+      this.updateSettings = settings || {
+        autoUpdate: true,
+        optInNonStable: false,
+        releaseTypes: ['stable']
+      }
       return this.updateSettings
     } catch (error) {
       console.error('Error loading update settings:', error)
@@ -66,8 +77,7 @@ export class UpdateManager {
   private getVersionInfo(currentVersion: string, latestVersion: string): VersionInfo {
     // Parse version dates (this would need to be implemented based on your versioning scheme)
     const currentDate = this.getVersionReleaseDate(currentVersion)
-    const latestDate = this.getVersionReleaseDate(latestVersion)
-    
+
     const daysSinceRelease = (Date.now() - currentDate) / (1000 * 60 * 60 * 24)
     const isOldVersion = daysSinceRelease > 365 // More than 1 year old
 
@@ -83,14 +93,14 @@ export class UpdateManager {
     // This is a simplified implementation
     // In reality, you'd need to map versions to their release dates
     // For now, we'll use a heuristic based on version numbers
-    
+
     if (version.includes('alpha')) {
-      return Date.now() - (30 * 24 * 60 * 60 * 1000) // 30 days ago
+      return Date.now() - 30 * 24 * 60 * 60 * 1000 // 30 days ago
     } else if (version.includes('beta')) {
-      return Date.now() - (60 * 24 * 60 * 60 * 1000) // 60 days ago
+      return Date.now() - 60 * 24 * 60 * 60 * 1000 // 60 days ago
     } else {
       // Assume stable versions are older
-      return Date.now() - (365 * 24 * 60 * 60 * 1000) // 1 year ago
+      return Date.now() - 365 * 24 * 60 * 60 * 1000 // 1 year ago
     }
   }
 
@@ -115,7 +125,9 @@ export class UpdateManager {
     }
 
     if (!shouldShowUpdate) {
-      console.log(`Update available (${info.version}) but user preferences don't allow this type of update`)
+      console.log(
+        `Update available (${info.version}) but user preferences don't allow this type of update`
+      )
       return
     }
 
@@ -128,24 +140,26 @@ export class UpdateManager {
   }
 
   private showOldVersionUpdateDialog(versionInfo: VersionInfo, updateInfo: UpdateInfo): void {
-    dialog.showMessageBox(this.mainWindow, {
-      type: 'warning',
-      title: 'Update Available (Manual Update Recommended)',
-      message: 'Your version is quite old and may require a manual update',
-      detail: `You're running version ${versionInfo.current} (${versionInfo.daysSinceRelease} days old). The latest version is ${versionInfo.latest}.\n\nDue to the age of your version, we recommend downloading the update manually to avoid potential compatibility issues.`,
-      buttons: ['Download Manually', 'Try Auto-Update', 'Later'],
-      defaultId: 0,
-      cancelId: 2
-    }).then((result) => {
-      if (result.response === 0) {
-        // Download manually
-        this.openManualDownload()
-      } else if (result.response === 1) {
-        // Try auto-update
-        this.proceedWithAutoUpdate(updateInfo)
-      }
-      // If response === 2, user chose "Later"
-    })
+    dialog
+      .showMessageBox(this.mainWindow, {
+        type: 'warning',
+        title: 'Update Available (Manual Update Recommended)',
+        message: 'Your version is quite old and may require a manual update',
+        detail: `You're running version ${versionInfo.current} (${versionInfo.daysSinceRelease} days old). The latest version is ${versionInfo.latest}.\n\nDue to the age of your version, we recommend downloading the update manually to avoid potential compatibility issues.`,
+        buttons: ['Download Manually', 'Try Auto-Update', 'Later'],
+        defaultId: 0,
+        cancelId: 2
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          // Download manually
+          this.openManualDownload()
+        } else if (result.response === 1) {
+          // Try auto-update
+          this.proceedWithAutoUpdate(updateInfo)
+        }
+        // If response === 2, user chose "Later"
+      })
   }
 
   private showNormalUpdateDialog(updateInfo: UpdateInfo): void {
@@ -168,25 +182,27 @@ export class UpdateManager {
   }
 
   private handleUpdateDownloaded(info: UpdateInfo): void {
-    dialog.showMessageBox(this.mainWindow, {
-      type: 'info',
-      title: 'Update Ready',
-      message: 'Update downloaded. The application will restart to apply the update.',
-      detail: `Version ${info.version} has been downloaded and is ready to install.`,
-      buttons: ['Restart Now', 'Later']
-    }).then((result) => {
-      if (result.response === 0) {
-        autoUpdater.quitAndInstall()
-      }
-    })
+    dialog
+      .showMessageBox(this.mainWindow, {
+        type: 'info',
+        title: 'Update Ready',
+        message: 'Update downloaded. The application will restart to apply the update.',
+        detail: `Version ${info.version} has been downloaded and is ready to install.`,
+        buttons: ['Restart Now', 'Later']
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          autoUpdater.quitAndInstall()
+        }
+      })
   }
 
   private handleUpdateError(error: Error): void {
     console.error('Auto-updater error:', error)
-    
+
     // Analyze the error to determine the best response
     const errorMessage = error.message.toLowerCase()
-    
+
     if (this.isCertificateError(errorMessage)) {
       this.handleCertificateError(error)
     } else if (this.isVersionCompatibilityError(errorMessage)) {
@@ -199,68 +215,80 @@ export class UpdateManager {
   }
 
   private isCertificateError(errorMessage: string): boolean {
-    return errorMessage.includes('code signature') ||
-           errorMessage.includes('certificate') ||
-           errorMessage.includes('expired') ||
-           errorMessage.includes('signature')
+    return (
+      errorMessage.includes('code signature') ||
+      errorMessage.includes('certificate') ||
+      errorMessage.includes('expired') ||
+      errorMessage.includes('signature')
+    )
   }
 
   private isVersionCompatibilityError(errorMessage: string): boolean {
-    return errorMessage.includes('version') ||
-           errorMessage.includes('compatibility') ||
-           errorMessage.includes('incompatible')
+    return (
+      errorMessage.includes('version') ||
+      errorMessage.includes('compatibility') ||
+      errorMessage.includes('incompatible')
+    )
   }
 
   private isNetworkError(errorMessage: string): boolean {
-    return errorMessage.includes('network') ||
-           errorMessage.includes('connection') ||
-           errorMessage.includes('timeout') ||
-           errorMessage.includes('dns')
+    return (
+      errorMessage.includes('network') ||
+      errorMessage.includes('connection') ||
+      errorMessage.includes('timeout') ||
+      errorMessage.includes('dns')
+    )
   }
 
   private handleCertificateError(error: Error): void {
-    dialog.showMessageBox(this.mainWindow, {
-      type: 'error',
-      title: 'Update Failed - Certificate Issue',
-      message: 'The automatic update failed due to a certificate issue.',
-      detail: `This usually happens when your version is very old. Please download the latest version manually from our website.\n\nError: ${error.message}`,
-      buttons: ['Download Manually', 'OK']
-    }).then((result) => {
-      if (result.response === 0) {
-        this.openManualDownload()
-      }
-    })
+    dialog
+      .showMessageBox(this.mainWindow, {
+        type: 'error',
+        title: 'Update Failed - Certificate Issue',
+        message: 'The automatic update failed due to a certificate issue.',
+        detail: `This usually happens when your version is very old. Please download the latest version manually from our website.\n\nError: ${error.message}`,
+        buttons: ['Download Manually', 'OK']
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          this.openManualDownload()
+        }
+      })
   }
 
   private handleVersionCompatibilityError(error: Error): void {
-    dialog.showMessageBox(this.mainWindow, {
-      type: 'error',
-      title: 'Update Failed - Version Compatibility',
-      message: 'Your version is too old for automatic updates.',
-      detail: `Please download the latest version manually. Your data will be preserved.\n\nError: ${error.message}`,
-      buttons: ['Download Manually', 'OK']
-    }).then((result) => {
-      if (result.response === 0) {
-        this.openManualDownload()
-      }
-    })
+    dialog
+      .showMessageBox(this.mainWindow, {
+        type: 'error',
+        title: 'Update Failed - Version Compatibility',
+        message: 'Your version is too old for automatic updates.',
+        detail: `Please download the latest version manually. Your data will be preserved.\n\nError: ${error.message}`,
+        buttons: ['Download Manually', 'OK']
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          this.openManualDownload()
+        }
+      })
   }
 
   private handleNetworkError(error: Error): void {
-    dialog.showMessageBox(this.mainWindow, {
-      type: 'error',
-      title: 'Update Failed - Network Issue',
-      message: 'The update failed due to a network problem.',
-      detail: `Please check your internet connection and try again later.\n\nError: ${error.message}`,
-      buttons: ['Retry', 'Download Manually', 'OK']
-    }).then((result) => {
-      if (result.response === 0) {
-        // Retry the update
-        this.checkForUpdates()
-      } else if (result.response === 1) {
-        this.openManualDownload()
-      }
-    })
+    dialog
+      .showMessageBox(this.mainWindow, {
+        type: 'error',
+        title: 'Update Failed - Network Issue',
+        message: 'The update failed due to a network problem.',
+        detail: `Please check your internet connection and try again later.\n\nError: ${error.message}`,
+        buttons: ['Retry', 'Download Manually', 'OK']
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          // Retry the update
+          this.checkForUpdates()
+        } else if (result.response === 1) {
+          this.openManualDownload()
+        }
+      })
   }
 
   private handleGenericError(error: Error): void {
@@ -270,10 +298,15 @@ export class UpdateManager {
     )
   }
 
-  private handleDownloadProgress(progressObj: any): void {
+  private handleDownloadProgress(progressObj: {
+    bytesPerSecond: number
+    percent: number
+    transferred: number
+    total: number
+  }): void {
     const message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`
     console.log(message)
-    
+
     // Send progress to renderer process
     this.mainWindow.webContents.send('update-download-progress', progressObj)
   }
@@ -286,15 +319,9 @@ export class UpdateManager {
     return app.getVersion()
   }
 
-  public async getVersionInfo(): Promise<VersionInfo | null> {
-    try {
-      const currentVersion = this.getCurrentVersion()
-      // This would need to be implemented to get the latest version
-      // For now, we'll return null
-      return null
-    } catch (error) {
-      console.error('Error getting version info:', error)
-      return null
-    }
+  public async getCurrentVersionInfo(): Promise<VersionInfo | null> {
+    // This would need to be implemented to get the latest version
+    // For now, we'll return null
+    return null
   }
 }

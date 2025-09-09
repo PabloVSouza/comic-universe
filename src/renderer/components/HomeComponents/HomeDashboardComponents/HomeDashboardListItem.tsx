@@ -41,7 +41,6 @@ const HomeDashboardComicListItem = ({ item }: { item: IChapter }): React.JSX.Ele
   const mutation = useMutation({
     mutationFn: async (page: number) => {
       const ReadProgress = item.ReadProgress?.[0]
-      if (!ReadProgress) return
       await invoke('dbUpdateReadProgress', {
         readProgress: {
           ...ReadProgress,

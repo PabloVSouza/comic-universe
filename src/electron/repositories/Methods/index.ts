@@ -30,7 +30,6 @@ class Methods {
       ...pluginsRepository.methods,
       ...settingsRepository.methods
     }
-
   }
 }
 

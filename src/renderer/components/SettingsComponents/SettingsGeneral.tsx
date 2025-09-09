@@ -42,17 +42,6 @@ const SettingsGeneral = () => {
       setDebugLoggingEnabled(enabled)
     } catch (error) {
       console.error('Error loading debug settings:', error)
-      // Retry after a short delay in case IPC handlers aren't ready yet
-      setTimeout(() => {
-        invoke('getDebugSettings')
-          .then(debugSettings => {
-            const enabled = debugSettings?.enableDebugLogging || false
-            setDebugLoggingEnabled(enabled)
-          })
-          .catch(retryError => {
-            console.error('Retry failed for debug settings:', retryError)
-          })
-      }, 1000)
     }
   }
 
@@ -68,7 +57,9 @@ const SettingsGeneral = () => {
 
       try {
         // Update settings file
-        await invoke('updateLanguageSettings', { languageSettings: { language: selectedOption.value } })
+        await invoke('updateLanguageSettings', {
+          languageSettings: { language: selectedOption.value }
+        })
 
         // Update local state
         setCurrentLanguage(selectedOption.value)
@@ -106,8 +97,8 @@ const SettingsGeneral = () => {
   const handleDebugLoggingToggle = async () => {
     try {
       const newValue = !debugLoggingEnabled
-      await invoke('updateDebugSettings', { 
-        debugSettings: { enableDebugLogging: newValue } 
+      await invoke('updateDebugSettings', {
+        debugSettings: { enableDebugLogging: newValue }
       })
       setDebugLoggingEnabled(newValue)
     } catch (error) {
@@ -150,9 +141,7 @@ const SettingsGeneral = () => {
 
           {/* Debug Settings Section */}
           <div>
-            <h3 className="text-xl mb-4 text-gray-800 dark:text-gray-200">
-              Debug Settings
-            </h3>
+            <h3 className="text-xl mb-4 text-gray-800 dark:text-gray-200">Debug Settings</h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>

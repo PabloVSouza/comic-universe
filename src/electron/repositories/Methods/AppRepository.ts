@@ -108,8 +108,7 @@ class AppRepository {
       return await this.settingsRepository.methods.updateLanguageSettings(
         args.languageSettings as Partial<LanguageSettings>
       )
-    },
-
+    }
   }
 }
 

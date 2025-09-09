@@ -67,24 +67,16 @@ const SettingsUpdatePreferences = () => {
 
   const handleReleaseTypeChange = (selected: unknown) => {
     const selectedArray = selected as TOption[]
-    if (selectedArray && selectedArray.length > 0) {
-      const newSelection = selectedArray[selectedArray.length - 1].value
+    if (selectedArray) {
+      // Extract values from the selected options
+      const newReleaseTypes = selectedArray.map(option => option.value)
       const newSettings = {
         ...settings,
-        releaseTypes: [...settings.releaseTypes, newSelection]
+        releaseTypes: newReleaseTypes
       }
       setSettings(newSettings)
       autoSave(newSettings)
     }
-  }
-
-  const handleRemoveReleaseType = (typeToRemove: string) => {
-    const newSettings = {
-      ...settings,
-      releaseTypes: settings.releaseTypes.filter((type) => type !== typeToRemove)
-    }
-    setSettings(newSettings)
-    autoSave(newSettings)
   }
 
   const allReleaseTypeOptions = [
@@ -92,11 +84,6 @@ const SettingsUpdatePreferences = () => {
     { value: 'beta', label: t('Settings.general.betaReleases') },
     { value: 'alpha', label: t('Settings.general.alphaReleases') }
   ]
-
-  // Filter out already selected options
-  const releaseTypeOptions = allReleaseTypeOptions.filter(
-    (option) => !settings.releaseTypes.includes(option.value)
-  )
 
   return (
     <div className="space-y-6">
@@ -130,39 +117,13 @@ const SettingsUpdatePreferences = () => {
         </label>
         <Select
           isMulti
-          value={null}
+          value={settings.releaseTypes.map(type => 
+            allReleaseTypeOptions.find(option => option.value === type)
+          ).filter(Boolean)}
           onChange={handleReleaseTypeChange}
-          options={releaseTypeOptions}
+          options={allReleaseTypeOptions}
           className="bg-default rounded-lg"
         />
-
-        {/* Selected Release Types Display */}
-        {settings.releaseTypes.length > 0 && (
-          <div className="mt-3 p-3 bg-default rounded-md border border-gray-200 dark:border-gray-700">
-            <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-              {t('General.selectedReleaseTypes')}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {settings.releaseTypes.map((type) => {
-                const option = allReleaseTypeOptions.find((opt) => opt.value === type)
-                return (
-                  <span
-                    key={type}
-                    className="inline-flex items-center gap-1 px-2 py-1 rounded text-sm bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                  >
-                    {option?.label || type}
-                    <button
-                      onClick={() => handleRemoveReleaseType(type)}
-                      className="ml-1 hover:bg-blue-200 dark:hover:bg-blue-800 rounded-full w-4 h-4 flex items-center justify-center"
-                    >
-                      ×
-                    </button>
-                  </span>
-                )
-              })}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Opt-in for Non-Stable Updates */}

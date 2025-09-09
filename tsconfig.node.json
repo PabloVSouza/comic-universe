@@ -19,6 +19,7 @@
       "utils": ["./src/electron/utils/utils"],
       "utils/*":["./src/electron/utils/*"],
       "windows/*":["./src/electron/windows/*"],
+      "database/*": ["./src/database/*"]
     }
   }
 }

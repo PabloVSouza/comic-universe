@@ -35,7 +35,7 @@ export class FallbackUpdateManager {
       return await this.downloadUpdateManually(options)
     })
 
-    ipcMain.handle('check-update-fallback', async (_event) => {
+    ipcMain.handle('check-update-fallback', async () => {
       return await this.checkForFallbackUpdate()
     })
   }
@@ -54,7 +54,7 @@ export class FallbackUpdateManager {
 
     // Try auto-update first
     try {
-      return await this.attemptAutoUpdate(updateInfo)
+      return await this.attemptAutoUpdate()
     } catch (error) {
       console.log('Auto-update failed, falling back to manual download:', error)
       return await this.handleAutoUpdateFailure(updateInfo, error as Error)
@@ -86,7 +86,15 @@ export class FallbackUpdateManager {
    */
   private async handleVeryOldVersion(
     updateInfo: UpdateInfo,
-    versionInfo: any
+    versionInfo: {
+      currentVersion: string
+      targetVersion: string
+      daysSinceCurrent: number
+      daysSinceTarget: number
+      isOld: boolean
+      isVeryOld: boolean
+      hasMajorVersionJump: boolean
+    }
   ): Promise<UpdateFallbackResult> {
     const result = await dialog.showMessageBox(this.mainWindow, {
       type: 'warning',
@@ -103,7 +111,8 @@ export class FallbackUpdateManager {
         return await this.downloadUpdateManually({
           downloadUrl: this.getDownloadUrl(updateInfo),
           version: updateInfo.version,
-          releaseNotes: typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : undefined,
+          releaseNotes:
+            typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : undefined,
           isPrerelease:
             updateInfo.releaseName?.includes('beta') ||
             updateInfo.releaseName?.includes('alpha') ||
@@ -114,7 +123,8 @@ export class FallbackUpdateManager {
         return await this.downloadUpdateInBackground({
           downloadUrl: this.getDownloadUrl(updateInfo),
           version: updateInfo.version,
-          releaseNotes: typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : undefined,
+          releaseNotes:
+            typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : undefined,
           isPrerelease:
             updateInfo.releaseName?.includes('beta') ||
             updateInfo.releaseName?.includes('alpha') ||
@@ -133,7 +143,7 @@ export class FallbackUpdateManager {
   /**
    * Attempt auto-update with timeout
    */
-  private async attemptAutoUpdate(_updateInfo: UpdateInfo): Promise<UpdateFallbackResult> {
+  private async attemptAutoUpdate(): Promise<UpdateFallbackResult> {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Auto-update timeout'))
@@ -202,7 +212,8 @@ export class FallbackUpdateManager {
         return await this.downloadUpdateManually({
           downloadUrl: this.getDownloadUrl(updateInfo),
           version: updateInfo.version,
-          releaseNotes: typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : undefined,
+          releaseNotes:
+            typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : undefined,
           isPrerelease:
             updateInfo.releaseName?.includes('beta') ||
             updateInfo.releaseName?.includes('alpha') ||
@@ -213,7 +224,8 @@ export class FallbackUpdateManager {
         return await this.downloadUpdateInBackground({
           downloadUrl: this.getDownloadUrl(updateInfo),
           version: updateInfo.version,
-          releaseNotes: typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : undefined,
+          releaseNotes:
+            typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : undefined,
           isPrerelease:
             updateInfo.releaseName?.includes('beta') ||
             updateInfo.releaseName?.includes('alpha') ||
@@ -489,20 +501,12 @@ Your data and settings will be preserved.`
    * Check for fallback update (public method)
    */
   public async checkForFallbackUpdate(): Promise<UpdateFallbackResult> {
-    try {
-      // This would integrate with your existing update checking logic
-      // For now, return a placeholder
-      return {
-        success: false,
-        method: 'auto',
-        message: 'No updates available'
-      }
-    } catch (error) {
-      return {
-        success: false,
-        method: 'auto',
-        message: `Update check failed: ${error}`
-      }
+    // This would integrate with your existing update checking logic
+    // For now, return a placeholder
+    return {
+      success: false,
+      method: 'auto',
+      message: 'No updates available'
     }
   }
 }

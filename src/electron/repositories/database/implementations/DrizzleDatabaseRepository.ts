@@ -75,9 +75,9 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     `)
 
     // Get current version
-    const currentVersionResult = await db.get(sql`
+    const currentVersionResult = (await db.get(sql`
       SELECT MAX(version) as version FROM schema_migrations
-    `)
+    `)) as { version: number } | undefined
 
     const currentVersion = currentVersionResult?.version || 0
     console.log(`Current database version: ${currentVersion}`)
@@ -187,19 +187,20 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   // Comic operations
   async getAllComics(): Promise<IComic[]> {
     const db = this.getDb()
-    return await db.select().from(comics).orderBy(asc(comics.name))
+    const results = await db.select().from(comics).orderBy(asc(comics.name))
+    return results as IComic[]
   }
 
   async getComicById(id: number): Promise<IComic | undefined> {
     const db = this.getDb()
     const result = await db.select().from(comics).where(eq(comics.id, id)).limit(1)
-    return result[0]
+    return result[0] as IComic | undefined
   }
 
   async getComicBySiteId(siteId: string): Promise<IComic | undefined> {
     const db = this.getDb()
     const result = await db.select().from(comics).where(eq(comics.siteId, siteId)).limit(1)
-    return result[0]
+    return result[0] as IComic | undefined
   }
 
   async createComic(comic: IComic, chapterList: IChapter[], repo: string): Promise<void> {
@@ -280,7 +281,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async updateComic(id: number, comic: Partial<IComic>): Promise<IComic | undefined> {
     const db = this.getDb()
     const result = await db.update(comics).set(comic).where(eq(comics.id, id)).returning()
-    return result[0]
+    return result[0] as IComic | undefined
   }
 
   async deleteComic(id: number): Promise<void> {
@@ -357,15 +358,30 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async createChapter(chapter: IChapter): Promise<IChapter> {
     const db = this.getDb()
     const { id: _id, Comic: _Comic, ReadProgress: _ReadProgress, ...chapterData } = chapter
-    const result = await db.insert(chapters).values(chapterData).returning()
-    return result[0]
+
+    // Ensure comicId is defined
+    if (!chapterData.comicId) {
+      throw new Error('comicId is required for chapter creation')
+    }
+
+    const result = await db
+      .insert(chapters)
+      .values(chapterData as any)
+      .returning()
+    return result[0] as IChapter
   }
 
-  async createChapters(chapters: IChapter[]): Promise<void> {
+  async createChapters(chapterList: IChapter[]): Promise<void> {
     const db = this.getDb()
-    for (const chapter of chapters) {
+    for (const chapter of chapterList) {
       const { id: _id, Comic: _Comic, ReadProgress: _ReadProgress, ...chapterData } = chapter
-      await db.insert(chapters).values(chapterData)
+
+      // Ensure comicId is defined
+      if (!chapterData.comicId) {
+        throw new Error('comicId is required for chapter creation')
+      }
+
+      await db.insert(chapters).values(chapterData as any)
     }
   }
 

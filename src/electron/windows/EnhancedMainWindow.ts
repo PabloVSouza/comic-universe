@@ -12,7 +12,7 @@ import { FallbackUpdateManager } from '../utils/FallbackUpdateManager'
 const setupEnhancedAutoUpdater = (
   mainWindow: BrowserWindow,
   settingsRepository: SettingsRepository
-): void => {
+): (() => void) => {
   // Configure auto-updater
   autoUpdater.disableDifferentialDownload = true
   autoUpdater.disableWebInstaller = true
@@ -191,17 +191,25 @@ const setupEnhancedAutoUpdater = (
   })
 
   // Download progress handler
-  autoUpdater.on('download-progress', (progressObj: { bytesPerSecond: number; percent: number; transferred: number; total: number }) => {
-    const message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`
-    console.log(message)
+  autoUpdater.on(
+    'download-progress',
+    (progressObj: {
+      bytesPerSecond: number
+      percent: number
+      transferred: number
+      total: number
+    }) => {
+      const message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`
+      console.log(message)
 
-    // Send progress to renderer process
-    mainWindow.webContents.send('update-download-progress', progressObj)
-  })
+      // Send progress to renderer process
+      mainWindow.webContents.send('update-download-progress', progressObj)
+    }
+  )
 
   // Check for updates with enhanced error handling
   const checkForUpdatesWithFallback = () => {
-    (async () => {
+    ;(async () => {
       try {
         console.log('Checking for updates...')
         await autoUpdater.checkForUpdatesAndNotify()

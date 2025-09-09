@@ -33,6 +33,8 @@ class Methods {
 
     // Debug: Log available methods to verify debug settings are included
     console.log('Available IPC methods:', Object.keys(this.methods).filter(key => key.includes('Debug')))
+    console.log('Total methods count:', Object.keys(this.methods).length)
+    console.log('AppRepository methods:', Object.keys(appRepository.methods))
   }
 }
 

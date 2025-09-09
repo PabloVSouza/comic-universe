@@ -41,7 +41,6 @@ const setupEnhancedAutoUpdater = (
     console.log('Update available:', info.version)
 
     const settings = await loadUpdateSettings()
-    const currentVersion = app.getVersion()
 
     // Check if user wants this type of update
     const isStable = !info.version.includes('alpha') && !info.version.includes('beta')
@@ -192,7 +191,7 @@ const setupEnhancedAutoUpdater = (
   })
 
   // Download progress handler
-  autoUpdater.on('download-progress', (progressObj: any) => {
+  autoUpdater.on('download-progress', (progressObj: { bytesPerSecond: number; percent: number; transferred: number; total: number }) => {
     const message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`
     console.log(message)
 
@@ -201,27 +200,29 @@ const setupEnhancedAutoUpdater = (
   })
 
   // Check for updates with enhanced error handling
-  const checkForUpdatesWithFallback = async () => {
-    try {
-      console.log('Checking for updates...')
-      await autoUpdater.checkForUpdatesAndNotify()
-    } catch (error) {
-      console.error('Error checking for updates:', error)
+  const checkForUpdatesWithFallback = () => {
+    (async () => {
+      try {
+        console.log('Checking for updates...')
+        await autoUpdater.checkForUpdatesAndNotify()
+      } catch (error) {
+        console.error('Error checking for updates:', error)
 
-      // Show fallback option
-      const result = await dialog.showMessageBox(mainWindow, {
-        type: 'warning',
-        title: 'Update Check Failed',
-        message: 'Could not check for updates automatically',
-        detail: `Error: ${error}\n\nWould you like to check for updates manually?`,
-        buttons: ['Check Manually', 'Cancel'],
-        defaultId: 0
-      })
+        // Show fallback option
+        const result = await dialog.showMessageBox(mainWindow, {
+          type: 'warning',
+          title: 'Update Check Failed',
+          message: 'Could not check for updates automatically',
+          detail: `Error: ${error}\n\nWould you like to check for updates manually?`,
+          buttons: ['Check Manually', 'Cancel'],
+          defaultId: 0
+        })
 
-      if (result.response === 0) {
-        shell.openExternal('https://github.com/PabloVSouza/comic-universe/releases/latest')
+        if (result.response === 0) {
+          shell.openExternal('https://github.com/PabloVSouza/comic-universe/releases/latest')
+        }
       }
-    }
+    })()
   }
 
   // Return the enhanced check function

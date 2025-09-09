@@ -22,7 +22,9 @@ const SettingsUpdatePreferences = () => {
   useEffect(() => {
     const loadSettings = async () => {
       try {
+        console.log('Loading settings from file...')
         const savedSettings = await invoke('getUpdateSettings')
+        console.log('Loaded settings:', savedSettings)
         setSettings(savedSettings as UpdateSettings)
       } catch (error) {
         console.error('Error loading settings:', error)
@@ -46,8 +48,9 @@ const SettingsUpdatePreferences = () => {
   // Auto-save function
   const autoSave = async (newSettings: UpdateSettings) => {
     try {
+      console.log('Auto-saving settings:', newSettings)
       await invoke('updateUpdateSettings', { updateSettings: newSettings })
-      console.log('Settings auto-saved')
+      console.log('Settings auto-saved successfully')
     } catch (error) {
       console.error('Error auto-saving settings:', error)
     }

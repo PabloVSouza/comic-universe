@@ -118,7 +118,9 @@ class SettingsRepository {
       updateSettings: Partial<UpdateSettings>
     ): Promise<UpdateSettings> => {
       try {
+        console.log('updateUpdateSettings called with:', updateSettings)
         const currentSettings = await this.methods.loadSettings()
+        console.log('Current settings:', currentSettings)
         const updatedSettings = {
           ...currentSettings,
           update: {
@@ -126,6 +128,7 @@ class SettingsRepository {
             ...updateSettings
           }
         }
+        console.log('Updated settings:', updatedSettings)
         await this.methods.saveSettings(updatedSettings)
         return updatedSettings.update
       } catch (error) {

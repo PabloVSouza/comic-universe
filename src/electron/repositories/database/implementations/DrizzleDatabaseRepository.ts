@@ -4,7 +4,7 @@ import { comics, chapters, users, readProgress, plugins } from 'database/schema'
 import { sql } from 'drizzle-orm'
 import Database from 'better-sqlite3'
 import { drizzle, type BetterSQLite3Database } from 'drizzle-orm/better-sqlite3'
-import DebugLogger from '../../../utils/DebugLogger'
+import DebugLogger from 'utils/DebugLogger'
 
 export class DrizzleDatabaseRepository implements IDatabaseRepository {
   private db: BetterSQLite3Database<Record<string, unknown>> | null = null

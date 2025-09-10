@@ -148,40 +148,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate Self-Signed Certificate
+      - name: Setup Consistent Certificate from Secrets
         run: |
-          # Create certificates directory
           mkdir -p certificates
-
-          # Create config file for certificate with proper key usage (PowerShell compatible)
-          @"
-          [req]
-          distinguished_name = req_distinguished_name
-          x509_extensions = v3_req
-          prompt = no
-
-          [req_distinguished_name]
-          C = US
-          ST = CA
-          L = San Francisco
-          O = Comic Universe
-          CN = Comic Universe
-
-          [v3_req]
-          keyUsage = critical, digitalSignature, keyEncipherment
-          extendedKeyUsage = critical, codeSigning
-          subjectKeyIdentifier = hash
-          "@ | Out-File -FilePath certificates/cert.conf -Encoding utf8
-
-          # Generate self-signed certificate with proper extensions
-          openssl req -x509 -newkey rsa:2048 -keyout certificates/cert-key.pem -out certificates/cert.pem -days 365 -nodes -config certificates/cert.conf -extensions v3_req
-
-          # Convert to PKCS#12 format
-          openssl pkcs12 -export -out certificates/cert.p12 -inkey certificates/cert-key.pem -in certificates/cert.pem -name "Comic Universe" -passout pass:comicuniverse
-
-          # Set environment variables for electron-builder
+          echo "${{ secrets.CSC_LINK_BASE64 }}" | base64 --decode > certificates/cert.p12
           echo "CSC_LINK=certificates/cert.p12" >> $env:GITHUB_ENV
-          echo "CSC_KEY_PASSWORD=comicuniverse" >> $env:GITHUB_ENV
+          echo "CSC_KEY_PASSWORD=${{ secrets.CSC_KEY_PASSWORD }}" >> $env:GITHUB_ENV
 
       - name: Build application (Windows)
         run: npm run build:win

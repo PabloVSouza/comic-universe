@@ -8,6 +8,36 @@ import ApiManager from 'repositories/ApiManager'
 import SettingsRepository from 'repositories/Methods/SettingsRepository'
 import { FallbackUpdateManager } from '../utils/FallbackUpdateManager'
 
+// Helper functions for version type validation
+function getVersionTypeString(version: string): string {
+  if (version.includes('alpha')) return 'alpha'
+  if (version.includes('beta')) return 'beta'
+  return 'stable'
+}
+
+function isValidUpdateTransition(
+  current: { isStable: boolean; isBeta: boolean; isAlpha: boolean },
+  available: { isStable: boolean; isBeta: boolean; isAlpha: boolean }
+): boolean {
+  // Stable can update to stable (newer stable versions)
+  if (current.isStable && available.isStable) {
+    return true
+  }
+
+  // Beta can update to beta (newer beta versions) or stable
+  if (current.isBeta && (available.isBeta || available.isStable)) {
+    return true
+  }
+
+  // Alpha can update to alpha (newer alpha versions), beta, or stable
+  if (current.isAlpha && (available.isAlpha || available.isBeta || available.isStable)) {
+    return true
+  }
+
+  // All other transitions are invalid (e.g., stable to beta/alpha, beta to alpha)
+  return false
+}
+
 // Enhanced auto-updater with fallback support
 const setupEnhancedAutoUpdater = (
   mainWindow: BrowserWindow,
@@ -41,19 +71,38 @@ const setupEnhancedAutoUpdater = (
     console.log('Update available:', info.version)
 
     const settings = await loadUpdateSettings()
+    const currentVersion = app.getVersion()
+
+    // Determine current and available version types
+    const currentIsStable = !currentVersion.includes('alpha') && !currentVersion.includes('beta')
+    const currentIsBeta = currentVersion.includes('beta')
+    const currentIsAlpha = currentVersion.includes('alpha')
+
+    const availableIsStable = !info.version.includes('alpha') && !info.version.includes('beta')
+    const availableIsBeta = info.version.includes('beta')
+    const availableIsAlpha = info.version.includes('alpha')
+
+    // Check if this is a valid update type transition
+    const isValidTransition = isValidUpdateTransition(
+      { isStable: currentIsStable, isBeta: currentIsBeta, isAlpha: currentIsAlpha },
+      { isStable: availableIsStable, isBeta: availableIsBeta, isAlpha: availableIsAlpha }
+    )
+
+    if (!isValidTransition) {
+      console.log(
+        `Update available (${info.version}) but invalid transition from ${currentVersion} (${getVersionTypeString(currentVersion)}) to ${info.version} (${getVersionTypeString(info.version)})`
+      )
+      return
+    }
 
     // Check if user wants this type of update
-    const isStable = !info.version.includes('alpha') && !info.version.includes('beta')
-    const isBeta = info.version.includes('beta')
-    const isAlpha = info.version.includes('alpha')
-
     let shouldShowUpdate = false
 
-    if (isStable && settings.releaseTypes.includes('stable')) {
+    if (availableIsStable && settings.releaseTypes.includes('stable')) {
       shouldShowUpdate = true
-    } else if (isBeta && settings.releaseTypes.includes('beta') && settings.optInNonStable) {
+    } else if (availableIsBeta && settings.releaseTypes.includes('beta') && settings.optInNonStable) {
       shouldShowUpdate = true
-    } else if (isAlpha && settings.releaseTypes.includes('alpha') && settings.optInNonStable) {
+    } else if (availableIsAlpha && settings.releaseTypes.includes('alpha') && settings.optInNonStable) {
       shouldShowUpdate = true
     }
 

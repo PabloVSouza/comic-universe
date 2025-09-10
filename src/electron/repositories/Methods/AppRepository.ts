@@ -127,8 +127,10 @@ class AppRepository {
     },
 
     updateWebUISettings: async (args: { webUISettings: unknown }) => {
+      // Extract the actual settings from the nested structure
+      const settings = (args.webUISettings as any)?.webUISettings || args.webUISettings
       return await this.settingsRepository.methods.updateWebUISettings(
-        args.webUISettings as Partial<WebUISettings>
+        settings as Partial<WebUISettings>
       )
     },
 

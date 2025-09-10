@@ -10,6 +10,7 @@ const IpcImplementation = {
       return window.Electron.ipcRenderer.on(channel, callback)
     }
     console.warn('IPC listener not available in this environment')
+    return undefined
   },
   removeAllListeners: (channel: string) => {
     if (typeof window !== 'undefined' && window.Electron) {

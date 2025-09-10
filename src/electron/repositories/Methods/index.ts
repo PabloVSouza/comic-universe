@@ -7,7 +7,7 @@ import PluginsRepository from './PluginsRepository'
 import SettingsRepository from './SettingsRepository'
 
 class Methods {
-  public methods = {}
+  public methods: any = {}
   private apiManager: any = null
 
   constructor(

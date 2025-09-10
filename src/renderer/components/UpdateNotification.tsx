@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { confirmAlert } from 'components/Alert'
-import { useTranslation } from 'react-i18next'
 import useApi from 'api'
 
 interface UpdateNotificationProps {
@@ -8,17 +7,17 @@ interface UpdateNotificationProps {
 }
 
 const UpdateNotification = ({}: UpdateNotificationProps) => {
-  const { t } = useTranslation()
   const { invoke, on, removeAllListeners } = useApi()
 
   useEffect(() => {
     // Listen for manual update notifications (macOS/Windows)
-    const handleManualUpdate = (event: any, data: {
-      version: string
-      platform: string
-      message: string
-      detail: string
-    }) => {
+    const handleManualUpdate = (...args: unknown[]) => {
+      const data = args[1] as {
+        version: string
+        platform: string
+        message: string
+        detail: string
+      }
       confirmAlert({
         title: 'Update Available',
         message: data.message,
@@ -41,11 +40,12 @@ const UpdateNotification = ({}: UpdateNotificationProps) => {
     }
 
     // Listen for auto update notifications (Linux)
-    const handleAutoUpdate = (event: any, data: {
-      version: string
-      message: string
-      detail: string
-    }) => {
+    const handleAutoUpdate = (...args: unknown[]) => {
+      const data = args[1] as {
+        version: string
+        message: string
+        detail: string
+      }
       confirmAlert({
         title: 'Update Available',
         message: data.message,

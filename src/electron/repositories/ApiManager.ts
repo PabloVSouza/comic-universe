@@ -8,8 +8,10 @@ import SettingsRepository from './Methods/SettingsRepository'
 class ApiManager {
   private settingsRepository: SettingsRepository
   private server: any = null
+  private methodsInstance: Methods
 
-  constructor(private methods: Methods) {
+  constructor(methods: Methods) {
+    this.methodsInstance = methods
     this.settingsRepository = new SettingsRepository()
     // Defer startup to allow async settings check
     setImmediate(() => {
@@ -66,7 +68,7 @@ class ApiManager {
 
   generateRoutes = () => {
     const routes = Router()
-    const { methods: apiMethods } = this.methods
+    const { methods: apiMethods } = this.methodsInstance
     const properties = Object.getOwnPropertyNames(apiMethods)
 
     const frontendPath = path.join(__dirname, '..', '..', 'out', 'renderer')

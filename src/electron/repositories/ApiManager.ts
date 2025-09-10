@@ -11,13 +11,17 @@ class ApiManager {
 
   constructor(private methods: Methods) {
     this.settingsRepository = new SettingsRepository()
-    this.startUp()
+    // Defer startup to allow async settings check
+    setImmediate(() => {
+      this.startUp()
+    })
   }
 
   startUp = async () => {
     try {
       // Check if web UI is enabled
       const webUISettings = await this.settingsRepository.methods.getWebUISettings()
+      console.log('ApiManager startup - Web UI setting:', webUISettings.enableWebUI)
       
       if (!webUISettings.enableWebUI) {
         console.log('Web UI is disabled - Express server not started')

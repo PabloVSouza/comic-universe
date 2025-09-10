@@ -121,13 +121,18 @@ const SettingsGeneral = () => {
   const handleWebUIToggle = async () => {
     try {
       const newValue = !webUIEnabled
-      await invoke('updateWebUISettings', {
+      console.log('Toggling web UI to:', newValue)
+      
+      const result = await invoke('updateWebUISettings', {
         webUISettings: { enableWebUI: newValue }
       })
+      console.log('Web UI settings update result:', result)
+      
       setWebUIEnabled(newValue)
       
       // Restart the API server to apply the new setting
-      await invoke('restartApiServer')
+      const restartResult = await invoke('restartApiServer')
+      console.log('API server restart result:', restartResult)
     } catch (error) {
       console.error('Error updating web UI settings:', error)
     }

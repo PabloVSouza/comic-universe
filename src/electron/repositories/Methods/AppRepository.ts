@@ -133,8 +133,8 @@ class AppRepository {
     },
 
     restartApiServer: async () => {
-      // This will be called by the ApiManager when needed
-      // The ApiManager instance will handle the restart
+      // This method will be overridden by Methods.setApiManager
+      // to call the actual ApiManager restartServer method
       return { message: 'API server restart requested' }
     },
 

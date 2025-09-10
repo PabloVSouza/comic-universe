@@ -50,6 +50,8 @@ class ApiManager {
 
   // Method to restart server when web UI setting changes
   restartServer = async () => {
+    console.log('ApiManager.restartServer called')
+    
     // Stop existing server if running
     if (this.server) {
       this.server.close()
@@ -58,6 +60,7 @@ class ApiManager {
     }
 
     // Start server again (will check setting)
+    console.log('Restarting server...')
     await this.startUp()
   }
 

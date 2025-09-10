@@ -37,7 +37,7 @@ class Methods {
   setApiManager = (apiManager: any) => {
     this.apiManager = apiManager
     // Update the restartApiServer method to use the actual ApiManager
-    if (this.methods.restartApiServer) {
+    if (this.methods && this.methods.restartApiServer) {
       this.methods.restartApiServer = async () => {
         if (this.apiManager) {
           await this.apiManager.restartServer()

@@ -138,7 +138,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Generate Consistent Self-Signed Certificate
+      - name: Setup Consistent Certificate from Secrets
         run: |
           # Create certificates directory
           mkdir -p certificates

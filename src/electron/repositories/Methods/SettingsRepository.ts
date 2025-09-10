@@ -16,10 +16,15 @@ export interface DebugSettings {
   enableDebugLogging: boolean
 }
 
+export interface WebUISettings {
+  enableWebUI: boolean
+}
+
 interface AppSettings {
   update: UpdateSettings
   language: LanguageSettings
   debug: DebugSettings
+  webUI: WebUISettings
   // Add other settings here in the future
 }
 
@@ -36,6 +41,9 @@ class SettingsRepository {
     },
     debug: {
       enableDebugLogging: false
+    },
+    webUI: {
+      enableWebUI: false
     }
   }
 
@@ -160,6 +168,18 @@ class SettingsRepository {
       return updatedSettings.debug
     },
 
+    // Get web UI settings specifically
+    getWebUISettings: async (): Promise<WebUISettings> => {
+      const settings = await this.methods.loadSettings()
+      return settings.webUI
+    },
+
+    // Update web UI settings specifically
+    updateWebUISettings: async (webUISettings: Partial<WebUISettings>): Promise<WebUISettings> => {
+      const updatedSettings = await this.methods.updateSettings('webUI', webUISettings)
+      return updatedSettings.webUI
+    },
+
     // Reset settings to defaults
     resetSettings: async (): Promise<AppSettings> => {
       await this.methods.saveSettings(this.defaultSettings)
@@ -187,6 +207,10 @@ class SettingsRepository {
       debug: {
         ...this.defaultSettings.debug,
         ...(settings.debug || {})
+      },
+      webUI: {
+        ...this.defaultSettings.webUI,
+        ...(settings.webUI || {})
       }
     }
 

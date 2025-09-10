@@ -13,16 +13,18 @@ const SettingsGeneral = () => {
   const { invoke } = useApi()
   const [currentLanguage, setCurrentLanguage] = useState('ptBR')
   const [debugLoggingEnabled, setDebugLoggingEnabled] = useState(false)
+  const [webUIEnabled, setWebUIEnabled] = useState(false)
 
   // Load settings on component mount
   useEffect(() => {
     loadLanguageFromSettings()
     loadDebugSettings()
+    loadWebUISettings()
   }, [])
 
   const loadLanguageFromSettings = async () => {
     try {
-      const languageSettings = await invoke('getLanguageSettings')
+      const languageSettings = await invoke('getLanguageSettings') as { language?: string }
       const language = languageSettings?.language || 'ptBR'
       setCurrentLanguage(language)
 
@@ -37,11 +39,21 @@ const SettingsGeneral = () => {
 
   const loadDebugSettings = async () => {
     try {
-      const debugSettings = await invoke('getDebugSettings')
+      const debugSettings = await invoke('getDebugSettings') as { enableDebugLogging?: boolean }
       const enabled = debugSettings?.enableDebugLogging || false
       setDebugLoggingEnabled(enabled)
     } catch (error) {
       console.error('Error loading debug settings:', error)
+    }
+  }
+
+  const loadWebUISettings = async () => {
+    try {
+      const webUISettings = await invoke('getWebUISettings') as { enableWebUI?: boolean }
+      const enabled = webUISettings?.enableWebUI || false
+      setWebUIEnabled(enabled)
+    } catch (error) {
+      console.error('Error loading web UI settings:', error)
     }
   }
 
@@ -106,6 +118,18 @@ const SettingsGeneral = () => {
     }
   }
 
+  const handleWebUIToggle = async () => {
+    try {
+      const newValue = !webUIEnabled
+      await invoke('updateWebUISettings', {
+        webUISettings: { enableWebUI: newValue }
+      })
+      setWebUIEnabled(newValue)
+    } catch (error) {
+      console.error('Error updating web UI settings:', error)
+    }
+  }
+
   return (
     <div className="h-full w-full flex flex-col">
       {/* Header */}
@@ -161,6 +185,38 @@ const SettingsGeneral = () => {
                   <span
                     className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
                       debugLoggingEnabled ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Separator */}
+          <div className="border-t border-gray-200 dark:border-gray-700"></div>
+
+          {/* Web UI Settings Section */}
+          <div>
+            <h3 className="text-xl mb-4 text-gray-800 dark:text-gray-200">Web Interface</h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className="block text-base text-gray-700 dark:text-gray-300">
+                    Enable Web UI
+                  </label>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Allow access to the application through a web browser interface
+                  </p>
+                </div>
+                <button
+                  onClick={handleWebUIToggle}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                    webUIEnabled ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      webUIEnabled ? 'translate-x-6' : 'translate-x-1'
                     }`}
                   />
                 </button>

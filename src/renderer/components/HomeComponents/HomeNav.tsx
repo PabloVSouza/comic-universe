@@ -32,7 +32,7 @@ const HomeNav = (): React.JSX.Element => {
     {
       label: t('HomeNav.about'),
       icon: infoIcon,
-      onClick: (): void => openWindow({ component: 'About', props: {} })
+      onClick: (): void => openWindow({ component: 'Settings', props: { initialTab: 'about' } })
     },
     {
       label: t('HomeNav.settings'),

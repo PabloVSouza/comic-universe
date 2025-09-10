@@ -3,14 +3,16 @@ import SettingsList from 'components/SettingsComponents/SettingsList'
 import SettingsGeneral from 'components/SettingsComponents/SettingsGeneral'
 import SettingsUser from 'components/SettingsComponents/SettingsUser'
 import SettingsPlugin from 'components/SettingsComponents/SettingsPlugin'
+import SettingsAbout from 'components/SettingsComponents/SettingsAbout'
 import { useTranslation } from 'react-i18next'
 
 import pluginIcon from 'assets/plugin.svg'
 import userIcon from 'assets/user.svg'
 import settingsIcon from 'assets/settings.svg'
+import infoIcon from 'assets/info.svg'
 
-const Settings = (): ReactElement => {
-  const [activeOption, setActiveOption] = useState('general')
+const Settings = ({ initialTab }: { initialTab?: string }): ReactElement => {
+  const [activeOption, setActiveOption] = useState(initialTab || 'general')
 
   const { t } = useTranslation()
 
@@ -32,17 +34,26 @@ const Settings = (): ReactElement => {
       icon: pluginIcon,
       tag: 'plugins',
       onClick: () => setActiveOption('plugins')
+    },
+    {
+      label: t('HomeNav.about'),
+      icon: infoIcon,
+      tag: 'about',
+      onClick: () => setActiveOption('about')
     }
   ]
 
   useEffect(() => {
-    setActiveOption(settingsOptions[0].tag)
-  }, [])
+    if (!initialTab) {
+      setActiveOption(settingsOptions[0].tag)
+    }
+  }, [initialTab])
 
   const componentList = {
     general: SettingsGeneral,
     user: SettingsUser,
-    plugins: SettingsPlugin
+    plugins: SettingsPlugin,
+    about: SettingsAbout
   }
 
   const Components = componentList[activeOption]

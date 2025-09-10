@@ -197,17 +197,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Setup Consistent Certificate from Secrets
-        run: |
-            mkdir -p certificates
-            echo "${{ secrets.CSC_LINK_BASE64 }}" | base64 --decode > certificates/cert.p12
-            echo "CSC_LINK=certificates/cert.p12" >> $GITHUB_ENV
-            echo "CSC_KEY_PASSWORD=${{ secrets.CSC_KEY_PASSWORD }}" >> $GITHUB_ENV
-            security create-keychain -p "" build.keychain
-            security default-keychain -s build.keychain
-            security unlock-keychain -p "" build.keychain
-            security import certificates/cert.p12 -k build.keychain -P "${{ secrets.CSC_KEY_PASSWORD }}" -T /usr/bin/codesign
-            security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+      # Certificate setup disabled temporarily to fix auto-updater
+      # - name: Setup Consistent Certificate from Secrets
 
       - name: Build application (macOS)
         run: npm run build:mac

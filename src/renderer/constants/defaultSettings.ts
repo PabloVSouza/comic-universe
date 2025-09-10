@@ -8,7 +8,7 @@ export const DEFAULT_SETTINGS = {
 
 export const DEFAULT_UPDATE_SETTINGS = {
   update: {
-    autoUpdate: true,
+    autoUpdate: false,
     optInNonStable: false
   }
 } as const

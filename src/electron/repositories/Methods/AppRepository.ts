@@ -1,4 +1,4 @@
-import { BrowserWindow, app } from 'electron'
+import { BrowserWindow, app, shell } from 'electron'
 import pathLib from 'path'
 import fs from 'fs'
 import { is } from '@electron-toolkit/utils'
@@ -119,6 +119,10 @@ class AppRepository {
       return await this.settingsRepository.methods.updateUpdateSettingsInternal(
         args.updateSettings as Partial<UpdateSettings>
       )
+    },
+
+    openExternal: (args: { url: string }) => {
+      shell.openExternal(args.url)
     }
   }
 }

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { confirmAlert } from 'components/Alert'
 import { useTranslation } from 'react-i18next'
+import useApi from 'api'
 
 interface UpdateNotificationProps {
   // This component doesn't need props, it listens to IPC messages
@@ -8,6 +9,7 @@ interface UpdateNotificationProps {
 
 const UpdateNotification = ({}: UpdateNotificationProps) => {
   const { t } = useTranslation()
+  const { invoke } = useApi()
 
   useEffect(() => {
     // Listen for manual update notifications (macOS/Windows)
@@ -23,9 +25,9 @@ const UpdateNotification = ({}: UpdateNotificationProps) => {
         buttons: [
           {
             label: 'Open Releases Page',
-            action: () => {
-              // Open GitHub releases page
-              window.Electron?.shell?.openExternal('https://github.com/PabloVSouza/comic-universe/releases')
+            action: async () => {
+              // Open GitHub releases page using API layer
+              await invoke('openExternal', { url: 'https://github.com/PabloVSouza/comic-universe/releases' })
             }
           },
           {
@@ -58,7 +60,7 @@ const UpdateNotification = ({}: UpdateNotificationProps) => {
       })
     }
 
-    // Register IPC listeners
+    // Register IPC listeners using API layer
     if (window.Electron?.ipcRenderer) {
       window.Electron.ipcRenderer.on('update-available-manual', handleManualUpdate)
       window.Electron.ipcRenderer.on('update-available-auto', handleAutoUpdate)
@@ -71,7 +73,7 @@ const UpdateNotification = ({}: UpdateNotificationProps) => {
         window.Electron.ipcRenderer.removeAllListeners('update-available-auto')
       }
     }
-  }, [])
+  }, [invoke])
 
   // This component doesn't render anything, it just handles IPC messages
   return null

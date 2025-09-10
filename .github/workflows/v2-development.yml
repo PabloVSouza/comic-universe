@@ -151,7 +151,8 @@ jobs:
       - name: Setup Consistent Certificate from Secrets
         run: |
           mkdir -p certificates
-          [System.Convert]::FromBase64String("${{ secrets.CSC_LINK_BASE64 }}") | Set-Content -Path certificates/cert.p12 -Encoding Byte
+          $bytes = [System.Convert]::FromBase64String("${{ secrets.CSC_LINK_BASE64 }}")
+          [System.IO.File]::WriteAllBytes("certificates/cert.p12", $bytes)
           echo "CSC_LINK=certificates/cert.p12" >> $env:GITHUB_ENV
           echo "CSC_KEY_PASSWORD=${{ secrets.CSC_KEY_PASSWORD }}" >> $env:GITHUB_ENV
 

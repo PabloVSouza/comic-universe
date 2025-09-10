@@ -17,8 +17,28 @@ function getVersionTypeString(version: string): string {
 
 function isValidUpdateTransition(
   current: { isStable: boolean; isBeta: boolean; isAlpha: boolean },
-  available: { isStable: boolean; isBeta: boolean; isAlpha: boolean }
+  available: { isStable: boolean; isBeta: boolean; isAlpha: boolean },
+  settings: any
 ): boolean {
+  // If user has opted into non-stable releases, allow more flexible transitions
+  if (settings.optInNonStable) {
+    // If user allows alpha releases, allow any transition to alpha
+    if (available.isAlpha && settings.releaseTypes.includes('alpha')) {
+      return true
+    }
+    
+    // If user allows beta releases, allow any transition to beta
+    if (available.isBeta && settings.releaseTypes.includes('beta')) {
+      return true
+    }
+    
+    // If user allows stable releases, allow any transition to stable
+    if (available.isStable && settings.releaseTypes.includes('stable')) {
+      return true
+    }
+  }
+
+  // Default conservative transitions (when optInNonStable is false)
   // Stable can update to stable (newer stable versions)
   if (current.isStable && available.isStable) {
     return true
@@ -34,7 +54,7 @@ function isValidUpdateTransition(
     return true
   }
 
-  // All other transitions are invalid (e.g., stable to beta/alpha, beta to alpha)
+  // All other transitions are invalid when not opted into non-stable
   return false
 }
 
@@ -85,7 +105,8 @@ const setupEnhancedAutoUpdater = (
     // Check if this is a valid update type transition
     const isValidTransition = isValidUpdateTransition(
       { isStable: currentIsStable, isBeta: currentIsBeta, isAlpha: currentIsAlpha },
-      { isStable: availableIsStable, isBeta: availableIsBeta, isAlpha: availableIsAlpha }
+      { isStable: availableIsStable, isBeta: availableIsBeta, isAlpha: availableIsAlpha },
+      settings
     )
 
     if (!isValidTransition) {

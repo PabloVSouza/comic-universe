@@ -77,7 +77,7 @@ openssl req -x509 -newkey rsa:2048 -keyout "$CERT_DIR/cert-key.pem" -out "$CERT_
 
 # Convert to PKCS#12 format
 print_status "Converting to PKCS#12 format..."
-openssl pkcs12 -export -out "$CERT_DIR/cert.p12" -inkey "$CERT_DIR/cert-key.pem" -in "$CERT_DIR/cert.pem" -name "$PROJECT_NAME" -passout pass:comicuniverse
+openssl pkcs12 -export -out "$CERT_DIR/cert.p12" -inkey "$CERT_DIR/cert-key.pem" -in "$CERT_DIR/cert.pem" -name "$PROJECT_NAME" -passout pass:comicuniverse -legacy
 
 # Generate base64 encoded certificate for GitHub Secrets
 print_status "Generating base64 encoded certificate..."

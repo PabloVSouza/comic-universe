@@ -131,8 +131,8 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-        - name: Setup Consistent Certificate from Secrets
-          run: |
+      - name: Setup Consistent Certificate from Secrets
+        run: |
             mkdir -p certificates
             echo "${{ secrets.CSC_LINK_BASE64 }}" | base64 --decode > certificates/cert.p12
             echo "CSC_LINK=certificates/cert.p12" >> $GITHUB_ENV

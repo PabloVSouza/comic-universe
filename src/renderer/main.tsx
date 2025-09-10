@@ -8,6 +8,7 @@ import usePersistStore from 'store/usePersistStore'
 import { AlertProvider } from 'components/Alert'
 import { I18nextProvider } from 'react-i18next'
 import i18n from './i18n/index'
+import UpdateNotification from 'components/UpdateNotification'
 
 import wallpaper from 'assets/wallpaper.webp'
 
@@ -70,6 +71,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <I18nextProvider i18n={i18n}>
         <Main>
           <AlertProvider>
+            <UpdateNotification />
             <Routes />
           </AlertProvider>
         </Main>

@@ -124,25 +124,19 @@ const setupAutoUpdater = (
       // For macOS and Windows, show manual download dialog instead of auto-download
       if (process.platform === 'darwin' || process.platform === 'win32') {
         const platformName = process.platform === 'darwin' ? 'macOS' : 'Windows'
-        dialog.showMessageBox(mainWindow, {
-          type: 'info',
-          title: 'Update Available',
+        // Send message to renderer to show update dialog
+        mainWindow.webContents.send('update-available-manual', {
+          version: info.version,
+          platform: platformName,
           message: `A new version (${info.version}) is available for ${platformName}.`,
-          detail: `Auto-updating is disabled on ${platformName} due to code signing requirements.\n\nPlease visit the GitHub releases page to download the latest version manually.\n\nThis ensures a secure and reliable update process.`,
-          buttons: ['Open Releases Page', 'OK']
-        }).then((result) => {
-          if (result.response === 0) {
-            shell.openExternal('https://github.com/PabloVSouza/comic-universe/releases')
-          }
+          detail: `Auto-updating is disabled on ${platformName} due to code signing requirements.\n\nPlease visit the GitHub releases page to download the latest version manually.\n\nThis ensures a secure and reliable update process.`
         })
       } else {
         // For Linux, use normal auto-update flow
-        dialog.showMessageBox(mainWindow, {
-          type: 'info',
-          title: 'Update Available',
+        mainWindow.webContents.send('update-available-auto', {
+          version: info.version,
           message: 'A new version is available. It will be downloaded in the background.',
-          detail: `Version ${info.version} is available. The update will be downloaded automatically.`,
-          buttons: ['OK']
+          detail: `Version ${info.version} is available. The update will be downloaded automatically.`
         })
       }
     } else {

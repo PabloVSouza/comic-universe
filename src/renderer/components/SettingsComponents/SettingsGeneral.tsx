@@ -125,6 +125,9 @@ const SettingsGeneral = () => {
         webUISettings: { enableWebUI: newValue }
       })
       setWebUIEnabled(newValue)
+      
+      // Restart the API server to apply the new setting
+      await invoke('restartApiServer')
     } catch (error) {
       console.error('Error updating web UI settings:', error)
     }

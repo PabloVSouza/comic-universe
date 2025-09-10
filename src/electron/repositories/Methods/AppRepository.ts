@@ -132,6 +132,12 @@ class AppRepository {
       )
     },
 
+    restartApiServer: async () => {
+      // This will be called by the ApiManager when needed
+      // The ApiManager instance will handle the restart
+      return { message: 'API server restart requested' }
+    },
+
     openExternal: (args: { url: string }) => {
       shell.openExternal(args.url)
     }

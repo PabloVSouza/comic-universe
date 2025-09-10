@@ -3,26 +3,61 @@ import path from 'path'
 
 import cors from 'cors'
 import Methods from './Methods'
+import SettingsRepository from './Methods/SettingsRepository'
 
 class ApiManager {
+  private settingsRepository: SettingsRepository
+  private server: any = null
+
   constructor(private methods: Methods) {
+    this.settingsRepository = new SettingsRepository()
     this.startUp()
   }
 
-  startUp = () => {
-    const app = express()
-    const port = 8888
+  startUp = async () => {
+    try {
+      // Check if web UI is enabled
+      const webUISettings = await this.settingsRepository.methods.getWebUISettings()
+      
+      if (!webUISettings.enableWebUI) {
+        console.log('Web UI is disabled - Express server not started')
+        return
+      }
 
-    app.use(cors())
-    app.use(express.json())
-    const routes = this.generateRoutes()
-    app.use(routes)
+      const app = express()
+      const port = 8888
 
-    app.listen(port, () => {
-      console.log('====================')
-      console.log(`Api is up on port ${port}`)
-      console.log('====================')
-    })
+      app.use(cors())
+      app.use(express.json())
+      const routes = this.generateRoutes()
+      app.use(routes)
+
+      this.server = app.listen(port, () => {
+        console.log('====================')
+        console.log(`Api is up on port ${port}`)
+        console.log('====================')
+      })
+    } catch (error) {
+      console.error('Error starting API server:', error)
+    }
+  }
+
+  // Method to restart server when web UI setting changes
+  restartServer = async () => {
+    // Stop existing server if running
+    if (this.server) {
+      this.server.close()
+      this.server = null
+      console.log('Express server stopped')
+    }
+
+    // Start server again (will check setting)
+    await this.startUp()
+  }
+
+  // Public methods for external access
+  public methods = {
+    restartServer: this.restartServer
   }
 
   generateRoutes = () => {

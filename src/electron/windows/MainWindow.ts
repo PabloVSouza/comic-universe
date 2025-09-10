@@ -209,14 +209,15 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
         !currentVersion.includes('-')
 
       if (isCICDVersion) {
-        // Disable auto-updater on macOS due to code signing issues
-        if (process.platform === 'darwin') {
-          console.log('Auto-updater disabled on macOS - manual download required')
-          // Show manual download message for macOS users
+        // Disable auto-updater on macOS and Windows due to code signing issues
+        if (process.platform === 'darwin' || process.platform === 'win32') {
+          const platformName = process.platform === 'darwin' ? 'macOS' : 'Windows'
+          console.log(`Auto-updater disabled on ${platformName} - manual download required`)
+          // Show manual download message for macOS and Windows users
           dialog.showMessageBox(mainWindow, {
             type: 'info',
             title: 'Manual Update Required',
-            message: 'Auto-updating is disabled on macOS due to code signing requirements.',
+            message: `Auto-updating is disabled on ${platformName} due to code signing requirements.`,
             detail: 'Please visit the GitHub releases page to download the latest version manually.\n\nThis ensures a secure and reliable update process.',
             buttons: ['Open Releases Page', 'OK']
           }).then((result) => {
@@ -225,7 +226,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
             }
           })
         } else {
-          // Enable auto-updater for Windows and Linux
+          // Enable auto-updater for Linux only
           const settingsRepository = new SettingsRepository()
           setupAutoUpdater(mainWindow, settingsRepository)
           autoUpdater.checkForUpdatesAndNotify()

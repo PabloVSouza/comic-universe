@@ -1,11 +1,11 @@
 const IpcImplementation = {
-  invoke: async (method: string, args?: unknown) => {
+  invoke: async (method: string, args?: any) => {
     if (typeof window !== 'undefined' && window.Electron) {
       return await window.Electron.ipcRenderer.invoke(method, args)
     }
     throw new Error('IPC not available in this environment')
   },
-  on: (channel: string, callback: (...args: unknown[]) => void) => {
+  on: (channel: string, callback: (...args: any[]) => void) => {
     if (typeof window !== 'undefined' && window.Electron) {
       return window.Electron.ipcRenderer.on(channel, callback)
     }

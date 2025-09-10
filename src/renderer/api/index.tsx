@@ -2,8 +2,8 @@ import IpcImplementation from './IpcImplementation'
 import RestImplemention from './RestImplementation'
 
 interface ApiImplementation {
-  invoke: (method: string, args?: unknown) => Promise<unknown>
-  on?: (channel: string, callback: (...args: unknown[]) => void) => void
+  invoke: (method: string, args?: any) => Promise<any>
+  on?: (channel: string, callback: (...args: any[]) => void) => void
   removeAllListeners?: (channel: string) => void
 }
 
@@ -23,10 +23,10 @@ const useApi = (implementation?: string) => {
   const selectedImplementation = implementation || getDefaultImplementation()
 
   return {
-    invoke: async (method: string, args?: unknown) => {
+    invoke: async (method: string, args?: any) => {
       return await ApiList[selectedImplementation].invoke(method, args)
     },
-    on: (channel: string, callback: (...args: unknown[]) => void) => {
+    on: (channel: string, callback: (...args: any[]) => void) => {
       // Only expose 'on' method for IPC implementation
       if (selectedImplementation === 'IpcImplementation' && ApiList[selectedImplementation].on) {
         return ApiList[selectedImplementation].on!(channel, callback)

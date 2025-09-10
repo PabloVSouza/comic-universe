@@ -24,7 +24,7 @@ const SettingsGeneral = () => {
 
   const loadLanguageFromSettings = async () => {
     try {
-      const languageSettings = await invoke('getLanguageSettings') as { language?: string }
+      const languageSettings = await invoke('getLanguageSettings')
       const language = languageSettings?.language || 'ptBR'
       setCurrentLanguage(language)
 
@@ -39,7 +39,7 @@ const SettingsGeneral = () => {
 
   const loadDebugSettings = async () => {
     try {
-      const debugSettings = await invoke('getDebugSettings') as { enableDebugLogging?: boolean }
+      const debugSettings = await invoke('getDebugSettings')
       const enabled = debugSettings?.enableDebugLogging || false
       setDebugLoggingEnabled(enabled)
     } catch (error) {
@@ -49,7 +49,7 @@ const SettingsGeneral = () => {
 
   const loadWebUISettings = async () => {
     try {
-      const webUISettings = await invoke('getWebUISettings') as { enableWebUI?: boolean }
+      const webUISettings = await invoke('getWebUISettings')
       const enabled = webUISettings?.enableWebUI || false
       setWebUIEnabled(enabled)
     } catch (error) {

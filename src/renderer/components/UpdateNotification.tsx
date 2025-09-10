@@ -11,7 +11,7 @@ const UpdateNotification = ({}: UpdateNotificationProps) => {
 
   useEffect(() => {
     // Listen for manual update notifications (macOS/Windows)
-    const handleManualUpdate = (...args: unknown[]) => {
+    const handleManualUpdate = (...args: any[]) => {
       const data = args[1] as {
         version: string
         platform: string
@@ -40,7 +40,7 @@ const UpdateNotification = ({}: UpdateNotificationProps) => {
     }
 
     // Listen for auto update notifications (Linux)
-    const handleAutoUpdate = (...args: unknown[]) => {
+    const handleAutoUpdate = (...args: any[]) => {
       const data = args[1] as {
         version: string
         message: string

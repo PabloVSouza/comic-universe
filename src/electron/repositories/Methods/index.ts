@@ -7,7 +7,9 @@ import PluginsRepository from './PluginsRepository'
 import SettingsRepository from './SettingsRepository'
 
 class Methods {
-  public methods = {}
+  public methods: any = {}
+  private apiManager: any = null
+
   constructor(
     private path: string,
     private runningPath: string,
@@ -29,6 +31,20 @@ class Methods {
       ...dbRepository.methods,
       ...pluginsRepository.methods,
       ...settingsRepository.methods
+    }
+  }
+
+  setApiManager = (apiManager: any) => {
+    this.apiManager = apiManager
+    // Update the restartApiServer method to use the actual ApiManager
+    if (this.methods && this.methods.restartApiServer) {
+      this.methods.restartApiServer = async () => {
+        if (this.apiManager) {
+          await this.apiManager.restartServer()
+          return { message: 'API server restarted successfully' }
+        }
+        return { message: 'API manager not available' }
+      }
     }
   }
 }

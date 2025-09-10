@@ -85,41 +85,27 @@ export class UpdateManager {
     available: { isStable: boolean; isBeta: boolean; isAlpha: boolean },
     settings: UpdateSettings
   ): boolean {
-    // If user has opted into non-stable releases, allow more flexible transitions
-    if (settings.optInNonStable) {
-      // If user allows alpha releases, allow any transition to alpha
-      if (available.isAlpha && settings.releaseTypes.includes('alpha')) {
-        return true
-      }
-      
-      // If user allows beta releases, allow any transition to beta
-      if (available.isBeta && settings.releaseTypes.includes('beta')) {
-        return true
-      }
-      
-      // If user allows stable releases, allow any transition to stable
-      if (available.isStable && settings.releaseTypes.includes('stable')) {
-        return true
-      }
-    }
-
-    // Default conservative transitions (when optInNonStable is false)
-    // Stable can update to stable (newer stable versions)
-    if (current.isStable && available.isStable) {
+    // Alpha can only update to alpha
+    if (current.isAlpha && available.isAlpha) {
       return true
     }
 
-    // Beta can update to beta (newer beta versions) or stable
+    // Beta can update to beta or stable
     if (current.isBeta && (available.isBeta || available.isStable)) {
       return true
     }
 
-    // Alpha can update to alpha (newer alpha versions), beta, or stable
-    if (current.isAlpha && (available.isAlpha || available.isBeta || available.isStable)) {
-      return true
+    // Stable can update to stable, or to beta if opt-in is enabled
+    if (current.isStable) {
+      if (available.isStable) {
+        return true
+      }
+      if (available.isBeta && settings.optInNonStable) {
+        return true
+      }
     }
 
-    // All other transitions are invalid when not opted into non-stable
+    // All other transitions are invalid
     return false
   }
 
@@ -181,14 +167,14 @@ export class UpdateManager {
       return
     }
 
-    // Check if user wants this type of update
+    // Check if user wants this type of update based on release types
     let shouldShowUpdate = false
 
     if (availableIsStable && settings.releaseTypes.includes('stable')) {
       shouldShowUpdate = true
-    } else if (availableIsBeta && settings.releaseTypes.includes('beta') && settings.optInNonStable) {
+    } else if (availableIsBeta && settings.releaseTypes.includes('beta')) {
       shouldShowUpdate = true
-    } else if (availableIsAlpha && settings.releaseTypes.includes('alpha') && settings.optInNonStable) {
+    } else if (availableIsAlpha && settings.releaseTypes.includes('alpha')) {
       shouldShowUpdate = true
     }
 

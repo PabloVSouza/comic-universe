@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
-import SettingsPluginList from 'components/SettingsComponents/SettingsPluginList'
+import SettingsPluginList from './SettingsPluginList'
 import Select from 'components/Select'
 import Button from 'components/Button'
+import SettingsTitle from '../SettingsTitle'
 
 import downloadIcon from 'assets/download-icon-3.svg'
 
@@ -63,7 +64,7 @@ const SettingsPlugin = () => {
 
   return (
     <div className="grow flex justify-center items-center p-2 flex-col gap-5">
-      <h2 className="text-2xl">Plugin Settings</h2>
+      <SettingsTitle i18nKey="Settings.plugin.title" variant="section" className="text-2xl" />
       <div className="w-full h-12 shrink-0 flex justify-center items-start gap-2">
         <Select
           className="!w-1/2 bg-default rounded-lg"

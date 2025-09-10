@@ -3,31 +3,75 @@ import path from 'path'
 
 import cors from 'cors'
 import Methods from './Methods'
+import SettingsRepository from './Methods/SettingsRepository'
 
 class ApiManager {
-  constructor(private methods: Methods) {
-    this.startUp()
+  private settingsRepository: SettingsRepository
+  private server: any = null
+  private methodsInstance: Methods
+
+  constructor(methods: Methods) {
+    this.methodsInstance = methods
+    this.settingsRepository = new SettingsRepository()
+    // Defer startup to allow async settings check
+    setImmediate(() => {
+      this.startUp()
+    })
   }
 
-  startUp = () => {
-    const app = express()
-    const port = 8888
+  startUp = async () => {
+    try {
+      // Check if web UI is enabled
+      const webUISettings = await this.settingsRepository.methods.getWebUISettings()
+      console.log('ApiManager startup - Web UI setting:', webUISettings.enableWebUI)
+      
+      if (!webUISettings.enableWebUI) {
+        console.log('Web UI is disabled - Express server not started')
+        return
+      }
 
-    app.use(cors())
-    app.use(express.json())
-    const routes = this.generateRoutes()
-    app.use(routes)
+      const app = express()
+      const port = 8888
 
-    app.listen(port, () => {
-      console.log('====================')
-      console.log(`Api is up on port ${port}`)
-      console.log('====================')
-    })
+      app.use(cors())
+      app.use(express.json())
+      const routes = this.generateRoutes()
+      app.use(routes)
+
+      this.server = app.listen(port, () => {
+        console.log('====================')
+        console.log(`Api is up on port ${port}`)
+        console.log('====================')
+      })
+    } catch (error) {
+      console.error('Error starting API server:', error)
+    }
+  }
+
+  // Method to restart server when web UI setting changes
+  restartServer = async () => {
+    console.log('ApiManager.restartServer called')
+    
+    // Stop existing server if running
+    if (this.server) {
+      this.server.close()
+      this.server = null
+      console.log('Express server stopped')
+    }
+
+    // Start server again (will check setting)
+    console.log('Restarting server...')
+    await this.startUp()
+  }
+
+  // Public methods for external access
+  public methods = {
+    restartServer: this.restartServer
   }
 
   generateRoutes = () => {
     const routes = Router()
-    const { methods: apiMethods } = this.methods
+    const { methods: apiMethods } = this.methodsInstance
     const properties = Object.getOwnPropertyNames(apiMethods)
 
     const frontendPath = path.join(__dirname, '..', '..', 'out', 'renderer')

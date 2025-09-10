@@ -32,7 +32,7 @@ const Search = (): React.JSX.Element => {
     queryFn: async () => {
       const repos = (await invoke('getRepoList')) as TOption[]
       if (repos.length) {
-        if (!repo.value || !repos.includes(repo)) setRepo(repos[0])
+        if (!repo.repo.value || !repos.includes(repo.repo)) setRepo(repos[0])
         setNoRepos(false)
       }
       return repos as TOption[]
@@ -48,8 +48,8 @@ const Search = (): React.JSX.Element => {
     queryKey: ['searchList', search, repo],
     queryFn: async () => {
       return search.length > 0
-        ? await invoke('search', { repo: repo.value, data: { search } })
-        : await invoke('getList', { repo: repo.value })
+        ? await invoke('search', { repo: repo.repo.value, data: { search } })
+        : await invoke('getList', { repo: repo.repo.value })
     },
     initialData: [],
     enabled: !!repoList.length
@@ -90,7 +90,7 @@ const Search = (): React.JSX.Element => {
       <div className="w-full h-24 flex-shrink-0 py-6 px-11 absolute top-0 bg-modal backdrop-blur-sm shadow-basic z-10">
         <div className="h-full w-full bg-default shadow-basic rounded flex justify-center items-center pr-4 max-w-3xl my-0 mx-auto">
           <Select
-            value={noRepos ? { label: t('SearchComic.noReposAvailable') } : repo}
+            value={noRepos ? { label: t('SearchComic.noReposAvailable') } : repo.repo}
             options={repoList}
             onChange={(e) => handleChangeRepo(e as TOption)}
             isDisabled={noRepos}

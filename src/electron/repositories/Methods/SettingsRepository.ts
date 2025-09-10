@@ -1,11 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 import { DataPaths } from 'utils/utils'
+import { deepMerge } from 'shared/utils'
+import { DEFAULT_UPDATE_SETTINGS } from 'constants/defaultSettings'
 
 export interface UpdateSettings {
   autoUpdate: boolean
   optInNonStable: boolean
-  releaseTypes: string[]
 }
 
 export interface LanguageSettings {
@@ -16,26 +17,46 @@ export interface DebugSettings {
   enableDebugLogging: boolean
 }
 
+export interface WebUISettings {
+  enableWebUI: boolean
+}
+
+export interface ThemeSettings {
+  theme: string
+}
+
+export interface RepoSettings {
+  repo: TOption
+}
+
 interface AppSettings {
   update: UpdateSettings
   language: LanguageSettings
   debug: DebugSettings
+  webUI: WebUISettings
+  theme: ThemeSettings
+  repo: RepoSettings
   // Add other settings here in the future
 }
 
 class SettingsRepository {
   private settingsPath: string
   private defaultSettings: AppSettings = {
-    update: {
-      autoUpdate: true,
-      optInNonStable: false,
-      releaseTypes: ['stable']
-    },
+    ...DEFAULT_UPDATE_SETTINGS,
     language: {
       language: 'ptBR'
     },
     debug: {
       enableDebugLogging: false
+    },
+    webUI: {
+      enableWebUI: false
+    },
+    theme: {
+      theme: 'dark'
+    },
+    repo: {
+      repo: {} as TOption
     }
   }
 
@@ -77,7 +98,6 @@ class SettingsRepository {
 
         // Write settings to file
         fs.writeFileSync(this.settingsPath, JSON.stringify(settings, null, 2), 'utf8')
-        console.log('Settings saved successfully')
       } catch (error) {
         console.error('Error saving settings:', error)
         throw error
@@ -160,10 +180,70 @@ class SettingsRepository {
       return updatedSettings.debug
     },
 
+    // Get web UI settings specifically
+    getWebUISettings: async (): Promise<WebUISettings> => {
+      const settings = await this.methods.loadSettings()
+      return settings.webUI
+    },
+
+    // Update web UI settings specifically
+    updateWebUISettings: async (webUISettings: Partial<WebUISettings>): Promise<WebUISettings> => {
+      console.log('updateWebUISettings called with:', webUISettings)
+      const currentSettings = await this.methods.loadSettings()
+      console.log('Current webUI settings:', currentSettings.webUI)
+
+      const updatedWebUISettings = {
+        ...currentSettings.webUI,
+        ...webUISettings
+      }
+      console.log('Updated webUI settings:', updatedWebUISettings)
+
+      const updatedSettings = await this.methods.updateSettings('webUI', updatedWebUISettings)
+      console.log('Final webUI settings:', updatedSettings.webUI)
+      return updatedSettings.webUI
+    },
+
     // Reset settings to defaults
     resetSettings: async (): Promise<AppSettings> => {
       await this.methods.saveSettings(this.defaultSettings)
       return this.defaultSettings
+    },
+
+    // Get theme settings specifically
+    getThemeSettings: async (): Promise<ThemeSettings> => {
+      const settings = await this.methods.loadSettings()
+      return settings.theme
+    },
+
+    // Update theme settings specifically
+    updateThemeSettings: async (themeSettings: Partial<ThemeSettings>): Promise<ThemeSettings> => {
+      const updatedSettings = await this.methods.updateSettings('theme', themeSettings)
+      return updatedSettings.theme
+    },
+
+    // Get repo settings specifically
+    getRepoSettings: async (): Promise<RepoSettings> => {
+      const settings = await this.methods.loadSettings()
+      return settings.repo
+    },
+
+    // Update repo settings specifically
+    updateRepoSettings: async (repoSettings: Partial<RepoSettings>): Promise<RepoSettings> => {
+      const updatedSettings = await this.methods.updateSettings('repo', repoSettings)
+      return updatedSettings.repo
+    },
+
+    // Get all settings at once
+    getAllSettings: async (): Promise<AppSettings> => {
+      return await this.methods.loadSettings()
+    },
+
+    // Update all settings at once by merging with existing settings
+    updateAllSettings: async (newSettings: Partial<AppSettings>): Promise<AppSettings> => {
+      const currentSettings = await this.methods.loadSettings()
+      const mergedSettings = deepMerge(currentSettings, newSettings)
+      await this.methods.saveSettings(mergedSettings)
+      return mergedSettings
     },
 
     // Get settings file path (for debugging)
@@ -187,6 +267,18 @@ class SettingsRepository {
       debug: {
         ...this.defaultSettings.debug,
         ...(settings.debug || {})
+      },
+      webUI: {
+        ...this.defaultSettings.webUI,
+        ...(settings.webUI || {})
+      },
+      theme: {
+        ...this.defaultSettings.theme,
+        ...(settings.theme || {})
+      },
+      repo: {
+        ...this.defaultSettings.repo,
+        ...(settings.repo || {})
       }
     }
 

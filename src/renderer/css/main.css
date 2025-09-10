@@ -1,6 +1,20 @@
 @import './fonts/roboto/roboto.css';
 @import 'tailwindcss';
 
+/* Custom spinning animation for loading buttons */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
 @theme {
   --font-family-roboto: 'Roboto', sans-serif;
 

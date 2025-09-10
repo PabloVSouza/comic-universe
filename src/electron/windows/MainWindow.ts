@@ -25,12 +25,12 @@ function isValidUpdateTransition(
     if (available.isAlpha && settings.releaseTypes.includes('alpha')) {
       return true
     }
-    
+
     // If user allows beta releases, allow any transition to beta
     if (available.isBeta && settings.releaseTypes.includes('beta')) {
       return true
     }
-    
+
     // If user allows stable releases, allow any transition to stable
     if (available.isStable && settings.releaseTypes.includes('stable')) {
       return true
@@ -112,22 +112,31 @@ const setupAutoUpdater = (
     // Check if user wants this type of update
     let shouldShowUpdate = false
 
-    if (availableIsStable && settings.releaseTypes.includes('stable')) {
+    if (availableIsStable) {
       shouldShowUpdate = true
-    } else if (availableIsBeta && settings.releaseTypes.includes('beta') && settings.optInNonStable) {
-      shouldShowUpdate = true
-    } else if (availableIsAlpha && settings.releaseTypes.includes('alpha') && settings.optInNonStable) {
+    } else if ((availableIsBeta || availableIsAlpha) && settings.optInNonStable) {
       shouldShowUpdate = true
     }
 
     if (shouldShowUpdate) {
-      dialog.showMessageBox(mainWindow, {
-        type: 'info',
-        title: 'Update Available',
-        message: 'A new version is available. It will be downloaded in the background.',
-        detail: `Version ${info.version} is available. The update will be downloaded automatically.`,
-        buttons: ['OK']
-      })
+      // For macOS and Windows, show manual download dialog instead of auto-download
+      if (process.platform === 'darwin' || process.platform === 'win32') {
+        const platformName = process.platform === 'darwin' ? 'macOS' : 'Windows'
+        // Send message to renderer to show update dialog
+        mainWindow.webContents.send('update-available-manual', {
+          version: info.version,
+          platform: platformName,
+          message: `A new version (${info.version}) is available for ${platformName}.`,
+          detail: `Auto-updating is disabled on ${platformName} due to code signing requirements.\n\nPlease visit the GitHub releases page to download the latest version manually.\n\nThis ensures a secure and reliable update process.`
+        })
+      } else {
+        // For Linux, use normal auto-update flow
+        mainWindow.webContents.send('update-available-auto', {
+          version: info.version,
+          message: 'A new version is available. It will be downloaded in the background.',
+          detail: `Version ${info.version} is available. The update will be downloaded automatically.`
+        })
+      }
     } else {
       console.log(
         `Update available (${info.version}) but user preferences don't allow this type of update`
@@ -135,21 +144,24 @@ const setupAutoUpdater = (
     }
   })
 
-  // Update downloaded
+  // Update downloaded (only for Linux)
   autoUpdater.on('update-downloaded', (info) => {
-    dialog
-      .showMessageBox(mainWindow, {
-        type: 'info',
-        title: 'Update Ready',
-        message: 'Update downloaded. The application will restart to apply the update.',
-        detail: `Version ${info.version} has been downloaded and is ready to install.`,
-        buttons: ['Restart Now', 'Later']
-      })
-      .then((result) => {
-        if (result.response === 0) {
-          autoUpdater.quitAndInstall()
-        }
-      })
+    // Only handle update installation for Linux
+    if (process.platform !== 'darwin' && process.platform !== 'win32') {
+      dialog
+        .showMessageBox(mainWindow, {
+          type: 'info',
+          title: 'Update Ready',
+          message: 'Update downloaded. The application will restart to apply the update.',
+          detail: `Version ${info.version} has been downloaded and is ready to install.`,
+          buttons: ['Restart Now', 'Later']
+        })
+        .then((result) => {
+          if (result.response === 0) {
+            autoUpdater.quitAndInstall()
+          }
+        })
+    }
   })
 
   // Update error
@@ -197,7 +209,10 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     await methods.starUp()
 
     eventManager = new EventManager(methods.methods)
-    new ApiManager(methods)
+    const apiManager = new ApiManager(methods)
+
+    // Pass ApiManager instance to AppRepository for server restart functionality
+    methods.setApiManager(apiManager)
 
     // Setup auto-updater with settings repository
     if (!is.dev) {
@@ -209,26 +224,18 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
         !currentVersion.includes('-')
 
       if (isCICDVersion) {
-        // Disable auto-updater on macOS and Windows due to code signing issues
+        // Setup auto-updater for all platforms, but handle macOS/Windows differently
+        const settingsRepository = new SettingsRepository()
+        setupAutoUpdater(mainWindow, settingsRepository)
+
         if (process.platform === 'darwin' || process.platform === 'win32') {
-          const platformName = process.platform === 'darwin' ? 'macOS' : 'Windows'
-          console.log(`Auto-updater disabled on ${platformName} - manual download required`)
-          // Show manual download message for macOS and Windows users
-          dialog.showMessageBox(mainWindow, {
-            type: 'info',
-            title: 'Manual Update Required',
-            message: `Auto-updating is disabled on ${platformName} due to code signing requirements.`,
-            detail: 'Please visit the GitHub releases page to download the latest version manually.\n\nThis ensures a secure and reliable update process.',
-            buttons: ['Open Releases Page', 'OK']
-          }).then((result) => {
-            if (result.response === 0) {
-              shell.openExternal('https://github.com/PabloVSouza/comic-universe/releases')
-            }
-          })
+          // For macOS and Windows, check for updates but show manual download dialog
+          console.log(
+            `Auto-updater enabled for ${process.platform === 'darwin' ? 'macOS' : 'Windows'} - will show manual download when update available`
+          )
+          autoUpdater.checkForUpdatesAndNotify()
         } else {
-          // Enable auto-updater for Linux only
-          const settingsRepository = new SettingsRepository()
-          setupAutoUpdater(mainWindow, settingsRepository)
+          // For Linux, use normal auto-updater
           autoUpdater.checkForUpdatesAndNotify()
         }
       }

@@ -17,10 +17,10 @@ export default function Select({ className, ...props }: ISelectProps) {
         input: () => '',
         control: () =>
           'pr-2 pl-5 h-full w-full overflow-hidden rounded !cursor-pointer hover:bg-list-item-hover hover:text-text-oposite',
-        menu: () => 'w-full flex pt-px bg-default rounded overflow-hidden',
+        menu: () => 'w-full flex pt-px bg-list-item rounded overflow-hidden',
         menuList: () => 'flex flex-col w-full gap-px',
         option: () =>
-          'bg-default w-full h-10 !flex justify-center items-center !cursor-pointer hover:bg-list-item-hover hover:text-text-oposite'
+          'bg-list-item w-full h-10 !flex justify-center items-center !cursor-pointer hover:bg-list-item-hover hover:text-text-oposite'
       }}
       {...props}
     />

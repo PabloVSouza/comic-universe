@@ -1,9 +1,13 @@
-import { BrowserWindow, app } from 'electron'
+import { BrowserWindow, app, shell } from 'electron'
 import pathLib from 'path'
 import fs from 'fs'
 import { is } from '@electron-toolkit/utils'
 import { autoUpdater } from 'electron-updater'
-import SettingsRepository, { LanguageSettings, UpdateSettings } from './SettingsRepository'
+import SettingsRepository, {
+  LanguageSettings,
+  UpdateSettings,
+  WebUISettings
+} from './SettingsRepository'
 
 class AppRepository {
   private settingsRepository: SettingsRepository
@@ -99,6 +103,10 @@ class AppRepository {
       return currentVersion
     },
 
+    getPlatform: () => {
+      return process.platform
+    },
+
     // Language settings methods
     getLanguageSettings: async () => {
       return await this.settingsRepository.methods.getLanguageSettings()
@@ -119,6 +127,29 @@ class AppRepository {
       return await this.settingsRepository.methods.updateUpdateSettingsInternal(
         args.updateSettings as Partial<UpdateSettings>
       )
+    },
+
+    // Web UI settings methods
+    getWebUISettings: async () => {
+      return await this.settingsRepository.methods.getWebUISettings()
+    },
+
+    updateWebUISettings: async (args: { webUISettings: unknown }) => {
+      // Extract the actual settings from the nested structure
+      const settings = (args.webUISettings as any)?.webUISettings || args.webUISettings
+      return await this.settingsRepository.methods.updateWebUISettings(
+        settings as Partial<WebUISettings>
+      )
+    },
+
+    restartApiServer: async () => {
+      // This method will be overridden by Methods.setApiManager
+      // to call the actual ApiManager restartServer method
+      return { message: 'API server restart requested' }
+    },
+
+    openExternal: (args: { url: string }) => {
+      shell.openExternal(args.url)
     }
   }
 }

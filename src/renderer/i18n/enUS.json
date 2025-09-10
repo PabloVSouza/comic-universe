@@ -57,16 +57,52 @@
     "next": "Next"
   },
   "Settings": {
+    "title": "Settings",
+    "saveAll": "Save All",
     "windowTitle": "Application Settings",
+    "app": {
+      "title": "App Settings"
+    },
     "options": {
       "generalLabel": "General",
       "pluginsLabel": "Plugins",
       "userLabel": "Users"
     },
+    "plugin": {
+      "title": "Plugin Settings"
+    },
+    "user": {
+      "title": "User Settings"
+    },
     "general": {
       "title": "General Settings",
-      "language": "Language",
-      "selectLanguage": "Select Language",
+      "language": {
+        "title": "Language Settings",
+        "label": "Select Language",
+        "description": "Choose your preferred language for the application interface"
+      },
+      "debug": {
+        "title": "Debug Settings",
+        "enableLogging": "Enable Debug Logging",
+        "enableLoggingDescription": "Enable detailed logging for debugging purposes"
+      },
+      "webUI": {
+        "title": "Web UI Settings",
+        "enableWebUI": "Enable Web UI",
+        "enableWebUIDescription": "Enable web-based user interface for remote access"
+      },
+      "theme": {
+        "label": "Theme",
+        "description": "Choose your preferred theme for the application interface",
+        "dark": "Dark",
+        "light": "Light"
+      },
+      "window": {
+        "title": "Window Management",
+        "refreshTitles": "Refresh Window Titles",
+        "refreshTitlesDescription": "Refresh all window titles to reflect current state",
+        "refresh": "Refresh"
+      },
       "updatePreferences": "Update Preferences",
       "autoUpdate": "Enable Auto-Update",
       "checkForUpdates": "Check for Updates",
@@ -81,6 +117,30 @@
       "settingsSaved": "Settings saved successfully",
       "updateCheckSuccess": "Update check completed",
       "updateCheckError": "Error checking for updates"
+    },
+    "update": {
+      "title": "Update Preferences",
+      "autoUpdate": {
+        "title": "Automatic Updates",
+        "enable": "Enable Automatic Updates",
+        "description": "Automatically download and install updates when available",
+        "notAvailableMacOS": "Auto-update is not available on macOS. Updates must be downloaded manually.",
+        "notAvailableWindows": "Auto-update is not available on Windows. Updates must be downloaded manually.",
+        "notAvailableOther": "Auto-update is not available on this platform. Updates must be downloaded manually."
+      },
+      "nonStable": {
+        "title": "Non-Stable Updates",
+        "optIn": "Opt-in for Non-Stable Updates",
+        "description": "Allow the app to check for and install beta and alpha releases",
+        "notAvailableWhenAutoUpdateDisabled": "Non-stable updates are only available when auto-update is enabled."
+      },
+      "releaseTypes": {
+        "title": "Release Types",
+        "description": "Select which types of releases to check for updates",
+        "stableDescription": "Stable releases are production-ready versions",
+        "betaDescription": "Beta releases are feature-complete but may have bugs",
+        "alphaDescription": "Alpha releases are early versions with experimental features"
+      }
     }
   },
   "Users": {

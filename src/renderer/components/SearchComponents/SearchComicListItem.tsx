@@ -42,12 +42,12 @@ const SearchComicListItem = ({
   })
 
   const { data: comicDetails, isFetching: comicDetailsFetching } = useQuery({
-    queryKey: [`comicDetails-${repo.value}-${data.siteId}`],
+    queryKey: [`comicDetails-${repo.repo.value}-${data.siteId}`],
     queryFn: async () => {
       const search = { siteId: data.siteId, siteLink: data.siteLink ?? '' }
 
       return await invoke('getDetails', {
-        repo: repo.value,
+        repo: repo.repo.value,
         data: search
       })
     },
@@ -55,10 +55,10 @@ const SearchComicListItem = ({
   })
 
   const { data: chapterData, isFetching: chapterDataFetching } = useQuery({
-    queryKey: [`chapterData-${repo.value}-${data.siteId}`],
+    queryKey: [`chapterData-${repo.repo.value}-${data.siteId}`],
     queryFn: async () =>
       (await invoke('getChapters', {
-        repo: repo.value,
+        repo: repo.repo.value,
         data: { siteId: data.siteId }
       })) as IChapter[],
     initialData: [],
@@ -78,7 +78,7 @@ const SearchComicListItem = ({
   }
 
   const addToList = (): void => {
-    insertComic({ data, comicDetails, chapterData, repo: repo.value })
+    insertComic({ data, comicDetails, chapterData, repo: repo.repo.value })
     navigate('/')
   }
 

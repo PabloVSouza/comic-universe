@@ -97,7 +97,7 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
 
   # Code signing configuration for macOS
-  # identity: 'Comic Universe'  # Disabled temporarily to fix auto-updater
+  identity: 'Comic Universe'
   # Certificate file for self-signed certificate (uses environment variables in CI/CD)
   # cscLink: "certificates/macos-cert.p12"  # Local development
   # cscKeyPassword: "comicuniverse"         # Local development

@@ -209,9 +209,27 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
         !currentVersion.includes('-')
 
       if (isCICDVersion) {
-        const settingsRepository = new SettingsRepository()
-        setupAutoUpdater(mainWindow, settingsRepository)
-        autoUpdater.checkForUpdatesAndNotify()
+        // Disable auto-updater on macOS due to code signing issues
+        if (process.platform === 'darwin') {
+          console.log('Auto-updater disabled on macOS - manual download required')
+          // Show manual download message for macOS users
+          dialog.showMessageBox(mainWindow, {
+            type: 'info',
+            title: 'Manual Update Required',
+            message: 'Auto-updating is disabled on macOS due to code signing requirements.',
+            detail: 'Please visit the GitHub releases page to download the latest version manually.\n\nThis ensures a secure and reliable update process.',
+            buttons: ['Open Releases Page', 'OK']
+          }).then((result) => {
+            if (result.response === 0) {
+              shell.openExternal('https://github.com/PabloVSouza/comic-universe/releases')
+            }
+          })
+        } else {
+          // Enable auto-updater for Windows and Linux
+          const settingsRepository = new SettingsRepository()
+          setupAutoUpdater(mainWindow, settingsRepository)
+          autoUpdater.checkForUpdatesAndNotify()
+        }
       }
     }
   }

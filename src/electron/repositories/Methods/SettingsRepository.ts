@@ -176,7 +176,18 @@ class SettingsRepository {
 
     // Update web UI settings specifically
     updateWebUISettings: async (webUISettings: Partial<WebUISettings>): Promise<WebUISettings> => {
-      const updatedSettings = await this.methods.updateSettings('webUI', webUISettings)
+      console.log('updateWebUISettings called with:', webUISettings)
+      const currentSettings = await this.methods.loadSettings()
+      console.log('Current webUI settings:', currentSettings.webUI)
+      
+      const updatedWebUISettings = {
+        ...currentSettings.webUI,
+        ...webUISettings
+      }
+      console.log('Updated webUI settings:', updatedWebUISettings)
+      
+      const updatedSettings = await this.methods.updateSettings('webUI', updatedWebUISettings)
+      console.log('Final webUI settings:', updatedSettings.webUI)
       return updatedSettings.webUI
     },
 

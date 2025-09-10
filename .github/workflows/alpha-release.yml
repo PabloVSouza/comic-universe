@@ -142,9 +142,6 @@ jobs:
             security unlock-keychain -p "" build.keychain
             security import certificates/cert.p12 -k build.keychain -P "${{ secrets.CSC_KEY_PASSWORD }}" -T /usr/bin/codesign
             security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
-            # Extract certificate and make it trusted
-            openssl pkcs12 -in certificates/cert.p12 -out certificates/cert.pem -nokeys -passin pass:"${{ secrets.CSC_KEY_PASSWORD }}"
-            security add-trusted-cert -d -r trustRoot -k build.keychain certificates/cert.pem
 
       - name: build-mac-universal
         run: npm run build:mac

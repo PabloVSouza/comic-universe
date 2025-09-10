@@ -19,7 +19,9 @@ export default defineConfig({
         scripts: resolve('src/electron/scripts'),
         utils: resolve('src/electron/utils'),
         windows: resolve('src/electron/windows'),
-        database: resolve('src/database')
+        database: resolve('src/database'),
+        constants: resolve('src/electron/constants'),
+        shared: resolve('src/shared')
       }
     }
   },
@@ -48,7 +50,9 @@ export default defineConfig({
         functions: resolve('src/renderer/functions'),
         routes: resolve('src/renderer/routes'),
         css: resolve('src/renderer/css'),
-        store: resolve('src/renderer/store')
+        store: resolve('src/renderer/store'),
+        constants: resolve('src/renderer/constants'),
+        shared: resolve('src/shared')
       }
     }
   }

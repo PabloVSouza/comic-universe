@@ -21,9 +21,6 @@ export const updateWindowTitles = (): void => {
     if (translationKey && window.windowProps.title) {
       const translatedTitle = i18n.t(translationKey)
       if (window.windowProps.title !== translatedTitle) {
-        console.log(
-          `Updating ${componentName} title: "${window.windowProps.title}" -> "${translatedTitle}"`
-        )
         updateWindowProps(window.id, { title: translatedTitle })
       }
     }
@@ -61,9 +58,6 @@ const openWindow = ({
         const translationKey = titleMap[component]
         if (translationKey) {
           const translatedTitle = i18n.t(translationKey)
-          console.log(
-            `Translating ${component} title: "${translatedWindowProps.title}" -> "${translatedTitle}"`
-          )
           translatedWindowProps.title = translatedTitle
         }
       }

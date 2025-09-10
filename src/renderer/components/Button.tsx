@@ -6,6 +6,7 @@ import Image from 'components/Image'
 const buttonStyling = {
   base: 'cursor-pointer relative overflow-hidden transition-all duration-500 ease-default',
   disabled: 'opacity-50 cursor-not-allowed',
+  disabledToggle: 'bg-gray-400 dark:bg-gray-500 cursor-not-allowed !h-6 !w-11',
   loading: 'animate-spin',
   themes: {
     default: {
@@ -72,6 +73,17 @@ const buttonStyling = {
         default: '',
         active: ''
       }
+    },
+    toggle: {
+      button: {
+        default: `relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none bg-gray-200 dark:bg-gray-700`,
+        active: 'bg-blue-600'
+      },
+      icon: {
+        default: `inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1`,
+        active: 'translate-x-6',
+        disabled: 'bg-gray-400 dark:bg-gray-500 !h-4 !w-4'
+      }
     }
   },
   sizes: {
@@ -133,7 +145,7 @@ const Button = ({
       buttonStyling.themes[theme].button.default,
       color ? buttonStyling.colors[color] : '',
       size ? buttonStyling.sizes[size] : '',
-      disabled ? buttonStyling.disabled : '',
+      disabled ? (theme === 'toggle' ? buttonStyling.disabledToggle : buttonStyling.disabled) : '',
       className,
       active ? buttonStyling.themes[theme].button.active : ''
     )
@@ -153,17 +165,19 @@ const Button = ({
           className={classNames(
             buttonStyling.themes[theme].icon.default,
             active && buttonStyling.themes[theme].icon.active,
+            disabled && theme === 'toggle' && buttonStyling.themes[theme].icon.disabled,
             loading && buttonStyling.loading
           )}
           src={icon}
           svg
         />
       ) : (
-        // For themes that don't use icons (like burger), render the icon styling directly
+        // For themes that don't use icons (like burger, toggle), render the icon styling directly
         <div
           className={classNames(
             buttonStyling.themes[theme].icon.default,
             active && buttonStyling.themes[theme].icon.active,
+            disabled && theme === 'toggle' && buttonStyling.themes[theme].icon.disabled,
             loading && buttonStyling.loading
           )}
         />

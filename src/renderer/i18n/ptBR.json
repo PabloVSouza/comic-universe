@@ -57,16 +57,52 @@
     "next": "Próxima"
   },
   "Settings": {
+    "title": "Configurações",
+    "saveAll": "Salvar Tudo",
     "windowTitle": "Configurações",
+    "app": {
+      "title": "Configurações do App"
+    },
     "options": {
       "generalLabel": "Geral",
       "pluginsLabel": "Plugins",
       "userLabel": "Usuário"
     },
+    "plugin": {
+      "title": "Configurações de Plugins"
+    },
+    "user": {
+      "title": "Configurações de Usuário"
+    },
     "general": {
       "title": "Configurações Gerais",
-      "language": "Idioma",
-      "selectLanguage": "Selecionar Idioma",
+      "language": {
+        "title": "Configurações de Idioma",
+        "label": "Selecionar Idioma",
+        "description": "Escolha seu idioma preferido para a interface do aplicativo"
+      },
+      "debug": {
+        "title": "Configurações de Debug",
+        "enableLogging": "Ativar Log de Debug",
+        "enableLoggingDescription": "Ativar log detalhado para fins de depuração"
+      },
+      "webUI": {
+        "title": "Configurações de Interface Web",
+        "enableWebUI": "Habilitar Interface Web",
+        "enableWebUIDescription": "Habilitar interface baseada em web para acesso remoto"
+      },
+      "theme": {
+        "label": "Tema",
+        "description": "Escolha seu tema preferido para a interface do aplicativo",
+        "dark": "Escuro",
+        "light": "Claro"
+      },
+      "window": {
+        "title": "Gerenciamento de Janelas",
+        "refreshTitles": "Atualizar Títulos das Janelas",
+        "refreshTitlesDescription": "Atualizar todos os títulos das janelas para refletir o estado atual",
+        "refresh": "Atualizar"
+      },
       "updatePreferences": "Preferências de Atualização",
       "autoUpdate": "Ativar Atualização Automática",
       "checkForUpdates": "Verificar Atualizações",
@@ -81,6 +117,30 @@
       "settingsSaved": "Configurações salvas com sucesso",
       "updateCheckSuccess": "Verificação de atualização concluída",
       "updateCheckError": "Erro ao verificar atualizações"
+    },
+    "update": {
+      "title": "Preferências de Atualização",
+      "autoUpdate": {
+        "title": "Atualizações Automáticas",
+        "enable": "Ativar Atualizações Automáticas",
+        "description": "Baixar e instalar automaticamente atualizações quando disponíveis",
+        "notAvailableMacOS": "Atualização automática não está disponível no macOS. Atualizações devem ser baixadas manualmente.",
+        "notAvailableWindows": "Atualização automática não está disponível no Windows. Atualizações devem ser baixadas manualmente.",
+        "notAvailableOther": "Atualização automática não está disponível nesta plataforma. Atualizações devem ser baixadas manualmente."
+      },
+      "nonStable": {
+        "title": "Atualizações Não-Estáveis",
+        "optIn": "Optar por Atualizações Não-Estáveis",
+        "description": "Permitir que o app verifique e instale releases beta e alpha",
+        "notAvailableWhenAutoUpdateDisabled": "Atualizações não-estáveis só estão disponíveis quando a atualização automática está habilitada."
+      },
+      "releaseTypes": {
+        "title": "Tipos de Release",
+        "description": "Selecionar quais tipos de releases verificar para atualizações",
+        "stableDescription": "Releases estáveis são versões prontas para produção",
+        "betaDescription": "Releases beta são completas em recursos mas podem ter bugs",
+        "alphaDescription": "Releases alpha são versões iniciais com recursos experimentais"
+      }
     }
   },
   "Users": {

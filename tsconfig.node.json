@@ -3,6 +3,7 @@
   "include": [
     "src/electron/**/*",
     "src/database/**/*",
+    "src/shared/**/*",
     "electron.vite.config.*",
     "src/@types/*.d.ts",
     "src/**/*.d.ts"
@@ -20,7 +21,9 @@
       "utils": ["./src/electron/utils/utils"],
       "utils/*":["./src/electron/utils/*"],
       "windows/*":["./src/electron/windows/*"],
-      "database/*": ["./src/database/*"]
+      "database/*": ["./src/database/*"],
+      "constants/*": ["./src/electron/constants/*"],
+      "shared/*": ["./src/shared/*"]
     }
   }
 }

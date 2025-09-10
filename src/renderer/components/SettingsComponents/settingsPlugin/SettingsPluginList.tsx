@@ -1,4 +1,4 @@
-import SettingsPluginListItem from 'components/SettingsComponents/SettingsPluginListItem'
+import SettingsPluginListItem from './SettingsPluginListItem'
 
 const SettingsPluginList = ({ pluginsList }: { pluginsList: IRepoPluginInfo[] }) => {
   return (

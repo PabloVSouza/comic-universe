@@ -1,9 +1,9 @@
-import { ReactElement, useState, useEffect } from 'react'
+import { ReactElement, useState, useEffect, useMemo } from 'react'
 import SettingsList from 'components/SettingsComponents/SettingsList'
-import SettingsGeneral from 'components/SettingsComponents/SettingsGeneral'
-import SettingsUser from 'components/SettingsComponents/SettingsUser'
-import SettingsPlugin from 'components/SettingsComponents/SettingsPlugin'
-import SettingsAbout from 'components/SettingsComponents/SettingsAbout'
+import SettingsApp from 'components/SettingsComponents/settingsApp'
+import SettingsUser from 'components/SettingsComponents/settingsUser'
+import SettingsPlugin from 'components/SettingsComponents/settingsPlugin'
+import SettingsAbout from 'components/SettingsComponents/settingsAbout'
 import { useTranslation } from 'react-i18next'
 
 import pluginIcon from 'assets/plugin.svg'
@@ -16,41 +16,44 @@ const Settings = ({ initialTab }: { initialTab?: string }): ReactElement => {
 
   const { t } = useTranslation()
 
-  const settingsOptions: ISettingsOption[] = [
-    {
-      label: t('Settings.options.generalLabel'),
-      tag: 'general',
-      icon: settingsIcon,
-      onClick: () => setActiveOption('general')
-    },
-    {
-      label: t('Settings.options.userLabel'),
-      icon: userIcon,
-      tag: 'user',
-      onClick: () => setActiveOption('user')
-    },
-    {
-      label: t('Settings.options.pluginsLabel'),
-      icon: pluginIcon,
-      tag: 'plugins',
-      onClick: () => setActiveOption('plugins')
-    },
-    {
-      label: t('HomeNav.about'),
-      icon: infoIcon,
-      tag: 'about',
-      onClick: () => setActiveOption('about')
-    }
-  ]
+  const settingsOptions: ISettingsOption[] = useMemo(
+    () => [
+      {
+        label: t('Settings.options.generalLabel'),
+        tag: 'general',
+        icon: settingsIcon,
+        onClick: () => setActiveOption('general')
+      },
+      {
+        label: t('Settings.options.userLabel'),
+        icon: userIcon,
+        tag: 'user',
+        onClick: () => setActiveOption('user')
+      },
+      {
+        label: t('Settings.options.pluginsLabel'),
+        icon: pluginIcon,
+        tag: 'plugins',
+        onClick: () => setActiveOption('plugins')
+      },
+      {
+        label: t('HomeNav.about'),
+        icon: infoIcon,
+        tag: 'about',
+        onClick: () => setActiveOption('about')
+      }
+    ],
+    [t]
+  )
 
   useEffect(() => {
     if (!initialTab) {
       setActiveOption(settingsOptions[0].tag)
     }
-  }, [initialTab])
+  }, [initialTab, settingsOptions])
 
   const componentList = {
-    general: SettingsGeneral,
+    general: SettingsApp,
     user: SettingsUser,
     plugins: SettingsPlugin,
     about: SettingsAbout

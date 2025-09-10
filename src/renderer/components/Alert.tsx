@@ -97,7 +97,10 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
     <>
       {children}
       {alertProps &&
-        createPortal(<Alert {...alertProps} buttons={buttons} className={theme} />, document.body)}
+        createPortal(
+          <Alert {...alertProps} buttons={buttons} className={theme.theme} />,
+          document.body
+        )}
     </>
   )
 }

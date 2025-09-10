@@ -1,6 +1,6 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
-  "include": ["src/env.d.ts", "src/**/*", "src/**/*.tsx", "src/@types/*.d.ts"],
+  "include": ["src/env.d.ts", "src/**/*", "src/**/*.tsx", "src/@types/*.d.ts", "src/shared/**/*"],
   "compilerOptions": {
     "composite": true,
     "jsx": "react-jsx",
@@ -25,7 +25,9 @@
       "routes/*": ["./routes/*"],
       "css/*": ["./css/*"],
       "store/*": ["./store/*"],
-      "@types/*": ["./@types/*"]
+      "constants/*": ["./constants/*"],
+      "@types/*": ["./@types/*"],
+      "shared/*": ["../shared/*"]
     }
   }
 }

@@ -25,12 +25,12 @@ function isValidUpdateTransition(
     if (available.isAlpha && settings.releaseTypes.includes('alpha')) {
       return true
     }
-    
+
     // If user allows beta releases, allow any transition to beta
     if (available.isBeta && settings.releaseTypes.includes('beta')) {
       return true
     }
-    
+
     // If user allows stable releases, allow any transition to stable
     if (available.isStable && settings.releaseTypes.includes('stable')) {
       return true
@@ -112,11 +112,9 @@ const setupAutoUpdater = (
     // Check if user wants this type of update
     let shouldShowUpdate = false
 
-    if (availableIsStable && settings.releaseTypes.includes('stable')) {
+    if (availableIsStable) {
       shouldShowUpdate = true
-    } else if (availableIsBeta && settings.releaseTypes.includes('beta') && settings.optInNonStable) {
-      shouldShowUpdate = true
-    } else if (availableIsAlpha && settings.releaseTypes.includes('alpha') && settings.optInNonStable) {
+    } else if ((availableIsBeta || availableIsAlpha) && settings.optInNonStable) {
       shouldShowUpdate = true
     }
 
@@ -212,7 +210,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
 
     eventManager = new EventManager(methods.methods)
     const apiManager = new ApiManager(methods)
-    
+
     // Pass ApiManager instance to AppRepository for server restart functionality
     methods.setApiManager(apiManager)
 
@@ -229,10 +227,12 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
         // Setup auto-updater for all platforms, but handle macOS/Windows differently
         const settingsRepository = new SettingsRepository()
         setupAutoUpdater(mainWindow, settingsRepository)
-        
+
         if (process.platform === 'darwin' || process.platform === 'win32') {
           // For macOS and Windows, check for updates but show manual download dialog
-          console.log(`Auto-updater enabled for ${process.platform === 'darwin' ? 'macOS' : 'Windows'} - will show manual download when update available`)
+          console.log(
+            `Auto-updater enabled for ${process.platform === 'darwin' ? 'macOS' : 'Windows'} - will show manual download when update available`
+          )
           autoUpdater.checkForUpdatesAndNotify()
         } else {
           // For Linux, use normal auto-updater

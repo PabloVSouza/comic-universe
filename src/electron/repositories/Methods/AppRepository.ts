@@ -3,7 +3,11 @@ import pathLib from 'path'
 import fs from 'fs'
 import { is } from '@electron-toolkit/utils'
 import { autoUpdater } from 'electron-updater'
-import SettingsRepository, { LanguageSettings, UpdateSettings, WebUISettings } from './SettingsRepository'
+import SettingsRepository, {
+  LanguageSettings,
+  UpdateSettings,
+  WebUISettings
+} from './SettingsRepository'
 
 class AppRepository {
   private settingsRepository: SettingsRepository
@@ -97,6 +101,10 @@ class AppRepository {
       // In production, return the actual version from package.json
       // This version is updated by CI/CD when releases are created
       return currentVersion
+    },
+
+    getPlatform: () => {
+      return process.platform
     },
 
     // Language settings methods

@@ -105,20 +105,23 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Setup Consistent Certificate from Secrets
-        if: matrix.os == 'windows-latest' || matrix.os == 'macos-14'
-        run: |
-          mkdir -p certificates
-          echo "${{ secrets.CSC_LINK_BASE64 }}" | base64 --decode > certificates/cert.p12
-          echo "CSC_LINK=certificates/cert.p12" >> $GITHUB_ENV
-          echo "CSC_KEY_PASSWORD=${{ secrets.CSC_KEY_PASSWORD }}" >> $GITHUB_ENV
-          if [[ "${{ matrix.os }}" == "macos-14" ]]; then
-            security create-keychain -p "" build.keychain
-            security default-keychain -s build.keychain
-            security unlock-keychain -p "" build.keychain
-            security import certificates/cert.p12 -k build.keychain -P "${{ secrets.CSC_KEY_PASSWORD }}" -T /usr/bin/codesign
-            security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
-          fi
+        - name: Setup Consistent Certificate from Secrets
+          if: matrix.os == 'windows-latest' || matrix.os == 'macos-14'
+          run: |
+            mkdir -p certificates
+            echo "${{ secrets.CSC_LINK_BASE64 }}" | base64 --decode > certificates/cert.p12
+            echo "CSC_LINK=certificates/cert.p12" >> $GITHUB_ENV
+            echo "CSC_KEY_PASSWORD=${{ secrets.CSC_KEY_PASSWORD }}" >> $GITHUB_ENV
+            if [[ "${{ matrix.os }}" == "macos-14" ]]; then
+              security create-keychain -p "" build.keychain
+              security default-keychain -s build.keychain
+              security unlock-keychain -p "" build.keychain
+              security import certificates/cert.p12 -k build.keychain -P "${{ secrets.CSC_KEY_PASSWORD }}" -T /usr/bin/codesign
+              security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+              # Extract certificate and make it trusted
+              openssl pkcs12 -in certificates/cert.p12 -out certificates/cert.pem -nokeys -passin pass:"${{ secrets.CSC_KEY_PASSWORD }}"
+              security add-trusted-cert -d -r trustRoot -k build.keychain certificates/cert.pem
+            fi
 
       - name: build-linux-x64
         if: matrix.architecture == 'x64' && matrix.os == 'ubuntu-latest'

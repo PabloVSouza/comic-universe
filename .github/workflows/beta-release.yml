@@ -39,21 +39,24 @@ jobs:
           CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
           BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
 
-          # Get the latest release to determine next build number
-          LATEST_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[0].tag_name // "v0.0.0"')
-          echo "Latest release: $LATEST_RELEASE"
-
-          # Extract build number from latest release or start from 1
-          # Handle both old timestamp format and new semantic format
-          if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
-            # Old timestamp format - start from 1
-            BUILD_NUMBER=1
-          elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
-            # New semantic format - increment build number
-            BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
-          else
-            BUILD_NUMBER=1
-          fi
+          # Get all releases and find the highest version number for this base version
+          ALL_RELEASES=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[].tag_name')
+          echo "All releases: $ALL_RELEASES"
+          
+          # Find the highest build number for the current base version and release type
+          MAX_BUILD_NUMBER=0
+          for release in $ALL_RELEASES; do
+            if [[ $release =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
+              BUILD_NUM=${BASH_REMATCH[2]}
+              if [[ $BUILD_NUM -gt $MAX_BUILD_NUMBER ]]; then
+                MAX_BUILD_NUMBER=$BUILD_NUM
+              fi
+            fi
+          done
+          
+          # Increment the highest build number found
+          BUILD_NUMBER=$((MAX_BUILD_NUMBER + 1))
+          echo "Max build number found: $MAX_BUILD_NUMBER, next build number: $BUILD_NUMBER"
 
           BETA_VERSION="${BASE_VERSION}-beta.${BUILD_NUMBER}"
           echo "beta-version=$BETA_VERSION" >> $GITHUB_OUTPUT

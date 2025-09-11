@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
 import openWindow from 'functions/openWindow'
+import Cover from 'components/Cover'
 import HomeTopBar from 'components/HomeComponents/HomeTopBar'
 import HomeComicList from 'components/HomeComponents/HomeComicList'
 import HomeComicDashboard from 'components/HomeComponents/HomeDashboardComponents/HomeDashboard'
@@ -10,6 +11,7 @@ import HomeBlankArea from 'components/HomeComponents/HomeBlankArea'
 import WindowManager from 'components/WindowComponents/WindowManager'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import useGlobalStore from 'store/useGlobalStore'
+import useWindowManagerStore from 'store/useWindowManagerStore'
 import useQueue from 'hooks/useQueue'
 import useFetchData from 'hooks/useFetchData'
 import { addChaptersToQueue } from 'functions/queueUtils'
@@ -19,6 +21,12 @@ const Home = (): React.JSX.Element => {
   const { currentUser } = usePersistSessionStore()
   const userActive = !!currentUser.id
   const { activeComic, setActiveComic } = useGlobalStore()
+  const { currentWindows } = useWindowManagerStore()
+
+  // Check if there are any active unique windows
+  const hasUniqueWindows = currentWindows
+    .filter((window) => !window.windowStatus.isMinimized)
+    .some((window) => window.windowProps.unique)
 
   const { fetchChapterPages } = useFetchData()
 
@@ -62,6 +70,9 @@ const Home = (): React.JSX.Element => {
           )}
         </div>
       </WindowManager>
+
+      {/* Cover overlay for unique windows to block clicks outside */}
+      {hasUniqueWindows && <Cover visible className="z-50" />}
     </div>
   )
 }

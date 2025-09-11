@@ -130,7 +130,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
               key={wallpaper.filename}
               className={`relative group cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
                 selectedWallpaper === (wallpaper.isDefault ? null : wallpaper.filename)
-                  ? 'border-blue-500 ring-2 ring-blue-200'
+                  ? 'border-text-default'
                   : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
               }`}
               onClick={() => handleWallpaperSelect(wallpaper)}
@@ -139,7 +139,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
                 <img
                   src={wallpaperUrls[wallpaper.filename]}
                   alt={wallpaper.filename}
-                  className="w-full h-20 object-cover"
+                  className="w-full aspect-video object-cover"
                   onError={(e) => {
                     // Fallback to a placeholder if image fails to load
                     e.currentTarget.src =
@@ -147,7 +147,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
                   }}
                 />
               ) : (
-                <div className="w-full h-20 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                <div className="w-full aspect-video bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                   <div className="animate-pulse text-gray-400 text-xs">Loading...</div>
                 </div>
               )}

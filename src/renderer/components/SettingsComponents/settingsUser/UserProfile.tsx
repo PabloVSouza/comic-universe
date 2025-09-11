@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next'
 import useApi from 'api'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import Button from 'components/Button'
+import DisplayValue from 'components/DisplayValue'
+import Input from 'components/Input'
 import SettingsItem from '../SettingsItem'
 
 const UserProfile = () => {
@@ -45,11 +47,10 @@ const UserProfile = () => {
         <div className="flex items-center gap-2">
           {isEditing ? (
             <div className="flex items-center gap-1">
-              <input
+              <Input
                 type="text"
                 value={editName}
                 onChange={(e) => setEditName(e.target.value)}
-                className="px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder={t('Settings.user.namePlaceholder')}
               />
               <Button
@@ -72,9 +73,7 @@ const UserProfile = () => {
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <div className="px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600">
-                {currentUser.name || t('Settings.user.noUserSelected')}
-              </div>
+              <DisplayValue>{currentUser.name || t('Settings.user.noUserSelected')}</DisplayValue>
               <Button
                 onClick={() => setIsEditing(true)}
                 theme="pure"

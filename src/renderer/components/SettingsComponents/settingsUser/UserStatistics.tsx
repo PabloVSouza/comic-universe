@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
 import usePersistSessionStore from 'store/usePersistSessionStore'
+import DisplayValue from 'components/DisplayValue'
 import SettingsItem from '../SettingsItem'
 
 const UserStatistics = () => {
@@ -28,18 +29,14 @@ const UserStatistics = () => {
         labelI18nKey="Settings.user.chaptersRead"
         descriptionI18nKey="Settings.user.chaptersReadDescription"
       >
-        <div className="px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600">
-          {totalChaptersRead}
-        </div>
+        <DisplayValue>{totalChaptersRead}</DisplayValue>
       </SettingsItem>
 
       <SettingsItem
         labelI18nKey="Settings.user.pagesRead"
         descriptionI18nKey="Settings.user.pagesReadDescription"
       >
-        <div className="px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600">
-          {totalPagesRead}
-        </div>
+        <DisplayValue>{totalPagesRead}</DisplayValue>
       </SettingsItem>
     </div>
   )

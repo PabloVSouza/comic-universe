@@ -4,6 +4,8 @@ import usePersistStore from 'store/usePersistStore'
 import useApi from 'api'
 import useEnvironment from 'hooks/useEnvironment'
 import Button from 'components/Button'
+import DisplayValue from 'components/DisplayValue'
+import Input from 'components/Input'
 import SettingsItem from '../SettingsItem'
 
 const SettingsWebUIPreferences = () => {
@@ -165,13 +167,11 @@ const SettingsWebUIPreferences = () => {
         descriptionI18nKey="Settings.general.webUI.portDescription"
       >
         <div className="flex items-center gap-2">
-          <input
+          <Input
             type="number"
             value={actualPort && !webUI.port ? actualPort.toString() : webUIPort}
             onChange={(e) => handlePortChange(e.target.value)}
-            className={`w-20 px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              autoPort || shouldDisableWebUISettings ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className="w-20"
             min="1024"
             max="65535"
             disabled={!currentWebUI || autoPort || shouldDisableWebUISettings}
@@ -188,14 +188,14 @@ const SettingsWebUIPreferences = () => {
           labelI18nKey="Settings.general.webUI.url"
           descriptionI18nKey="Settings.general.webUI.urlDescription"
         >
-          <a
+          <DisplayValue
             href={`http://localhost:${actualPort || webUIPort}`}
             target="_blank"
             rel="noreferrer"
-            className="px-3 py-2 bg-list-item text-blue-600 dark:text-blue-400 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors inline-block"
+            className="text-blue-600 dark:text-blue-400 inline-block"
           >
             http://localhost:{actualPort || webUIPort}
-          </a>
+          </DisplayValue>
         </SettingsItem>
       )}
     </div>

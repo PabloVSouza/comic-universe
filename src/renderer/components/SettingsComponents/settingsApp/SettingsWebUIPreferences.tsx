@@ -4,6 +4,8 @@ import usePersistStore from 'store/usePersistStore'
 import useApi from 'api'
 import useEnvironment from 'hooks/useEnvironment'
 import Button from 'components/Button'
+import DisplayValue from 'components/DisplayValue'
+import Input from 'components/Input'
 import SettingsItem from '../SettingsItem'
 
 const SettingsWebUIPreferences = () => {
@@ -46,23 +48,22 @@ const SettingsWebUIPreferences = () => {
             }
           }
         }
-      } catch (error) {
+      } catch {
         setWebUIStatus('unknown')
       }
     }
 
     loadWebUIStatus()
-  }, [currentWebUI, invoke])
+  }, [currentWebUI, invoke, webUI.port])
 
   const handleWebUIToggle = async () => {
     const newValue = !currentWebUI
     setCurrentWebUI(newValue)
     setWebUI(newValue)
 
-    // Trigger API server restart when WebUI setting changes
     try {
       await invoke('restartApiServer')
-    } catch (error) {
+    } catch {
       // Failed to restart API server
     }
   }
@@ -77,7 +78,7 @@ const SettingsWebUIPreferences = () => {
         setWebUIPort(portNumber) // Update the store
         // Restart the server to use the new port
         await invoke('restartApiServer')
-      } catch (error) {
+      } catch {
         // Error updating port setting
       }
     }
@@ -90,7 +91,7 @@ const SettingsWebUIPreferences = () => {
 
     try {
       await invoke('updateWebUISettings', { autoPort: newAutoPort })
-    } catch (error) {
+    } catch {
       // Error updating auto port setting
     }
   }
@@ -114,10 +115,7 @@ const SettingsWebUIPreferences = () => {
   return (
     <div className="space-y-6">
       {/* Web UI Status */}
-      <div>
-        <label className="block text-base mb-2 text-text-default">
-          {t('Settings.general.webUIStatus')}
-        </label>
+      <SettingsItem labelI18nKey="Settings.general.webUIStatus">
         <div
           className={`text-base px-3 py-2 rounded-md ${
             webUIStatus === 'running'
@@ -131,7 +129,7 @@ const SettingsWebUIPreferences = () => {
           {webUIStatus === 'stopped' && t('Settings.general.webUIStatusStopped')}
           {webUIStatus === 'unknown' && t('Settings.general.webUIStatusUnknown')}
         </div>
-      </div>
+      </SettingsItem>
 
       {/* Enable Web UI Toggle */}
       <SettingsItem
@@ -169,13 +167,11 @@ const SettingsWebUIPreferences = () => {
         descriptionI18nKey="Settings.general.webUI.portDescription"
       >
         <div className="flex items-center gap-2">
-          <input
+          <Input
             type="number"
             value={actualPort && !webUI.port ? actualPort.toString() : webUIPort}
             onChange={(e) => handlePortChange(e.target.value)}
-            className={`w-20 px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              autoPort || shouldDisableWebUISettings ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className="w-20"
             min="1024"
             max="65535"
             disabled={!currentWebUI || autoPort || shouldDisableWebUISettings}
@@ -192,19 +188,14 @@ const SettingsWebUIPreferences = () => {
           labelI18nKey="Settings.general.webUI.url"
           descriptionI18nKey="Settings.general.webUI.urlDescription"
         >
-          <div className="flex items-center gap-2">
-            <div className="px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600">
-              http://localhost:{actualPort || webUIPort}
-            </div>
-            <Button
-              onClick={() => window.open(`http://localhost:${actualPort || webUIPort}`, '_blank')}
-              theme="default"
-              size="s"
-              title={t('Settings.general.webUI.openUrl')}
-            >
-              {t('Settings.general.webUI.open')}
-            </Button>
-          </div>
+          <DisplayValue
+            href={`http://localhost:${actualPort || webUIPort}`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-blue-600 dark:text-blue-400 inline-block"
+          >
+            http://localhost:{actualPort || webUIPort}
+          </DisplayValue>
         </SettingsItem>
       )}
     </div>

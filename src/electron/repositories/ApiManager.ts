@@ -4,7 +4,8 @@ import path from 'path'
 import cors from 'cors'
 import Methods from './Methods'
 import SettingsRepository from './Methods/SettingsRepository'
-import { getPortToUse } from 'utils/portManager'
+import { getPortToUse } from 'electron-utils/portManager'
+import { DataPaths } from 'electron-utils/utils'
 
 class ApiManager {
   private settingsRepository: SettingsRepository
@@ -89,9 +90,11 @@ class ApiManager {
 
     const frontendPath = path.join(__dirname, '..', '..', 'out', 'renderer')
     const pluginsPath = path.join(__dirname, '..', '..', 'dev-data', 'plugins')
+    const wallpaperPath = path.join(DataPaths.getBaseDataPath(), 'wallpapers')
 
     routes.use('/', express.static(frontendPath))
     routes.use('/api/plugins', express.static(pluginsPath + '/'))
+    routes.use('/api/wallpapers', express.static(wallpaperPath + '/'))
 
     // Proxy route for external images to bypass CORS
     routes.get('/api/proxy-image', async (req, res): Promise<void> => {

@@ -5,19 +5,17 @@ import openWindow from 'functions/openWindow'
 import Image from 'components/Image'
 import { useTranslation } from 'react-i18next'
 import useGlobalStore from 'store/useGlobalStore'
-import usePersistStore from 'store/usePersistStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 
 import infoIcon from 'assets/info.svg'
 import settingsIcon from 'assets/settings.svg'
-import darkmodeIcon from 'assets/darkmode.svg'
 import userIcon from 'assets/user.svg'
 import exitIcon from 'assets/exit-door.svg'
 
 const HomeNav = (): React.JSX.Element => {
   const { invoke } = useApi()
   const { menuVisible, toggleMenu } = useGlobalStore()
-  const { switchTheme } = usePersistStore()
+
   const { currentUser, setCurrentUser } = usePersistSessionStore()
 
   const { t } = useTranslation()
@@ -39,11 +37,7 @@ const HomeNav = (): React.JSX.Element => {
       icon: settingsIcon,
       onClick: () => openWindow({ component: 'Settings', props: {} })
     },
-    {
-      label: t('HomeNav.darkMode'),
-      icon: darkmodeIcon,
-      onClick: (): void => switchTheme()
-    },
+
     {
       label: t('HomeNav.changeUser'),
       icon: userIcon,

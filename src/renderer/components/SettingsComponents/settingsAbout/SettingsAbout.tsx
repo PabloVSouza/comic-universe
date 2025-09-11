@@ -1,5 +1,6 @@
 import useApi from 'api'
 import { useQuery } from '@tanstack/react-query'
+import DisplayValue from 'components/DisplayValue'
 import Image from 'components/Image'
 import LoadingOverlay from 'components/LoadingOverlay'
 import SettingsBox from '../SettingsBox'
@@ -43,21 +44,15 @@ const SettingsAbout = (): React.JSX.Element => {
               {/* App Details */}
               <div className="space-y-4">
                 <SettingsItem labelI18nKey="General.version">
-                  <div className="px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600">
-                    {appVersion || appData?.version}
-                  </div>
+                  <DisplayValue>{appVersion || appData?.version}</DisplayValue>
                 </SettingsItem>
 
                 <SettingsItem labelI18nKey="General.author">
-                  <div className="px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600">
-                    {appData?.author}
-                  </div>
+                  <DisplayValue>{appData?.author}</DisplayValue>
                 </SettingsItem>
 
                 <SettingsItem labelI18nKey="General.license">
-                  <div className="px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600">
-                    {appData?.license}
-                  </div>
+                  <DisplayValue>{appData?.license}</DisplayValue>
                 </SettingsItem>
               </div>
 
@@ -67,14 +62,14 @@ const SettingsAbout = (): React.JSX.Element => {
                   labelI18nKey="General.githubRepository"
                   descriptionI18nKey="Settings.about.repositoryDescription"
                 >
-                  <a
+                  <DisplayValue
                     href={appData?.repository}
                     target="_blank"
                     rel="noreferrer"
-                    className="px-3 py-2 bg-list-item text-blue-600 dark:text-blue-400 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors inline-block"
+                    className="text-blue-600 dark:text-blue-400 inline-block"
                   >
                     {appData?.repository}
-                  </a>
+                  </DisplayValue>
                 </SettingsItem>
               </div>
             </div>

@@ -91,14 +91,11 @@ const SettingsUpdatePreferences = () => {
   return (
     <div className="space-y-6">
       {/* Current Version Section */}
-      <div>
-        <label className="block text-base mb-2 text-text-default">
-          {t('Settings.general.currentVersion')}
-        </label>
+      <SettingsItem labelI18nKey="Settings.general.currentVersion">
         <div className="text-base bg-list-item text-text-default px-3 py-2 rounded-md">
           {currentVersion}
         </div>
-      </div>
+      </SettingsItem>
 
       {/* Auto-Update Toggle */}
       <SettingsItem

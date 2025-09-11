@@ -1,4 +1,4 @@
-import { BrowserWindow, app, shell } from 'electron'
+import { BrowserWindow, app, shell, dialog } from 'electron'
 import pathLib from 'path'
 import fs from 'fs'
 import { is } from '@electron-toolkit/utils'
@@ -156,6 +156,11 @@ class AppRepository {
 
     openExternal: (args: { url: string }) => {
       shell.openExternal(args.url)
+    },
+
+    showOpenDialog: async (options: any) => {
+      const result = await dialog.showOpenDialog(this.win, options)
+      return result
     }
   }
 }

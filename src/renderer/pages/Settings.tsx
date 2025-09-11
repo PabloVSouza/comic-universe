@@ -50,7 +50,8 @@ const Settings = ({ initialTab }: { initialTab?: string }): ReactElement => {
     if (!initialTab) {
       setActiveOption(settingsOptions[0].tag)
     }
-  }, [initialTab, settingsOptions])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialTab])
 
   const componentList = {
     general: SettingsApp,
@@ -77,12 +78,12 @@ const getWindowSettings = () => {
       titleBar: true,
       closeable: true,
       unique: true,
-      title: 'Settings' // Will be translated dynamically in openWindow
+      title: 'Settings'
     },
     initialStatus: {
       startPosition: 'center',
       width: 750,
-      height: 500
+      height: 600
     }
   } as TWindow
 }

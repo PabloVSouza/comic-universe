@@ -5,6 +5,8 @@ import AppRepository from './AppRepository'
 import DBRepository from './DBRepository'
 import PluginsRepository from './PluginsRepository'
 import SettingsRepository from './SettingsRepository'
+import WallpaperRepository from './WallpaperRepository'
+import AssetServer from 'electron-utils/AssetServer'
 
 class Methods {
   public methods: any = {}
@@ -24,13 +26,17 @@ class Methods {
     const dbRepository = new DBRepository()
     await dbRepository.startup()
     const settingsRepository = new SettingsRepository()
+    const wallpaperRepository = new WallpaperRepository()
+    const assetServer = new AssetServer()
 
     this.methods = {
       ...apiRepository.methods,
       ...appRepository.methods,
       ...dbRepository.methods,
       ...pluginsRepository.methods,
-      ...settingsRepository.methods
+      ...settingsRepository.methods,
+      ...wallpaperRepository.methods,
+      ...assetServer.methods
     }
   }
 

@@ -6,7 +6,7 @@ import SettingsItem from '../SettingsItem'
 
 const ThemeSettings = () => {
   const { t } = useTranslation()
-  const { theme, switchTheme } = usePersistStore()
+  const { theme, switchTheme, _hasHydrated } = usePersistStore()
   const [currentTheme, setCurrentTheme] = useState(theme.theme)
 
   useEffect(() => {
@@ -22,6 +22,20 @@ const ThemeSettings = () => {
     const selectedOption = selected as { value: string; label: string }
     setCurrentTheme(selectedOption.value)
     switchTheme(selectedOption.value)
+  }
+
+  // Show loading state while store is hydrating
+  if (!_hasHydrated) {
+    return (
+      <SettingsItem
+        labelI18nKey="Settings.general.theme.label"
+        descriptionI18nKey="Settings.general.theme.description"
+      >
+        <div className="animate-pulse">
+          <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded"></div>
+        </div>
+      </SettingsItem>
+    )
   }
 
   return (

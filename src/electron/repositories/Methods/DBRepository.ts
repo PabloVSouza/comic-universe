@@ -1,5 +1,5 @@
 import { initializeDatabase, IDatabaseRepository } from '../database'
-import { DataPaths } from 'utils/utils'
+import { DataPaths } from 'electron-utils/utils'
 
 class DBRepository implements IDBRepository {
   private repository!: IDatabaseRepository
@@ -17,7 +17,7 @@ class DBRepository implements IDBRepository {
 
   methods: IDBMethods = {
     dbRunMigrations: async () => {
-      await this.repository.runMigrations()
+      await this.repository.runDrizzleMigrations()
     },
 
     dbVerifyMigrations: async () => {
@@ -63,6 +63,13 @@ class DBRepository implements IDBRepository {
       await this.repository.createComic(comic, chapters, repo)
       return new Promise((resolve) => {
         resolve()
+      })
+    },
+
+    dbUpdateComic: async ({ id, comic }): Promise<IComic | undefined> => {
+      const updatedComic = await this.repository.updateComic(id, comic)
+      return new Promise((resolve) => {
+        resolve(updatedComic)
       })
     },
 
@@ -128,6 +135,13 @@ class DBRepository implements IDBRepository {
       return new Promise((resolve) => resolve())
     },
 
+    dbGetReadProgressByUser: async ({ userId }): Promise<IReadProgress[]> => {
+      const progress = await this.repository.getReadProgressByUser(userId)
+      return new Promise((resolve) => {
+        resolve(progress as IReadProgress[])
+      })
+    },
+
     //Users
     dbGetAllUsers: async (): Promise<IUser[]> => {
       const users = await this.repository.getAllUsers()
@@ -157,6 +171,21 @@ class DBRepository implements IDBRepository {
       await this.repository.deleteUser(id)
       return new Promise((resolve) => {
         resolve()
+      })
+    },
+
+    // User Settings
+    dbGetUserSettings: async ({ userId }): Promise<IUserSettings | undefined> => {
+      const settings = await this.repository.getUserSettings(userId)
+      return new Promise((resolve) => {
+        resolve(settings || undefined)
+      })
+    },
+
+    dbUpdateUserSettings: async ({ userId, settings }): Promise<IUserSettings | undefined> => {
+      const updatedSettings = await this.repository.updateUserSettings(userId, settings)
+      return new Promise((resolve) => {
+        resolve(updatedSettings || undefined)
       })
     }
   }

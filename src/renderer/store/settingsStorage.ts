@@ -1,7 +1,7 @@
 import { StateStorage } from 'zustand/middleware'
 import useApi from 'api'
 import { DEFAULT_SETTINGS } from 'constants/defaultSettings'
-import { deepMerge } from 'shared/utils'
+import { deepMerge } from 'shared-utils'
 
 // Pre-load settings to avoid async issues
 let cachedSettings: string | null = null

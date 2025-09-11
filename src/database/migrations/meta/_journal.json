@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1757589512718,
+      "tag": "0000_old_deadpool",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1757614764013,
+      "tag": "0001_tiny_ares",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1757615856535,
+      "tag": "0002_free_old_lace",
+      "breakpoints": true
+    }
+  ]
+}

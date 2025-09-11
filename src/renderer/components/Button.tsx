@@ -77,12 +77,23 @@ const buttonStyling = {
     toggle: {
       button: {
         default: `relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none bg-gray-200 dark:bg-gray-700`,
-        active: 'bg-blue-600'
+        active: '!bg-green-100 dark:!bg-green-900'
       },
       icon: {
         default: `inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1`,
         active: 'translate-x-6',
         disabled: 'bg-gray-400 dark:bg-gray-500 !h-4 !w-4'
+      }
+    },
+    navigation: {
+      button: {
+        default:
+          'bg-blue-500/70 hover:bg-blue-500/90 text-white px-4 py-2 rounded-lg transition-colors duration-200',
+        active: 'bg-blue-500/90'
+      },
+      icon: {
+        default: '',
+        active: ''
       }
     }
   },
@@ -139,15 +150,22 @@ const Button = ({
     if (to) navigate(to)
   }
 
+  // Ensure theme exists, fallback to 'default' if not
+  const safeTheme = buttonStyling.themes[theme] ? theme : 'default'
+
   const classProps = {
     className: classNames(
       buttonStyling.base,
-      buttonStyling.themes[theme].button.default,
+      buttonStyling.themes[safeTheme].button.default,
       color ? buttonStyling.colors[color] : '',
       size ? buttonStyling.sizes[size] : '',
-      disabled ? (theme === 'toggle' ? buttonStyling.disabledToggle : buttonStyling.disabled) : '',
+      disabled
+        ? safeTheme === 'toggle'
+          ? buttonStyling.disabledToggle
+          : buttonStyling.disabled
+        : '',
       className,
-      active ? buttonStyling.themes[theme].button.active : ''
+      active ? buttonStyling.themes[safeTheme].button.active : ''
     )
   }
 
@@ -163,9 +181,9 @@ const Button = ({
       {icon ? (
         <Image
           className={classNames(
-            buttonStyling.themes[theme].icon.default,
-            active && buttonStyling.themes[theme].icon.active,
-            disabled && theme === 'toggle' && buttonStyling.themes[theme].icon.disabled,
+            buttonStyling.themes[safeTheme].icon.default,
+            active && buttonStyling.themes[safeTheme].icon.active,
+            disabled && safeTheme === 'toggle' && buttonStyling.themes[safeTheme].icon.disabled,
             loading && buttonStyling.loading
           )}
           src={icon}
@@ -175,9 +193,9 @@ const Button = ({
         // For themes that don't use icons (like burger, toggle), render the icon styling directly
         <div
           className={classNames(
-            buttonStyling.themes[theme].icon.default,
-            active && buttonStyling.themes[theme].icon.active,
-            disabled && theme === 'toggle' && buttonStyling.themes[theme].icon.disabled,
+            buttonStyling.themes[safeTheme].icon.default,
+            active && buttonStyling.themes[safeTheme].icon.active,
+            disabled && safeTheme === 'toggle' && buttonStyling.themes[safeTheme].icon.disabled,
             loading && buttonStyling.loading
           )}
         />

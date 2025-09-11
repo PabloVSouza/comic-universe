@@ -1,17 +1,16 @@
-name: Beta Release (Pull Requests)
+name: Beta Release (Merged Code)
 
 on:
   pull_request:
     branches:
       - main
-      - staging
-    types: [opened, synchronize, reopened]
 
 jobs:
   prepare-beta:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.beta-version.outputs.beta-version }}
+      version: ${{ steps.beta-version.outputs.version }}
+      release-type: ${{ steps.beta-version.outputs.release-type }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -55,14 +54,23 @@ jobs:
             BUILD_NUMBER=1
           fi
 
-          BETA_VERSION="${BASE_VERSION}-beta.${BUILD_NUMBER}"
-          echo "beta-version=$BETA_VERSION" >> $GITHUB_OUTPUT
-          echo "Beta version: $BETA_VERSION"
+          # Format build number with 4-digit padding
+          PADDED_BUILD_NUMBER=$(printf "%04d" $BUILD_NUMBER)
+
+          # PR to main: Create beta version (final testing before production)
+          NEW_VERSION="${BASE_VERSION}-beta.${PADDED_BUILD_NUMBER}"
+          RELEASE_TYPE="beta"
+
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "release-type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
+          echo "New version: $NEW_VERSION"
+          echo "Release type: $RELEASE_TYPE"
 
       - name: Update package.json version
         run: |
-          npm version ${{ steps.beta-version.outputs.beta-version }} --no-git-tag-version
-          echo "Updated package.json to version ${{ steps.beta-version.outputs.beta-version }}"
+          # Use jq to update package.json directly to preserve 4-digit padding
+          jq --arg version "${{ steps.beta-version.outputs.version }}" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
+          echo "Updated package.json to version ${{ steps.beta-version.outputs.version }}"
 
       - name: Upload version files
         uses: actions/upload-artifact@v4
@@ -95,6 +103,8 @@ jobs:
         run: npm ci
 
       - name: Build application (Linux)
+        env:
+          ELECTRON_BUILDER_VERSION: ${{ needs.prepare-beta.outputs.version }}
         run: npm run build:linux-x64
 
       - name: Upload Linux artifacts
@@ -110,8 +120,8 @@ jobs:
     runs-on: windows-latest
     needs: prepare-beta
     env:
-      # Force code signing for PR builds
-      CSC_FOR_PULL_REQUEST: true
+      # Disable code signing for PR builds
+      CSC_FOR_PULL_REQUEST: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -131,14 +141,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Setup Consistent Certificate from Secrets
-        run: |
-          mkdir -p certificates
-          echo "${{ secrets.CSC_LINK_BASE64 }}" | base64 --decode > certificates/cert.p12
-          echo "CSC_LINK=certificates/cert.p12" >> $env:GITHUB_ENV
-          echo "CSC_KEY_PASSWORD=${{ secrets.CSC_KEY_PASSWORD }}" >> $env:GITHUB_ENV
+      # Certificate setup disabled for PR builds
+      # - name: Setup Consistent Certificate from Secrets
 
       - name: Build application (Windows)
+        env:
+          ELECTRON_BUILDER_VERSION: ${{ needs.prepare-beta.outputs.version }}
         run: npm run build:win
 
       - name: Upload Windows artifacts
@@ -154,8 +162,8 @@ jobs:
     runs-on: macos-latest
     needs: prepare-beta
     env:
-      # Force code signing for PR builds
-      CSC_FOR_PULL_REQUEST: true
+      # Disable code signing for PR builds
+      CSC_FOR_PULL_REQUEST: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -179,6 +187,8 @@ jobs:
       # - name: Setup Consistent Certificate from Secrets
 
       - name: Build application (macOS)
+        env:
+          ELECTRON_BUILDER_VERSION: ${{ needs.prepare-beta.outputs.version }}
         run: npm run build:mac
 
       - name: Upload macOS artifacts
@@ -208,13 +218,19 @@ jobs:
 
       - name: Generate release notes
         run: |
-          # Get the base branch commit to compare against
-          BASE_COMMIT="${{ github.event.pull_request.base.sha }}"
-          HEAD_COMMIT="${{ github.event.pull_request.head.sha }}"
+          # Get the base commit for comparison
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BASE_COMMIT="${{ github.event.pull_request.base.sha }}"
+            HEAD_COMMIT="${{ github.event.pull_request.head.sha }}"
+          else
+            # For push events, compare with previous commit
+            BASE_COMMIT="HEAD~1"
+            HEAD_COMMIT="HEAD"
+          fi
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "## 🧪 Beta Release for PR #${{ github.event.number }}" >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
-          echo "This is a beta release created automatically for testing purposes." >> $GITHUB_ENV
+          echo "This is a beta release created automatically for final testing before production." >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "**PR:** #${{ github.event.number }}" >> $GITHUB_ENV
           echo "**Branch:** \`${{ github.head_ref }}\`" >> $GITHUB_ENV
@@ -226,7 +242,7 @@ jobs:
           ./scripts/generate-release-notes.sh $BASE_COMMIT $HEAD_COMMIT >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "## Testing" >> $GITHUB_ENV
-          echo "Please test this beta release and provide feedback in the PR comments." >> $GITHUB_ENV
+          echo "Please test this beta release and provide feedback." >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "## Installation" >> $GITHUB_ENV
           echo "Download the appropriate build for your platform from the assets below." >> $GITHUB_ENV
@@ -235,13 +251,18 @@ jobs:
           echo "All builds are automatically signed with self-signed certificates. Users may see security warnings - this is normal for self-signed certificates." >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Create beta release
+      - name: Set release name
+        id: release-name
+        run: |
+          echo "name=Beta Release ${{ needs.prepare-beta.outputs.version }}" >> $GITHUB_OUTPUT
+
+      - name: Create release
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
           tag_name: 'v${{ needs.prepare-beta.outputs.version }}'
-          name: 'Beta Release ${{ needs.prepare-beta.outputs.version }}'
-          target_commitish: ${{ github.event.pull_request.head.sha }}
+          name: '${{ steps.release-name.outputs.name }}'
+          target_commitish: ${{ github.sha }}
           body: ${{ env.RELEASE_NOTES }}
           files: |
             linux-builds/*
@@ -254,19 +275,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Comment on PR
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `🧪 **Beta Release Created**
-              
-              Version: \`${{ needs.prepare-beta.outputs.version }}\`
-              
-              A beta release has been created for testing this PR. You can download it from the [releases page](https://github.com/${{ github.repository }}/releases/tag/v${{ needs.prepare-beta.outputs.version }}).
-              
-              Please test the beta release and provide feedback in the comments below.`
-            })
+      # No PR comment needed for push-triggered releases

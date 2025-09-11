@@ -1,4 +1,4 @@
-name: Build/release Electron app
+name: Stable Release
 
 on:
   push:
@@ -49,7 +49,8 @@ jobs:
           CURRENT_VERSION=$(node -p "require('./package.json').version")
           STABLE_VERSION="${{ steps.stable-version.outputs.stable-version }}"
           if [ "$CURRENT_VERSION" != "$STABLE_VERSION" ]; then
-            npm version $STABLE_VERSION --no-git-tag-version
+            # Use jq to update package.json directly to preserve version format
+            jq --arg version "$STABLE_VERSION" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
             echo "Updated package.json from $CURRENT_VERSION to $STABLE_VERSION"
           else
             echo "Version $STABLE_VERSION is already set, no update needed"
@@ -68,13 +69,9 @@ jobs:
     needs: prepare-stable
     permissions: write-all
     env:
-      GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      # Code signing environment variables
-      CSC_LINK: ${{ secrets.CSC_LINK }}
-      CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-      APPLE_ID: ${{ secrets.APPLE_ID }}
-      APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Code signing disabled for all builds
+      CSC_FOR_PULL_REQUEST: false
     strategy:
       matrix:
         include:
@@ -105,23 +102,31 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      # Certificate setup disabled temporarily to fix auto-updater
+      # Code signing disabled for all builds
       # - name: Setup Consistent Certificate from Secrets
 
       - name: build-linux-x64
         if: matrix.architecture == 'x64' && matrix.os == 'ubuntu-latest'
+        env:
+          ELECTRON_BUILDER_VERSION: ${{ needs.prepare-stable.outputs.version }}
         run: npm run build:linux-x64
 
       - name: build-linux-arm
         if: matrix.architecture == 'arm64' && matrix.os == 'ubuntu-latest'
+        env:
+          ELECTRON_BUILDER_VERSION: ${{ needs.prepare-stable.outputs.version }}
         run: npm run build:linux-arm
 
       - name: build-win
         if: matrix.os == 'windows-latest'
+        env:
+          ELECTRON_BUILDER_VERSION: ${{ needs.prepare-stable.outputs.version }}
         run: npm run build:win
 
       - name: build-mac-universal
         if: matrix.architecture == 'arm64' && matrix.os == 'macos-14'
+        env:
+          ELECTRON_BUILDER_VERSION: ${{ needs.prepare-stable.outputs.version }}
         run: npm run build:mac
 
       - name: Generate release notes
@@ -143,7 +148,7 @@ jobs:
           echo "Download the appropriate build for your platform from the assets below." >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "## Code Signing" >> $GITHUB_ENV
-          echo "All builds are automatically signed with self-signed certificates. Users may see security warnings - this is normal for self-signed certificates." >> $GITHUB_ENV
+          echo "Code signing is disabled for all builds to speed up the build process and avoid certificate issues." >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "## Testing" >> $GITHUB_ENV
           echo "This is a stable release. Please test thoroughly and report any issues." >> $GITHUB_ENV

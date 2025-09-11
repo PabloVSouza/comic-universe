@@ -1,0 +1,193 @@
+import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import useApi from 'api'
+import wallpaperManager, { WallpaperInfo } from 'renderer-utils/wallpaperManager'
+import Button from 'components/Button'
+import SettingsItem from '../SettingsItem'
+
+interface WallpaperSelectorProps {
+  currentWallpaper: string | null
+  onWallpaperChange: (wallpaper: string | null) => void
+}
+
+const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSelectorProps) => {
+  const { t } = useTranslation()
+  const { invoke } = useApi()
+  const queryClient = useQueryClient()
+  const [selectedWallpaper, setSelectedWallpaper] = useState<string | null>(currentWallpaper)
+
+  const { data: wallpapers = [], isLoading } = useQuery({
+    queryKey: ['wallpapers'],
+    queryFn: () => wallpaperManager.getAvailableWallpapers(),
+    staleTime: 5 * 60 * 1000 // 5 minutes
+  })
+
+  const { mutate: addWallpaper } = useMutation({
+    mutationFn: (filePath: string) => wallpaperManager.addWallpaper(filePath),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['wallpapers'] })
+    }
+  })
+
+  const { mutate: removeWallpaper } = useMutation({
+    mutationFn: (filename: string) => wallpaperManager.removeWallpaper(filename),
+    onSuccess: (_, filename) => {
+      queryClient.invalidateQueries({ queryKey: ['wallpapers'] })
+      // If the removed wallpaper was selected, reset to default
+      if (selectedWallpaper && selectedWallpaper.includes(filename)) {
+        setSelectedWallpaper(null)
+        onWallpaperChange(null)
+      }
+    }
+  })
+
+  const handleFileSelect = async () => {
+    try {
+      const result = await invoke('showOpenDialog', {
+        properties: ['openFile'],
+        filters: [
+          {
+            name: 'Images',
+            extensions: ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp']
+          }
+        ]
+      })
+
+      if (!result.canceled && result.filePaths && result.filePaths.length > 0) {
+        const filePath = result.filePaths[0]
+        addWallpaper(filePath)
+      }
+    } catch (error) {
+      console.error('Error selecting wallpaper file:', error)
+    }
+  }
+
+  const handleWallpaperSelect = (wallpaper: WallpaperInfo) => {
+    const wallpaperValue = wallpaper.isDefault ? null : wallpaper.filename
+    setSelectedWallpaper(wallpaperValue)
+    onWallpaperChange(wallpaperValue)
+  }
+
+  const handleRemoveWallpaper = (filename: string) => {
+    if (confirm(t('Settings.user.wallpaper.removeConfirm'))) {
+      removeWallpaper(filename)
+    }
+  }
+
+  const [wallpaperUrls, setWallpaperUrls] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    setSelectedWallpaper(currentWallpaper)
+  }, [currentWallpaper])
+
+  // Load URLs for all wallpapers when they change
+  useEffect(() => {
+    const loadUrls = async () => {
+      const urlPromises = wallpapers.map(async (wallpaper) => {
+        const url = await wallpaperManager.getWallpaperUrl(wallpaper.filename)
+        return { filename: wallpaper.filename, url }
+      })
+
+      const results = await Promise.all(urlPromises)
+      const urlMap: Record<string, string> = {}
+      results.forEach(({ filename, url }) => {
+        urlMap[filename] = url
+      })
+      setWallpaperUrls(urlMap)
+    }
+
+    if (wallpapers.length > 0) {
+      loadUrls()
+    }
+  }, [wallpapers])
+
+  return (
+    <div className="flex flex-col gap-4">
+      <SettingsItem
+        labelI18nKey="Settings.user.wallpaper.label"
+        descriptionI18nKey="Settings.user.wallpaper.description"
+      >
+        <Button
+          onClick={handleFileSelect}
+          theme="pure"
+          size="s"
+          icon="assets/upload.svg"
+          className="!size-10"
+          title={t('Settings.user.wallpaper.addWallpaper')}
+        />
+      </SettingsItem>
+
+      {/* Wallpaper grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-64 overflow-y-auto">
+        {isLoading ? (
+          <div className="col-span-full text-center text-text-default opacity-70 py-4">
+            {t('General.checking')}
+          </div>
+        ) : (
+          wallpapers.map((wallpaper) => (
+            <div
+              key={wallpaper.filename}
+              className={`relative group cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                selectedWallpaper === (wallpaper.isDefault ? null : wallpaper.filename)
+                  ? 'border-text-default'
+                  : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+              }`}
+              onClick={() => handleWallpaperSelect(wallpaper)}
+            >
+              {wallpaperUrls[wallpaper.filename] ? (
+                <img
+                  src={wallpaperUrls[wallpaper.filename]}
+                  alt={wallpaper.filename}
+                  className="w-full aspect-video object-cover"
+                  onError={(e) => {
+                    // Fallback to a placeholder if image fails to load
+                    e.currentTarget.src =
+                      'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjgwIiB2aWV3Qm94PSIwIDAgMTAwIDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iODAiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSI1MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SW1hZ2U8L3RleHQ+PC9zdmc+'
+                  }}
+                />
+              ) : (
+                <div className="w-full aspect-video bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                  <div className="animate-pulse text-gray-400 text-xs">Loading...</div>
+                </div>
+              )}
+
+              {/* Check icon for selected wallpaper */}
+              {selectedWallpaper === (wallpaper.isDefault ? null : wallpaper.filename) && (
+                <div className="absolute top-1 left-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                  <img src="assets/confirm.svg" alt="Selected" className="w-3 h-3" />
+                </div>
+              )}
+
+              {/* File name overlay on hover */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="p-2">
+                  <p className="text-white text-xs truncate">
+                    {wallpaper.isDefault
+                      ? t('Settings.user.wallpaper.default')
+                      : wallpaper.filename}
+                  </p>
+                </div>
+              </div>
+
+              {/* Remove button for custom wallpapers */}
+              {!wallpaper.isDefault && (
+                <button
+                  onClick={() => {
+                    handleRemoveWallpaper(wallpaper.filename)
+                  }}
+                  className="absolute top-1 right-1 w-5 h-5 bg-red-500/70 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                  title={t('Settings.user.wallpaper.remove')}
+                >
+                  <img src="assets/cancel.svg" alt="Remove" className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default WallpaperSelector

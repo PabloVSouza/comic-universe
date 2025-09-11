@@ -1,16 +1,17 @@
-name: Beta Release (Merged Code)
+name: Development Release
 
 on:
   pull_request:
     branches:
-      - main
+      - staging
+      - dev/v2.0.0
 
 jobs:
-  prepare-beta:
+  prepare-development:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.beta-version.outputs.version }}
-      release-type: ${{ steps.beta-version.outputs.release-type }}
+      version: ${{ steps.version.outputs.version }}
+      release-type: ${{ steps.version.outputs.release-type }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,8 +33,8 @@ jobs:
           echo "current-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           echo "Current version: $CURRENT_VERSION"
 
-      - name: Generate beta version
-        id: beta-version
+      - name: Generate version
+        id: version
         run: |
           CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
           BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
@@ -44,10 +45,10 @@ jobs:
 
           # Extract build number from latest release or start from 1
           # Handle both old timestamp format and new semantic format
-          if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
+          if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta|dev)\.([0-9]{14}) ]]; then
             # Old timestamp format - start from 1
             BUILD_NUMBER=1
-          elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
+          elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta|dev)\.([0-9]+) ]]; then
             # New semantic format - increment build number
             BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
           else
@@ -57,9 +58,9 @@ jobs:
           # Format build number with 4-digit padding
           PADDED_BUILD_NUMBER=$(printf "%04d" $BUILD_NUMBER)
 
-          # PR to main: Create beta version (final testing before production)
-          NEW_VERSION="${BASE_VERSION}-beta.${PADDED_BUILD_NUMBER}"
-          RELEASE_TYPE="beta"
+          # PR to staging/dev: Create development version (early development)
+          NEW_VERSION="${BASE_VERSION}-dev.${PADDED_BUILD_NUMBER}"
+          RELEASE_TYPE="development"
 
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "release-type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
@@ -68,8 +69,8 @@ jobs:
 
       - name: Update package.json version
         run: |
-          npm version ${{ steps.beta-version.outputs.version }} --no-git-tag-version
-          echo "Updated package.json to version ${{ steps.beta-version.outputs.version }}"
+          npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+          echo "Updated package.json to version ${{ steps.version.outputs.version }}"
 
       - name: Upload version files
         uses: actions/upload-artifact@v4
@@ -81,7 +82,7 @@ jobs:
 
   build-linux:
     runs-on: ubuntu-latest
-    needs: prepare-beta
+    needs: prepare-development
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -115,9 +116,9 @@ jobs:
 
   build-windows:
     runs-on: windows-latest
-    needs: prepare-beta
+    needs: prepare-development
     env:
-      # Disable code signing for PR builds
+      # Code signing disabled for all builds
       CSC_FOR_PULL_REQUEST: false
     steps:
       - name: Checkout
@@ -138,7 +139,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Certificate setup disabled for PR builds
+      # Code signing disabled for all builds
       # - name: Setup Consistent Certificate from Secrets
 
       - name: Build application (Windows)
@@ -155,9 +156,9 @@ jobs:
 
   build-macos:
     runs-on: macos-latest
-    needs: prepare-beta
+    needs: prepare-development
     env:
-      # Disable code signing for PR builds
+      # Code signing disabled for all builds
       CSC_FOR_PULL_REQUEST: false
     steps:
       - name: Checkout
@@ -178,7 +179,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Certificate setup disabled temporarily to fix auto-updater
+      # Code signing disabled for all builds
       # - name: Setup Consistent Certificate from Secrets
 
       - name: Build application (macOS)
@@ -194,9 +195,9 @@ jobs:
             dist/*.yml
             dist/*.blockmap
 
-  beta-release:
+  create-release:
     runs-on: ubuntu-latest
-    needs: [prepare-beta, build-linux, build-windows, build-macos]
+    needs: [prepare-development, build-linux, build-windows, build-macos]
     permissions:
       contents: write
       pull-requests: write
@@ -212,18 +213,12 @@ jobs:
       - name: Generate release notes
         run: |
           # Get the base commit for comparison
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            BASE_COMMIT="${{ github.event.pull_request.base.sha }}"
-            HEAD_COMMIT="${{ github.event.pull_request.head.sha }}"
-          else
-            # For push events, compare with previous commit
-            BASE_COMMIT="HEAD~1"
-            HEAD_COMMIT="HEAD"
-          fi
+          BASE_COMMIT="${{ github.event.pull_request.base.sha }}"
+          HEAD_COMMIT="${{ github.event.pull_request.head.sha }}"
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo "## 🧪 Beta Release for PR #${{ github.event.number }}" >> $GITHUB_ENV
+          echo "## 🔧 Development Release for PR #${{ github.event.number }}" >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
-          echo "This is a beta release created automatically for final testing before production." >> $GITHUB_ENV
+          echo "This is a development release created automatically for early testing." >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "**PR:** #${{ github.event.number }}" >> $GITHUB_ENV
           echo "**Branch:** \`${{ github.head_ref }}\`" >> $GITHUB_ENV
@@ -235,27 +230,22 @@ jobs:
           ./scripts/generate-release-notes.sh $BASE_COMMIT $HEAD_COMMIT >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "## Testing" >> $GITHUB_ENV
-          echo "Please test this beta release and provide feedback." >> $GITHUB_ENV
+          echo "Please test this development release and provide feedback in the PR comments." >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "## Installation" >> $GITHUB_ENV
           echo "Download the appropriate build for your platform from the assets below." >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "## Code Signing" >> $GITHUB_ENV
-          echo "All builds are automatically signed with self-signed certificates. Users may see security warnings - this is normal for self-signed certificates." >> $GITHUB_ENV
+          echo "Code signing is disabled for all builds to speed up the build process and avoid certificate issues." >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Set release name
-        id: release-name
-        run: |
-          echo "name=Beta Release ${{ needs.prepare-beta.outputs.version }}" >> $GITHUB_OUTPUT
-
-      - name: Create release
+      - name: Create development release
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: 'v${{ needs.prepare-beta.outputs.version }}'
-          name: '${{ steps.release-name.outputs.name }}'
-          target_commitish: ${{ github.sha }}
+          tag_name: 'v${{ needs.prepare-development.outputs.version }}'
+          name: 'Development Release ${{ needs.prepare-development.outputs.version }}'
+          target_commitish: ${{ github.event.pull_request.head.sha }}
           body: ${{ env.RELEASE_NOTES }}
           files: |
             linux-builds/*
@@ -268,4 +258,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # No PR comment needed for push-triggered releases
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🔧 **Development Release Created**
+              
+              Version: \`${{ needs.prepare-development.outputs.version }}\`
+              
+              A development release has been created for testing this PR. You can download it from the [releases page](https://github.com/${{ github.repository }}/releases/tag/v${{ needs.prepare-development.outputs.version }}).
+              
+              Please test the development release and provide feedback in the comments below.`
+            })

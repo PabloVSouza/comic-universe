@@ -53,17 +53,17 @@ export const useUserSettings = () => {
 
   // Apply language settings
   useEffect(() => {
+    let languageToApply = appLanguage.language
+
     if (userSettings?.appPreferences?.language) {
       const userLanguage = userSettings.appPreferences.language
-      let languageToApply = appLanguage.language
-
       if (userLanguage !== 'inherit') {
         languageToApply = userLanguage
       }
+    }
 
-      if (i18n.language !== languageToApply) {
-        i18n.changeLanguage(languageToApply)
-      }
+    if (i18n.language !== languageToApply) {
+      i18n.changeLanguage(languageToApply)
     }
   }, [userSettings?.appPreferences?.language, appLanguage.language, i18n])
 

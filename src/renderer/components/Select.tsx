@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { StateManagerProps } from 'react-select/dist/declarations/src/useStateManager'
 import { forwardRef } from 'react'
 
-interface ISelectProps extends StateManagerProps {
+interface ISelectProps extends Omit<StateManagerProps, 'theme'> {
   className?: string
   theme?: 'styled' | 'native'
 }

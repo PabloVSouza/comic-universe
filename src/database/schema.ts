@@ -34,7 +34,8 @@ export const comics = sqliteTable('Comic', {
   siteLink: text('siteLink'),
   year: text('year'),
   synopsis: text('synopsis').notNull(),
-  type: text('type').notNull()
+  type: text('type').notNull(),
+  readingMode: text('readingMode').default('horizontal')
 })
 
 // Chapter table

@@ -13,5 +13,6 @@ interface IComic {
   synopsis: string
   year?: string | null
   type: 'hq' | 'manga' | 'manhwa' | 'manhua'
+  readingMode?: 'horizontal' | 'vertical'
   chapters?: IChapter[]
 }

@@ -72,7 +72,7 @@ const Home = (): React.JSX.Element => {
       </WindowManager>
 
       {/* Cover overlay for unique windows to block clicks outside */}
-      {hasUniqueWindows && <Cover visible className="z-50" />}
+      {hasUniqueWindows && <Cover visible className="z-40" />}
     </div>
   )
 }

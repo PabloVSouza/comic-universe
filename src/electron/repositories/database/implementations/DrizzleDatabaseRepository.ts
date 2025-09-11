@@ -67,83 +67,38 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     const db = this.getDb()
 
     try {
-      // Check if this is a fresh database or existing one
-      const tablesExist = await this.checkIfTablesExist()
+      // Use path that works for both dev and production builds
+      // In dev: migrations are in src/database/migrations
+      // In production: migrations are unpacked to app.asar.unpacked/out/database/migrations
+      const isProduction = __dirname.includes('app.asar')
+      let migrationsPath: string
 
-      if (tablesExist) {
-        console.log('Database tables already exist, skipping initial migration')
-        // For existing databases, we'll handle migrations differently
-        await this.handleExistingDatabaseMigrations()
+      if (isProduction) {
+        // Production build - migrations are unpacked to Contents/Resources/app.asar.unpacked/out/database/migrations
+        const { app } = await import('electron')
+        const appPath = app.getAppPath()
+        // app.getAppPath() returns path to app.asar, so we need to go to the unpacked directory
+        // The correct path is: app.asar -> .. -> app.asar.unpacked -> out -> database -> migrations
+        migrationsPath = path.join(
+          appPath,
+          '..',
+          'app.asar.unpacked',
+          'out',
+          'database',
+          'migrations'
+        )
       } else {
-        console.log('Fresh database detected, running full migrations')
-        // Use path that works for both dev and production builds
-        // In dev: migrations are in src/database/migrations
-        // In production: migrations are unpacked to app.asar.unpacked/out/database/migrations
-        const isProduction = __dirname.includes('app.asar')
-        let migrationsPath: string
-
-        if (isProduction) {
-          // Production build - migrations are unpacked to Contents/Resources/app.asar.unpacked/out/database/migrations
-          const { app } = await import('electron')
-          const appPath = app.getAppPath()
-          // app.getAppPath() returns path to app.asar, so we need to go to the unpacked directory
-          // The correct path is: app.asar -> .. -> app.asar.unpacked -> out -> database -> migrations
-          migrationsPath = path.join(
-            appPath,
-            '..',
-            'app.asar.unpacked',
-            'out',
-            'database',
-            'migrations'
-          )
-        } else {
-          // Development - migrations are in src/database/migrations
-          migrationsPath = path.join(process.cwd(), 'src', 'database', 'migrations')
-        }
-
-        console.log('Migrations path:', migrationsPath)
-        await migrate(db, { migrationsFolder: migrationsPath })
+        // Development - migrations are in src/database/migrations
+        migrationsPath = path.join(process.cwd(), 'src', 'database', 'migrations')
       }
+
+      console.log('Migrations path:', migrationsPath)
+      await migrate(db, { migrationsFolder: migrationsPath })
 
       console.log('✅ Drizzle migrations completed successfully')
     } catch (error) {
       console.error('❌ Drizzle migrations failed:', error)
       throw error
-    }
-  }
-
-  private async checkIfTablesExist(): Promise<boolean> {
-    try {
-      const db = this.getDb()
-      // Check if any of our main tables exist
-      const result = await db.get(`
-        SELECT name FROM sqlite_master 
-        WHERE type='table' AND name IN ('User', 'Comic', 'Chapter', 'ReadProgress', 'Plugin')
-        LIMIT 1
-      `)
-      return !!result
-    } catch {
-      return false
-    }
-  }
-
-  private async handleExistingDatabaseMigrations(): Promise<void> {
-    // For existing databases, we need to be more careful
-    // Check if the settings column exists in User table
-    const db = this.getDb()
-
-    try {
-      const result = (await db.get(`
-        SELECT sql FROM sqlite_master 
-        WHERE type='table' AND name='User'
-      `)) as { sql: string } | undefined
-
-      if (result && !result.sql.includes('settings')) {
-        console.log('Adding settings column to existing User table...')
-        await db.run(`ALTER TABLE User ADD COLUMN settings TEXT DEFAULT '{}'`)
-      }
-    } catch (error) {
-      console.log('Settings column may already exist or error occurred:', error)
     }
   }
 
@@ -161,19 +116,32 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async getAllComics(): Promise<IComic[]> {
     const db = this.getDb()
     const results = await db.select().from(comics).orderBy(asc(comics.name))
-    return results as IComic[]
+    return results.map((result) => ({
+      ...result,
+      readingMode: (result as any).readingMode as 'horizontal' | 'vertical' | undefined
+    })) as IComic[]
   }
 
   async getComicById(id: number): Promise<IComic | undefined> {
     const db = this.getDb()
     const result = await db.select().from(comics).where(eq(comics.id, id)).limit(1)
-    return result[0] as IComic | undefined
+    return result[0]
+      ? ({
+          ...result[0],
+          readingMode: result[0].readingMode as 'horizontal' | 'vertical' | undefined
+        } as IComic)
+      : undefined
   }
 
   async getComicBySiteId(siteId: string): Promise<IComic | undefined> {
     const db = this.getDb()
     const result = await db.select().from(comics).where(eq(comics.siteId, siteId)).limit(1)
-    return result[0] as IComic | undefined
+    return result[0]
+      ? ({
+          ...result[0],
+          readingMode: result[0].readingMode as 'horizontal' | 'vertical' | undefined
+        } as IComic)
+      : undefined
   }
 
   async createComic(comic: IComic, chapterList: IChapter[], repo: string): Promise<void> {
@@ -254,7 +222,12 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async updateComic(id: number, comic: Partial<IComic>): Promise<IComic | undefined> {
     const db = this.getDb()
     const result = await db.update(comics).set(comic).where(eq(comics.id, id)).returning()
-    return result[0] as IComic | undefined
+    return result[0]
+      ? ({
+          ...result[0],
+          readingMode: result[0].readingMode as 'horizontal' | 'vertical' | undefined
+        } as IComic)
+      : undefined
   }
 
   async deleteComic(id: number): Promise<void> {
@@ -450,15 +423,17 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   // ReadProgress operations
   async getReadProgressByUser(userId: number): Promise<IReadProgress[]> {
     const db = this.getDb()
-    return await db.select().from(readProgress).where(eq(readProgress.userId, userId))
+    const results = await db.select().from(readProgress).where(eq(readProgress.userId, userId))
+    return results
   }
 
   async getReadProgressByComic(comicId: number, userId: number): Promise<IReadProgress[]> {
     const db = this.getDb()
-    return await db
+    const results = await db
       .select()
       .from(readProgress)
       .where(and(eq(readProgress.comicId, comicId), eq(readProgress.userId, userId)))
+    return results
   }
 
   async getReadProgressByChapter(
@@ -495,7 +470,8 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       progress = await this.getReadProgressByUser(search.userId as number)
     } else {
       // Fallback to raw query for complex searches
-      progress = await db.select().from(readProgress)
+      const results = await db.select().from(readProgress)
+      progress = results
     }
 
     return progress

@@ -66,6 +66,13 @@ class DBRepository implements IDBRepository {
       })
     },
 
+    dbUpdateComic: async ({ id, comic }): Promise<IComic | undefined> => {
+      const updatedComic = await this.repository.updateComic(id, comic)
+      return new Promise((resolve) => {
+        resolve(updatedComic)
+      })
+    },
+
     dbDeleteComic: async ({ comic }): Promise<void> => {
       if (!comic.id) {
         throw new Error('Cannot delete comic: comic ID is required')

@@ -84,6 +84,17 @@ const buttonStyling = {
         active: 'translate-x-6',
         disabled: 'bg-gray-400 dark:bg-gray-500 !h-4 !w-4'
       }
+    },
+    navigation: {
+      button: {
+        default:
+          'bg-blue-500/70 hover:bg-blue-500/90 text-white px-4 py-2 rounded-lg transition-colors duration-200',
+        active: 'bg-blue-500/90'
+      },
+      icon: {
+        default: '',
+        active: ''
+      }
     }
   },
   sizes: {

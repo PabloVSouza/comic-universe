@@ -99,7 +99,11 @@ const UserPreferences = () => {
             label: t(`Settings.user.${settings.readingPreferences.readingDirection}`)
           }}
           onChange={(selected) =>
-            handleSettingChange('readingPreferences', 'readingDirection', selected?.value || null)
+            handleSettingChange(
+              'readingPreferences',
+              'readingDirection',
+              (selected as any)?.value || null
+            )
           }
           options={[
             { value: 'ltr', label: t('Settings.user.ltr') },
@@ -119,7 +123,7 @@ const UserPreferences = () => {
             label: t(`Settings.user.${settings.displayPreferences.theme}`)
           }}
           onChange={(selected) =>
-            handleSettingChange('displayPreferences', 'theme', selected?.value || null)
+            handleSettingChange('displayPreferences', 'theme', (selected as any)?.value || null)
           }
           options={[
             { value: 'inherit', label: t('Settings.user.inherit') },
@@ -146,7 +150,7 @@ const UserPreferences = () => {
                   : 'Português'
           }}
           onChange={(selected) =>
-            handleSettingChange('appPreferences', 'language', selected?.value || null)
+            handleSettingChange('appPreferences', 'language', (selected as any)?.value || null)
           }
           options={[
             { value: 'inherit', label: t('Settings.user.inherit') },

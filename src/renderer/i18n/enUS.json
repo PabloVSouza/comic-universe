@@ -244,5 +244,17 @@
       "confirmDeleteButton": "Yes",
       "cancelDeleteButton": "No"
     }
+  },
+  "Reader": {
+    "readingMode": "Reading Mode",
+    "readingModeDescription": "Choose how pages are displayed (horizontal for manga, vertical for manhwa)",
+    "horizontal": "Horizontal",
+    "vertical": "Vertical",
+    "chapter": "Chapter",
+    "switchToVertical": "Switch to Vertical Reading",
+    "switchToHorizontal": "Switch to Horizontal Reading",
+    "previousChapter": "Previous Chapter",
+    "nextChapter": "Next Chapter",
+    "read": "Read"
   }
 }

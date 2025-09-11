@@ -147,3 +147,16 @@
     height: unset;
   }
 }
+
+/* Smooth theme transitions for specific elements */
+.bg-background,
+.bg-foreground,
+.text-foreground,
+.text-muted-foreground,
+.border-border,
+.bg-default {
+  transition:
+    background-color 0.3s ease-in-out,
+    color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out;
+}

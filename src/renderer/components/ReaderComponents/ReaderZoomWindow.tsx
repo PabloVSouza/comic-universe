@@ -25,7 +25,7 @@ interface IZoomPosition {
   height: string
 }
 
-const ZoomWindow = ({ mousePos, image, visible }: IZoomWindowProps): React.JSX.Element => {
+const ReaderZoomWindow = ({ mousePos, image, visible }: IZoomWindowProps): React.JSX.Element => {
   const windowRef = useRef(null)
 
   const [zoomFactor, setZoomFactor] = useState(2)
@@ -87,4 +87,4 @@ const ZoomWindow = ({ mousePos, image, visible }: IZoomWindowProps): React.JSX.E
   )
 }
 
-export default ZoomWindow
+export default ReaderZoomWindow

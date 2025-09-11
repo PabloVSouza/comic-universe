@@ -6,7 +6,7 @@ import useApi from 'api'
 import FixFilePaths from 'functions/fixFilePaths'
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
-import ReaderZoomWindow, { IMousePos } from 'components/ZoomWindow'
+import ReaderZoomWindow, { IMousePos } from 'components/ReaderComponents/ReaderZoomWindow'
 import ReaderBottomBar from 'components/ReaderComponents/ReaderBottomBar'
 
 import loading from 'assets/loading.svg'

@@ -69,7 +69,16 @@
       "userLabel": "Users"
     },
     "plugin": {
-      "title": "Plugin Settings"
+      "title": "Plugin Settings",
+      "install": {
+        "label": "Install Plugin",
+        "description": "Download and install plugins from the repository",
+        "selectPlaceholder": "Select a plugin to install",
+        "buttonTitle": "Download and Install Plugin"
+      },
+      "installed": {
+        "title": "Installed Plugins"
+      }
     },
     "user": {
       "title": "User Settings"
@@ -89,7 +98,8 @@
       "webUI": {
         "title": "Web UI Settings",
         "enableWebUI": "Enable Web UI",
-        "enableWebUIDescription": "Enable web-based user interface for remote access"
+        "enableWebUIDescription": "Enable web-based user interface for remote access",
+        "enableWebUIDescriptionDisabled": "Cannot disable Web UI while accessing through web interface"
       },
       "theme": {
         "label": "Theme",

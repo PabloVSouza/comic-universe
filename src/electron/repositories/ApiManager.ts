@@ -24,7 +24,7 @@ class ApiManager {
       // Check if web UI is enabled
       const webUISettings = await this.settingsRepository.methods.getWebUISettings()
       console.log('ApiManager startup - Web UI setting:', webUISettings.enableWebUI)
-      
+
       if (!webUISettings.enableWebUI) {
         console.log('Web UI is disabled - Express server not started')
         return
@@ -33,7 +33,26 @@ class ApiManager {
       const app = express()
       const port = 8888
 
-      app.use(cors())
+      app.use(
+        cors({
+          origin: true,
+          credentials: true,
+          methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+          allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+        })
+      )
+
+      // Add CORS headers to all responses
+      app.use((_req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*')
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+        res.header(
+          'Access-Control-Allow-Headers',
+          'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+        )
+        next()
+      })
+
       app.use(express.json())
       const routes = this.generateRoutes()
       app.use(routes)
@@ -51,7 +70,7 @@ class ApiManager {
   // Method to restart server when web UI setting changes
   restartServer = async () => {
     console.log('ApiManager.restartServer called')
-    
+
     // Stop existing server if running
     if (this.server) {
       this.server.close()
@@ -75,10 +94,53 @@ class ApiManager {
     const properties = Object.getOwnPropertyNames(apiMethods)
 
     const frontendPath = path.join(__dirname, '..', '..', 'out', 'renderer')
-    const pluginsPath = path.join(__dirname, '..', '..', 'plugins')
+    const pluginsPath = path.join(__dirname, '..', '..', 'dev-data', 'plugins')
 
     routes.use('/', express.static(frontendPath))
     routes.use('/api/plugins', express.static(pluginsPath + '/'))
+
+    // Proxy route for external images to bypass CORS
+    routes.get('/api/proxy-image', async (req, res): Promise<void> => {
+      try {
+        const imageUrl = req.query.url as string
+
+        if (!imageUrl) {
+          res.status(400).json({ error: 'URL parameter is required' })
+          return
+        }
+
+        // Validate that it's a valid image URL
+        if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+          res.status(400).json({ error: 'Invalid URL' })
+          return
+        }
+
+        const response = await fetch(imageUrl)
+
+        if (!response.ok) {
+          res.status(response.status).json({ error: 'Failed to fetch image' })
+          return
+        }
+
+        // Set appropriate headers
+        const contentType = response.headers.get('content-type')
+        if (contentType) {
+          res.set('Content-Type', contentType)
+        }
+
+        // Set CORS headers
+        res.set('Access-Control-Allow-Origin', '*')
+        res.set('Access-Control-Allow-Methods', 'GET')
+        res.set('Access-Control-Allow-Headers', 'Content-Type')
+
+        // Get the image data and send it
+        const imageBuffer = await response.arrayBuffer()
+        res.send(Buffer.from(imageBuffer))
+      } catch (error) {
+        console.error('Error proxying image:', error)
+        res.status(500).json({ error: 'Internal server error' })
+      }
+    })
 
     for (const method of properties) {
       routes.post(`/${method}`, async (req, res) => {

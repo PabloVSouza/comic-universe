@@ -17,24 +17,12 @@ function getVersionTypeString(version: string): string {
 function isValidUpdateTransition(
   current: { isStable: boolean; isBeta: boolean; isAlpha: boolean },
   available: { isStable: boolean; isBeta: boolean; isAlpha: boolean },
-  settings: any
+  settings: { optInNonStable: boolean }
 ): boolean {
   // If user has opted into non-stable releases, allow more flexible transitions
   if (settings.optInNonStable) {
-    // If user allows alpha releases, allow any transition to alpha
-    if (available.isAlpha && settings.releaseTypes.includes('alpha')) {
-      return true
-    }
-
-    // If user allows beta releases, allow any transition to beta
-    if (available.isBeta && settings.releaseTypes.includes('beta')) {
-      return true
-    }
-
-    // If user allows stable releases, allow any transition to stable
-    if (available.isStable && settings.releaseTypes.includes('stable')) {
-      return true
-    }
+    // Allow any transition when user has opted into non-stable
+    return true
   }
 
   // Default conservative transitions (when optInNonStable is false)
@@ -68,15 +56,18 @@ const setupAutoUpdater = (
   autoUpdater.disableWebInstaller = true
 
   // Load user's update preferences from file
-  const loadUpdateSettings = async () => {
+  const loadUpdateSettings = async (): Promise<{
+    optInNonStable: boolean
+  }> => {
     try {
-      return await settingsRepository.methods.getUpdateSettings()
+      const settings = await settingsRepository.methods.getUpdateSettings()
+      return {
+        optInNonStable: settings.optInNonStable
+      }
     } catch (error) {
       console.error('Error loading update settings:', error)
       return {
-        autoUpdate: true,
-        optInNonStable: false,
-        releaseTypes: ['stable']
+        optInNonStable: false
       }
     }
   }
@@ -198,7 +189,11 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     webPreferences: {
       webSecurity: false,
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      allowRunningInsecureContent: true,
+      experimentalFeatures: true,
+      nodeIntegration: false,
+      contextIsolation: true
     },
     icon: join(__dirname, '../../../resources/logo.svg')
   })
@@ -243,6 +238,18 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
   }
 
   initApiEvents()
+
+  // Disable CORS completely for the session
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Access-Control-Allow-Origin': ['*'],
+        'Access-Control-Allow-Methods': ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        'Access-Control-Allow-Headers': ['*']
+      }
+    })
+  })
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

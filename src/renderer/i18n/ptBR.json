@@ -69,7 +69,16 @@
       "userLabel": "Usuário"
     },
     "plugin": {
-      "title": "Configurações de Plugins"
+      "title": "Configurações de Plugins",
+      "install": {
+        "label": "Instalar Plugin",
+        "description": "Baixar e instalar plugins do repositório",
+        "selectPlaceholder": "Selecione um plugin para instalar",
+        "buttonTitle": "Baixar e Instalar Plugin"
+      },
+      "installed": {
+        "title": "Plugins Instalados"
+      }
     },
     "user": {
       "title": "Configurações de Usuário"
@@ -89,7 +98,8 @@
       "webUI": {
         "title": "Configurações de Interface Web",
         "enableWebUI": "Habilitar Interface Web",
-        "enableWebUIDescription": "Habilitar interface baseada em web para acesso remoto"
+        "enableWebUIDescription": "Habilitar interface baseada em web para acesso remoto",
+        "enableWebUIDescriptionDisabled": "Não é possível desabilitar a Interface Web enquanto acessando através da interface web"
       },
       "theme": {
         "label": "Tema",

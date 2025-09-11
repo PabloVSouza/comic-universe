@@ -68,7 +68,8 @@ jobs:
 
       - name: Update package.json version
         run: |
-          npm version ${{ steps.beta-version.outputs.version }} --no-git-tag-version
+          # Use jq to update package.json directly to preserve 4-digit padding
+          jq --arg version "${{ steps.beta-version.outputs.version }}" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
           echo "Updated package.json to version ${{ steps.beta-version.outputs.version }}"
 
       - name: Upload version files

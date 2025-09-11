@@ -123,7 +123,7 @@
       "light": "Claro",
       "dark": "Escuro",
       "auto": "Automático",
-      "inherit": "Herdar",
+      "inherit": "Herdar do App",
       "wallpaper": {
         "label": "Papel de Parede",
         "description": "Escolha um papel de parede personalizado para o app",

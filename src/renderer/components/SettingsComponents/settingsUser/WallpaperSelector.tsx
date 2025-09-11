@@ -113,7 +113,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
           theme="pure"
           size="s"
           icon="assets/upload.svg"
-          className="!size-7"
+          className="!size-10"
           title={t('Settings.user.wallpaper.addWallpaper')}
         />
       </SettingsItem>

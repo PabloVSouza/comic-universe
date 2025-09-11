@@ -11,9 +11,7 @@ const LanguageSettings = () => {
   const { language, setLanguage, _hasHydrated } = usePersistStore()
   const { effectiveLanguage } = useUserSettings()
 
-  // Update i18n when language changes, but only if user doesn't have a language override
   useEffect(() => {
-    // Only apply app-level language if user language is set to 'inherit'
     if (effectiveLanguage === language.language && i18n.language !== language.language) {
       i18n.changeLanguage(language.language)
     }
@@ -28,11 +26,8 @@ const LanguageSettings = () => {
     const selectedOption = selected as { value: string; label: string }
     if (selectedOption && selectedOption.value !== language.language) {
       try {
-        // Update store (which will save to settings.json)
         setLanguage(selectedOption.value)
 
-        // Update window titles to reflect language change
-        // Small delay to ensure i18n has updated
         setTimeout(() => {
           updateWindowTitles()
         }, 100)
@@ -42,7 +37,6 @@ const LanguageSettings = () => {
     }
   }
 
-  // Show loading state while store is hydrating
   if (!_hasHydrated) {
     return (
       <SettingsItem

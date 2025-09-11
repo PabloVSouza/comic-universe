@@ -9,7 +9,6 @@ const DebugSettings = () => {
     setDebugLogging(!debug.enableDebugLogging)
   }
 
-  // Show loading state while store is hydrating
   if (!_hasHydrated) {
     return (
       <SettingsItem

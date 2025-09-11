@@ -10,7 +10,6 @@ import usePersistSessionStore from 'store/usePersistSessionStore'
 
 import infoIcon from 'assets/info.svg'
 import settingsIcon from 'assets/settings.svg'
-import darkmodeIcon from 'assets/darkmode.svg'
 import userIcon from 'assets/user.svg'
 import exitIcon from 'assets/exit-door.svg'
 
@@ -39,11 +38,7 @@ const HomeNav = (): React.JSX.Element => {
       icon: settingsIcon,
       onClick: () => openWindow({ component: 'Settings', props: {} })
     },
-    {
-      label: t('HomeNav.darkMode'),
-      icon: darkmodeIcon,
-      onClick: (): void => switchTheme()
-    },
+
     {
       label: t('HomeNav.changeUser'),
       icon: userIcon,

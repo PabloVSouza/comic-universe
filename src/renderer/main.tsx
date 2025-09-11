@@ -17,21 +17,16 @@ interface Props {
 
 const queryClient = new QueryClient()
 
-// Apply theme immediately on app startup to prevent flash
 const applyInitialTheme = () => {
-  // For now, default to dark theme to prevent flash
-  // The actual theme will be applied by the Main component once usePersistStore is initialized
   document.documentElement.classList.add('dark')
 }
 
-// Apply theme immediately
 applyInitialTheme()
 
 const Main = ({ children }: Props): React.JSX.Element => {
   const { theme } = usePersistStore()
-  const { userSettings, effectiveTheme } = useUserSettings()
+  const { effectiveTheme } = useUserSettings()
 
-  // Apply theme class to document element for Tailwind CSS v4 dark mode
   useEffect(() => {
     const themeToApply = effectiveTheme || theme?.theme
 
@@ -41,7 +36,6 @@ const Main = ({ children }: Props): React.JSX.Element => {
       } else if (themeToApply === 'light') {
         document.documentElement.classList.remove('dark')
       } else if (themeToApply === 'auto') {
-        // Auto theme based on system preference
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
         if (prefersDark) {
           document.documentElement.classList.add('dark')
@@ -52,7 +46,6 @@ const Main = ({ children }: Props): React.JSX.Element => {
     }
   }, [effectiveTheme, theme])
 
-  // Add transition classes once on mount
   useEffect(() => {
     document.documentElement.classList.add('transition-colors', 'duration-300', 'ease-default')
   }, [])

@@ -3,7 +3,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import useApi from 'api'
 import usePersistSessionStore from 'store/usePersistSessionStore'
-import usePersistStore from 'store/usePersistStore'
 import LoadingOverlay from 'components/LoadingOverlay'
 import SettingsItem from '../SettingsItem'
 import WallpaperSelector from './WallpaperSelector'
@@ -13,7 +12,6 @@ const UserPreferences = () => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const { currentUser } = usePersistSessionStore()
-  const { theme: appTheme, language: appLanguage } = usePersistStore()
 
   const [settings, setSettings] = useState<IUserSettings>({
     readingPreferences: {
@@ -114,9 +112,7 @@ const UserPreferences = () => {
           onChange={(e) => handleSettingChange('displayPreferences', 'theme', e.target.value)}
           className="px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <option value="inherit">
-            {t('Settings.user.inherit')} ({appTheme.theme})
-          </option>
+          <option value="inherit">{t('Settings.user.inherit')}</option>
           <option value="light">{t('Settings.user.light')}</option>
           <option value="dark">{t('Settings.user.dark')}</option>
           <option value="auto">{t('Settings.user.auto')}</option>
@@ -132,9 +128,7 @@ const UserPreferences = () => {
           onChange={(e) => handleSettingChange('appPreferences', 'language', e.target.value)}
           className="px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <option value="inherit">
-            {t('Settings.user.inherit')} ({appLanguage.language})
-          </option>
+          <option value="inherit">{t('Settings.user.inherit')}</option>
           <option value="enUS">English</option>
           <option value="ptBR">Português</option>
         </select>

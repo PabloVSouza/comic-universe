@@ -46,23 +46,22 @@ const SettingsWebUIPreferences = () => {
             }
           }
         }
-      } catch (error) {
+      } catch {
         setWebUIStatus('unknown')
       }
     }
 
     loadWebUIStatus()
-  }, [currentWebUI, invoke])
+  }, [currentWebUI, invoke, webUI.port])
 
   const handleWebUIToggle = async () => {
     const newValue = !currentWebUI
     setCurrentWebUI(newValue)
     setWebUI(newValue)
 
-    // Trigger API server restart when WebUI setting changes
     try {
       await invoke('restartApiServer')
-    } catch (error) {
+    } catch {
       // Failed to restart API server
     }
   }
@@ -77,7 +76,7 @@ const SettingsWebUIPreferences = () => {
         setWebUIPort(portNumber) // Update the store
         // Restart the server to use the new port
         await invoke('restartApiServer')
-      } catch (error) {
+      } catch {
         // Error updating port setting
       }
     }
@@ -90,7 +89,7 @@ const SettingsWebUIPreferences = () => {
 
     try {
       await invoke('updateWebUISettings', { autoPort: newAutoPort })
-    } catch (error) {
+    } catch {
       // Error updating auto port setting
     }
   }

@@ -11,7 +11,6 @@ import AssetServer from 'electron-utils/AssetServer'
 class Methods {
   public methods: any = {}
   private apiManager: any = null
-  private assetServer: any = null
 
   constructor(
     private path: string,
@@ -29,8 +28,6 @@ class Methods {
     const settingsRepository = new SettingsRepository()
     const wallpaperRepository = new WallpaperRepository()
     const assetServer = new AssetServer()
-
-    this.assetServer = assetServer
 
     this.methods = {
       ...apiRepository.methods,

@@ -69,8 +69,12 @@ jobs:
               # PR to main: Create beta version (final testing before production)
               NEW_VERSION="${BASE_VERSION}-beta.${PADDED_BUILD_NUMBER}"
               RELEASE_TYPE="beta"
-            else
+            elif [[ "${{ github.base_ref }}" == "staging" ]] || [[ "${{ github.base_ref }}" == "dev/v2.0.0" ]]; then
               # PR to staging/dev: Create development version (early development)
+              NEW_VERSION="${BASE_VERSION}-dev.${PADDED_BUILD_NUMBER}"
+              RELEASE_TYPE="development"
+            else
+              # PR to other branches: Create development version
               NEW_VERSION="${BASE_VERSION}-dev.${PADDED_BUILD_NUMBER}"
               RELEASE_TYPE="development"
             fi
@@ -79,10 +83,14 @@ jobs:
               # Push to main: Create stable version (production release)
               NEW_VERSION="${BASE_VERSION}"
               RELEASE_TYPE="stable"
-            else
+            elif [[ "${{ github.ref_name }}" == "staging" ]] || [[ "${{ github.ref_name }}" == "dev/v2.0.0" ]]; then
               # Push to staging/dev: Create alpha version (staging testing)
               NEW_VERSION="${BASE_VERSION}-alpha.${PADDED_BUILD_NUMBER}"
               RELEASE_TYPE="alpha"
+            else
+              # Push to other branches: Create development version
+              NEW_VERSION="${BASE_VERSION}-dev.${PADDED_BUILD_NUMBER}"
+              RELEASE_TYPE="development"
             fi
           fi
 

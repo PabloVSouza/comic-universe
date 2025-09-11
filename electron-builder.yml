@@ -58,6 +58,8 @@ files:
   - '!node_modules/@types/react/**'
   - '!node_modules/@types/react-dom/**'
   - '!node_modules/@types/uuid/**'
+  - '!node_modules/@emnapi/**'
+  - '!node_modules/@tailwindcss/oxide-wasm32-wasi/**'
   - '!node_modules/better-sqlite3/build/Release/test_extension.node'
   - '!node_modules/**/test/**'
   - '!node_modules/**/tests/**'
@@ -84,12 +86,12 @@ win:
   # Time stamping server
   signAndEditExecutable: false
 nsis:
-  artifactName: ${name}-${env.ELECTRON_BUILDER_VERSION}-win-${arch}.${ext}
+  artifactName: ${name}-${version}-win-${arch}.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:
-  artifactName: ${name}-${env.ELECTRON_BUILDER_VERSION}-mac-${arch}.${ext}
+  artifactName: ${name}-${version}-mac-${arch}.${ext}
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
@@ -112,7 +114,7 @@ mac:
   # Gatekeeper assessment (required for notarization)
   gatekeeperAssess: false
 dmg:
-  artifactName: ${name}-${env.ELECTRON_BUILDER_VERSION}-mac-${arch}.${ext}
+  artifactName: ${name}-${version}-mac-${arch}.${ext}
   backgroundColor: '#a0aef8'
   # Optimize DMG creation speed
   format: UDZO
@@ -126,7 +128,7 @@ linux:
   maintainer: electronjs.org
   category: Utility
 appImage:
-  artifactName: ${name}-${env.ELECTRON_BUILDER_VERSION}-linux-${arch}.${ext}
+  artifactName: ${name}-${version}-linux-${arch}.${ext}
 npmRebuild: true
 # Optimize build size and speed
 compression: normal
@@ -134,3 +136,7 @@ removePackageScripts: true
 removePackageKeywords: true
 generateUpdatesFilesForAllChannels: false
 buildDependenciesFromSource: false
+# Skip problematic dependencies
+nodeGypRebuild: false
+# Disable dependency analysis to avoid @emnapi issues
+includePinnedDependencies: false

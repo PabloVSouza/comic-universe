@@ -46,6 +46,16 @@ class Methods {
         return { message: 'API manager not available' }
       }
     }
+    // Update the getWebUIPort method to use the actual ApiManager
+    if (this.methods && this.methods.getWebUIPort) {
+      this.methods.getWebUIPort = async () => {
+        if (this.apiManager) {
+          const port = this.apiManager.getCurrentPort()
+          return { port }
+        }
+        return { port: null }
+      }
+    }
   }
 }
 

@@ -83,8 +83,20 @@
     "user": {
       "title": "Configurações de Usuário"
     },
+    "about": {
+      "title": "Sobre Este Aplicativo",
+      "details": "Detalhes do Aplicativo",
+      "repository": "Repositório",
+      "repositoryDescription": "Visite o repositório do projeto no GitHub"
+    },
     "general": {
       "title": "Configurações Gerais",
+      "webUIPreferences": "Preferências da Interface Web",
+      "restartWebUI": "Reiniciar Interface Web",
+      "webUIStatus": "Status da Interface Web",
+      "webUIStatusRunning": "Executando",
+      "webUIStatusStopped": "Parado",
+      "webUIStatusUnknown": "Desconhecido",
       "language": {
         "title": "Configurações de Idioma",
         "label": "Selecionar Idioma",
@@ -99,7 +111,16 @@
         "title": "Configurações de Interface Web",
         "enableWebUI": "Habilitar Interface Web",
         "enableWebUIDescription": "Habilitar interface baseada em web para acesso remoto",
-        "enableWebUIDescriptionDisabled": "Não é possível desabilitar a Interface Web enquanto acessando através da interface web"
+        "enableWebUIDescriptionDisabled": "Não é possível desabilitar a Interface Web enquanto acessando através da interface web",
+        "autoPort": "Porta Automática",
+        "autoPortDescription": "Encontrar automaticamente uma porta disponível começando de 8080",
+        "port": "Porta da Interface Web",
+        "portDescription": "Número da porta para o servidor da Interface Web",
+        "portRange": "(1024-65535)",
+        "url": "URL da Interface Web",
+        "urlDescription": "Acesse a Interface Web através desta URL",
+        "open": "Abrir",
+        "openUrl": "Abrir Interface Web no navegador externo"
       },
       "theme": {
         "label": "Tema",

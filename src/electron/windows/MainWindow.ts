@@ -209,6 +209,9 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     // Pass ApiManager instance to AppRepository for server restart functionality
     methods.setApiManager(apiManager)
 
+    // Reset EventManager to use the updated methods
+    eventManager.resetEvents()
+
     // Setup auto-updater with settings repository
     if (!is.dev) {
       // Only setup auto-updater for CI/CD generated versions

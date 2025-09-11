@@ -1,14 +1,10 @@
 import React, { ReactElement, useRef, useState, ImgHTMLAttributes, CSSProperties } from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
-
-// Utility function to check if we're running in Web UI mode
-const isWebUIMode = (): boolean => {
-  return window.location.origin.includes('localhost:8888')
-}
+import useEnvironment from 'hooks/useEnvironment'
 
 // Utility function to get proxied image URL for Web UI
-const getProxiedImageUrl = (originalUrl: string): string => {
-  if (isWebUIMode() && (originalUrl.startsWith('http://') || originalUrl.startsWith('https://'))) {
+const getProxiedImageUrl = (originalUrl: string, isWebUI: boolean): string => {
+  if (isWebUI && (originalUrl.startsWith('http://') || originalUrl.startsWith('https://'))) {
     const proxiedUrl = `/api/proxy-image?url=${encodeURIComponent(originalUrl)}`
     return proxiedUrl
   }
@@ -44,10 +40,11 @@ const Image = ({
   const [isLoading, setIsLoading] = useState(1)
   const [hasError, setHasError] = useState(false)
   const nodeRef = useRef(null)
+  const { isWebUI } = useEnvironment()
 
   const pureImgProps = {
     className,
-    src: getProxiedImageUrl(src || ''),
+    src: getProxiedImageUrl(src || '', isWebUI),
     alt,
     style,
     referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
@@ -105,7 +102,7 @@ const Image = ({
       ...props,
       referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
       style,
-      src: getProxiedImageUrl(src || ''),
+      src: getProxiedImageUrl(src || '', isWebUI),
       className,
       alt,
       ref: nodeRef,
@@ -114,7 +111,7 @@ const Image = ({
     }
 
     const loadingProps = {
-      src: getProxiedImageUrl(src || ''),
+      src: getProxiedImageUrl(src || '', isWebUI),
       style: { display: 'none' },
       referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
       onLoad: (): void => setIsLoading(0),

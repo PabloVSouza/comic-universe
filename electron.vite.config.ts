@@ -52,6 +52,7 @@ export default defineConfig({
         css: resolve('src/renderer/css'),
         store: resolve('src/renderer/store'),
         constants: resolve('src/renderer/constants'),
+        'renderer-utils': resolve('src/renderer/utils'),
         shared: resolve('src/shared')
       }
     }

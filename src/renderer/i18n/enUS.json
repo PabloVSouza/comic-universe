@@ -83,8 +83,20 @@
     "user": {
       "title": "User Settings"
     },
+    "about": {
+      "title": "About This App",
+      "details": "Application Details",
+      "repository": "Repository",
+      "repositoryDescription": "Visit the project repository on GitHub"
+    },
     "general": {
       "title": "General Settings",
+      "webUIPreferences": "Web UI Preferences",
+      "restartWebUI": "Restart Web UI",
+      "webUIStatus": "Web UI Status",
+      "webUIStatusRunning": "Running",
+      "webUIStatusStopped": "Stopped",
+      "webUIStatusUnknown": "Unknown",
       "language": {
         "title": "Language Settings",
         "label": "Select Language",
@@ -99,7 +111,16 @@
         "title": "Web UI Settings",
         "enableWebUI": "Enable Web UI",
         "enableWebUIDescription": "Enable web-based user interface for remote access",
-        "enableWebUIDescriptionDisabled": "Cannot disable Web UI while accessing through web interface"
+        "enableWebUIDescriptionDisabled": "Cannot disable Web UI while accessing through web interface",
+        "autoPort": "Automatic Port",
+        "autoPortDescription": "Automatically find an available port starting from 8080",
+        "port": "Web UI Port",
+        "portDescription": "Port number for the Web UI server",
+        "portRange": "(1024-65535)",
+        "url": "Web UI URL",
+        "urlDescription": "Access the Web UI through this URL",
+        "open": "Open",
+        "openUrl": "Open Web UI in external browser"
       },
       "theme": {
         "label": "Theme",

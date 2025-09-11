@@ -27,7 +27,8 @@
       "store/*": ["./store/*"],
       "constants/*": ["./constants/*"],
       "@types/*": ["./@types/*"],
-      "shared/*": ["../shared/*"]
+      "shared/*": ["../shared/*"],
+      "renderer-utils/*": ["./utils/*"]
     }
   }
 }

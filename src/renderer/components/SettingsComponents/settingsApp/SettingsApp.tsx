@@ -1,8 +1,8 @@
 import LanguageSettings from './LanguageSettings'
 import DebugSettings from './DebugSettings'
-import WebUISettings from './WebUISettings'
 import ThemeSettings from './ThemeSettings'
 import UpdatePreferences from './UpdatePreferences'
+import WebUIPreferences from './WebUIPreferences'
 import SettingsBox from '../SettingsBox'
 import SettingsTitle from '../SettingsTitle'
 
@@ -22,8 +22,10 @@ const SettingsApp = () => {
               <ThemeSettings />
               <LanguageSettings />
               <DebugSettings />
-              <WebUISettings />
             </div>
+          </SettingsBox>
+          <SettingsBox>
+            <WebUIPreferences />
           </SettingsBox>
         </div>
       </div>

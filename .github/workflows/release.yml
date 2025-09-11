@@ -1,4 +1,4 @@
-name: Build/release Electron app
+name: Stable Release
 
 on:
   push:
@@ -68,13 +68,9 @@ jobs:
     needs: prepare-stable
     permissions: write-all
     env:
-      GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      # Code signing environment variables
-      CSC_LINK: ${{ secrets.CSC_LINK }}
-      CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-      APPLE_ID: ${{ secrets.APPLE_ID }}
-      APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Code signing disabled for all builds
+      CSC_FOR_PULL_REQUEST: false
     strategy:
       matrix:
         include:
@@ -105,7 +101,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      # Certificate setup disabled temporarily to fix auto-updater
+      # Code signing disabled for all builds
       # - name: Setup Consistent Certificate from Secrets
 
       - name: build-linux-x64
@@ -143,7 +139,7 @@ jobs:
           echo "Download the appropriate build for your platform from the assets below." >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "## Code Signing" >> $GITHUB_ENV
-          echo "All builds are automatically signed with self-signed certificates. Users may see security warnings - this is normal for self-signed certificates." >> $GITHUB_ENV
+          echo "Code signing is disabled for all builds to speed up the build process and avoid certificate issues." >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "## Testing" >> $GITHUB_ENV
           echo "This is a stable release. Please test thoroughly and report any issues." >> $GITHUB_ENV

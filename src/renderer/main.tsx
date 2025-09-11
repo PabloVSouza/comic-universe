@@ -9,9 +9,7 @@ import { AlertProvider } from 'components/Alert'
 import { I18nextProvider } from 'react-i18next'
 import i18n from './i18n/index'
 import UpdateNotification from 'components/UpdateNotification'
-// import { useUserSettings } from 'hooks/useUserSettings'
-
-import wallpaper from 'assets/wallpaper.webp'
+import { useUserSettings } from 'hooks/useUserSettings'
 
 interface Props {
   children: ReactNode
@@ -31,36 +29,36 @@ applyInitialTheme()
 
 const Main = ({ children }: Props): React.JSX.Element => {
   const { theme } = usePersistStore()
-  // const { userSettings } = useUserSettings()
+  const { userSettings, effectiveTheme } = useUserSettings()
 
   // Apply theme class to document element for Tailwind CSS v4 dark mode
   useEffect(() => {
-    // Only apply theme if the store is initialized and has a theme value
-    if (theme?.theme) {
-      if (theme.theme === 'dark') {
+    const themeToApply = effectiveTheme || theme?.theme
+
+    if (themeToApply) {
+      if (themeToApply === 'dark') {
         document.documentElement.classList.add('dark')
-      } else {
+      } else if (themeToApply === 'light') {
         document.documentElement.classList.remove('dark')
+      } else if (themeToApply === 'auto') {
+        // Auto theme based on system preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (prefersDark) {
+          document.documentElement.classList.add('dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
       }
     }
-  }, [theme])
+  }, [effectiveTheme, theme])
 
   // Add transition classes once on mount
   useEffect(() => {
     document.documentElement.classList.add('transition-colors', 'duration-300', 'ease-default')
   }, [])
 
-  // Determine wallpaper to use
-  const getWallpaperUrl = () => {
-    // For now, always use the default wallpaper
-    return wallpaper
-  }
-
   return (
-    <div
-      className="main-container h-[calc(100dvh)] w-screen bg-cover bg-center bg-no-repeat flex justify-center items-center relative overflow-hidden transition-colors duration-300 ease-default"
-      style={{ backgroundImage: `url(${getWallpaperUrl()})` }}
-    >
+    <div className="main-container h-[calc(100dvh)] w-screen bg-cover bg-center bg-no-repeat flex justify-center items-center relative overflow-hidden transition-colors duration-300 ease-default">
       {children}
     </div>
   )

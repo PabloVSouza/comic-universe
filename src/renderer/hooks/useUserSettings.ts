@@ -72,14 +72,19 @@ export const useUserSettings = () => {
     const mainContainer = document.querySelector('.main-container')
     if (!mainContainer) return
 
-    if (userSettings?.displayPreferences?.wallpaper) {
-      const wallpaper = userSettings.displayPreferences.wallpaper
-      const wallpaperUrl = wallpaperManager.getWallpaperUrl(wallpaper)
-      ;(mainContainer as HTMLElement).style.backgroundImage = `url(${wallpaperUrl})`
-    } else {
-      // Reset to default wallpaper - let the main component handle this
-      ;(mainContainer as HTMLElement).style.backgroundImage = ''
+    const applyWallpaper = async () => {
+      if (userSettings?.displayPreferences?.wallpaper) {
+        const wallpaper = userSettings.displayPreferences.wallpaper
+        const wallpaperUrl = await wallpaperManager.getWallpaperUrl(wallpaper)
+        ;(mainContainer as HTMLElement).style.backgroundImage = `url(${wallpaperUrl})`
+      } else {
+        // Use default wallpaper when no custom wallpaper is selected
+        const defaultWallpaperUrl = await wallpaperManager.getWallpaperUrl('default.webp')
+        ;(mainContainer as HTMLElement).style.backgroundImage = `url(${defaultWallpaperUrl})`
+      }
     }
+
+    applyWallpaper()
   }, [userSettings?.displayPreferences?.wallpaper])
 
   return {

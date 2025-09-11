@@ -60,8 +60,17 @@ export const getPreferredPort = async (settingsRepository: any): Promise<number>
 /**
  * Get the actual port to use (preferred port if available, or next available)
  */
-export const getPortToUse = async (settingsRepository: any): Promise<number> => {
-  const preferredPort = await getPreferredPort(settingsRepository)
+export const getPortToUse = async (
+  settingsRepository: any,
+  defaultStartPort: number = 8080
+): Promise<number> => {
+  let preferredPort: number
+
+  if (settingsRepository) {
+    preferredPort = await getPreferredPort(settingsRepository)
+  } else {
+    preferredPort = defaultStartPort
+  }
 
   // Check if preferred port is available
   const isAvailable = await isPortAvailable(preferredPort)

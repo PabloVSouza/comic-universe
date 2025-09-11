@@ -6,10 +6,12 @@ import DBRepository from './DBRepository'
 import PluginsRepository from './PluginsRepository'
 import SettingsRepository from './SettingsRepository'
 import WallpaperRepository from './WallpaperRepository'
+import AssetServer from 'electron-utils/AssetServer'
 
 class Methods {
   public methods: any = {}
   private apiManager: any = null
+  private assetServer: any = null
 
   constructor(
     private path: string,
@@ -26,6 +28,9 @@ class Methods {
     await dbRepository.startup()
     const settingsRepository = new SettingsRepository()
     const wallpaperRepository = new WallpaperRepository()
+    const assetServer = new AssetServer()
+
+    this.assetServer = assetServer
 
     this.methods = {
       ...apiRepository.methods,
@@ -33,7 +38,8 @@ class Methods {
       ...dbRepository.methods,
       ...pluginsRepository.methods,
       ...settingsRepository.methods,
-      ...wallpaperRepository.methods
+      ...wallpaperRepository.methods,
+      ...assetServer.methods
     }
   }
 

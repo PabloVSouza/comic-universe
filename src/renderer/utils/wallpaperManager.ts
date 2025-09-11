@@ -1,5 +1,6 @@
 import useApi from 'api'
 import path from 'path'
+import defaultWallpaper from 'assets/wallpaper.webp'
 
 export interface WallpaperInfo {
   filename: string
@@ -45,10 +46,17 @@ class WallpaperManager {
   /**
    * Get the URL for a wallpaper (for display purposes)
    */
-  getWallpaperUrl(filename: string): string {
-    // In development, serve from the wallpaper directory
-    // In production, this will be handled by the main process
-    return `/api/wallpapers/${filename}`
+  async getWallpaperUrl(filename: string): Promise<string> {
+    // Handle default wallpaper - use the imported asset which has the correct hash
+    if (filename === 'default.webp') {
+      return defaultWallpaper
+    }
+
+    // For custom wallpapers, use the asset server
+    const port = await this.api.invoke('getAssetServerPort')
+    // Properly encode the filename for URL
+    const encodedFilename = encodeURIComponent(filename)
+    return `http://localhost:${port}/wallpapers/${encodedFilename}`
   }
 
   /**

@@ -19,6 +19,8 @@ export interface DebugSettings {
 
 export interface WebUISettings {
   enableWebUI: boolean
+  port?: number
+  autoPort?: boolean
 }
 
 export interface ThemeSettings {
@@ -82,7 +84,6 @@ class SettingsRepository {
           return this.defaultSettings
         }
       } catch (error) {
-        console.error('Error loading settings:', error)
         return this.defaultSettings
       }
     },
@@ -99,7 +100,6 @@ class SettingsRepository {
         // Write settings to file
         fs.writeFileSync(this.settingsPath, JSON.stringify(settings, null, 2), 'utf8')
       } catch (error) {
-        console.error('Error saving settings:', error)
         throw error
       }
     },
@@ -122,7 +122,6 @@ class SettingsRepository {
         await this.methods.saveSettings(updatedSettings)
         return updatedSettings
       } catch (error) {
-        console.error('Error updating settings:', error)
         throw error
       }
     },
@@ -149,7 +148,6 @@ class SettingsRepository {
         await this.methods.saveSettings(updatedSettings)
         return updatedSettings.update
       } catch (error) {
-        console.error('Error updating update settings:', error)
         throw error
       }
     },
@@ -188,18 +186,14 @@ class SettingsRepository {
 
     // Update web UI settings specifically
     updateWebUISettings: async (webUISettings: Partial<WebUISettings>): Promise<WebUISettings> => {
-      console.log('updateWebUISettings called with:', webUISettings)
       const currentSettings = await this.methods.loadSettings()
-      console.log('Current webUI settings:', currentSettings.webUI)
 
       const updatedWebUISettings = {
         ...currentSettings.webUI,
         ...webUISettings
       }
-      console.log('Updated webUI settings:', updatedWebUISettings)
 
       const updatedSettings = await this.methods.updateSettings('webUI', updatedWebUISettings)
-      console.log('Final webUI settings:', updatedSettings.webUI)
       return updatedSettings.webUI
     },
 

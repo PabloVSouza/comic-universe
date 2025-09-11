@@ -4,11 +4,13 @@ import path from 'path'
 import cors from 'cors'
 import Methods from './Methods'
 import SettingsRepository from './Methods/SettingsRepository'
+import { getPortToUse } from 'utils/portManager'
 
 class ApiManager {
   private settingsRepository: SettingsRepository
   private server: any = null
   private methodsInstance: Methods
+  private currentPort: number | null = null
 
   constructor(methods: Methods) {
     this.methodsInstance = methods
@@ -23,15 +25,13 @@ class ApiManager {
     try {
       // Check if web UI is enabled
       const webUISettings = await this.settingsRepository.methods.getWebUISettings()
-      console.log('ApiManager startup - Web UI setting:', webUISettings.enableWebUI)
-
       if (!webUISettings.enableWebUI) {
-        console.log('Web UI is disabled - Express server not started')
         return
       }
 
       const app = express()
-      const port = 8888
+      const port = await getPortToUse(this.settingsRepository)
+      this.currentPort = port
 
       app.use(
         cors({
@@ -58,28 +58,22 @@ class ApiManager {
       app.use(routes)
 
       this.server = app.listen(port, () => {
-        console.log('====================')
-        console.log(`Api is up on port ${port}`)
-        console.log('====================')
+        // API server started
       })
     } catch (error) {
-      console.error('Error starting API server:', error)
+      // Error starting API server
     }
   }
 
   // Method to restart server when web UI setting changes
   restartServer = async () => {
-    console.log('ApiManager.restartServer called')
-
     // Stop existing server if running
     if (this.server) {
       this.server.close()
       this.server = null
-      console.log('Express server stopped')
     }
 
     // Start server again (will check setting)
-    console.log('Restarting server...')
     await this.startUp()
   }
 
@@ -137,7 +131,7 @@ class ApiManager {
         const imageBuffer = await response.arrayBuffer()
         res.send(Buffer.from(imageBuffer))
       } catch (error) {
-        console.error('Error proxying image:', error)
+        // Error proxying image
         res.status(500).json({ error: 'Internal server error' })
       }
     })
@@ -149,6 +143,11 @@ class ApiManager {
     }
 
     return routes
+  }
+
+  // Get the current port the server is running on
+  getCurrentPort = (): number | null => {
+    return this.currentPort
   }
 }
 

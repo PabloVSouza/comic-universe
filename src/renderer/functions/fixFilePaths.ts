@@ -1,12 +1,11 @@
 import useGlobalStore from 'store/useGlobalStore'
+import { isWebUI } from 'renderer-utils/environment'
 
 const FixFilePaths = (path: string) => {
   if (path.startsWith('http')) return path
 
   // Check if we're running in Web UI mode
-  const isWebUIMode = window.location.origin.includes('localhost:8888')
-
-  if (isWebUIMode) {
+  if (isWebUI()) {
     // In Web UI mode, serve files through the Express server
     // Remove the file:// prefix and extract the relative path from plugins directory
     const cleanPath = path.replace(/^file:\/\//, '')

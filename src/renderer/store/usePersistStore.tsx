@@ -9,13 +9,15 @@ interface IusePersistStore {
   repo: { repo: TOption }
   language: { language: string }
   debug: { enableDebugLogging: boolean }
-  webUI: { enableWebUI: boolean }
+  webUI: { enableWebUI: boolean; autoPort?: boolean; port?: number }
   _hasHydrated: boolean
   switchTheme: (theme?: string) => void
   setRepo: (repo: TOption) => void
   setLanguage: (language: string) => void
   setDebugLogging: (enabled: boolean) => void
-  setWebUI: (enabled: boolean) => void
+  setWebUI: (enabled: boolean, autoPort?: boolean, port?: number) => void
+  setWebUIAutoPort: (autoPort: boolean) => void
+  setWebUIPort: (port: number) => void
 }
 
 const { appParams } = useGlobalStore.getState()
@@ -39,8 +41,30 @@ const usePersistStore = create<IusePersistStore>()(
       setDebugLogging: (enabled) => {
         set({ debug: { enableDebugLogging: enabled } })
       },
-      setWebUI: (enabled) => {
-        set({ webUI: { enableWebUI: enabled } })
+      setWebUI: (enabled, autoPort?: boolean, port?: number) => {
+        set((state) => ({
+          webUI: {
+            enableWebUI: enabled,
+            autoPort: autoPort !== undefined ? autoPort : state.webUI.autoPort,
+            port: port !== undefined ? port : state.webUI.port
+          }
+        }))
+      },
+      setWebUIAutoPort: (autoPort) => {
+        set((state) => ({
+          webUI: {
+            ...state.webUI,
+            autoPort
+          }
+        }))
+      },
+      setWebUIPort: (port) => {
+        set((state) => ({
+          webUI: {
+            ...state.webUI,
+            port
+          }
+        }))
       }
     }),
     {

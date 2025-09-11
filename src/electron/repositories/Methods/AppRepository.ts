@@ -148,6 +148,12 @@ class AppRepository {
       return { message: 'API server restart requested' }
     },
 
+    getWebUIPort: async () => {
+      // This method will be overridden by Methods.setApiManager
+      // to call the actual ApiManager getCurrentPort method
+      return { port: null }
+    },
+
     openExternal: (args: { url: string }) => {
       shell.openExternal(args.url)
     }

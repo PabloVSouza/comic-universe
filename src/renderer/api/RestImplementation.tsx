@@ -1,6 +1,16 @@
 import axios from 'axios'
+import { isWebUI } from 'renderer-utils/environment'
+
+// Get the current port from the URL if we're in Web UI mode
+const getCurrentPort = (): number => {
+  if (isWebUI() && typeof window !== 'undefined' && window.location.port) {
+    return parseInt(window.location.port, 10)
+  }
+  return 8888 // fallback to default port
+}
+
 const api = axios.create({
-  baseURL: 'http://localhost:8888/'
+  baseURL: `http://localhost:${getCurrentPort()}/`
 })
 
 const RestImplementation = {

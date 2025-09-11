@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import usePersistStore from 'store/usePersistStore'
+import { useUserSettings } from 'hooks/useUserSettings'
 import Select from 'components/Select'
 import SettingsItem from '../SettingsItem'
 import { updateWindowTitles } from 'functions/openWindow'
@@ -8,13 +9,15 @@ import { updateWindowTitles } from 'functions/openWindow'
 const LanguageSettings = () => {
   const { i18n } = useTranslation()
   const { language, setLanguage, _hasHydrated } = usePersistStore()
+  const { effectiveLanguage } = useUserSettings()
 
-  // Update i18n when language changes
+  // Update i18n when language changes, but only if user doesn't have a language override
   useEffect(() => {
-    if (i18n.language !== language.language) {
+    // Only apply app-level language if user language is set to 'inherit'
+    if (effectiveLanguage === language.language && i18n.language !== language.language) {
       i18n.changeLanguage(language.language)
     }
-  }, [language, i18n])
+  }, [language, i18n, effectiveLanguage])
 
   const languageOptions = [
     { value: 'enUS', label: 'English' },

@@ -26,13 +26,6 @@ const ReaderBottomBar = ({
 }: ReaderBottomBarProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  // Debug: Log the current page value
-  console.log('ReaderBottomBar debug:', {
-    currentPage,
-    totalPages,
-    readingMode
-  })
-
   const progressPercentage = totalPages > 0 ? (currentPage / totalPages) * 100 : 0
 
   return (

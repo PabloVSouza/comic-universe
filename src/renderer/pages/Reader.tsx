@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate } from 'react-router-dom'
 import Image from 'components/Image'
@@ -23,6 +23,7 @@ const Reader = (): React.JSX.Element => {
   const [currentReadingMode, setCurrentReadingMode] = useState<'horizontal' | 'vertical'>(
     'horizontal'
   )
+  const mainContainerRef = useRef<HTMLDivElement>(null)
   const [scrollContainer, setScrollContainer] = useState<HTMLDivElement | null>(null)
   const [isScrollingProgrammatically, setIsScrollingProgrammatically] = useState(false)
   const [shouldScrollToPage, setShouldScrollToPage] = useState(false)
@@ -304,6 +305,10 @@ const Reader = (): React.JSX.Element => {
       updateReadingMode(newMode)
       setShouldScrollToPage(true)
     }
+    // Close zoom window when switching to vertical mode
+    if (newMode === 'vertical') {
+      setZoomVisible(false)
+    }
   }
 
   const position = {
@@ -321,6 +326,23 @@ const Reader = (): React.JSX.Element => {
       document.removeEventListener('keydown', handleKeys)
     }
   }, [activeComic, chapterIndex, readProgress, handleKeys])
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent): void => {
+      if (readingMode === 'horizontal') {
+        e.preventDefault()
+      }
+    }
+
+    const container = mainContainerRef.current
+    if (container) {
+      container.addEventListener('wheel', handleWheel, { passive: false })
+      return () => {
+        container.removeEventListener('wheel', handleWheel)
+      }
+    }
+    return undefined
+  }, [readingMode])
 
   useEffect(() => {
     resetQueries()
@@ -346,12 +368,12 @@ const Reader = (): React.JSX.Element => {
     <Cover visible>
       <div className="w-full h-full flex flex-col">
         <div
+          ref={mainContainerRef}
           className="flex-1 relative overflow-hidden"
           onMouseMoveCapture={defineMousePos}
-          onContextMenu={(): void => setZoomVisible(!zoomVisible)}
-          onWheel={(e): void => {
+          onContextMenu={(): void => {
             if (readingMode === 'horizontal') {
-              e.preventDefault()
+              setZoomVisible(!zoomVisible)
             }
           }}
         >
@@ -375,7 +397,7 @@ const Reader = (): React.JSX.Element => {
               />
             </svg>
           </button>
-          {!!pages?.length && readProgress?.page && (
+          {!!pages?.length && readProgress?.page && readingMode === 'horizontal' && (
             <ReaderZoomWindow
               mousePos={mousePos}
               image={
@@ -418,18 +440,18 @@ const Reader = (): React.JSX.Element => {
                     ))}
                 </div>
               </div>
-              <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute inset-0 pointer-events-none flex flex-col">
                 <button
-                  className="w-full h-1/3 transition-colors duration-200 bg-transparent border-none cursor-pointer hover:bg-black/10 pointer-events-auto"
+                  className="w-full h-16 transition-colors duration-200 bg-transparent border-none cursor-pointer hover:bg-black/10 pointer-events-auto"
                   onClick={(e): void => {
                     e.preventDefault()
                     e.stopPropagation()
                     previousPage()
                   }}
                 />
-                <div className="w-full h-1/3" />
+                <div className="w-full flex-1" />
                 <button
-                  className="w-full h-1/3 transition-colors duration-200 bg-transparent border-none cursor-pointer hover:bg-black/10 pointer-events-auto"
+                  className="w-full h-16 transition-colors duration-200 bg-transparent border-none cursor-pointer hover:bg-black/10 pointer-events-auto"
                   onClick={(e): void => {
                     e.preventDefault()
                     e.stopPropagation()
@@ -463,7 +485,7 @@ const Reader = (): React.JSX.Element => {
               {/* Fixed navigation buttons for horizontal mode */}
               <div className="absolute inset-0 w-full h-full flex justify-between pointer-events-none z-10">
                 <button
-                  className="w-1/3 h-full transition-colors duration-200 bg-transparent border-none cursor-pointer hover:bg-black/10 pointer-events-auto"
+                  className="w-16 h-full transition-colors duration-200 bg-transparent border-none cursor-pointer hover:bg-black/10 pointer-events-auto"
                   onClick={(e): void => {
                     e.preventDefault()
                     e.stopPropagation()
@@ -474,8 +496,9 @@ const Reader = (): React.JSX.Element => {
                     }
                   }}
                 />
+                <div className="flex-1 h-full" />
                 <button
-                  className="w-1/3 h-full transition-colors duration-200 bg-transparent border-none cursor-pointer hover:bg-black/10 pointer-events-auto"
+                  className="w-16 h-full transition-colors duration-200 bg-transparent border-none cursor-pointer hover:bg-black/10 pointer-events-auto"
                   onClick={(e): void => {
                     e.preventDefault()
                     e.stopPropagation()

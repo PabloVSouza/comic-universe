@@ -84,12 +84,12 @@ win:
   # Time stamping server
   signAndEditExecutable: false
 nsis:
-  artifactName: ${name}-${version}-win-${arch}.${ext}
+  artifactName: ${name}-${env.ELECTRON_BUILDER_VERSION || version}-win-${arch}.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:
-  artifactName: ${name}-${version}-mac-${arch}.${ext}
+  artifactName: ${name}-${env.ELECTRON_BUILDER_VERSION || version}-mac-${arch}.${ext}
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
@@ -112,7 +112,7 @@ mac:
   # Gatekeeper assessment (required for notarization)
   gatekeeperAssess: false
 dmg:
-  artifactName: ${name}-${version}-mac-${arch}.${ext}
+  artifactName: ${name}-${env.ELECTRON_BUILDER_VERSION || version}-mac-${arch}.${ext}
   backgroundColor: '#a0aef8'
   # Optimize DMG creation speed
   format: UDZO
@@ -126,7 +126,7 @@ linux:
   maintainer: electronjs.org
   category: Utility
 appImage:
-  artifactName: ${name}-${version}-linux-${arch}.${ext}
+  artifactName: ${name}-${env.ELECTRON_BUILDER_VERSION || version}-linux-${arch}.${ext}
 npmRebuild: true
 # Optimize build size and speed
 compression: normal

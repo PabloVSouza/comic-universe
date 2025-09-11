@@ -9,6 +9,9 @@ const WebUISettings = () => {
   const { invoke } = useApi()
   const [currentWebUI, setCurrentWebUI] = useState(webUI.enableWebUI)
 
+  // Check if we're running in Web UI mode
+  const isWebUIMode = window.location.origin.includes('localhost:8888')
+
   useEffect(() => {
     setCurrentWebUI(webUI.enableWebUI)
   }, [webUI])
@@ -42,9 +45,18 @@ const WebUISettings = () => {
   return (
     <SettingsItem
       labelI18nKey="Settings.general.webUI.enableWebUI"
-      descriptionI18nKey="Settings.general.webUI.enableWebUIDescription"
+      descriptionI18nKey={
+        isWebUIMode
+          ? 'Settings.general.webUI.enableWebUIDescriptionDisabled'
+          : 'Settings.general.webUI.enableWebUIDescription'
+      }
     >
-      <Button onClick={handleWebUIToggle} theme="toggle" active={currentWebUI} />
+      <Button
+        onClick={handleWebUIToggle}
+        theme="toggle"
+        active={currentWebUI}
+        disabled={isWebUIMode}
+      />
     </SettingsItem>
   )
 }

@@ -1,5 +1,19 @@
-import { ReactElement, useRef, useState, ImgHTMLAttributes, CSSProperties } from 'react'
+import React, { ReactElement, useRef, useState, ImgHTMLAttributes, CSSProperties } from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
+
+// Utility function to check if we're running in Web UI mode
+const isWebUIMode = (): boolean => {
+  return window.location.origin.includes('localhost:8888')
+}
+
+// Utility function to get proxied image URL for Web UI
+const getProxiedImageUrl = (originalUrl: string): string => {
+  if (isWebUIMode() && (originalUrl.startsWith('http://') || originalUrl.startsWith('https://'))) {
+    const proxiedUrl = `/api/proxy-image?url=${encodeURIComponent(originalUrl)}`
+    return proxiedUrl
+  }
+  return originalUrl
+}
 
 interface IImageProps extends Partial<ImgHTMLAttributes<HTMLImageElement>> {
   placeholderSrc?: string
@@ -7,6 +21,9 @@ interface IImageProps extends Partial<ImgHTMLAttributes<HTMLImageElement>> {
   placeholderStyle?: CSSProperties
   lazy?: boolean
   svg?: boolean
+  svgColor?: string
+  svgSize?: number | string
+  SvgComponent?: React.ComponentType<React.SVGProps<SVGSVGElement>>
 }
 
 const Image = ({
@@ -19,33 +36,58 @@ const Image = ({
   className,
   lazy,
   svg,
+  svgColor,
+  svgSize,
+  SvgComponent,
   ...props
 }: IImageProps): ReactElement => {
   const [isLoading, setIsLoading] = useState(1)
+  const [hasError, setHasError] = useState(false)
   const nodeRef = useRef(null)
 
   const pureImgProps = {
     className,
-    src,
+    src: getProxiedImageUrl(src || ''),
     alt,
     style,
     referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
+    onError: () => setHasError(true),
+    onLoad: () => setHasError(false),
     ...props
   }
 
   if (svg) {
-    const svgImgProps = {
-      ...pureImgProps,
-      style: {
-        ...style,
-        WebkitMaskImage: `url(${src})`,
-        WebkitMaskSize: 'contain',
-        WebkitMaskPosition: 'center',
-        WebkitMaskRepeat: 'no-repeat',
-        WebkitMaskOrigin: 'content-box'
-      }
+    const iconSize = svgSize || style?.width || style?.height || 24
+    const iconStyle: React.CSSProperties = {
+      width: iconSize,
+      height: iconSize,
+      color: svgColor || style?.color || 'currentColor',
+      fill: 'currentColor',
+      ...style
     }
-    return <div {...svgImgProps} />
+
+    // If SvgComponent is provided, use it directly
+    if (SvgComponent) {
+      return (
+        <SvgComponent className={className} style={iconStyle} aria-label={alt} aria-hidden={!alt} />
+      )
+    }
+
+    // Fallback to the original mask approach for string paths
+    if (src) {
+      const svgImgProps = {
+        ...pureImgProps,
+        style: {
+          ...style,
+          WebkitMaskImage: `url(${src})`,
+          WebkitMaskSize: 'contain',
+          WebkitMaskPosition: 'center',
+          WebkitMaskRepeat: 'no-repeat',
+          WebkitMaskOrigin: 'content-box'
+        }
+      }
+      return <div {...svgImgProps} />
+    }
   }
 
   if (lazy) {
@@ -63,17 +105,23 @@ const Image = ({
       ...props,
       referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
       style,
-      src,
+      src: getProxiedImageUrl(src || ''),
       className,
       alt,
-      ref: nodeRef
+      ref: nodeRef,
+      onError: () => setHasError(true),
+      onLoad: () => setHasError(false)
     }
 
     const loadingProps = {
-      src,
+      src: getProxiedImageUrl(src || ''),
       style: { display: 'none' },
       referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
-      onLoad: (): void => setIsLoading(0)
+      onLoad: (): void => setIsLoading(0),
+      onError: (): void => {
+        setHasError(true)
+        setIsLoading(0)
+      }
     }
 
     const transitionStyles = {
@@ -99,6 +147,20 @@ const Image = ({
       </>
     )
   }
+
+  // If there's an error loading the image, show a placeholder
+  if (hasError) {
+    return (
+      <div
+        className={`${className} flex items-center justify-center bg-gray-200 text-gray-500`}
+        style={style}
+        title={`Failed to load image: ${alt || src}`}
+      >
+        <span className="text-xs">Image unavailable</span>
+      </div>
+    )
+  }
+
   return <img {...pureImgProps} />
 }
 

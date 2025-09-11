@@ -355,6 +355,26 @@ const Reader = (): React.JSX.Element => {
             }
           }}
         >
+          <button
+            className="absolute top-4 right-4 z-50 w-8 h-8 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
+            onClick={() => navigate('/')}
+            title="Close Reader (Esc)"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
           {!!pages?.length && readProgress?.page && (
             <ReaderZoomWindow
               mousePos={mousePos}

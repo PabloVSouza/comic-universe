@@ -2,10 +2,11 @@ appId: com.electron.app
 productName: Comic Universe
 directories:
   buildResources: build
-publish:
-  provider: github
-  owner: PabloVSouza
-  repo: comic-universe
+# Publish configuration disabled - we handle publishing manually in workflows
+# publish:
+#   provider: github
+#   owner: PabloVSouza
+#   repo: comic-universe
 
 # Code signing configuration
 # For code signing options:

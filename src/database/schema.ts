@@ -15,7 +15,8 @@ export const plugins = sqliteTable('Plugin', {
 export const users = sqliteTable('User', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   name: text('name').notNull(),
-  default: integer('default', { mode: 'boolean' }).default(false).notNull()
+  default: integer('default', { mode: 'boolean' }).default(false).notNull(),
+  settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({})
 })
 
 // Comic table

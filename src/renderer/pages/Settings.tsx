@@ -77,12 +77,12 @@ const getWindowSettings = () => {
       titleBar: true,
       closeable: true,
       unique: true,
-      title: 'Settings' // Will be translated dynamically in openWindow
+      title: 'Settings'
     },
     initialStatus: {
       startPosition: 'center',
       width: 750,
-      height: 500
+      height: 600
     }
   } as TWindow
 }

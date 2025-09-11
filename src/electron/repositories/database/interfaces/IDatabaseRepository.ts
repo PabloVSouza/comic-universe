@@ -7,7 +7,7 @@ export interface IDatabaseRepository {
   isInitialized(): boolean
 
   // Migration management
-  runMigrations(): Promise<void>
+  runDrizzleMigrations(): Promise<void>
   verifyMigrations(): Promise<boolean>
 
   // Comic operations
@@ -49,6 +49,13 @@ export interface IDatabaseRepository {
   createUser(user: IUser): Promise<IUser>
   updateUser(id: number, user: Partial<IUser>): Promise<IUser | undefined>
   deleteUser(id: number): Promise<void>
+
+  // User settings operations
+  getUserSettings(userId: number): Promise<IUserSettings | undefined>
+  updateUserSettings(
+    userId: number,
+    settings: Partial<IUserSettings>
+  ): Promise<IUserSettings | undefined>
 
   // ReadProgress operations
   getReadProgressByUser(userId: number): Promise<IReadProgress[]>

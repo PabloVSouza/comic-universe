@@ -74,6 +74,7 @@ files:
 asarUnpack:
   - 'node_modules/better-sqlite3/build/Release/better_sqlite3.node'
   - 'resources/*'
+  - 'out/database/migrations/**/*'
 win:
   executableName: comic-universe
   # Code signing configuration for Windows

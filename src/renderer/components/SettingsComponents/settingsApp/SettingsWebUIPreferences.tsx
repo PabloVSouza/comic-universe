@@ -114,10 +114,7 @@ const SettingsWebUIPreferences = () => {
   return (
     <div className="space-y-6">
       {/* Web UI Status */}
-      <div>
-        <label className="block text-base mb-2 text-text-default">
-          {t('Settings.general.webUIStatus')}
-        </label>
+      <SettingsItem labelI18nKey="Settings.general.webUIStatus">
         <div
           className={`text-base px-3 py-2 rounded-md ${
             webUIStatus === 'running'
@@ -131,7 +128,7 @@ const SettingsWebUIPreferences = () => {
           {webUIStatus === 'stopped' && t('Settings.general.webUIStatusStopped')}
           {webUIStatus === 'unknown' && t('Settings.general.webUIStatusUnknown')}
         </div>
-      </div>
+      </SettingsItem>
 
       {/* Enable Web UI Toggle */}
       <SettingsItem
@@ -192,19 +189,14 @@ const SettingsWebUIPreferences = () => {
           labelI18nKey="Settings.general.webUI.url"
           descriptionI18nKey="Settings.general.webUI.urlDescription"
         >
-          <div className="flex items-center gap-2">
-            <div className="px-3 py-2 bg-list-item text-text-default rounded-lg border border-gray-200 dark:border-gray-600">
-              http://localhost:{actualPort || webUIPort}
-            </div>
-            <Button
-              onClick={() => window.open(`http://localhost:${actualPort || webUIPort}`, '_blank')}
-              theme="default"
-              size="s"
-              title={t('Settings.general.webUI.openUrl')}
-            >
-              {t('Settings.general.webUI.open')}
-            </Button>
-          </div>
+          <a
+            href={`http://localhost:${actualPort || webUIPort}`}
+            target="_blank"
+            rel="noreferrer"
+            className="px-3 py-2 bg-list-item text-blue-600 dark:text-blue-400 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors inline-block"
+          >
+            http://localhost:{actualPort || webUIPort}
+          </a>
         </SettingsItem>
       )}
     </div>

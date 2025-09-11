@@ -27,7 +27,11 @@
     "cert:setup": "./scripts/setup-consistent-cert.sh",
     "test:fallback": "node scripts/test-fallback-update.js",
     "build:win:unsigned": "CSC_LINK=\"\" npm run build:win",
-    "build:mac:unsigned": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run build:mac"
+    "build:mac:unsigned": "CSC_IDENTITY_AUTO_DISCOVERY=false npm run build:mac",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
@@ -93,5 +97,6 @@
     "typescript": "^5.9.2",
     "vite": "^7.1.4",
     "vite-plugin-svgr": "^4.2.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

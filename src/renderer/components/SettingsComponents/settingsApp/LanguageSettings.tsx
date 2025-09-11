@@ -7,7 +7,7 @@ import { updateWindowTitles } from 'functions/openWindow'
 
 const LanguageSettings = () => {
   const { i18n } = useTranslation()
-  const { language, setLanguage } = usePersistStore()
+  const { language, setLanguage, _hasHydrated } = usePersistStore()
 
   // Update i18n when language changes
   useEffect(() => {
@@ -37,6 +37,20 @@ const LanguageSettings = () => {
         console.error('Error updating language settings:', error)
       }
     }
+  }
+
+  // Show loading state while store is hydrating
+  if (!_hasHydrated) {
+    return (
+      <SettingsItem
+        labelI18nKey="Settings.general.language.label"
+        descriptionI18nKey="Settings.general.language.description"
+      >
+        <div className="animate-pulse">
+          <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded"></div>
+        </div>
+      </SettingsItem>
+    )
   }
 
   return (

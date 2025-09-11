@@ -2,7 +2,7 @@ import { BrowserWindow } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import path from 'path'
 import fs from 'fs'
-import { CreateDirectory, githubApi, ComicUniverseApi, DownloadFile, DataPaths } from 'utils/utils'
+import { CreateDirectory, githubApi, ComicUniverseApi, DownloadFile, DataPaths } from 'electron-utils/utils'
 import { extract } from 'pacote'
 
 class PluginsRepository {

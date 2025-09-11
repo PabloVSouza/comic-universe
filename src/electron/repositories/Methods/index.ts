@@ -5,6 +5,7 @@ import AppRepository from './AppRepository'
 import DBRepository from './DBRepository'
 import PluginsRepository from './PluginsRepository'
 import SettingsRepository from './SettingsRepository'
+import WallpaperRepository from './WallpaperRepository'
 
 class Methods {
   public methods: any = {}
@@ -24,13 +25,15 @@ class Methods {
     const dbRepository = new DBRepository()
     await dbRepository.startup()
     const settingsRepository = new SettingsRepository()
+    const wallpaperRepository = new WallpaperRepository()
 
     this.methods = {
       ...apiRepository.methods,
       ...appRepository.methods,
       ...dbRepository.methods,
       ...pluginsRepository.methods,
-      ...settingsRepository.methods
+      ...settingsRepository.methods,
+      ...wallpaperRepository.methods
     }
   }
 

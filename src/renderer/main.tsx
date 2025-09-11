@@ -9,6 +9,7 @@ import { AlertProvider } from 'components/Alert'
 import { I18nextProvider } from 'react-i18next'
 import i18n from './i18n/index'
 import UpdateNotification from 'components/UpdateNotification'
+// import { useUserSettings } from 'hooks/useUserSettings'
 
 import wallpaper from 'assets/wallpaper.webp'
 
@@ -30,6 +31,7 @@ applyInitialTheme()
 
 const Main = ({ children }: Props): React.JSX.Element => {
   const { theme } = usePersistStore()
+  // const { userSettings } = useUserSettings()
 
   // Apply theme class to document element for Tailwind CSS v4 dark mode
   useEffect(() => {
@@ -48,10 +50,16 @@ const Main = ({ children }: Props): React.JSX.Element => {
     document.documentElement.classList.add('transition-colors', 'duration-300', 'ease-default')
   }, [])
 
+  // Determine wallpaper to use
+  const getWallpaperUrl = () => {
+    // For now, always use the default wallpaper
+    return wallpaper
+  }
+
   return (
     <div
-      className="h-[calc(100dvh)] w-screen bg-cover bg-center bg-no-repeat flex justify-center items-center relative overflow-hidden transition-colors duration-300 ease-default"
-      style={{ backgroundImage: `url(${wallpaper})` }}
+      className="main-container h-[calc(100dvh)] w-screen bg-cover bg-center bg-no-repeat flex justify-center items-center relative overflow-hidden transition-colors duration-300 ease-default"
+      style={{ backgroundImage: `url(${getWallpaperUrl()})` }}
     >
       {children}
     </div>

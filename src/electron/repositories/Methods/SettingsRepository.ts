@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import { DataPaths } from 'utils/utils'
-import { deepMerge } from 'shared/utils'
+import { DataPaths } from 'electron-utils/utils'
+import { deepMerge } from 'shared-utils'
 import { DEFAULT_UPDATE_SETTINGS } from 'constants/defaultSettings'
 
 export interface UpdateSettings {

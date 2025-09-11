@@ -14,12 +14,20 @@ type IDBMethods = {
 
   //Read Progress
   dbGetReadProgress: (input: { search: string }) => Promise<IReadProgress[]>
+  dbGetReadProgressByUser: (input: { userId: number }) => Promise<IReadProgress[]>
   dbUpdateReadProgress: (input: { readProgress: IReadProgress }) => Promise<void>
 
   //Users
   dbGetAllUsers: () => Promise<IUser[]>
   dbUpdateUser: (input: { user: IUser }) => Promise<IUser>
   dbDeleteUser: (input: { id: number }) => Promise<void>
+
+  // User Settings
+  dbGetUserSettings: (input: { userId: number }) => Promise<IUserSettings | undefined>
+  dbUpdateUserSettings: (input: {
+    userId: number
+    settings: Partial<IUserSettings>
+  }) => Promise<IUserSettings | undefined>
 
   dbRunMigrations: () => Promise<void>
   dbVerifyMigrations: () => Promise<boolean>

@@ -2,6 +2,7 @@ import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 import svgr from 'vite-plugin-svgr'
+import { copyFileSync, mkdirSync, existsSync, readdirSync, statSync, cpSync } from 'fs'
 
 export default defineConfig({
   main: {
@@ -10,18 +11,50 @@ export default defineConfig({
         entry: 'src/electron/main/index.ts'
       }
     },
-    plugins: [externalizeDepsPlugin()],
+    plugins: [
+      externalizeDepsPlugin(),
+      {
+        name: 'copy-migrations',
+        writeBundle() {
+          // Copy migration files to build output
+          const migrationsSource = resolve('src/database/migrations')
+          const migrationsTarget = resolve('out/database/migrations')
+
+          if (existsSync(migrationsSource)) {
+            mkdirSync(migrationsTarget, { recursive: true })
+
+            // Copy all files from migrations directory
+            const files = readdirSync(migrationsSource)
+
+            for (const file of files) {
+              const sourcePath = resolve(migrationsSource, file)
+              const targetPath = resolve(migrationsTarget, file)
+
+              if (statSync(sourcePath).isDirectory()) {
+                // Copy directory recursively
+                cpSync(sourcePath, targetPath, { recursive: true })
+              } else {
+                copyFileSync(sourcePath, targetPath)
+              }
+            }
+
+            console.log('✅ Migration files copied to build output')
+          }
+        }
+      }
+    ],
     resolve: {
       alias: {
         main: resolve('src/electron/main'),
         preload: resolve('src/electron/preload'),
         repositories: resolve('src/electron/repositories'),
         scripts: resolve('src/electron/scripts'),
-        utils: resolve('src/electron/utils'),
+        'electron-utils': resolve('src/electron/utils'),
         windows: resolve('src/electron/windows'),
         database: resolve('src/database'),
         constants: resolve('src/electron/constants'),
-        shared: resolve('src/shared')
+        shared: resolve('src/shared'),
+        'shared-utils': resolve('src/utils')
       }
     }
   },
@@ -53,7 +86,8 @@ export default defineConfig({
         store: resolve('src/renderer/store'),
         constants: resolve('src/renderer/constants'),
         'renderer-utils': resolve('src/renderer/utils'),
-        shared: resolve('src/shared')
+        shared: resolve('src/shared'),
+        'shared-utils': resolve('src/utils')
       }
     }
   }

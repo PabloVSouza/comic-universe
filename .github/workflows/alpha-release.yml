@@ -104,8 +104,6 @@ jobs:
         run: npm ci
 
       - name: Build application (Linux)
-        env:
-          ELECTRON_BUILDER_VERSION: ${{ needs.prepare-alpha.outputs.version }}
         run: npm run build:linux-x64
 
       - name: Upload Linux artifacts
@@ -146,8 +144,6 @@ jobs:
       # - name: Setup Consistent Certificate from Secrets
 
       - name: Build application (Windows)
-        env:
-          ELECTRON_BUILDER_VERSION: ${{ needs.prepare-alpha.outputs.version }}
         run: npm run build:win
 
       - name: Upload Windows artifacts
@@ -188,8 +184,6 @@ jobs:
       # - name: Setup Consistent Certificate from Secrets
 
       - name: Build application (macOS)
-        env:
-          ELECTRON_BUILDER_VERSION: ${{ needs.prepare-alpha.outputs.version }}
         run: npm run build:mac
 
       - name: Upload macOS artifacts

@@ -205,9 +205,11 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     }
     windowConfig.transparent = true
   } else if (isWindows) {
-    // Windows: Use native frame with standard window controls
-    windowConfig.frame = true
-    windowConfig.titleBarStyle = 'default'
+    // Windows: Use custom frame with rounded corners and window controls
+    windowConfig.frame = false
+    windowConfig.titleBarStyle = 'hidden'
+    windowConfig.transparent = true
+    windowConfig.roundedCorners = true
   } else {
     // Linux: Use native frame
     windowConfig.frame = true
@@ -215,6 +217,27 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
   }
 
   const mainWindow = new BrowserWindow(windowConfig)
+
+  // Add window control IPC handlers for Windows
+  if (isWindows) {
+    const { ipcMain } = require('electron')
+
+    ipcMain.handle('minimize-window', () => {
+      mainWindow.minimize()
+    })
+
+    ipcMain.handle('maximize-window', () => {
+      if (mainWindow.isMaximized()) {
+        mainWindow.unmaximize()
+      } else {
+        mainWindow.maximize()
+      }
+    })
+
+    ipcMain.handle('close-window', () => {
+      mainWindow.close()
+    })
+  }
 
   let eventManager: EventManager
   const initApiEvents = async () => {

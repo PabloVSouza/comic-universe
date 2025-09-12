@@ -5,6 +5,9 @@ import useApi from 'api'
 import wallpaperManager, { WallpaperInfo } from 'renderer-utils/wallpaperManager'
 import Button from 'components/Button'
 import SettingsItem from '../SettingsItem'
+import confirmButton from 'assets/confirm.svg'
+import cancelButton from 'assets/cancel.svg'
+import uploadButton from 'assets/upload.svg'
 
 interface WallpaperSelectorProps {
   currentWallpaper: string | null
@@ -112,7 +115,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
           onClick={handleFileSelect}
           theme="pure"
           size="s"
-          icon="assets/upload.svg"
+          icon={uploadButton}
           className="!size-10"
           title={t('Settings.user.wallpaper.addWallpaper')}
         />
@@ -155,7 +158,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
               {/* Check icon for selected wallpaper */}
               {selectedWallpaper === (wallpaper.isDefault ? null : wallpaper.filename) && (
                 <div className="absolute top-1 left-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                  <img src="assets/confirm.svg" alt="Selected" className="w-3 h-3" />
+                  <img src={confirmButton} alt="Selected" className="w-3 h-3" />
                 </div>
               )}
 
@@ -179,7 +182,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
                   className="absolute top-1 right-1 w-5 h-5 bg-red-500/70 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                   title={t('Settings.user.wallpaper.remove')}
                 >
-                  <img src="assets/cancel.svg" alt="Remove" className="w-3 h-3" />
+                  <img src={cancelButton} alt="Remove" className="w-3 h-3" />
                 </button>
               )}
             </div>

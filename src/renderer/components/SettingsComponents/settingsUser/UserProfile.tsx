@@ -7,6 +7,9 @@ import Button from 'components/Button'
 import DisplayValue from 'components/DisplayValue'
 import Input from 'components/Input'
 import SettingsItem from '../SettingsItem'
+import confirmIcon from 'assets/confirm.svg'
+import cancelIcon from 'assets/cancel.svg'
+import pencilIcon from 'assets/pencil.svg'
 
 const UserProfile = () => {
   const { t } = useTranslation()
@@ -58,7 +61,7 @@ const UserProfile = () => {
                 theme="pure"
                 size="s"
                 disabled={!editName.trim()}
-                icon="assets/confirm.svg"
+                icon={confirmIcon}
                 className="!size-7"
                 title={t('General.save')}
               />
@@ -66,7 +69,7 @@ const UserProfile = () => {
                 onClick={() => setIsEditing(false)}
                 theme="pure"
                 size="s"
-                icon="assets/cancel.svg"
+                icon={cancelIcon}
                 className="!size-7"
                 title={t('General.cancel')}
               />
@@ -79,7 +82,7 @@ const UserProfile = () => {
                 theme="pure"
                 size="s"
                 disabled={!currentUser.id}
-                icon="assets/pencil.svg"
+                icon={pencilIcon}
                 className="!size-7"
                 title={t('General.edit')}
               />

@@ -38,18 +38,18 @@ jobs:
           CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
           BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
 
-          # Get the latest release to determine next build number
-          LATEST_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[0].tag_name // "v0.0.0"')
-          echo "Latest release: $LATEST_RELEASE"
+          # Get the latest beta release to determine next build number
+          LATEST_BETA_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[] | select(.tag_name | contains("-beta.")) | .tag_name' | head -1)
+          echo "Latest beta release: $LATEST_BETA_RELEASE"
 
-          # Extract build number from latest release or start from 1
+          # Extract build number from latest beta release or start from 1
           # Handle both old timestamp format and new semantic format
-          if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
+          if [[ $LATEST_BETA_RELEASE =~ v${BASE_VERSION}-beta\.([0-9]{14}) ]]; then
             # Old timestamp format - start from 1
             BUILD_NUMBER=1
-          elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
+          elif [[ $LATEST_BETA_RELEASE =~ v${BASE_VERSION}-beta\.([0-9]+) ]]; then
             # New semantic format - increment build number
-            BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
+            BUILD_NUMBER=$(( ${BASH_REMATCH[1]} + 1 ))
           else
             BUILD_NUMBER=1
           fi

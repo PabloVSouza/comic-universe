@@ -139,5 +139,3 @@ generateUpdatesFilesForAllChannels: false
 buildDependenciesFromSource: false
 # Skip problematic dependencies
 nodeGypRebuild: false
-# Disable dependency analysis to avoid @emnapi issues
-includePinnedDependencies: false

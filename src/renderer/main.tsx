@@ -10,8 +10,6 @@ import { I18nextProvider } from 'react-i18next'
 import i18n from './i18n/index'
 import UpdateNotification from 'components/UpdateNotification'
 import { useUserSettings } from 'hooks/useUserSettings'
-import WindowsWindowControls from 'components/WindowsWindowControls'
-import { isWindows } from 'renderer-utils/platform'
 
 interface Props {
   children: ReactNode
@@ -54,12 +52,6 @@ const Main = ({ children }: Props): React.JSX.Element => {
 
   return (
     <div className="main-container h-[calc(100dvh)] w-screen bg-cover bg-center bg-no-repeat flex justify-center items-center relative overflow-hidden transition-colors duration-300 ease-default">
-      {/* Windows window controls */}
-      {isWindows() && (
-        <div className="absolute top-0 right-0 z-50">
-          <WindowsWindowControls />
-        </div>
-      )}
       {children}
     </div>
   )

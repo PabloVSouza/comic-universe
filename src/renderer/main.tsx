@@ -11,7 +11,7 @@ import i18n from './i18n/index'
 import UpdateNotification from 'components/UpdateNotification'
 import { useUserSettings } from 'hooks/useUserSettings'
 import WindowsWindowControls from 'components/WindowsWindowControls'
-import { isWindows } from './utils/platform'
+import { isWindows } from 'renderer-utils/platform'
 
 interface Props {
   children: ReactNode

@@ -54,11 +54,8 @@ jobs:
             BUILD_NUMBER=1
           fi
 
-          # Format build number with 4-digit padding
-          PADDED_BUILD_NUMBER=$(printf "%04d" $BUILD_NUMBER)
-
           # PR to main: Create beta version (final testing before production)
-          NEW_VERSION="${BASE_VERSION}-beta.${PADDED_BUILD_NUMBER}"
+          NEW_VERSION="${BASE_VERSION}-beta.${BUILD_NUMBER}"
           RELEASE_TYPE="beta"
 
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT

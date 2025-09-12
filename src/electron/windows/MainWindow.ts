@@ -223,20 +223,24 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
         !currentVersion.includes('-')
 
       if (isCICDVersion) {
-        // Setup auto-updater for all platforms, but handle macOS/Windows differently
+        // Only setup auto-updater on Linux and when auto-updates are enabled
         const settingsRepository = new SettingsRepository()
-        setupAutoUpdater(mainWindow, settingsRepository)
-
-        if (process.platform === 'darwin' || process.platform === 'win32') {
-          // For macOS and Windows, check for updates but show manual download dialog
-          console.log(
-            `Auto-updater enabled for ${process.platform === 'darwin' ? 'macOS' : 'Windows'} - will show manual download when update available`
-          )
-          autoUpdater.checkForUpdatesAndNotify()
-        } else {
-          // For Linux, use normal auto-updater
-          autoUpdater.checkForUpdatesAndNotify()
-        }
+        
+        // Check if auto-updates are enabled in settings
+        settingsRepository.methods.getUpdateSettings().then((updateSettings) => {
+          if (updateSettings.autoUpdate && process.platform === 'linux') {
+            // Only run auto-updater on Linux when auto-updates are enabled
+            setupAutoUpdater(mainWindow, settingsRepository)
+            console.log(`Auto-updater enabled for Linux (version: ${currentVersion})`)
+            autoUpdater.checkForUpdatesAndNotify()
+          } else {
+            console.log(`Auto-updater disabled - Platform: ${process.platform}, Auto-update enabled: ${updateSettings.autoUpdate}`)
+          }
+        }).catch((error) => {
+          console.error('Error checking auto-update settings:', error)
+          // Default to disabled if we can't read settings
+          console.log('Auto-updater disabled - could not read settings')
+        })
       }
     }
   }

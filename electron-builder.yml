@@ -83,6 +83,7 @@ asarUnpack:
   - 'out/database/migrations/**/*'
 win:
   executableName: comic-universe
+  icon: build/icon.ico
   # Code signing configuration for Windows
   # cscLink: "certificates/windows-cert.p12"  # Local development
   # cscKeyPassword: "comicuniverse"           # Local development

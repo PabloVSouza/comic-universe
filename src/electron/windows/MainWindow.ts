@@ -1,4 +1,4 @@
-import { shell, BrowserWindow, app, dialog } from 'electron'
+import { shell, BrowserWindow, app, dialog, ipcMain } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
 import { autoUpdater } from 'electron-updater'
@@ -220,8 +220,6 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
 
   // Add window control IPC handlers for Windows
   if (isWindows) {
-    const { ipcMain } = require('electron')
-
     ipcMain.handle('minimize-window', () => {
       mainWindow.minimize()
     })

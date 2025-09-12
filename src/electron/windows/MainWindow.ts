@@ -192,7 +192,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
       nodeIntegration: false,
       contextIsolation: true
     },
-    icon: join(__dirname, '../../../resources/logo.svg')
+    icon: join(__dirname, '../../../resources/icon.png')
   }
 
   if (isMac) {

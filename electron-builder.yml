@@ -83,13 +83,19 @@ asarUnpack:
   - 'out/database/migrations/**/*'
 win:
   executableName: comic-universe
-  icon: build/icon.ico
+  icon: resources/icon.png
   # Code signing configuration for Windows
   # cscLink: "certificates/windows-cert.p12"  # Local development
   # cscKeyPassword: "comicuniverse"           # Local development
 
   # Time stamping server
   signAndEditExecutable: false
+  
+  # Ensure icon is properly embedded
+  target:
+    - target: nsis
+      arch:
+        - x64
 nsis:
   artifactName: ${name}-${version}-win-${arch}.${ext}
   shortcutName: ${productName}

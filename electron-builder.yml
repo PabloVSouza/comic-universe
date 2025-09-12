@@ -8,6 +8,9 @@ directories:
 #   owner: PabloVSouza
 #   repo: comic-universe
 
+# Disable auto-publishing in CI
+publish: null
+
 # Code signing configuration
 # For code signing options:
 # 1. Apple Developer Program ($99/year) - macOS official certificates

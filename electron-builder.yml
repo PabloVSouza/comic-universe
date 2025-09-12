@@ -138,7 +138,7 @@ npmRebuild: true
 compression: normal
 removePackageScripts: true
 removePackageKeywords: true
-generateUpdatesFilesForAllChannels: false
+generateUpdatesFilesForAllChannels: true
 buildDependenciesFromSource: false
 # Skip problematic dependencies
 nodeGypRebuild: false

@@ -39,8 +39,30 @@ export class UpdateManager {
     autoUpdater.allowDowngrade = false
     autoUpdater.allowPrerelease = true
 
+    // Set the update channel based on current version type
+    this.setUpdateChannel()
+
     // Set up event handlers
     this.setupEventHandlers()
+  }
+
+  private setUpdateChannel(): void {
+    const currentVersion = app.getVersion()
+    const versionType = this.getVersionTypeString(currentVersion)
+    
+    // Set the update channel to match the current version type
+    // This ensures each version type only updates to the same type
+    if (versionType === 'alpha') {
+      autoUpdater.channel = 'alpha'
+    } else if (versionType === 'beta') {
+      autoUpdater.channel = 'beta'
+    } else if (versionType === 'dev') {
+      autoUpdater.channel = 'dev'
+    } else {
+      autoUpdater.channel = 'latest' // stable releases
+    }
+    
+    console.log(`Auto-updater configured for ${versionType} channel (version: ${currentVersion})`)
   }
 
   private setupEventHandlers(): void {
@@ -75,6 +97,7 @@ export class UpdateManager {
   }
 
   private getVersionTypeString(version: string): string {
+    if (version.includes('dev')) return 'dev'
     if (version.includes('alpha')) return 'alpha'
     if (version.includes('beta')) return 'beta'
     return 'stable'

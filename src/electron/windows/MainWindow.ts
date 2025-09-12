@@ -214,14 +214,13 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
 
     // Setup auto-updater with settings repository
     if (!is.dev) {
-      // Only setup auto-updater for CI/CD generated versions
+      // Only setup auto-updater for stable and beta versions (not alpha/dev)
       const currentVersion = app.getVersion()
-      const isCICDVersion =
-        currentVersion.includes('alpha') ||
+      const isStableOrBeta =
         currentVersion.includes('beta') ||
         !currentVersion.includes('-')
 
-      if (isCICDVersion) {
+      if (isStableOrBeta) {
         // Setup auto-updater for all platforms, but handle macOS/Windows differently
         const settingsRepository = new SettingsRepository()
         setupAutoUpdater(mainWindow, settingsRepository)

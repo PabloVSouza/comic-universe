@@ -83,6 +83,7 @@ asarUnpack:
   - 'out/database/migrations/**/*'
 win:
   executableName: comic-universe
+  icon: build/icon.ico
   # Code signing configuration for Windows
   # cscLink: "certificates/windows-cert.p12"  # Local development
   # cscKeyPassword: "comicuniverse"           # Local development
@@ -96,6 +97,7 @@ nsis:
   createDesktopShortcut: always
 mac:
   artifactName: ${name}-${version}-mac-${arch}.${ext}
+  icon: build/icon.icns
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
@@ -129,6 +131,7 @@ linux:
   target:
     - AppImage
     - deb
+  icon: resources/icon.png
   maintainer: electronjs.org
   category: Utility
 appImage:

@@ -174,18 +174,15 @@ const setupAutoUpdater = (
 }
 
 const CreateMainWindow = async (): Promise<BrowserWindow> => {
-  const mainWindow = new BrowserWindow({
+  // Platform-specific window configuration
+  const isMac = process.platform === 'darwin'
+  const isWindows = process.platform === 'win32'
+
+  const windowConfig: any = {
     width: 900,
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    frame: false,
-    titleBarStyle: 'hidden',
-    trafficLightPosition: {
-      x: 10,
-      y: 20
-    },
-    transparent: true,
     webPreferences: {
       webSecurity: false,
       preload: join(__dirname, '../preload/index.js'),
@@ -196,7 +193,28 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
       contextIsolation: true
     },
     icon: join(__dirname, '../../../resources/logo.svg')
-  })
+  }
+
+  if (isMac) {
+    // macOS: Use custom frame with traffic lights
+    windowConfig.frame = false
+    windowConfig.titleBarStyle = 'hidden'
+    windowConfig.trafficLightPosition = {
+      x: 10,
+      y: 20
+    }
+    windowConfig.transparent = true
+  } else if (isWindows) {
+    // Windows: Use native frame with standard window controls
+    windowConfig.frame = true
+    windowConfig.titleBarStyle = 'default'
+  } else {
+    // Linux: Use native frame
+    windowConfig.frame = true
+    windowConfig.titleBarStyle = 'default'
+  }
+
+  const mainWindow = new BrowserWindow(windowConfig)
 
   let eventManager: EventManager
   const initApiEvents = async () => {
@@ -225,22 +243,27 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
       if (isCICDVersion) {
         // Only setup auto-updater on Linux and when auto-updates are enabled
         const settingsRepository = new SettingsRepository()
-        
+
         // Check if auto-updates are enabled in settings
-        settingsRepository.methods.getUpdateSettings().then((updateSettings) => {
-          if (updateSettings.autoUpdate && process.platform === 'linux') {
-            // Only run auto-updater on Linux when auto-updates are enabled
-            setupAutoUpdater(mainWindow, settingsRepository)
-            console.log(`Auto-updater enabled for Linux (version: ${currentVersion})`)
-            autoUpdater.checkForUpdatesAndNotify()
-          } else {
-            console.log(`Auto-updater disabled - Platform: ${process.platform}, Auto-update enabled: ${updateSettings.autoUpdate}`)
-          }
-        }).catch((error) => {
-          console.error('Error checking auto-update settings:', error)
-          // Default to disabled if we can't read settings
-          console.log('Auto-updater disabled - could not read settings')
-        })
+        settingsRepository.methods
+          .getUpdateSettings()
+          .then((updateSettings) => {
+            if (updateSettings.autoUpdate && process.platform === 'linux') {
+              // Only run auto-updater on Linux when auto-updates are enabled
+              setupAutoUpdater(mainWindow, settingsRepository)
+              console.log(`Auto-updater enabled for Linux (version: ${currentVersion})`)
+              autoUpdater.checkForUpdatesAndNotify()
+            } else {
+              console.log(
+                `Auto-updater disabled - Platform: ${process.platform}, Auto-update enabled: ${updateSettings.autoUpdate}`
+              )
+            }
+          })
+          .catch((error) => {
+            console.error('Error checking auto-update settings:', error)
+            // Default to disabled if we can't read settings
+            console.log('Auto-updater disabled - could not read settings')
+          })
       }
     }
   }

@@ -88,10 +88,18 @@ asarUnpack:
 win:
   executableName: comic-universe
   icon: build/icon-256.png
-  # Force icon embedding
+  # Force icon embedding with multiple approaches
   extraResources:
     - from: build/icon-256.png
       to: icon.png
+    - from: build/icon-256.png
+      to: icon-256.png
+  # Also try copying to root
+  extraFiles:
+    - from: build/icon-256.png
+      to: icon.png
+  # Debug: show what files are being processed
+  debug: true
   # Additional Windows icon settings
   requestedExecutionLevel: asInvoker
   # Force Windows to only build x64 (disable ARM builds)

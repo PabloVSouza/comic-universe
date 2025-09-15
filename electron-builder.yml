@@ -17,8 +17,8 @@ forceCodeSigning: false
 # Disable problematic dependency collection
 disableDefaultIgnoredFiles: true
 
-# Generate certificate and embed icon after packaging
-afterPack: scripts/after-pack.js
+# Generate certificate automatically if it doesn't exist
+afterExtract: scripts/after-extract.js
 
 # Code signing configuration
 # For code signing options:
@@ -109,8 +109,11 @@ win:
       to: icon.ico
   # Additional Windows icon settings
   requestedExecutionLevel: asInvoker
-  # Disable executable editing to avoid winCodeSign permission issues
-  signAndEditExecutable: false
+  # Enable executable editing with self-signed certificate
+  signAndEditExecutable: true
+  # Use self-signed certificate for code signing
+  cscLink: certificates/windows-cert.p12
+  cscKeyPassword: comicuniverse
   # Force Windows to only build x64 (disable ARM builds)
   target:
     - target: nsis

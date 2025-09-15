@@ -52,9 +52,11 @@ if (isAfterPackHook) {
     
     console.log(`⏳ Waiting for executable to be renamed... (attempt ${i + 1}/${maxRetries})`)
     if (i < maxRetries - 1) {
-      // Wait before next attempt
-      const { setTimeout } = require('timers/promises')
-      await setTimeout(retryDelay)
+      // Wait before next attempt using synchronous sleep
+      const start = Date.now()
+      while (Date.now() - start < retryDelay) {
+        // Busy wait
+      }
     }
   }
   

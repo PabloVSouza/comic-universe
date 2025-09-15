@@ -98,11 +98,19 @@ win:
   signAndEditExecutable: false
   # Disable code signing completely
   forceCodeSigning: false
+  # Explicitly disable all signing
+  cscLink: null
+  cscKeyPassword: null
+  # Disable timestamping
+  signExts: []
 nsis:
   artifactName: ${name}-${version}-win-${arch}.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+  # Disable NSIS code signing
+  oneClick: false
+  perMachine: false
 mac:
   artifactName: ${name}-${version}-mac-${arch}.${ext}
   icon: build/icon.icns

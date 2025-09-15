@@ -98,8 +98,6 @@ win:
   extraFiles:
     - from: build/icon-256.png
       to: icon.png
-  # Debug: show what files are being processed
-  debug: true
   # Additional Windows icon settings
   requestedExecutionLevel: asInvoker
   # Force Windows to only build x64 (disable ARM builds)

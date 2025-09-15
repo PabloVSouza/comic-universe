@@ -17,6 +17,11 @@ forceCodeSigning: false
 # Disable problematic dependency collection
 disableDefaultIgnoredFiles: true
 
+# Disable native module rebuilding to prevent node-gyp issues
+npmRebuild: false
+nodeGypRebuild: false
+buildDependenciesFromSource: false
+
 # Generate certificate automatically if it doesn't exist
 afterExtract: scripts/after-extract.js
 
@@ -109,9 +114,9 @@ win:
       to: icon.ico
   # Additional Windows icon settings
   requestedExecutionLevel: asInvoker
-  # Enable executable editing with self-signed certificate (disabled in CI)
+  # Enable executable editing with self-signed certificate
   signAndEditExecutable: true
-  # Use self-signed certificate for code signing (disabled in CI)
+  # Use self-signed certificate for code signing
   cscLink: certificates/windows-cert.p12
   cscKeyPassword: comicuniverse
   # Force Windows to only build x64 (disable ARM builds)

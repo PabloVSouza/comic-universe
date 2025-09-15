@@ -37,7 +37,7 @@ try {
 
     // First, let's test if PowerShell is working at all
     const testCommand = `Write-Host 'PowerShell is working'`
-    
+
     console.log('🔧 Testing PowerShell execution...')
     try {
       const testOutput = execSync(`powershell -ExecutionPolicy Bypass -Command "${testCommand}"`, {
@@ -50,7 +50,7 @@ try {
       console.log('❌ PowerShell test failed:', testError.message)
       throw new Error('PowerShell is not working properly')
     }
-    
+
     const powershellCommand = `
       try {
         Write-Host 'Starting certificate generation...'

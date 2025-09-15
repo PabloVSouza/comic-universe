@@ -27,6 +27,14 @@ if (isAfterPackHook) {
   winUnpackedDir = context.appOutDir
   executablePath = path.join(winUnpackedDir, 'comic-universe.exe')
   console.log('📁 Using afterPack context:', winUnpackedDir)
+  
+  // Debug: List files in the directory to see what's actually there
+  if (fs.existsSync(winUnpackedDir)) {
+    const files = fs.readdirSync(winUnpackedDir)
+    console.log('📁 Files in directory:', files)
+  } else {
+    console.log('❌ Directory does not exist:', winUnpackedDir)
+  }
 } else {
   // Called as standalone script - use original logic
   const distDir = path.join(__dirname, '..', 'dist')

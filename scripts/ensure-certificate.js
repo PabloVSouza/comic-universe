@@ -34,6 +34,15 @@ if (fs.existsSync(certPath)) {
 console.log('🔧 Generating Windows certificate...')
 
 try {
+  // Check if we're in a CI environment where code signing is disabled
+  if (process.env.CSC_FOR_PULL_REQUEST === 'false' || process.env.CI) {
+    console.log('🔧 Code signing disabled in CI environment, skipping certificate generation')
+    console.log('⚠️  Setting empty certificate paths to disable code signing')
+    process.env.WIN_CSC_LINK = ''
+    process.env.CSC_LINK = ''
+    return
+  }
+
   // Use OpenSSL for all platforms - it's more reliable in CI environments
   console.log('🔧 Generating certificate with OpenSSL...')
   console.log('🔧 Target path:', certPath)
@@ -41,6 +50,18 @@ try {
   const keyPath = path.join(certDir, 'windows-key.pem')
   const certPemPath = path.join(certDir, 'windows-cert.pem')
   const csrPath = path.join(certDir, 'windows-cert.csr')
+
+  // Check if OpenSSL is available
+  try {
+    execSync('openssl version', { stdio: 'pipe' })
+    console.log('✅ OpenSSL is available')
+  } catch (opensslError) {
+    console.log('❌ OpenSSL is not available:', opensslError.message)
+    console.log('⚠️  Skipping certificate generation - OpenSSL not found')
+    process.env.WIN_CSC_LINK = ''
+    process.env.CSC_LINK = ''
+    return
+  }
 
   // Generate private key
   console.log('🔧 Generating private key...')

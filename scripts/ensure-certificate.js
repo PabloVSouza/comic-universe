@@ -51,62 +51,54 @@ try {
       throw new Error('PowerShell is not working properly')
     }
 
-    const powershellCommand = `
-      try {
-        Write-Host 'Starting certificate generation...'
-        $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My
-        Write-Host 'Certificate created successfully'
-        $pwd = ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText
-        Write-Host 'Password created successfully'
-        Export-PfxCertificate -Cert $cert -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password $pwd
-        Write-Host 'Certificate exported successfully to: ${certPath}'
-        if (Test-Path '${certPath.replace(/\\/g, '\\\\')}') {
-          Write-Host 'Certificate file exists: YES'
-        } else {
-          Write-Host 'Certificate file exists: NO'
-        }
-      } catch {
-        Write-Host 'Error occurred:' $_.Exception.Message
-        Write-Host 'Error details:' $_.Exception.ToString()
-        exit 1
-      }
-    `
+    // Create a PowerShell script file instead of inline command
+    const psScriptPath = path.join(__dirname, 'generate-cert.ps1')
+    const psScriptContent = `
+Write-Host 'Starting certificate generation...'
+try {
+  $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My
+  Write-Host 'Certificate created successfully'
+  $pwd = ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText
+  Write-Host 'Password created successfully'
+  Export-PfxCertificate -Cert $cert -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password $pwd
+  Write-Host 'Certificate exported successfully to: ${certPath}'
+  if (Test-Path '${certPath.replace(/\\/g, '\\\\')}') {
+    Write-Host 'Certificate file exists: YES'
+  } else {
+    Write-Host 'Certificate file exists: NO'
+  }
+} catch {
+  Write-Host 'Error occurred:' $_.Exception.Message
+  Write-Host 'Error details:' $_.Exception.ToString()
+  exit 1
+}
+`
 
-    console.log('🔧 Executing PowerShell command...')
+    // Write the PowerShell script to a file
+    fs.writeFileSync(psScriptPath, psScriptContent)
+    console.log('🔧 Created PowerShell script:', psScriptPath)
+
+    console.log('🔧 Executing PowerShell script...')
     try {
-      // Try different PowerShell execution methods
-      const commands = [
-        `powershell -ExecutionPolicy Bypass -Command "${powershellCommand}"`,
-        `powershell.exe -ExecutionPolicy Bypass -Command "${powershellCommand}"`,
-        `pwsh -Command "${powershellCommand}"`
-      ]
-
-      let success = false
-      for (const cmd of commands) {
-        try {
-          console.log('🔧 Trying command:', cmd)
-          const output = execSync(cmd, {
-            stdio: 'pipe',
-            encoding: 'utf8',
-            timeout: 30000
-          })
-          console.log('🔧 PowerShell output:', output)
-          success = true
-          break
-        } catch (cmdError) {
-          console.log('⚠️  Command failed:', cmdError.message)
-          continue
-        }
-      }
-
-      if (!success) {
-        throw new Error('All PowerShell execution methods failed')
-      }
+      const output = execSync(`powershell -ExecutionPolicy Bypass -File "${psScriptPath}"`, {
+        stdio: 'pipe',
+        encoding: 'utf8',
+        timeout: 30000
+      })
+      console.log('🔧 PowerShell output:', output)
     } catch (psError) {
-      console.log('❌ PowerShell command failed:', psError.message)
+      console.log('❌ PowerShell script failed:', psError.message)
       console.log('❌ PowerShell stderr:', psError.stderr)
       console.log('❌ PowerShell stdout:', psError.stdout)
       throw psError
+    } finally {
+      // Clean up the script file
+      try {
+        fs.unlinkSync(psScriptPath)
+        console.log('🔧 Cleaned up PowerShell script file')
+      } catch (cleanupError) {
+        console.log('⚠️  Could not clean up script file:', cleanupError.message)
+      }
     }
 
     // Verify the certificate was created

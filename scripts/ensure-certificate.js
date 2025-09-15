@@ -56,57 +56,52 @@ try {
       return
     }
 
-    // Use a simpler PowerShell command that's more likely to work in CI
+    // Use a much simpler approach that works in CI environments
     console.log('🔧 Executing PowerShell certificate generation...')
     try {
-      // Try the simplest possible PowerShell command first
-      const simpleCommand = `New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My | Export-PfxCertificate -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password (ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText)`
+      // Create a PowerShell script file that avoids module loading issues
+      const psScript = `
+$ErrorActionPreference = "Stop"
+try {
+  Write-Host "Creating certificate..."
+  $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=Comic Universe" -KeyUsage DigitalSignature -FriendlyName "Comic Universe Code Signing" -CertStoreLocation "Cert:\\CurrentUser\\My"
+  Write-Host "Certificate created with thumbprint: $($cert.Thumbprint)"
+  
+  Write-Host "Exporting certificate..."
+  $password = "comicuniverse"
+  $securePassword = ConvertTo-SecureString -String $password -Force -AsPlainText
+  Export-PfxCertificate -Cert $cert -FilePath "${certPath.replace(/\\/g, '\\\\')}" -Password $securePassword
+  Write-Host "Certificate exported successfully"
+} catch {
+  Write-Host "Error: $($_.Exception.Message)"
+  Write-Host "Error details: $($_.Exception.ToString())"
+  exit 1
+}
+`
 
-      console.log('🔧 Trying simple PowerShell command...')
-      const output = execSync(`powershell -ExecutionPolicy Bypass -Command "${simpleCommand}"`, {
+      // Write the script to a temporary file
+      const scriptPath = path.join(__dirname, 'temp-cert-gen.ps1')
+      fs.writeFileSync(scriptPath, psScript)
+      
+      console.log('🔧 Executing PowerShell script...')
+      const output = execSync(`powershell -ExecutionPolicy Bypass -File "${scriptPath}"`, {
         stdio: 'pipe',
         encoding: 'utf8',
         timeout: 30000
       })
       console.log('🔧 PowerShell output:', output)
+      
+      // Clean up the script file
+      try {
+        fs.unlinkSync(scriptPath)
+      } catch (cleanupError) {
+        console.log('⚠️  Could not clean up script file:', cleanupError.message)
+      }
     } catch (psError) {
-      console.log('❌ Simple PowerShell command failed:', psError.message)
+      console.log('❌ PowerShell script failed:', psError.message)
       console.log('❌ PowerShell stderr:', psError.stderr)
       console.log('❌ PowerShell stdout:', psError.stdout)
-
-      // Try alternative approach with separate commands
-      console.log('🔧 Trying alternative PowerShell approach...')
-      try {
-        // Step 1: Create certificate
-        const createCertCmd = `$cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My; $cert.Thumbprint`
-        const thumbprint = execSync(
-          `powershell -ExecutionPolicy Bypass -Command "${createCertCmd}"`,
-          {
-            stdio: 'pipe',
-            encoding: 'utf8',
-            timeout: 15000
-          }
-        )
-          .toString()
-          .trim()
-
-        console.log('🔧 Certificate created with thumbprint:', thumbprint)
-
-        // Step 2: Export certificate
-        const exportCmd = `$cert = Get-ChildItem -Path Cert:\\CurrentUser\\My -Thumbprint '${thumbprint}'; Export-PfxCertificate -Cert $cert -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password (ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText)`
-        const exportOutput = execSync(
-          `powershell -ExecutionPolicy Bypass -Command "${exportCmd}"`,
-          {
-            stdio: 'pipe',
-            encoding: 'utf8',
-            timeout: 15000
-          }
-        )
-        console.log('🔧 Certificate exported:', exportOutput)
-      } catch (altError) {
-        console.log('❌ Alternative PowerShell approach failed:', altError.message)
-        throw altError
-      }
+      throw psError
     }
 
     // Verify the certificate was created

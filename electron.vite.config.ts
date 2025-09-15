@@ -87,9 +87,11 @@ export default defineConfig({
           for (const iconFile of iconFiles) {
             if (existsSync(iconFile)) {
               const fileName = iconFile.split('/').pop()
-              const targetPath = resolve(targetDir, fileName)
-              copyFileSync(iconFile, targetPath)
-              console.log(`✅ Copied ${fileName} to build output`)
+              if (fileName) {
+                const targetPath = resolve(targetDir, fileName)
+                copyFileSync(iconFile, targetPath)
+                console.log(`✅ Copied ${fileName} to build output`)
+              }
             }
           }
         }

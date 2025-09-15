@@ -26,6 +26,15 @@ try {
   });
   
   console.log('✅ Build completed successfully!');
+  
+  // Try to embed the icon into the executable
+  console.log('🔧 Attempting to embed icon into executable...');
+  try {
+    execSync('node scripts/embed-executable-icon.js', { stdio: 'inherit' });
+  } catch (iconError) {
+    console.log('⚠️  Icon embedding failed, but build was successful');
+  }
+  
 } catch (error) {
   console.error('❌ Build failed:', error.message);
   process.exit(1);

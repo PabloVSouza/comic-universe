@@ -112,7 +112,7 @@ win:
   # Enable executable editing with self-signed certificate
   signAndEditExecutable: true
   # Use self-signed certificate for code signing
-  cscLink: certificates/windows-cert.p12
+  cscLink: ${WIN_CSC_LINK}
   cscKeyPassword: comicuniverse
   # Force Windows to only build x64 (disable ARM builds)
   target:

@@ -39,9 +39,14 @@ try {
     `;
     
     execSync(`powershell -Command "${powershellCommand}"`, { stdio: 'inherit' });
-    console.log('✅ Windows certificate generated successfully');
-  } else {
-    // macOS/Linux: Use OpenSSL to generate certificate
+          console.log('✅ Windows certificate generated successfully');
+          
+          // Set environment variable for electron-builder
+          process.env.WIN_CSC_LINK = certPath;
+          process.env.CSC_LINK = certPath;
+          console.log('🔧 Set WIN_CSC_LINK environment variable:', certPath);
+        } else {
+          // macOS/Linux: Use OpenSSL to generate certificate
     const keyPath = path.join(certDir, 'windows-key.pem');
     const certPemPath = path.join(certDir, 'windows-cert.pem');
     const csrPath = path.join(certDir, 'windows-cert.csr');
@@ -65,10 +70,15 @@ try {
       }
     });
     
-    console.log('✅ Windows certificate generated successfully');
-  }
-  
-  console.log('📋 Certificate details:');
+            console.log('✅ Windows certificate generated successfully');
+            
+            // Set environment variable for electron-builder
+            process.env.WIN_CSC_LINK = certPath;
+            process.env.CSC_LINK = certPath;
+            console.log('🔧 Set WIN_CSC_LINK environment variable:', certPath);
+          }
+          
+          console.log('📋 Certificate details:');
   console.log('  📁 Path:', certPath);
   console.log('  🔑 Password: comicuniverse');
   

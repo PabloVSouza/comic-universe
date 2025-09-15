@@ -8,6 +8,13 @@ console.log('🔐 [BEFORE BUILD HOOK] Checking for Windows certificate...')
 console.log('🔐 [BEFORE BUILD HOOK] Platform:', process.platform)
 console.log('🔐 [BEFORE BUILD HOOK] Working directory:', process.cwd())
 
+// Skip certificate generation in CI environments
+if (process.env.CI || process.env.GITHUB_ACTIONS) {
+  console.log('🔐 [BEFORE BUILD HOOK] CI environment detected - skipping certificate generation')
+  console.log('🔐 [BEFORE BUILD HOOK] Certificate generation is disabled in CI for reliability')
+  process.exit(0)
+}
+
 const certDir = path.join(__dirname, '..', 'certificates')
 const certPath = path.join(certDir, 'windows-cert.p12')
 
@@ -37,7 +44,7 @@ try {
 
     // First, let's test if PowerShell is working at all
     const testCommand = `Write-Host 'PowerShell is working'`
-    
+
     console.log('🔧 Testing PowerShell execution...')
     try {
       const testOutput = execSync(`powershell -ExecutionPolicy Bypass -Command "${testCommand}"`, {
@@ -167,7 +174,7 @@ try {
   // Set environment variable to disable code signing
   process.env.WIN_CSC_LINK = ''
   process.env.CSC_LINK = ''
-  
+
   // Don't exit with error code - let the build continue
   process.exit(0)
 }

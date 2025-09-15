@@ -89,7 +89,7 @@ class ApiManager {
     const properties = Object.getOwnPropertyNames(apiMethods)
 
     const frontendPath = path.join(__dirname, '..', '..', 'out', 'renderer')
-    const pluginsPath = path.join(__dirname, '..', '..', 'dev-data', 'plugins')
+    const pluginsPath = DataPaths.getPluginsPath()
     const wallpaperPath = path.join(DataPaths.getBaseDataPath(), 'wallpapers')
 
     routes.use('/', express.static(frontendPath))

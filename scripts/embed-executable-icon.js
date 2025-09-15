@@ -7,14 +7,23 @@ const { execSync } = require('child_process')
 console.log('🔧 Embedding icon into Windows executable...')
 
 // Check if this is being called as an afterPack hook or standalone script
-const isAfterPackHook = process.argv.length > 2 && process.argv[2] === '--context'
+const isAfterPackHook = process.argv.length > 2 && (process.argv[2] === '--context' || process.argv[2] === '--context-file')
 
 let executablePath
 let winUnpackedDir
 
 if (isAfterPackHook) {
   // Called as afterPack hook - get paths from context
-  const context = JSON.parse(process.argv[3])
+  let context
+  if (process.argv[2] === '--context-file') {
+    // Read context from file
+    const contextFile = process.argv[3]
+    const contextData = fs.readFileSync(contextFile, 'utf8')
+    context = JSON.parse(contextData)
+  } else {
+    // Read context from command line argument
+    context = JSON.parse(process.argv[3])
+  }
   winUnpackedDir = context.appOutDir
   executablePath = path.join(winUnpackedDir, 'comic-universe.exe')
   console.log('📁 Using afterPack context:', winUnpackedDir)

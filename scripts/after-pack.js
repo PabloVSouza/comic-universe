@@ -13,13 +13,22 @@ module.exports = async (context) => {
     try {
       const scriptPath = path.join(__dirname, 'embed-executable-icon.js');
       console.log('🔧 Calling icon embedding script:', scriptPath);
-      // Pass only the specific properties we need to avoid circular reference issues
+      // Write context to a temporary file to avoid command line escaping issues
+      const fs = require('fs');
       const contextData = {
         electronPlatformName: context.electronPlatformName,
         appOutDir: context.appOutDir,
         outDir: context.outDir
       };
-      execSync(`node "${scriptPath}" --context "${JSON.stringify(contextData)}"`, { stdio: 'inherit' });
+      const tempFile = path.join(__dirname, 'temp-context.json');
+      fs.writeFileSync(tempFile, JSON.stringify(contextData));
+      execSync(`node "${scriptPath}" --context-file "${tempFile}"`, { stdio: 'inherit' });
+      // Clean up the temporary file
+      try {
+        fs.unlinkSync(tempFile);
+      } catch (e) {
+        // Ignore cleanup errors
+      }
       console.log('✅ Windows icon embedding completed');
     } catch (error) {
       console.log('⚠️  Windows icon embedding failed:', error.message);

@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.pablovsouza.comic-universe
 productName: Comic Universe
 directories:
   buildResources: build
@@ -88,6 +88,9 @@ asarUnpack:
 win:
   executableName: comic-universe
   icon: build/icon.ico
+  # Windows app metadata
+  appId: com.pablovsouza.comic-universe
+  productName: Comic Universe
   # Force icon embedding with multiple approaches
   extraResources:
     - from: build/icon-256.png

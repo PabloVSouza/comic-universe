@@ -46,13 +46,13 @@ console.log('📁 Executable:', executablePath);
 console.log('🎨 Icon:', iconPath);
 
 try {
-  // Try to use rcedit to embed the icon
+  // Try to use rcedit to embed the icon and set app metadata
   const rceditCommands = [
-    `npx rcedit "${executablePath}" --set-icon "${iconPath}"`,
-    `rcedit "${executablePath}" --set-icon "${iconPath}"`,
-    `node_modules/.bin/rcedit "${executablePath}" --set-icon "${iconPath}"`,
-    `"${path.join(__dirname, '..', 'node_modules', 'rcedit', 'bin', 'rcedit.exe')}" "${executablePath}" --set-icon "${iconPath}"`,
-    `"${path.join(__dirname, '..', 'node_modules', 'rcedit', 'bin', 'rcedit-x64.exe')}" "${executablePath}" --set-icon "${iconPath}"`
+    `npx rcedit "${executablePath}" --set-icon "${iconPath}" --set-version-string "ProductName" "Comic Universe" --set-version-string "FileDescription" "Comic Universe" --set-version-string "CompanyName" "PabloVSouza"`,
+    `rcedit "${executablePath}" --set-icon "${iconPath}" --set-version-string "ProductName" "Comic Universe" --set-version-string "FileDescription" "Comic Universe" --set-version-string "CompanyName" "PabloVSouza"`,
+    `node_modules/.bin/rcedit "${executablePath}" --set-icon "${iconPath}" --set-version-string "ProductName" "Comic Universe" --set-version-string "FileDescription" "Comic Universe" --set-version-string "CompanyName" "PabloVSouza"`,
+    `"${path.join(__dirname, '..', 'node_modules', 'rcedit', 'bin', 'rcedit.exe')}" "${executablePath}" --set-icon "${iconPath}" --set-version-string "ProductName" "Comic Universe" --set-version-string "FileDescription" "Comic Universe" --set-version-string "CompanyName" "PabloVSouza"`,
+    `"${path.join(__dirname, '..', 'node_modules', 'rcedit', 'bin', 'rcedit-x64.exe')}" "${executablePath}" --set-icon "${iconPath}" --set-version-string "ProductName" "Comic Universe" --set-version-string "FileDescription" "Comic Universe" --set-version-string "CompanyName" "PabloVSouza"`
   ];
 
   let success = false;

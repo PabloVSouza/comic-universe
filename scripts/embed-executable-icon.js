@@ -25,8 +25,43 @@ if (isAfterPackHook) {
     context = JSON.parse(process.argv[3])
   }
   winUnpackedDir = context.appOutDir
-  executablePath = path.join(winUnpackedDir, 'comic-universe.exe')
-  console.log('📁 Using afterAllArtifactBuild context:', winUnpackedDir)
+  console.log('📁 Using afterPack context:', winUnpackedDir)
+  
+  // Wait for the executable to be renamed from electron.exe to comic-universe.exe
+  const maxRetries = 10
+  const retryDelay = 1000 // 1 second
+  let executablePath = null
+  
+  for (let i = 0; i < maxRetries; i++) {
+    const possiblePaths = [
+      path.join(winUnpackedDir, 'comic-universe.exe'),
+      path.join(winUnpackedDir, 'electron.exe')
+    ]
+    
+    for (const testPath of possiblePaths) {
+      if (fs.existsSync(testPath)) {
+        executablePath = testPath
+        console.log('✅ Found executable:', path.basename(testPath))
+        break
+      }
+    }
+    
+    if (executablePath) {
+      break
+    }
+    
+    console.log(`⏳ Waiting for executable to be renamed... (attempt ${i + 1}/${maxRetries})`)
+    if (i < maxRetries - 1) {
+      // Wait before next attempt
+      const { setTimeout } = require('timers/promises')
+      await setTimeout(retryDelay)
+    }
+  }
+  
+  if (!executablePath) {
+    executablePath = path.join(winUnpackedDir, 'comic-universe.exe') // Fallback
+  }
+  
   console.log('🎯 Target executable:', executablePath)
 } else {
   // Called as standalone script - use original logic

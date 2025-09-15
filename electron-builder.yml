@@ -110,9 +110,9 @@ win:
   # Additional Windows icon settings
   requestedExecutionLevel: asInvoker
   # Enable executable editing with self-signed certificate (disabled in CI)
-  signAndEditExecutable: ${CI:-true}
+  signAndEditExecutable: true
   # Use self-signed certificate for code signing (disabled in CI)
-  cscLink: ${CI:+}certificates/windows-cert.p12
+  cscLink: certificates/windows-cert.p12
   cscKeyPassword: comicuniverse
   # Force Windows to only build x64 (disable ARM builds)
   target:

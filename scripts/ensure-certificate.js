@@ -53,7 +53,18 @@ try {
     `;
     
     console.log('🔧 Executing PowerShell command...');
-    execSync(`powershell -Command "${powershellCommand}"`, { stdio: 'inherit' });
+    try {
+      const output = execSync(`powershell -Command "${powershellCommand}"`, { 
+        stdio: 'pipe',
+        encoding: 'utf8'
+      });
+      console.log('🔧 PowerShell output:', output);
+    } catch (psError) {
+      console.log('❌ PowerShell command failed:', psError.message);
+      console.log('❌ PowerShell stderr:', psError.stderr);
+      console.log('❌ PowerShell stdout:', psError.stdout);
+      throw psError;
+    }
     
     // Verify the certificate was created
     if (fs.existsSync(certPath)) {

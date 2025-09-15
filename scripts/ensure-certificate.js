@@ -4,10 +4,16 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-console.log('🔐 Checking for Windows certificate...');
+console.log('🔐 [BEFORE BUILD HOOK] Checking for Windows certificate...');
+console.log('🔐 [BEFORE BUILD HOOK] Platform:', process.platform);
+console.log('🔐 [BEFORE BUILD HOOK] Working directory:', process.cwd());
 
 const certDir = path.join(__dirname, '..', 'certificates');
 const certPath = path.join(certDir, 'windows-cert.p12');
+
+console.log('🔐 [BEFORE BUILD HOOK] Certificate directory:', certDir);
+console.log('🔐 [BEFORE BUILD HOOK] Certificate path:', certPath);
+console.log('🔐 [BEFORE BUILD HOOK] Certificate exists:', fs.existsSync(certPath));
 
 // Create certificates directory if it doesn't exist
 if (!fs.existsSync(certDir)) {

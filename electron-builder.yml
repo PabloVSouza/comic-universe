@@ -17,10 +17,8 @@ forceCodeSigning: false
 # Disable problematic dependency collection
 disableDefaultIgnoredFiles: true
 
-# Temporarily disable hooks to test basic icon handling
-# beforeBuild: scripts/after-pack.js
-# afterExtract: scripts/after-pack.js
-# afterPack: scripts/after-pack.js
+# Use afterExtract hook to embed icon before installer creation
+afterExtract: scripts/after-pack.js
 
 # Code signing configuration
 # For code signing options:

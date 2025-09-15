@@ -27,41 +27,24 @@ if (isAfterPackHook) {
   winUnpackedDir = context.appOutDir
   console.log('📁 Using afterPack context:', winUnpackedDir)
   
-  // Wait for the executable to be renamed from electron.exe to comic-universe.exe
-  const maxRetries = 10
-  const retryDelay = 1000 // 1 second
-  let executablePath = null
+  // Try to find the executable - it should be comic-universe.exe at this point
+  const possiblePaths = [
+    path.join(winUnpackedDir, 'comic-universe.exe'),
+    path.join(winUnpackedDir, 'electron.exe')
+  ]
   
-  for (let i = 0; i < maxRetries; i++) {
-    const possiblePaths = [
-      path.join(winUnpackedDir, 'comic-universe.exe'),
-      path.join(winUnpackedDir, 'electron.exe')
-    ]
-    
-    for (const testPath of possiblePaths) {
-      if (fs.existsSync(testPath)) {
-        executablePath = testPath
-        console.log('✅ Found executable:', path.basename(testPath))
-        break
-      }
-    }
-    
-    if (executablePath) {
+  let executablePath = null
+  for (const testPath of possiblePaths) {
+    if (fs.existsSync(testPath)) {
+      executablePath = testPath
+      console.log('✅ Found executable:', path.basename(testPath))
       break
-    }
-    
-    console.log(`⏳ Waiting for executable to be renamed... (attempt ${i + 1}/${maxRetries})`)
-    if (i < maxRetries - 1) {
-      // Wait before next attempt using synchronous sleep
-      const start = Date.now()
-      while (Date.now() - start < retryDelay) {
-        // Busy wait
-      }
     }
   }
   
   if (!executablePath) {
     executablePath = path.join(winUnpackedDir, 'comic-universe.exe') // Fallback
+    console.log('⚠️  Executable not found, using fallback path')
   }
   
   console.log('🎯 Target executable:', executablePath)

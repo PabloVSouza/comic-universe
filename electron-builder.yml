@@ -17,7 +17,8 @@ forceCodeSigning: false
 # Disable problematic dependency collection
 disableDefaultIgnoredFiles: true
 
-# Let electron-builder handle icon embedding automatically with signAndEditExecutable: true
+# Use afterPack hook to manually embed icon after executable is created
+afterPack: scripts/after-pack.js
 
 # Code signing configuration
 # For code signing options:
@@ -108,8 +109,8 @@ win:
       to: icon.ico
   # Additional Windows icon settings
   requestedExecutionLevel: asInvoker
-  # Enable executable editing to embed icon (required for custom icons)
-  signAndEditExecutable: true
+  # Disable executable editing to avoid code signing tool issues
+  signAndEditExecutable: false
   # Force Windows to only build x64 (disable ARM builds)
   target:
     - target: nsis

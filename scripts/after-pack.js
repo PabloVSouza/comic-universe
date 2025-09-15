@@ -13,7 +13,13 @@ module.exports = async (context) => {
     try {
       const scriptPath = path.join(__dirname, 'embed-executable-icon.js');
       console.log('🔧 Calling icon embedding script:', scriptPath);
-      execSync(`node "${scriptPath}" --context '${JSON.stringify(context)}'`, { stdio: 'inherit' });
+      // Pass only the specific properties we need to avoid circular reference issues
+      const contextData = {
+        electronPlatformName: context.electronPlatformName,
+        appOutDir: context.appOutDir,
+        outDir: context.outDir
+      };
+      execSync(`node "${scriptPath}" --context '${JSON.stringify(contextData)}'`, { stdio: 'inherit' });
       console.log('✅ Windows icon embedding completed');
     } catch (error) {
       console.log('⚠️  Windows icon embedding failed:', error.message);

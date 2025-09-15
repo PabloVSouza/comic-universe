@@ -84,9 +84,14 @@ asarUnpack:
   - 'node_modules/better-sqlite3/build/Release/better_sqlite3.node'
   - 'resources/*'
   - 'out/database/migrations/**/*'
+  - 'build/icon-256.png'
 win:
   executableName: comic-universe
   icon: build/icon-256.png
+  # Force icon embedding
+  extraResources:
+    - from: build/icon-256.png
+      to: icon.png
   # Additional Windows icon settings
   requestedExecutionLevel: asInvoker
   # Force Windows to only build x64 (disable ARM builds)

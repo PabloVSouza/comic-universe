@@ -41,7 +41,6 @@ files:
   - '!node_modules/vite/**'
   - '!node_modules/electron-vite/**'
   - '!node_modules/electron-builder/**'
-  - '!node_modules/electron-icon-builder/**'
   - '!node_modules/sass-embedded/**'
   - '!node_modules/tailwindcss/**'
   - '!node_modules/autoprefixer/**'

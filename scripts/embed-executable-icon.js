@@ -73,10 +73,12 @@ try {
     console.log('❌ All rcedit approaches failed');
     console.log('💡 The executable icon might already be embedded correctly');
     console.log('💡 Or you may need to install rcedit: npm install -g rcedit');
+    console.log('⚠️  Continuing build process - this is not a critical failure');
   }
 
 } catch (error) {
   console.log('❌ Unexpected error:', error.message);
+  console.log('⚠️  Continuing build process - this is not a critical failure');
 }
 
 console.log('✅ Icon embedding process completed');

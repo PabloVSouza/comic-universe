@@ -183,7 +183,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     }
   }
 
-  const iconPath = isWindows ? getIconPath('icon.ico') : getIconPath('icon.png')
+  const iconPath = isWindows ? getIconPath('icon-256.png') : getIconPath('icon.png')
   console.log('Icon path:', iconPath)
   console.log('Platform:', process.platform)
   console.log('Is dev:', is.dev)

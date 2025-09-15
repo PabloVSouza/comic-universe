@@ -86,7 +86,7 @@ asarUnpack:
   - 'out/database/migrations/**/*'
 win:
   executableName: comic-universe
-  icon: build/icon.ico
+  icon: build/icon-256.png
   # Additional Windows icon settings
   requestedExecutionLevel: asInvoker
   # Force Windows to only build x64 (disable ARM builds)

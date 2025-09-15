@@ -117,46 +117,15 @@ try {
 
 console.log('✅ Icon embedding process completed')
 
-// Also try to embed icon in the installer file if it exists
-const distDir = path.join(__dirname, '..', 'dist')
-const installerFiles = [
-  path.join(distDir, 'comic-universe-2.0.0-win-x64.exe'),
-  path.join(distDir, 'comic-universe-2.0.0-win-universal.exe'),
-  path.join(distDir, 'comic-universe-2.0.0-dev.1-win-x64.exe')
-]
-
-for (const installerFile of installerFiles) {
-  if (fs.existsSync(installerFile)) {
-    console.log('🔧 Also embedding icon in installer:', installerFile)
-    try {
-      const rceditCommands = [
-        `"${path.join(__dirname, '..', 'node_modules', 'rcedit', 'bin', 'rcedit.exe')}" "${installerFile}" --set-icon "${iconPath}" --set-version-string "ProductName" "Comic Universe" --set-version-string "FileDescription" "Comic Universe" --set-version-string "CompanyName" "PabloVSouza" --set-version-string "LegalCopyright" "© 2025 PabloVSouza" --set-version-string "OriginalFilename" "comic-universe.exe"`,
-        `"${path.join(__dirname, '..', 'node_modules', 'rcedit', 'bin', 'rcedit-x64.exe')}" "${installerFile}" --set-icon "${iconPath}" --set-version-string "ProductName" "Comic Universe" --set-version-string "FileDescription" "Comic Universe" --set-version-string "CompanyName" "PabloVSouza" --set-version-string "LegalCopyright" "© 2025 PabloVSouza" --set-version-string "OriginalFilename" "comic-universe.exe"`
-      ]
-
-      let success = false
-      for (const command of rceditCommands) {
-        try {
-          console.log('🔧 Trying installer command:', command)
-          execSync(command, { stdio: 'inherit' })
-          console.log('✅ Installer icon embedded successfully!')
-          success = true
-          break
-        } catch (cmdError) {
-          console.log('⚠️  Installer command failed:', cmdError.message)
-          continue
-        }
-      }
-
-      if (!success) {
-        console.log('⚠️  Could not embed icon in installer')
-      }
-    } catch (error) {
-      console.log('⚠️  Error embedding icon in installer:', error.message)
-    }
-    break // Only try the first installer file found
-  }
-}
+// Note: We don't modify the installer file with rcedit because:
+// 1. NSIS installers have a specific internal structure
+// 2. rcedit corrupts the installer integrity
+// 3. The installer icon is already set via electron-builder configuration
+// 4. The important part is that the installed app has the correct icon
+//
+// If you see "NSIS Error: Installer integrity check has failed" after running this script,
+// it means the installer was corrupted by rcedit. You need to rebuild the installer:
+// npm run build:win
 
 // If called as afterPack hook, don't exit the process
 if (!isAfterPackHook) {

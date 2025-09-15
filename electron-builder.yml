@@ -156,7 +156,7 @@ linux:
   category: Utility
 appImage:
   artifactName: ${name}-${version}-linux-${arch}.${ext}
-npmRebuild: true
+npmRebuild: false
 # Optimize build size and speed
 compression: normal
 removePackageScripts: true

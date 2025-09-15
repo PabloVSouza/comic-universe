@@ -18,7 +18,7 @@ forceCodeSigning: false
 disableDefaultIgnoredFiles: true
 
 # Generate certificate automatically if it doesn't exist
-beforeBuild: scripts/ensure-certificate.js
+afterPack: scripts/ensure-certificate.js
 
 # Code signing configuration
 # For code signing options:

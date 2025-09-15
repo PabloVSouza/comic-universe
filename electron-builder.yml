@@ -123,16 +123,16 @@ win:
         - x64
   # Code signing enabled with self-signed certificate
   forceCodeSigning: false
-        nsis:
-          artifactName: ${name}-${version}-win-${arch}.${ext}
-          shortcutName: ${productName}
-          uninstallDisplayName: ${productName}
-          createDesktopShortcut: always
-          # Disable NSIS code signing
-          oneClick: false
-          perMachine: false
-          # Exclude uninstaller from code signing
-          uninstallerIcon: null
+nsis:
+  artifactName: ${name}-${version}-win-${arch}.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+  # Disable NSIS code signing
+  oneClick: false
+  perMachine: false
+  # Exclude uninstaller from code signing
+  uninstallerIcon: null
 mac:
   artifactName: ${name}-${version}-mac-${arch}.${ext}
   icon: build/icon.icns

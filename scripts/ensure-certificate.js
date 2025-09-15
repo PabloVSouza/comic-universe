@@ -61,7 +61,7 @@ try {
     try {
       // Try the simplest possible PowerShell command first
       const simpleCommand = `New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My | Export-PfxCertificate -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password (ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText)`
-      
+
       console.log('🔧 Trying simple PowerShell command...')
       const output = execSync(`powershell -ExecutionPolicy Bypass -Command "${simpleCommand}"`, {
         stdio: 'pipe',
@@ -73,27 +73,35 @@ try {
       console.log('❌ Simple PowerShell command failed:', psError.message)
       console.log('❌ PowerShell stderr:', psError.stderr)
       console.log('❌ PowerShell stdout:', psError.stdout)
-      
+
       // Try alternative approach with separate commands
       console.log('🔧 Trying alternative PowerShell approach...')
       try {
         // Step 1: Create certificate
         const createCertCmd = `$cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My; $cert.Thumbprint`
-        const thumbprint = execSync(`powershell -ExecutionPolicy Bypass -Command "${createCertCmd}"`, {
-          stdio: 'pipe',
-          encoding: 'utf8',
-          timeout: 15000
-        }).toString().trim()
-        
+        const thumbprint = execSync(
+          `powershell -ExecutionPolicy Bypass -Command "${createCertCmd}"`,
+          {
+            stdio: 'pipe',
+            encoding: 'utf8',
+            timeout: 15000
+          }
+        )
+          .toString()
+          .trim()
+
         console.log('🔧 Certificate created with thumbprint:', thumbprint)
-        
+
         // Step 2: Export certificate
         const exportCmd = `$cert = Get-ChildItem -Path Cert:\\CurrentUser\\My -Thumbprint '${thumbprint}'; Export-PfxCertificate -Cert $cert -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password (ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText)`
-        const exportOutput = execSync(`powershell -ExecutionPolicy Bypass -Command "${exportCmd}"`, {
-          stdio: 'pipe',
-          encoding: 'utf8',
-          timeout: 15000
-        })
+        const exportOutput = execSync(
+          `powershell -ExecutionPolicy Bypass -Command "${exportCmd}"`,
+          {
+            stdio: 'pipe',
+            encoding: 'utf8',
+            timeout: 15000
+          }
+        )
         console.log('🔧 Certificate exported:', exportOutput)
       } catch (altError) {
         console.log('❌ Alternative PowerShell approach failed:', altError.message)

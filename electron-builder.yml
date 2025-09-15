@@ -84,6 +84,8 @@ asarUnpack:
 win:
   executableName: comic-universe
   icon: build/icon.ico
+  # Additional Windows icon settings
+  requestedExecutionLevel: asInvoker
   # Code signing configuration for Windows
   # cscLink: "certificates/windows-cert.p12"  # Local development
   # cscKeyPassword: "comicuniverse"           # Local development

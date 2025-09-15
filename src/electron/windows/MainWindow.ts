@@ -153,7 +153,16 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
   const isMac = process.platform === 'darwin'
   const isWindows = process.platform === 'win32'
 
-  const windowConfig: any = {
+  // Get the correct icon path for both development and production
+  const getIconPath = (iconName: string): string => {
+    if (is.dev) {
+      return join(__dirname, '../../../build', iconName)
+    } else {
+      return join(process.resourcesPath, 'build', iconName)
+    }
+  }
+
+  const windowConfig: Electron.BrowserWindowConstructorOptions = {
     width: 1000,
     height: 800,
     show: false,
@@ -167,7 +176,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
       nodeIntegration: false,
       contextIsolation: true
     },
-    icon: join(__dirname, '../../../build/icon.png')
+    icon: isWindows ? getIconPath('icon.ico') : getIconPath('icon.png')
   }
 
   if (isMac) {

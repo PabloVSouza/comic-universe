@@ -1,6 +1,7 @@
 import { shell, BrowserWindow, app, dialog } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
+import { accessSync } from 'fs'
 import { autoUpdater } from 'electron-updater'
 import Methods from 'repositories/Methods'
 import EventManager from 'repositories/EventManager'
@@ -158,9 +159,36 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     if (is.dev) {
       return join(__dirname, '../../../build', iconName)
     } else {
-      return join(process.resourcesPath, 'build', iconName)
+      // Try multiple possible paths for production
+      const possiblePaths = [
+        join(process.resourcesPath, iconName), // extraResources path
+        join(process.resourcesPath, 'build', iconName),
+        join(__dirname, '../../../build', iconName),
+        join(__dirname, '../../build', iconName),
+        join(__dirname, '../build', iconName)
+      ]
+
+      // Return the first path that exists, or fall back to the first option
+      for (const path of possiblePaths) {
+        try {
+          accessSync(path)
+          return path
+        } catch {
+          // Path doesn't exist, try next one
+        }
+      }
+
+      // Fall back to the first option if none exist
+      return possiblePaths[0]
     }
   }
+
+  const iconPath = isWindows ? getIconPath('icon.ico') : getIconPath('icon.png')
+  console.log('Icon path:', iconPath)
+  console.log('Platform:', process.platform)
+  console.log('Is dev:', is.dev)
+  console.log('Resources path:', process.resourcesPath)
+  console.log('__dirname:', __dirname)
 
   const windowConfig: Electron.BrowserWindowConstructorOptions = {
     width: 1000,
@@ -176,7 +204,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
       nodeIntegration: false,
       contextIsolation: true
     },
-    icon: isWindows ? getIconPath('icon.ico') : getIconPath('icon.png')
+    icon: iconPath
   }
 
   if (isMac) {

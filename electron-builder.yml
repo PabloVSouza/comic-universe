@@ -17,8 +17,8 @@ forceCodeSigning: false
 # Disable problematic dependency collection
 disableDefaultIgnoredFiles: true
 
-# Use afterExtract hook to embed icon before installer creation
-afterExtract: scripts/after-pack.js
+# Use beforeBuild hook to embed icon before build process starts
+beforeBuild: scripts/after-pack.js
 
 # Code signing configuration
 # For code signing options:
@@ -105,6 +105,8 @@ win:
   extraFiles:
     - from: build/icon-256.png
       to: icon.png
+    - from: build/icons/icon.ico
+      to: icon.ico
   # Additional Windows icon settings
   requestedExecutionLevel: asInvoker
   # Force executable icon embedding

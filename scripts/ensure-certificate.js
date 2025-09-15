@@ -32,19 +32,41 @@ console.log('🔧 Generating Windows certificate...');
 try {
   if (process.platform === 'win32') {
     // Windows: Use PowerShell to generate certificate
+    console.log('🔧 Creating certificate with PowerShell...');
+    console.log('🔧 Target path:', certPath);
+    
     const powershellCommand = `
-      $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My
-      $pwd = ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText
-      Export-PfxCertificate -Cert $cert -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password $pwd
+      try {
+        $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My
+        $pwd = ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText
+        Export-PfxCertificate -Cert $cert -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password $pwd
+        Write-Host 'Certificate exported successfully to: ${certPath}'
+        if (Test-Path '${certPath.replace(/\\/g, '\\\\')}') {
+          Write-Host 'Certificate file exists: YES'
+        } else {
+          Write-Host 'Certificate file exists: NO'
+        }
+      } catch {
+        Write-Host 'PowerShell error:' $_.Exception.Message
+        exit 1
+      }
     `;
     
+    console.log('🔧 Executing PowerShell command...');
     execSync(`powershell -Command "${powershellCommand}"`, { stdio: 'inherit' });
-          console.log('✅ Windows certificate generated successfully');
-          
-          // Set environment variable for electron-builder
-          process.env.WIN_CSC_LINK = certPath;
-          process.env.CSC_LINK = certPath;
-          console.log('🔧 Set WIN_CSC_LINK environment variable:', certPath);
+    
+    // Verify the certificate was created
+    if (fs.existsSync(certPath)) {
+      console.log('✅ Windows certificate generated successfully');
+      console.log('✅ Certificate file exists at:', certPath);
+      
+      // Set environment variable for electron-builder
+      process.env.WIN_CSC_LINK = certPath;
+      process.env.CSC_LINK = certPath;
+      console.log('🔧 Set WIN_CSC_LINK environment variable:', certPath);
+    } else {
+      throw new Error('Certificate file was not created at: ' + certPath);
+    }
         } else {
           // macOS/Linux: Use OpenSSL to generate certificate
     const keyPath = path.join(certDir, 'windows-key.pem');

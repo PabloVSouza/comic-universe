@@ -37,7 +37,7 @@ try {
 
     // First, let's test if PowerShell is working at all
     const testCommand = `Write-Host 'PowerShell is working'`
-
+    
     console.log('🔧 Testing PowerShell execution...')
     try {
       const testOutput = execSync(`powershell -ExecutionPolicy Bypass -Command "${testCommand}"`, {
@@ -48,7 +48,8 @@ try {
       console.log('🔧 PowerShell test output:', testOutput)
     } catch (testError) {
       console.log('❌ PowerShell test failed:', testError.message)
-      throw new Error('PowerShell is not working properly')
+      console.log('⚠️  Continuing without certificate generation - this is not a critical failure')
+      return
     }
 
     // Create a PowerShell script file instead of inline command
@@ -161,8 +162,12 @@ try {
 } catch (error) {
   console.error('❌ Failed to generate certificate:', error.message)
   console.log('⚠️  Continuing build without code signing...')
+  console.log('⚠️  This is not a critical failure - build will continue')
 
   // Set environment variable to disable code signing
   process.env.WIN_CSC_LINK = ''
   process.env.CSC_LINK = ''
+  
+  // Don't exit with error code - let the build continue
+  process.exit(0)
 }

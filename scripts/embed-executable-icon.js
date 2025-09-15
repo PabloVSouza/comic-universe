@@ -50,7 +50,8 @@ try {
   const rceditCommands = [
     `npx rcedit "${executablePath}" --set-icon "${iconPath}"`,
     `rcedit "${executablePath}" --set-icon "${iconPath}"`,
-    `node_modules/.bin/rcedit "${executablePath}" --set-icon "${iconPath}"`
+    `node_modules/.bin/rcedit "${executablePath}" --set-icon "${iconPath}"`,
+    `node "${path.join(__dirname, '..', 'node_modules', 'rcedit', 'bin', 'rcedit')}" "${executablePath}" --set-icon "${iconPath}"`
   ];
 
   let success = false;

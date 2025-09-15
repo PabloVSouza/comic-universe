@@ -10,6 +10,11 @@ process.env.CSC_KEY_PASSWORD = '';
 process.env.CSC_IDENTITY_AUTO_DISCOVERY = 'false';
 process.env.WIN_CSC_LINK = '';
 process.env.WIN_CSC_KEY_PASSWORD = '';
+process.env.CSC_NAME = '';
+process.env.CSC_IDENTITY_NAME = '';
+process.env.CSC_IDENTITY_PASSWORD = '';
+process.env.CSC_IDENTITY_LINK = '';
+process.env.CSC_IDENTITY_KEY_PASSWORD = '';
 
 try {
   // Run the build command
@@ -21,7 +26,12 @@ try {
       CSC_KEY_PASSWORD: '',
       CSC_IDENTITY_AUTO_DISCOVERY: 'false',
       WIN_CSC_LINK: '',
-      WIN_CSC_KEY_PASSWORD: ''
+      WIN_CSC_KEY_PASSWORD: '',
+      CSC_NAME: '',
+      CSC_IDENTITY_NAME: '',
+      CSC_IDENTITY_PASSWORD: '',
+      CSC_IDENTITY_LINK: '',
+      CSC_IDENTITY_KEY_PASSWORD: ''
     }
   });
   

@@ -18,7 +18,7 @@ forceCodeSigning: false
 disableDefaultIgnoredFiles: true
 
 # Add afterPack hook to embed icon before installer creation
-afterPack: scripts/embed-executable-icon.js
+afterPack: scripts/after-pack.js
 
 # Code signing configuration
 # For code signing options:

@@ -14,6 +14,9 @@ publish: null
 # Disable code signing globally
 forceCodeSigning: false
 
+# Disable problematic dependency collection
+disableDefaultIgnoredFiles: true
+
 # Code signing configuration
 # For code signing options:
 # 1. Apple Developer Program ($99/year) - macOS official certificates
@@ -45,6 +48,8 @@ files:
   - '!node_modules/tailwindcss/**'
   - '!node_modules/autoprefixer/**'
   - '!node_modules/postcss/**'
+  - '!node_modules/@emnapi/**'
+  - '!node_modules/@tailwindcss/**'
   - '!node_modules/vite-plugin-svgr/**'
   - '!node_modules/@vitejs/**'
   - '!node_modules/@typescript-eslint/**'
@@ -87,9 +92,6 @@ asarUnpack:
 win:
   executableName: comic-universe
   icon: build/icon.ico
-  # Windows app metadata
-  appId: com.pablovsouza.comic-universe
-  productName: Comic Universe
   # Force icon embedding with multiple approaches
   extraResources:
     - from: build/icon-256.png

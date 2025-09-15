@@ -118,12 +118,8 @@ win:
     - target: nsis
       arch:
         - x64
-  # Code signing disabled for Windows
-  # Disable code signing completely
+  # Code signing enabled with self-signed certificate
   forceCodeSigning: false
-  # Explicitly disable all signing
-  cscLink: null
-  cscKeyPassword: null
   # Disable timestamping
   signExts: []
 nsis:

@@ -19,7 +19,7 @@ module.exports = async (context) => {
         appOutDir: context.appOutDir,
         outDir: context.outDir
       };
-      execSync(`node "${scriptPath}" --context '${JSON.stringify(contextData)}'`, { stdio: 'inherit' });
+      execSync(`node "${scriptPath}" --context "${JSON.stringify(contextData)}"`, { stdio: 'inherit' });
       console.log('✅ Windows icon embedding completed');
     } catch (error) {
       console.log('⚠️  Windows icon embedding failed:', error.message);

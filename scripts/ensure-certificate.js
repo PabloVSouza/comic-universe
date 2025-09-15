@@ -49,11 +49,34 @@ try {
     
     console.log('🔧 Executing PowerShell command...');
     try {
-      const output = execSync(`powershell -Command "${powershellCommand}"`, { 
-        stdio: 'pipe',
-        encoding: 'utf8'
-      });
-      console.log('🔧 PowerShell output:', output);
+      // Try different PowerShell execution methods
+      const commands = [
+        `powershell -ExecutionPolicy Bypass -Command "${powershellCommand}"`,
+        `powershell.exe -ExecutionPolicy Bypass -Command "${powershellCommand}"`,
+        `pwsh -Command "${powershellCommand}"`
+      ];
+      
+      let success = false;
+      for (const cmd of commands) {
+        try {
+          console.log('🔧 Trying command:', cmd);
+          const output = execSync(cmd, { 
+            stdio: 'pipe',
+            encoding: 'utf8',
+            timeout: 30000
+          });
+          console.log('🔧 PowerShell output:', output);
+          success = true;
+          break;
+        } catch (cmdError) {
+          console.log('⚠️  Command failed:', cmdError.message);
+          continue;
+        }
+      }
+      
+      if (!success) {
+        throw new Error('All PowerShell execution methods failed');
+      }
     } catch (psError) {
       console.log('❌ PowerShell command failed:', psError.message);
       console.log('❌ PowerShell stderr:', psError.stderr);

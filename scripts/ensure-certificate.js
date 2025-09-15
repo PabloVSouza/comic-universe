@@ -35,15 +35,40 @@ try {
     console.log('🔧 Creating certificate with PowerShell...')
     console.log('🔧 Target path:', certPath)
 
+    // First, let's test if PowerShell is working at all
+    const testCommand = `Write-Host 'PowerShell is working'`
+    
+    console.log('🔧 Testing PowerShell execution...')
+    try {
+      const testOutput = execSync(`powershell -ExecutionPolicy Bypass -Command "${testCommand}"`, {
+        stdio: 'pipe',
+        encoding: 'utf8',
+        timeout: 10000
+      })
+      console.log('🔧 PowerShell test output:', testOutput)
+    } catch (testError) {
+      console.log('❌ PowerShell test failed:', testError.message)
+      throw new Error('PowerShell is not working properly')
+    }
+    
     const powershellCommand = `
-      $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My
-      $pwd = ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText
-      Export-PfxCertificate -Cert $cert -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password $pwd
-      Write-Host 'Certificate exported successfully to: ${certPath}'
-      if (Test-Path '${certPath.replace(/\\/g, '\\\\')}') {
-        Write-Host 'Certificate file exists: YES'
-      } else {
-        Write-Host 'Certificate file exists: NO'
+      try {
+        Write-Host 'Starting certificate generation...'
+        $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My
+        Write-Host 'Certificate created successfully'
+        $pwd = ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText
+        Write-Host 'Password created successfully'
+        Export-PfxCertificate -Cert $cert -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password $pwd
+        Write-Host 'Certificate exported successfully to: ${certPath}'
+        if (Test-Path '${certPath.replace(/\\/g, '\\\\')}') {
+          Write-Host 'Certificate file exists: YES'
+        } else {
+          Write-Host 'Certificate file exists: NO'
+        }
+      } catch {
+        Write-Host 'Error occurred:' $_.Exception.Message
+        Write-Host 'Error details:' $_.Exception.ToString()
+        exit 1
       }
     `
 

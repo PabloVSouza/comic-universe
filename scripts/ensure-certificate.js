@@ -7,7 +7,10 @@ const { execSync } = require('child_process')
 console.log('🔐 [BEFORE BUILD HOOK] Checking for Windows certificate...')
 console.log('🔐 [BEFORE BUILD HOOK] Platform:', process.platform)
 console.log('🔐 [BEFORE BUILD HOOK] Working directory:', process.cwd())
-console.log('🔐 [BEFORE BUILD HOOK] CI environment:', process.env.CI || process.env.GITHUB_ACTIONS ? 'Yes' : 'No')
+console.log(
+  '🔐 [BEFORE BUILD HOOK] CI environment:',
+  process.env.CI || process.env.GITHUB_ACTIONS ? 'Yes' : 'No'
+)
 
 const certDir = path.join(__dirname, '..', 'certificates')
 const certPath = path.join(certDir, 'windows-cert.p12')
@@ -53,53 +56,48 @@ try {
       return
     }
 
-    // Create a PowerShell script file instead of inline command
-    const psScriptPath = path.join(__dirname, 'generate-cert.ps1')
-    const psScriptContent = `
-Write-Host 'Starting certificate generation...'
-try {
-  $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My
-  Write-Host 'Certificate created successfully'
-  $pwd = ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText
-  Write-Host 'Password created successfully'
-  Export-PfxCertificate -Cert $cert -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password $pwd
-  Write-Host 'Certificate exported successfully to: ${certPath}'
-  if (Test-Path '${certPath.replace(/\\/g, '\\\\')}') {
-    Write-Host 'Certificate file exists: YES'
-  } else {
-    Write-Host 'Certificate file exists: NO'
-  }
-} catch {
-  Write-Host 'Error occurred:' $_.Exception.Message
-  Write-Host 'Error details:' $_.Exception.ToString()
-  exit 1
-}
-`
-
-    // Write the PowerShell script to a file
-    fs.writeFileSync(psScriptPath, psScriptContent)
-    console.log('🔧 Created PowerShell script:', psScriptPath)
-
-    console.log('🔧 Executing PowerShell script...')
+    // Use a simpler PowerShell command that's more likely to work in CI
+    console.log('🔧 Executing PowerShell certificate generation...')
     try {
-      const output = execSync(`powershell -ExecutionPolicy Bypass -File "${psScriptPath}"`, {
+      // Try the simplest possible PowerShell command first
+      const simpleCommand = `New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My | Export-PfxCertificate -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password (ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText)`
+      
+      console.log('🔧 Trying simple PowerShell command...')
+      const output = execSync(`powershell -ExecutionPolicy Bypass -Command "${simpleCommand}"`, {
         stdio: 'pipe',
         encoding: 'utf8',
         timeout: 30000
       })
       console.log('🔧 PowerShell output:', output)
     } catch (psError) {
-      console.log('❌ PowerShell script failed:', psError.message)
+      console.log('❌ Simple PowerShell command failed:', psError.message)
       console.log('❌ PowerShell stderr:', psError.stderr)
       console.log('❌ PowerShell stdout:', psError.stdout)
-      throw psError
-    } finally {
-      // Clean up the script file
+      
+      // Try alternative approach with separate commands
+      console.log('🔧 Trying alternative PowerShell approach...')
       try {
-        fs.unlinkSync(psScriptPath)
-        console.log('🔧 Cleaned up PowerShell script file')
-      } catch (cleanupError) {
-        console.log('⚠️  Could not clean up script file:', cleanupError.message)
+        // Step 1: Create certificate
+        const createCertCmd = `$cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My; $cert.Thumbprint`
+        const thumbprint = execSync(`powershell -ExecutionPolicy Bypass -Command "${createCertCmd}"`, {
+          stdio: 'pipe',
+          encoding: 'utf8',
+          timeout: 15000
+        }).toString().trim()
+        
+        console.log('🔧 Certificate created with thumbprint:', thumbprint)
+        
+        // Step 2: Export certificate
+        const exportCmd = `$cert = Get-ChildItem -Path Cert:\\CurrentUser\\My -Thumbprint '${thumbprint}'; Export-PfxCertificate -Cert $cert -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password (ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText)`
+        const exportOutput = execSync(`powershell -ExecutionPolicy Bypass -Command "${exportCmd}"`, {
+          stdio: 'pipe',
+          encoding: 'utf8',
+          timeout: 15000
+        })
+        console.log('🔧 Certificate exported:', exportOutput)
+      } catch (altError) {
+        console.log('❌ Alternative PowerShell approach failed:', altError.message)
+        throw altError
       }
     }
 

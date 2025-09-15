@@ -25,16 +25,25 @@ if (isAfterPackHook) {
     context = JSON.parse(process.argv[3])
   }
   winUnpackedDir = context.appOutDir
-  executablePath = path.join(winUnpackedDir, 'comic-universe.exe')
-  console.log('📁 Using afterPack context:', winUnpackedDir)
+  // Try multiple possible executable names
+  const possibleExecutables = ['comic-universe.exe', 'electron.exe', 'Comic Universe.exe']
+  let executablePath = null
   
-  // Debug: List files in the directory to see what's actually there
-  if (fs.existsSync(winUnpackedDir)) {
-    const files = fs.readdirSync(winUnpackedDir)
-    console.log('📁 Files in directory:', files)
-  } else {
-    console.log('❌ Directory does not exist:', winUnpackedDir)
+  for (const exeName of possibleExecutables) {
+    const testPath = path.join(winUnpackedDir, exeName)
+    if (fs.existsSync(testPath)) {
+      executablePath = testPath
+      console.log('✅ Found executable:', exeName)
+      break
+    }
   }
+  
+  if (!executablePath) {
+    executablePath = path.join(winUnpackedDir, 'electron.exe') // Default fallback
+  }
+  
+  console.log('📁 Using afterPack context:', winUnpackedDir)
+  console.log('🎯 Target executable:', executablePath)
 } else {
   // Called as standalone script - use original logic
   const distDir = path.join(__dirname, '..', 'dist')

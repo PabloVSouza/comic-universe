@@ -17,7 +17,8 @@ forceCodeSigning: false
 # Disable problematic dependency collection
 disableDefaultIgnoredFiles: true
 
-# Let electron-builder handle icon embedding automatically with code signing
+# Generate certificate automatically if it doesn't exist
+beforeBuild: scripts/ensure-certificate.js
 
 # Code signing configuration
 # For code signing options:
@@ -111,7 +112,7 @@ win:
   # Enable executable editing with self-signed certificate
   signAndEditExecutable: true
   # Use self-signed certificate for code signing
-  cscLink: ${WIN_CSC_LINK}
+  cscLink: certificates/windows-cert.p12
   cscKeyPassword: comicuniverse
   # Force Windows to only build x64 (disable ARM builds)
   target:

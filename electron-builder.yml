@@ -108,7 +108,6 @@ win:
       arch:
         - x64
   # Code signing disabled for Windows
-  signAndEditExecutable: false
   # Disable code signing completely
   forceCodeSigning: false
   # Explicitly disable all signing

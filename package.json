@@ -16,7 +16,7 @@
     "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
-    "build:win": "npm run build && electron-builder --win --config",
+    "build:win": "npm run build && electron-builder --win --config && node scripts/embed-executable-icon.js",
     "build:win-no-sign": "node scripts/build-win-no-sign.js",
     "build:linux-x64": "npm run build && electron-builder --linux --config",
     "build:linux-arm": "npm run build && electron-builder --linux --arm64 --config",

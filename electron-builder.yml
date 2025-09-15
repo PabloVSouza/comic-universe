@@ -17,9 +17,10 @@ forceCodeSigning: false
 # Disable problematic dependency collection
 disableDefaultIgnoredFiles: true
 
-# Add hooks to embed icon at multiple stages
-afterExtract: scripts/after-pack.js
-afterPack: scripts/after-pack.js
+# Temporarily disable hooks to test basic icon handling
+# beforeBuild: scripts/after-pack.js
+# afterExtract: scripts/after-pack.js
+# afterPack: scripts/after-pack.js
 
 # Code signing configuration
 # For code signing options:
@@ -95,7 +96,7 @@ asarUnpack:
   - 'build/icon-256.png'
 win:
   executableName: comic-universe
-  icon: build/icon.ico
+  icon: build/icons/icon.ico
   # Force icon embedding with multiple approaches
   extraResources:
     - from: build/icon-256.png

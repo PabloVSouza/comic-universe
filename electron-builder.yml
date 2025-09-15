@@ -17,8 +17,8 @@ forceCodeSigning: false
 # Disable problematic dependency collection
 disableDefaultIgnoredFiles: true
 
-# Use afterPack hook to embed icon after executable is packaged but before installer
-afterPack: scripts/after-pack.js
+# Use afterAllArtifactBuild hook to embed icon after executable is renamed
+afterAllArtifactBuild: scripts/after-pack.js
 
 # Code signing configuration
 # For code signing options:

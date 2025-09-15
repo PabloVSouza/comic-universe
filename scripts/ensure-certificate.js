@@ -36,19 +36,14 @@ try {
     console.log('🔧 Target path:', certPath);
     
     const powershellCommand = `
-      try {
-        $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My
-        $pwd = ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText
-        Export-PfxCertificate -Cert $cert -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password $pwd
-        Write-Host 'Certificate exported successfully to: ${certPath}'
-        if (Test-Path '${certPath.replace(/\\/g, '\\\\')}') {
-          Write-Host 'Certificate file exists: YES'
-        } else {
-          Write-Host 'Certificate file exists: NO'
-        }
-      } catch {
-        Write-Host 'PowerShell error:' $_.Exception.Message
-        exit 1
+      $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Comic Universe' -KeyUsage DigitalSignature -FriendlyName 'Comic Universe Code Signing' -CertStoreLocation Cert:\\CurrentUser\\My
+      $pwd = ConvertTo-SecureString -String 'comicuniverse' -Force -AsPlainText
+      Export-PfxCertificate -Cert $cert -FilePath '${certPath.replace(/\\/g, '\\\\')}' -Password $pwd
+      Write-Host 'Certificate exported successfully to: ${certPath}'
+      if (Test-Path '${certPath.replace(/\\/g, '\\\\')}') {
+        Write-Host 'Certificate file exists: YES'
+      } else {
+        Write-Host 'Certificate file exists: NO'
       }
     `;
     

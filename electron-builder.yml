@@ -11,6 +11,9 @@ directories:
 # Disable auto-publishing in CI
 publish: null
 
+# Disable code signing globally
+forceCodeSigning: false
+
 # Code signing configuration
 # For code signing options:
 # 1. Apple Developer Program ($99/year) - macOS official certificates
@@ -86,12 +89,15 @@ win:
   icon: build/icon.ico
   # Additional Windows icon settings
   requestedExecutionLevel: asInvoker
-  # Code signing configuration for Windows
-  # cscLink: "certificates/windows-cert.p12"  # Local development
-  # cscKeyPassword: "comicuniverse"           # Local development
-
-  # Time stamping server
+  # Force Windows to only build x64 (disable ARM builds)
+  target:
+    - target: nsis
+      arch:
+        - x64
+  # Code signing disabled for Windows
   signAndEditExecutable: false
+  # Disable code signing completely
+  forceCodeSigning: false
 nsis:
   artifactName: ${name}-${version}-win-${arch}.${ext}
   shortcutName: ${productName}
@@ -107,19 +113,18 @@ mac:
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
 
-  # Code signing configuration for macOS
-  identity: 'Comic Universe'
-  # Certificate file for self-signed certificate (uses environment variables in CI/CD)
-  # cscLink: "certificates/macos-cert.p12"  # Local development
-  # cscKeyPassword: "comicuniverse"         # Local development
+  # Code signing disabled for macOS
+  identity: null
+  # Disable code signing completely
+  forceCodeSigning: false
 
-  # Notarization (requires Apple Developer Program)
-  notarize: false # Set to true when you have Apple Developer Program access
+  # Notarization disabled (requires Apple Developer Program)
+  notarize: false
 
-  # Hardened runtime (required for notarization)
+  # Hardened runtime disabled (required for notarization)
   hardenedRuntime: false
 
-  # Gatekeeper assessment (required for notarization)
+  # Gatekeeper assessment disabled (required for notarization)
   gatekeeperAssess: false
 dmg:
   artifactName: ${name}-${version}-mac-${arch}.${ext}

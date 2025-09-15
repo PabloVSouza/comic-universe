@@ -111,8 +111,8 @@ win:
   # Enable executable editing with self-signed certificate
   signAndEditExecutable: true
   # Use self-signed certificate for code signing
-  certificateFile: certificates/windows-cert.p12
-  certificatePassword: comicuniverse
+  cscLink: certificates/windows-cert.p12
+  cscKeyPassword: comicuniverse
   # Force Windows to only build x64 (disable ARM builds)
   target:
     - target: nsis

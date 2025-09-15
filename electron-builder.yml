@@ -17,6 +17,9 @@ forceCodeSigning: false
 # Disable problematic dependency collection
 disableDefaultIgnoredFiles: true
 
+# Add afterPack hook to embed icon before installer creation
+afterPack: scripts/embed-executable-icon.js
+
 # Code signing configuration
 # For code signing options:
 # 1. Apple Developer Program ($99/year) - macOS official certificates

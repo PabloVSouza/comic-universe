@@ -6,20 +6,39 @@ const { execSync } = require('child_process')
 
 console.log('🔧 Embedding icon into Windows executable...')
 
-// Find the built executable
-const distDir = path.join(__dirname, '..', 'dist')
-const winUnpackedDir = path.join(distDir, 'win-unpacked')
+// Check if this is being called as an afterPack hook or standalone script
+const isAfterPackHook = process.argv.length > 2 && process.argv[2] === '--context'
 
-if (!fs.existsSync(winUnpackedDir)) {
-  console.log('❌ Windows unpacked directory not found. Build the Windows version first.')
-  process.exit(0)
+let executablePath
+let winUnpackedDir
+
+if (isAfterPackHook) {
+  // Called as afterPack hook - get paths from context
+  const context = JSON.parse(process.argv[3])
+  winUnpackedDir = context.appOutDir
+  executablePath = path.join(winUnpackedDir, 'comic-universe.exe')
+  console.log('📁 Using afterPack context:', winUnpackedDir)
+} else {
+  // Called as standalone script - use original logic
+  const distDir = path.join(__dirname, '..', 'dist')
+  winUnpackedDir = path.join(distDir, 'win-unpacked')
+  
+  if (!fs.existsSync(winUnpackedDir)) {
+    console.log('❌ Windows unpacked directory not found. Build the Windows version first.')
+    process.exit(0)
+  }
+  
+  executablePath = path.join(winUnpackedDir, 'comic-universe.exe')
 }
 
-// Find the executable file
-const executablePath = path.join(winUnpackedDir, 'comic-universe.exe')
 if (!fs.existsSync(executablePath)) {
   console.log('❌ Executable file not found at:', executablePath)
-  process.exit(0)
+  if (isAfterPackHook) {
+    console.log('⚠️  Continuing build process - this is not a critical failure')
+    return
+  } else {
+    process.exit(0)
+  }
 }
 
 // Icon file path - try multiple options
@@ -68,7 +87,7 @@ try {
         const parts = command.split('"')
         const rceditPath = parts[1] // The rcedit executable path
         const targetExe = parts[3] // The target executable path
-        
+
         const verifyCommand = `"${rceditPath}" "${targetExe}" --get-version-string "ProductName"`
         console.log('🔍 Verifying metadata...')
         const result = execSync(verifyCommand, { encoding: 'utf8' })
@@ -97,3 +116,8 @@ try {
 }
 
 console.log('✅ Icon embedding process completed')
+
+// If called as afterPack hook, don't exit the process
+if (!isAfterPackHook) {
+  process.exit(0)
+}

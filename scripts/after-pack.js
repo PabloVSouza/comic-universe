@@ -9,7 +9,7 @@ module.exports = async (context) => {
     outDir: context.outDir
   });
   
-  if (context.electronPlatformName === 'win') {
+  if (context.electronPlatformName === 'win32') {
     try {
       const scriptPath = path.join(__dirname, 'embed-executable-icon.js');
       console.log('🔧 Calling icon embedding script:', scriptPath);

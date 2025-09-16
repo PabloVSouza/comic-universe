@@ -2,7 +2,13 @@ import { BrowserWindow } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import path from 'path'
 import fs from 'fs'
-import { CreateDirectory, githubApi, ComicUniverseApi, DownloadFile, DataPaths } from 'electron-utils/utils'
+import {
+  CreateDirectory,
+  githubApi,
+  ComicUniverseApi,
+  DownloadFile,
+  DataPaths
+} from 'electron-utils/utils'
 import { extract } from 'pacote'
 
 class PluginsRepository {
@@ -64,6 +70,9 @@ class PluginsRepository {
     },
 
     activatePlugins: async () => {
+      // Clear existing plugins to ensure fresh activation
+      this.activePlugins = {}
+
       const pluginsList = this.methods.getPluginInfoList()
 
       for (const plugin of pluginsList) {
@@ -73,13 +82,25 @@ class PluginsRepository {
 
         const importPath = platform === 'win32' ? 'file://' + pluginPath : pluginPath
 
-        const newPlugin: IRepoPluginRepositoryConstruct = (await import(importPath)).default.default
+        try {
+          // Clear module cache to ensure fresh import
+          if (require.cache[importPath]) {
+            delete require.cache[importPath]
+          }
 
-        const instantiatedPlugin = new newPlugin()
+          const newPlugin: IRepoPluginRepositoryConstruct = (await import(importPath)).default
+            .default
 
-        this.activePlugins = {
-          ...this.activePlugins,
-          [instantiatedPlugin.RepoTag]: instantiatedPlugin
+          const instantiatedPlugin = new newPlugin()
+
+          this.activePlugins = {
+            ...this.activePlugins,
+            [instantiatedPlugin.RepoTag]: instantiatedPlugin
+          }
+
+          // Plugin activated successfully
+        } catch (error) {
+          console.error(`Failed to activate plugin ${plugin.name}:`, error)
         }
       }
 

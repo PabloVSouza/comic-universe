@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, createRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
+import { confirmAlert } from 'components/Alert'
 import useApi from 'api'
 import wallpaperManager, { WallpaperInfo } from 'renderer-utils/wallpaperManager'
 import Button from 'components/Button'
@@ -73,9 +75,19 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
   }
 
   const handleRemoveWallpaper = (filename: string) => {
-    if (confirm(t('Settings.user.wallpaper.removeConfirm'))) {
-      removeWallpaper(filename)
-    }
+    confirmAlert({
+      title: t('Settings.user.wallpaper.remove'),
+      message: t('Settings.user.wallpaper.removeConfirm'),
+      buttons: [
+        {
+          label: t('General.cancel')
+        },
+        {
+          label: t('General.yes'),
+          action: () => removeWallpaper(filename)
+        }
+      ]
+    })
   }
 
   const [wallpaperUrls, setWallpaperUrls] = useState<Record<string, string>>({})
@@ -122,71 +134,84 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
       </SettingsItem>
 
       {/* Wallpaper grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-64 overflow-y-auto">
+      <div className="max-h-64 overflow-y-auto">
         {isLoading ? (
-          <div className="col-span-full text-center text-text-default opacity-70 py-4">
+          <div className="text-center text-text-default opacity-70 py-4">
             {t('General.checking')}
           </div>
         ) : (
-          wallpapers.map((wallpaper) => (
-            <div
-              key={wallpaper.filename}
-              className={`relative group cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
-                selectedWallpaper === (wallpaper.isDefault ? null : wallpaper.filename)
-                  ? 'border-text-default'
-                  : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
-              }`}
-              onClick={() => handleWallpaperSelect(wallpaper)}
-            >
-              {wallpaperUrls[wallpaper.filename] ? (
-                <img
-                  src={wallpaperUrls[wallpaper.filename]}
-                  alt={wallpaper.filename}
-                  className="w-full aspect-video object-cover"
-                  onError={(e) => {
-                    // Fallback to a placeholder if image fails to load
-                    e.currentTarget.src =
-                      'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjgwIiB2aWV3Qm94PSIwIDAgMTAwIDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iODAiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSI1MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SW1hZ2U8L3RleHQ+PC9zdmc+'
-                  }}
-                />
-              ) : (
-                <div className="w-full aspect-video bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                  <div className="animate-pulse text-gray-400 text-xs">Loading...</div>
-                </div>
-              )}
-
-              {/* Check icon for selected wallpaper */}
-              {selectedWallpaper === (wallpaper.isDefault ? null : wallpaper.filename) && (
-                <div className="absolute top-1 left-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                  <img src={confirmButton} alt="Selected" className="w-3 h-3" />
-                </div>
-              )}
-
-              {/* File name overlay on hover */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="p-2">
-                  <p className="text-white text-xs truncate">
-                    {wallpaper.isDefault
-                      ? t('Settings.user.wallpaper.default')
-                      : wallpaper.filename}
-                  </p>
-                </div>
-              </div>
-
-              {/* Remove button for custom wallpapers */}
-              {!wallpaper.isDefault && (
-                <button
-                  onClick={() => {
-                    handleRemoveWallpaper(wallpaper.filename)
-                  }}
-                  className="absolute top-1 right-1 w-5 h-5 bg-red-500/70 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                  title={t('Settings.user.wallpaper.remove')}
+          <TransitionGroup className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {wallpapers.map((wallpaper) => {
+              const nodeRef = createRef<HTMLDivElement>()
+              return (
+                <CSSTransition
+                  key={wallpaper.filename}
+                  nodeRef={nodeRef}
+                  timeout={300}
+                  classNames="wallpaper-item"
+                  appear={true}
                 >
-                  <img src={cancelButton} alt="Remove" className="w-3 h-3" />
-                </button>
-              )}
-            </div>
-          ))
+                  <div
+                    ref={nodeRef}
+                    className={`relative group cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                      selectedWallpaper === (wallpaper.isDefault ? null : wallpaper.filename)
+                        ? 'border-text-default'
+                        : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+                    }`}
+                    onClick={() => handleWallpaperSelect(wallpaper)}
+                  >
+                    {wallpaperUrls[wallpaper.filename] ? (
+                      <img
+                        src={wallpaperUrls[wallpaper.filename]}
+                        alt={wallpaper.filename}
+                        className="w-full aspect-video object-cover"
+                        onError={(e) => {
+                          // Fallback to a placeholder if image fails to load
+                          e.currentTarget.src =
+                            'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjgwIiB2aWV3Qm94PSIwIDAgMTAwIDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iODAiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSI1MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SW1hZ2U8L3RleHQ+PC9zdmc+'
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full aspect-video bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                        <div className="animate-pulse text-gray-400 text-xs">Loading...</div>
+                      </div>
+                    )}
+
+                    {/* Check icon for selected wallpaper */}
+                    {selectedWallpaper === (wallpaper.isDefault ? null : wallpaper.filename) && (
+                      <div className="absolute top-1 left-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                        <img src={confirmButton} alt="Selected" className="w-3 h-3" />
+                      </div>
+                    )}
+
+                    {/* File name overlay on hover */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="p-2">
+                        <p className="text-white text-xs truncate">
+                          {wallpaper.isDefault
+                            ? t('Settings.user.wallpaper.default')
+                            : wallpaper.filename}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Remove button for custom wallpapers */}
+                    {!wallpaper.isDefault && (
+                      <button
+                        onClick={() => {
+                          handleRemoveWallpaper(wallpaper.filename)
+                        }}
+                        className="absolute top-1 right-1 w-5 h-5 bg-red-500/70 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                        title={t('Settings.user.wallpaper.remove')}
+                      >
+                        <img src={cancelButton} alt="Remove" className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+                </CSSTransition>
+              )
+            })}
+          </TransitionGroup>
         )}
       </div>
     </div>

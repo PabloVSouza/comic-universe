@@ -36,7 +36,7 @@ const UpdatePreferences = () => {
     }
 
     loadPlatform()
-  }, [invoke])
+  }, []) // Remove invoke dependency to prevent infinite loop
 
   const handleCheckForUpdates = () => {
     checkForUpdates.mutate()

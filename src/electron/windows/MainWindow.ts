@@ -184,11 +184,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
   }
 
   const iconPath = isWindows ? getIconPath('icon-256.png') : getIconPath('icon.png')
-  console.log('Icon path:', iconPath)
-  console.log('Platform:', process.platform)
-  console.log('Is dev:', is.dev)
-  console.log('Resources path:', process.resourcesPath)
-  console.log('__dirname:', __dirname)
+  // Application startup information
 
   const windowConfig: Electron.BrowserWindowConstructorOptions = {
     width: 1000,
@@ -234,6 +230,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     const apiManager = new ApiManager(methods)
 
     methods.setApiManager(apiManager)
+    methods.setEventManager(eventManager)
 
     eventManager.resetEvents()
 

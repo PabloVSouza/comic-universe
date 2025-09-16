@@ -58,7 +58,7 @@ const SettingsUpdatePreferences = () => {
     loadUpdateSettings()
     loadCurrentVersion()
     loadPlatform()
-  }, [invoke])
+  }, []) // Remove invoke dependency to prevent infinite loop
 
   // Auto-save functions
   const saveUpdateSettings = async (settings: UpdateSettings) => {

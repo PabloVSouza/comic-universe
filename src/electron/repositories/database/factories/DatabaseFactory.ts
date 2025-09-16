@@ -47,7 +47,7 @@ export class DatabaseFactory implements IDatabaseFactory {
       throw new Error(`Unsupported ORM: ${orm}`)
     }
     this.currentORM = orm
-    console.log(`Switched to ORM: ${orm}`)
+    // ORM switched successfully
   }
 
   getCurrentORM(): SupportedORM {

@@ -11,6 +11,8 @@ import AssetServer from 'electron-utils/AssetServer'
 class Methods {
   public methods: any = {}
   private apiManager: any = null
+  private pluginsRepository: any = null
+  private eventManager: any = null
 
   constructor(
     private path: string,
@@ -19,9 +21,14 @@ class Methods {
   ) {}
 
   starUp = async () => {
-    const pluginsRepository = new PluginsRepository()
-    await pluginsRepository.startUp()
-    const apiRepository = new ApiRepository(pluginsRepository)
+    this.pluginsRepository = new PluginsRepository()
+    await this.pluginsRepository.startUp()
+    await this.refreshMethods()
+  }
+
+  // New method to refresh all methods including plugin methods
+  refreshMethods = async () => {
+    const apiRepository = new ApiRepository(this.pluginsRepository)
     const appRepository = new AppRepository(this.path, this.runningPath, this.win)
     const dbRepository = new DBRepository()
     await dbRepository.startup()
@@ -33,11 +40,28 @@ class Methods {
       ...apiRepository.methods,
       ...appRepository.methods,
       ...dbRepository.methods,
-      ...pluginsRepository.methods,
+      ...this.pluginsRepository.methods,
       ...settingsRepository.methods,
       ...wallpaperRepository.methods,
-      ...assetServer.methods
+      ...assetServer.methods,
+      // Add method to refresh plugin handlers
+      refreshPluginHandlers: async () => {
+        await this.pluginsRepository.methods.installPlugins()
+        await this.pluginsRepository.methods.activatePlugins()
+        await this.refreshMethods()
+
+        // Reset the event manager with new methods
+        if (this.eventManager) {
+          this.eventManager.updateMethods(this.methods)
+        }
+
+        return { success: true, message: 'Plugin handlers refreshed successfully' }
+      }
     }
+  }
+
+  setEventManager = (eventManager: any) => {
+    this.eventManager = eventManager
   }
 
   setApiManager = (apiManager: any) => {

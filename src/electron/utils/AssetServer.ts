@@ -32,7 +32,7 @@ class AssetServer {
       app.use('/wallpapers', express.static(wallpaperPath))
 
       this.server = app.listen(port, () => {
-        console.log(`Asset server running on port ${port}`)
+        // Asset server started successfully
       })
     } catch (error) {
       console.error('Error starting asset server:', error)

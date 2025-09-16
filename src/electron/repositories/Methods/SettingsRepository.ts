@@ -52,7 +52,7 @@ class SettingsRepository {
       enableDebugLogging: false
     },
     webUI: {
-      enableWebUI: false
+      enableWebUI: true
     },
     theme: {
       theme: 'dark'

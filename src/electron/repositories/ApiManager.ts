@@ -88,6 +88,8 @@ class ApiManager {
     const { methods: apiMethods } = this.methodsInstance
     const properties = Object.getOwnPropertyNames(apiMethods)
 
+    // Methods are being exposed for WebUI access
+
     const frontendPath = path.join(__dirname, '..', '..', 'out', 'renderer')
     const pluginsPath = DataPaths.getPluginsPath()
     const wallpaperPath = path.join(DataPaths.getBaseDataPath(), 'wallpapers')

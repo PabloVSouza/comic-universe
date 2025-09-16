@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Button from 'components/Button'
 import SlideUpMenu, { TSlideUpMenuOption } from 'components/SlideUpMenu'
+import settingsIcon from 'assets/settings.svg'
 
 interface ReaderBottomBarProps {
   chapterName?: string
@@ -85,11 +86,9 @@ const ReaderBottomBar = ({
         <Button
           theme="navigation"
           onClick={toggleMenu}
-          className="text-sm"
+          icon={settingsIcon}
           title={t('Reader.readingSettings')}
-        >
-          ⚙️ {t('Reader.settings')}
-        </Button>
+        />
         <Button
           theme="navigation"
           disabled={!hasNextChapter}

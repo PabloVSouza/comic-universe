@@ -11,6 +11,12 @@ out
 .yarn/
 dev-data/
 
+# Build artifacts from CI
+linux-builds/
+macos-builds/
+windows-builds/
+version-files/
+
 # Code signing certificates and keys
 *.p12
 *.pfx

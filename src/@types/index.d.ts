@@ -3,9 +3,16 @@ import { PlatformPath } from 'path'
 import { IDBInteractionsRepository } from 'repositories/Implementations/DBImplementations/IDBInteractionsRepository'
 import { ComicUniverseAPI } from './ApiTypes'
 
+// Extend ElectronAPI to include window control methods
+interface ExtendedElectronAPI extends ElectronAPI {
+  minimizeWindow: () => Promise<void>
+  maximizeWindow: () => Promise<void>
+  closeWindow: () => Promise<void>
+}
+
 declare global {
   interface Window {
-    Electron: ElectronAPI
+    Electron: ExtendedElectronAPI
     api: ComicUniverseAPI
     path: PlatformPath
     app: {

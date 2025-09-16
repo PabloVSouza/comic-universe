@@ -49,7 +49,8 @@ class PluginsRepository {
         const { platform } = process
 
         const pluginPath = path.join(this.pluginsFinalPath, plugin)
-        const devPath = is.dev ? './' + pluginPath : pluginPath
+        // Fix Windows path issue: don't prepend './' to absolute paths
+        const devPath = is.dev && !path.isAbsolute(pluginPath) ? './' + pluginPath : pluginPath
         const finalPath = platform === 'win32' ? 'file://' + devPath : devPath
         const destPath = path.join(
           this.pluginsFinalPath,

@@ -11,12 +11,20 @@ const FixFilePaths = (path: string) => {
     const cleanPath = path.replace(/^file:\/\//, '')
 
     // Extract the relative path from the plugins directory
-    // e.g., /Volumes/projects/.../dev-data/plugins/comic-universe-plugin-hqnow/icon.svg
+    // Handle both Windows (\plugins\) and Unix (/plugins/) path separators
+    // e.g., C:\Users\...\dev-data\plugins\comic-universe-plugin-hqnow\icon.svg
+    // or /Volumes/projects/.../dev-data/plugins/comic-universe-plugin-hqnow/icon.svg
     // becomes: comic-universe-plugin-hqnow/icon.svg
-    const pluginsIndex = cleanPath.indexOf('/plugins/')
-    if (pluginsIndex !== -1) {
-      const relativePath = cleanPath.substring(pluginsIndex + '/plugins/'.length)
+    const pluginsIndexUnix = cleanPath.indexOf('/plugins/')
+    const pluginsIndexWindows = cleanPath.indexOf('\\plugins\\')
+    
+    if (pluginsIndexUnix !== -1) {
+      const relativePath = cleanPath.substring(pluginsIndexUnix + '/plugins/'.length)
       return `/api/plugins/${relativePath}`
+    } else if (pluginsIndexWindows !== -1) {
+      const relativePath = cleanPath.substring(pluginsIndexWindows + '\\plugins\\'.length)
+      // Convert Windows path separators to forward slashes for URL
+      return `/api/plugins/${relativePath.replace(/\\/g, '/')}`
     }
 
     // Fallback: try to serve the file directly

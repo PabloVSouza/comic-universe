@@ -70,7 +70,33 @@ export default defineConfig({
     build: {
       assetsInlineLimit: 0
     },
-    plugins: [react(), svgr()],
+    plugins: [
+      react(), 
+      svgr(),
+      {
+        name: 'copy-icons',
+        writeBundle() {
+          // Copy icon files to build output for favicon
+          const iconFiles = [
+            'src/renderer/assets/icon.svg',
+            'build/icon-256.png'
+          ]
+          
+          const targetDir = resolve('out/renderer')
+          
+          for (const iconFile of iconFiles) {
+            if (existsSync(iconFile)) {
+              const fileName = iconFile.split('/').pop()
+              if (fileName) {
+                const targetPath = resolve(targetDir, fileName)
+                copyFileSync(iconFile, targetPath)
+                console.log(`✅ Copied ${fileName} to build output`)
+              }
+            }
+          }
+        }
+      }
+    ],
     resolve: {
       alias: {
         '@': resolve('src/renderer/'),

@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.pablovsouza.comic-universe
 productName: Comic Universe
 directories:
   buildResources: build
@@ -10,6 +10,21 @@ directories:
 
 # Disable auto-publishing in CI
 publish: null
+
+# Disable code signing globally
+forceCodeSigning: false
+
+# Disable problematic dependency collection
+disableDefaultIgnoredFiles: true
+
+# Disable native module rebuilding to prevent CI issues
+# better-sqlite3 will be rebuilt in afterExtract hook
+npmRebuild: false
+nodeGypRebuild: false
+buildDependenciesFromSource: false
+
+# Generate certificate automatically if it doesn't exist
+afterExtract: scripts/after-extract.js
 
 # Code signing configuration
 # For code signing options:
@@ -38,11 +53,12 @@ files:
   - '!node_modules/vite/**'
   - '!node_modules/electron-vite/**'
   - '!node_modules/electron-builder/**'
-  - '!node_modules/electron-icon-builder/**'
   - '!node_modules/sass-embedded/**'
   - '!node_modules/tailwindcss/**'
   - '!node_modules/autoprefixer/**'
   - '!node_modules/postcss/**'
+  - '!node_modules/@emnapi/**'
+  - '!node_modules/@tailwindcss/**'
   - '!node_modules/vite-plugin-svgr/**'
   - '!node_modules/@vitejs/**'
   - '!node_modules/@typescript-eslint/**'
@@ -81,21 +97,49 @@ asarUnpack:
   - 'node_modules/better-sqlite3/build/Release/better_sqlite3.node'
   - 'resources/*'
   - 'out/database/migrations/**/*'
+  - 'build/icon-256.png'
 win:
   executableName: comic-universe
-  # Code signing configuration for Windows
-  # cscLink: "certificates/windows-cert.p12"  # Local development
-  # cscKeyPassword: "comicuniverse"           # Local development
-
-  # Time stamping server
-  signAndEditExecutable: false
+  icon: build/icons/icon.ico
+  # Force icon embedding with multiple approaches
+  extraResources:
+    - from: build/icon-256.png
+      to: icon.png
+    - from: build/icon-256.png
+      to: icon-256.png
+  # Also try copying to root
+  extraFiles:
+    - from: build/icon-256.png
+      to: icon.png
+    - from: build/icons/icon.ico
+      to: icon.ico
+  # Additional Windows icon settings
+  requestedExecutionLevel: asInvoker
+  # Enable executable editing with self-signed certificate
+  signAndEditExecutable: true
+  # Use self-signed certificate for code signing
+  cscLink: certificates/windows-cert.p12
+  cscKeyPassword: comicuniverse
+  # Force Windows to only build x64 (disable ARM builds)
+  target:
+    - target: nsis
+      arch:
+        - x64
+  # Code signing enabled with self-signed certificate
+  forceCodeSigning: false
 nsis:
   artifactName: ${name}-${version}-win-${arch}.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+  # Disable NSIS code signing
+  oneClick: false
+  perMachine: false
+  # Exclude uninstaller from code signing
+  uninstallerIcon: null
 mac:
   artifactName: ${name}-${version}-mac-${arch}.${ext}
+  icon: build/icon.icns
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
@@ -103,19 +147,18 @@ mac:
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
 
-  # Code signing configuration for macOS
-  identity: 'Comic Universe'
-  # Certificate file for self-signed certificate (uses environment variables in CI/CD)
-  # cscLink: "certificates/macos-cert.p12"  # Local development
-  # cscKeyPassword: "comicuniverse"         # Local development
+  # Code signing disabled for macOS
+  identity: null
+  # Disable code signing completely
+  forceCodeSigning: false
 
-  # Notarization (requires Apple Developer Program)
-  notarize: false # Set to true when you have Apple Developer Program access
+  # Notarization disabled (requires Apple Developer Program)
+  notarize: false
 
-  # Hardened runtime (required for notarization)
+  # Hardened runtime disabled (required for notarization)
   hardenedRuntime: false
 
-  # Gatekeeper assessment (required for notarization)
+  # Gatekeeper assessment disabled (required for notarization)
   gatekeeperAssess: false
 dmg:
   artifactName: ${name}-${version}-mac-${arch}.${ext}
@@ -129,16 +172,13 @@ linux:
   target:
     - AppImage
     - deb
+  icon: resources/icon.png
   maintainer: electronjs.org
   category: Utility
 appImage:
   artifactName: ${name}-${version}-linux-${arch}.${ext}
-npmRebuild: true
 # Optimize build size and speed
 compression: normal
 removePackageScripts: true
 removePackageKeywords: true
 generateUpdatesFilesForAllChannels: true
-buildDependenciesFromSource: false
-# Skip problematic dependencies
-nodeGypRebuild: false

@@ -33,6 +33,7 @@
     "closeApp": "Close App"
   },
   "SearchComic": {
+    "windowTitle": "Search Comics",
     "textPlaceholder": "Type your Search",
     "bookmarkComic": "Bookmark",
     "alreadyBookmarked": "Bookmarked",

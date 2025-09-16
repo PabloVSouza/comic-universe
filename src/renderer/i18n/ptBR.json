@@ -33,6 +33,7 @@
     "closeApp": "Fechar App"
   },
   "SearchComic": {
+    "windowTitle": "Buscar Quadrinhos",
     "textPlaceholder": "Digite sua Busca",
     "bookmarkComic": "Favoritar",
     "alreadyBookmarked": "Favoritado",

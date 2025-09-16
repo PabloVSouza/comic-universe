@@ -10,7 +10,6 @@ const UserDataManagement = () => {
   const { invoke } = useApi()
   const { currentUser } = usePersistSessionStore()
 
-
   const { data: readProgress, isLoading: progressLoading } = useQuery({
     queryKey: ['userReadProgress', currentUser.id],
     queryFn: async () => {
@@ -22,7 +21,6 @@ const UserDataManagement = () => {
     enabled: !!currentUser.id,
     initialData: []
   })
-
 
   const { mutate: exportUserData } = useMutation({
     mutationFn: async () => {
@@ -45,7 +43,6 @@ const UserDataManagement = () => {
       }
     }
   })
-
 
   return (
     <div className="flex flex-col gap-6">

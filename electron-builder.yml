@@ -17,10 +17,10 @@ forceCodeSigning: false
 # Disable problematic dependency collection
 disableDefaultIgnoredFiles: true
 
-# Enable native module rebuilding for production builds
-# This ensures better-sqlite3 is compiled for the correct Electron version
-npmRebuild: true
-nodeGypRebuild: true
+# Disable native module rebuilding to prevent CI issues
+# Native modules should be pre-built or rebuilt manually when needed
+npmRebuild: false
+nodeGypRebuild: false
 buildDependenciesFromSource: false
 
 # Generate certificate automatically if it doesn't exist

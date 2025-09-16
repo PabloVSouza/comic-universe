@@ -34,15 +34,6 @@ if (fs.existsSync(certPath)) {
 console.log('🔧 Generating Windows certificate...')
 
 try {
-  // Check if we're in a CI environment where code signing is disabled
-  if (process.env.CSC_FOR_PULL_REQUEST === 'false' || process.env.CI) {
-    console.log('🔧 Code signing disabled in CI environment, skipping certificate generation')
-    console.log('⚠️  Setting empty certificate paths to disable code signing')
-    process.env.WIN_CSC_LINK = ''
-    process.env.CSC_LINK = ''
-    return
-  }
-
   // Use OpenSSL for all platforms - it's more reliable in CI environments
   console.log('🔧 Generating certificate with OpenSSL...')
   console.log('🔧 Target path:', certPath)

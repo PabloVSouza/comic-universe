@@ -1,4 +1,5 @@
 import express, { Router } from 'express'
+import { Server } from 'http'
 import path from 'path'
 
 import cors from 'cors'
@@ -9,7 +10,7 @@ import { DataPaths } from 'electron-utils/utils'
 
 class ApiManager {
   private settingsRepository: SettingsRepository
-  private server: any = null
+  private server: Server | null = null
   private methodsInstance: Methods
   private currentPort: number | null = null
 

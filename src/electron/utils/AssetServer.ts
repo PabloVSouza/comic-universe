@@ -1,10 +1,11 @@
 import express from 'express'
+import { Server } from 'http'
 import path from 'path'
 import { DataPaths } from 'electron-utils/utils'
 import { getPortToUse } from 'electron-utils/portManager'
 
 class AssetServer {
-  private server: any = null
+  private server: Server | null = null
   private currentPort: number | null = null
 
   constructor() {

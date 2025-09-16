@@ -82,8 +82,6 @@
       "pagesReadDescription": "Número total de páginas lidas em todos os capítulos",
       "exportData": "Exportar Dados",
       "exportDataDescription": "Exportar seus dados de leitura e configurações",
-      "deleteUser": "Excluir Usuário",
-      "deleteUserDescription": "Excluir permanentemente este usuário e todos os dados associados",
       "readingDirection": "Direção de Leitura",
       "readingDirectionDescription": "Escolha a direção de leitura para os quadrinhos",
       "ltr": "Esquerda para Direita",
@@ -168,13 +166,7 @@
     "header": "Selecione o seu Usuário",
     "createButton": "Criar Usuário",
     "cancelButton": "Cancelar",
-    "namePlaceholder": "Nome do Usuário",
-    "deleteUser": {
-      "deleteUserTitle": "Apagar este usuário?",
-      "deleteUserMessage": "Todo o progresso de leitura será perdido!",
-      "confirmDeleteButton": "Sim",
-      "cancelDeleteButton": "Não"
-    }
+    "namePlaceholder": "Nome do Usuário"
   },
   "Reader": {
     "chapter": "Capítulo",

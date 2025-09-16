@@ -82,8 +82,6 @@
       "pagesReadDescription": "Total number of pages read across all chapters",
       "exportData": "Export Data",
       "exportDataDescription": "Export your reading data and settings",
-      "deleteUser": "Delete User",
-      "deleteUserDescription": "Permanently delete this user and all associated data",
       "readingDirection": "Reading Direction",
       "readingDirectionDescription": "Choose the reading direction for comics",
       "ltr": "Left to Right",
@@ -168,13 +166,7 @@
     "header": "Select Your User",
     "createButton": "Create new User",
     "cancelButton": "Cancel",
-    "namePlaceholder": "User Name",
-    "deleteUser": {
-      "deleteUserTitle": "Delete this User?",
-      "deleteUserMessage": "All the read progress will be lost!",
-      "confirmDeleteButton": "Yes",
-      "cancelDeleteButton": "No"
-    }
+    "namePlaceholder": "User Name"
   },
   "Reader": {
     "chapter": "Chapter",

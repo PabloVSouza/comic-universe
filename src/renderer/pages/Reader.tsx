@@ -254,7 +254,8 @@ const Reader = (): React.JSX.Element => {
     activeComic.chapters,
     navigate,
     comicId,
-    chapters?.length
+    chapters?.length,
+    pages.length
   ])
 
   const previousPage = useCallback(async (): Promise<void> => {
@@ -286,7 +287,8 @@ const Reader = (): React.JSX.Element => {
     chapterIndex,
     activeComic.chapters,
     navigate,
-    comicId
+    comicId,
+    pages.length
   ])
 
   const handleKeys = useCallback(

@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import useApi from 'api'
 import usePersistSessionStore from 'store/usePersistSessionStore'
@@ -8,14 +8,7 @@ import SettingsItem from '../SettingsItem'
 const UserDataManagement = () => {
   const { t } = useTranslation()
   const { invoke } = useApi()
-  const queryClient = useQueryClient()
-  const { currentUser, setCurrentUser } = usePersistSessionStore()
-
-  const { data: users } = useQuery({
-    queryKey: ['userData'],
-    queryFn: async () => await invoke('dbGetAllUsers'),
-    initialData: []
-  })
+  const { currentUser } = usePersistSessionStore()
 
   const { data: readProgress, isLoading: progressLoading } = useQuery({
     queryKey: ['userReadProgress', currentUser.id],
@@ -27,20 +20,6 @@ const UserDataManagement = () => {
     },
     enabled: !!currentUser.id,
     initialData: []
-  })
-
-  const { mutate: deleteUser } = useMutation({
-    mutationFn: async (userId: number) => await invoke('dbDeleteUser', { userId }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['userData'] })
-      // If we deleted the current user, set to default user or first available
-      if (currentUser.id === users.find((u) => u.id === currentUser.id)?.id) {
-        const remainingUsers = users.filter((u) => u.id !== currentUser.id)
-        if (remainingUsers.length > 0) {
-          setCurrentUser(remainingUsers[0])
-        }
-      }
-    }
   })
 
   const { mutate: exportUserData } = useMutation({
@@ -65,12 +44,6 @@ const UserDataManagement = () => {
     }
   })
 
-  const handleDeleteUser = () => {
-    if (currentUser.id && window.confirm(t('Settings.user.deleteUser.confirm'))) {
-      deleteUser(currentUser.id)
-    }
-  }
-
   return (
     <div className="flex flex-col gap-6">
       <SettingsItem
@@ -85,22 +58,6 @@ const UserDataManagement = () => {
           disabled={!currentUser.id || progressLoading}
         >
           {t('Settings.user.exportData')}
-        </Button>
-      </SettingsItem>
-
-      <SettingsItem
-        labelI18nKey="Settings.user.deleteUser"
-        descriptionI18nKey="Settings.user.deleteUserDescription"
-      >
-        <Button
-          onClick={handleDeleteUser}
-          theme="default"
-          color="red"
-          size="m"
-          className="min-w-[140px]"
-          disabled={!currentUser.id || currentUser.default}
-        >
-          {t('Settings.user.deleteUser')}
         </Button>
       </SettingsItem>
     </div>

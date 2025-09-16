@@ -1,4 +1,5 @@
 import net from 'net'
+import SettingsRepository from '../repositories/Methods/SettingsRepository'
 
 /**
  * Check if a port is available
@@ -44,7 +45,7 @@ export const findAvailablePort = async (
 /**
  * Get the preferred port from settings or use default
  */
-export const getPreferredPort = async (settingsRepository: any): Promise<number> => {
+export const getPreferredPort = async (settingsRepository: SettingsRepository): Promise<number> => {
   try {
     const webUISettings = await settingsRepository.methods.getWebUISettings()
     // If auto port is enabled, always use default port
@@ -61,7 +62,7 @@ export const getPreferredPort = async (settingsRepository: any): Promise<number>
  * Get the actual port to use (preferred port if available, or next available)
  */
 export const getPortToUse = async (
-  settingsRepository: any,
+  settingsRepository: SettingsRepository | null,
   defaultStartPort: number = 8080
 ): Promise<number> => {
   let preferredPort: number

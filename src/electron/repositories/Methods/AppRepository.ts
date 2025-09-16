@@ -134,9 +134,13 @@ class AppRepository {
       return await this.settingsRepository.methods.getWebUISettings()
     },
 
-    updateWebUISettings: async (args: { webUISettings: Partial<WebUISettings> | { webUISettings: Partial<WebUISettings> } }) => {
+    updateWebUISettings: async (args: {
+      webUISettings: Partial<WebUISettings> | { webUISettings: Partial<WebUISettings> }
+    }) => {
       // Extract the actual settings from the nested structure
-      const settings = (args.webUISettings as { webUISettings: Partial<WebUISettings> })?.webUISettings || args.webUISettings as Partial<WebUISettings>
+      const settings =
+        (args.webUISettings as { webUISettings: Partial<WebUISettings> })?.webUISettings ||
+        (args.webUISettings as Partial<WebUISettings>)
       return await this.settingsRepository.methods.updateWebUISettings(settings)
     },
 

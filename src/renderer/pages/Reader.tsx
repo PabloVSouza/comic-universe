@@ -143,7 +143,9 @@ const Reader = (): React.JSX.Element => {
   const { mutate: updateReadingMode } = useMutation({
     mutationFn: async (readingMode: 'horizontal' | 'vertical') => {
       if (!activeComic.id) return
-      await invoke('dbUpdateComic', { id: activeComic.id, comic: { readingMode } })
+      const currentSettings = activeComic.settings || {}
+      const newSettings = { ...currentSettings, readingMode }
+      await invoke('dbUpdateComic', { id: activeComic.id, comic: { settings: newSettings } })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comicData'] })
@@ -159,19 +161,21 @@ const Reader = (): React.JSX.Element => {
   // Initialize reading mode from comic data or default
   useEffect(() => {
     if (currentReadingMode === null && activeComic.id) {
-      if (activeComic.readingMode) {
-        setCurrentReadingMode(activeComic.readingMode as 'horizontal' | 'vertical')
+      const savedReadingMode = activeComic.settings?.readingMode
+      if (savedReadingMode) {
+        setCurrentReadingMode(savedReadingMode as 'horizontal' | 'vertical')
       } else {
         setCurrentReadingMode(defaultReadingMode)
         if (activeComic.id) {
-          setActiveComic({ ...activeComic, readingMode: defaultReadingMode })
+          const newSettings = { ...activeComic.settings, readingMode: defaultReadingMode as 'horizontal' | 'vertical' }
+          setActiveComic({ ...activeComic, settings: newSettings })
           updateReadingMode(defaultReadingMode)
         }
       }
     }
   }, [
     defaultReadingMode,
-    activeComic.readingMode,
+    activeComic.settings?.readingMode,
     activeComic.id,
     currentReadingMode,
     activeComic,
@@ -308,7 +312,8 @@ const Reader = (): React.JSX.Element => {
     const newMode = currentMode === 'horizontal' ? 'vertical' : 'horizontal'
     setCurrentReadingMode(newMode)
     if (activeComic.id) {
-      setActiveComic({ ...activeComic, readingMode: newMode })
+      const newSettings = { ...activeComic.settings, readingMode: newMode as 'horizontal' | 'vertical' }
+      setActiveComic({ ...activeComic, settings: newSettings })
       updateReadingMode(newMode)
       setShouldScrollToPage(true)
     }

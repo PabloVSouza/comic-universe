@@ -118,7 +118,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     const results = await db.select().from(comics).orderBy(asc(comics.name))
     return results.map((result) => ({
       ...result,
-      readingMode: (result as any).readingMode as 'horizontal' | 'vertical' | undefined
+      settings: result.settings || {}
     })) as IComic[]
   }
 
@@ -128,7 +128,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     return result[0]
       ? ({
           ...result[0],
-          readingMode: result[0].readingMode as 'horizontal' | 'vertical' | undefined
+          settings: result[0].settings || {}
         } as IComic)
       : undefined
   }
@@ -139,7 +139,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     return result[0]
       ? ({
           ...result[0],
-          readingMode: result[0].readingMode as 'horizontal' | 'vertical' | undefined
+          settings: result[0].settings || {}
         } as IComic)
       : undefined
   }
@@ -225,7 +225,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     return result[0]
       ? ({
           ...result[0],
-          readingMode: result[0].readingMode as 'horizontal' | 'vertical' | undefined
+          settings: result[0].settings || {}
         } as IComic)
       : undefined
   }

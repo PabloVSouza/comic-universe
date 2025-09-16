@@ -1,3 +1,8 @@
+interface IComicSettings {
+  readingMode?: 'horizontal' | 'vertical'
+  [key: string]: any
+}
+
 interface IComic {
   id?: number
   siteId: string
@@ -13,6 +18,6 @@ interface IComic {
   synopsis: string
   year?: string | null
   type: 'hq' | 'manga' | 'manhwa' | 'manhua'
-  readingMode?: 'horizontal' | 'vertical'
+  settings?: IComicSettings
   chapters?: IChapter[]
 }

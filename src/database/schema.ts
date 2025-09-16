@@ -35,7 +35,7 @@ export const comics = sqliteTable('Comic', {
   year: text('year'),
   synopsis: text('synopsis').notNull(),
   type: text('type').notNull(),
-  readingMode: text('readingMode').default('horizontal')
+  settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({})
 })
 
 // Chapter table

@@ -181,5 +181,3 @@ compression: normal
 removePackageScripts: true
 removePackageKeywords: true
 generateUpdatesFilesForAllChannels: true
-# Skip problematic dependencies
-nodeGypRebuild: false

@@ -59,10 +59,14 @@ const Reader = (): React.JSX.Element => {
 
       const pageHeight = containerHeight
       const currentPageIndex = Math.round(scrollTop / pageHeight) + 1
-      const clampedPage = Math.max(1, Math.min(currentPageIndex, pages.length))
+      const clampedPage = Math.max(1, Math.min(currentPageIndex, pages.length || 1))
 
-      if (readProgress && readProgress.page !== clampedPage) {
-        const newReadProgress = { ...readProgress, page: clampedPage } as IReadProgress
+      if (readProgress && readProgress.page !== clampedPage && !isNaN(clampedPage) && clampedPage > 0) {
+        const newReadProgress = { 
+          ...readProgress, 
+          page: clampedPage,
+          totalPages: readProgress.totalPages || pages.length || 1
+        } as IReadProgress
         updateReadProgress(newReadProgress)
       }
     }
@@ -201,17 +205,25 @@ const Reader = (): React.JSX.Element => {
 
   useEffect(() => {
     if (readProgress && readProgress.page === 0) {
-      const newReadProgress = { ...readProgress, page: 1 } as IReadProgress
+      const newReadProgress = { 
+        ...readProgress, 
+        page: 1,
+        totalPages: readProgress.totalPages || pages.length || 1
+      } as IReadProgress
       updateReadProgress(newReadProgress)
     }
-  }, [readProgress, updateReadProgress])
+  }, [readProgress, updateReadProgress, pages.length])
 
   const nextPage = useCallback(async (): Promise<void> => {
     if (readProgress) {
       const { page, totalPages } = readProgress
 
-      if (page < totalPages) {
-        const newReadProgress = { ...readProgress, page: page + 1 } as IReadProgress
+      if (page < totalPages && page > 0 && totalPages > 0) {
+        const newReadProgress = { 
+          ...readProgress, 
+          page: page + 1,
+          totalPages: totalPages || pages.length || 1
+        } as IReadProgress
         updateReadProgress(newReadProgress)
         if (readingMode === 'vertical') {
           setShouldScrollToPage(true)
@@ -238,9 +250,13 @@ const Reader = (): React.JSX.Element => {
 
   const previousPage = useCallback(async (): Promise<void> => {
     if (readProgress) {
-      const { page } = readProgress
-      if (page > 1) {
-        const newReadProgress = { ...readProgress, page: page - 1 } as IReadProgress
+      const { page, totalPages } = readProgress
+      if (page > 1 && totalPages > 0) {
+        const newReadProgress = { 
+          ...readProgress, 
+          page: page - 1,
+          totalPages: totalPages || pages.length || 1
+        } as IReadProgress
         updateReadProgress(newReadProgress)
         if (readingMode === 'vertical') {
           setShouldScrollToPage(true)

@@ -166,7 +166,7 @@
     "header": "Selecione o seu Usuário",
     "createButton": "Criar Usuário",
     "cancelButton": "Cancelar",
-    "namePlaceholder": "Nome do Usuário",
+    "namePlaceholder": "Nome do Usuário"
   },
   "Reader": {
     "chapter": "Capítulo",

@@ -166,7 +166,7 @@
     "header": "Select Your User",
     "createButton": "Create new User",
     "cancelButton": "Cancel",
-    "namePlaceholder": "User Name",
+    "namePlaceholder": "User Name"
   },
   "Reader": {
     "chapter": "Chapter",

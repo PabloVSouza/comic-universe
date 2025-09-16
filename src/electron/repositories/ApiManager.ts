@@ -87,6 +87,10 @@ class ApiManager {
     const routes = Router()
     const { methods: apiMethods } = this.methodsInstance
     const properties = Object.getOwnPropertyNames(apiMethods)
+    
+    // Debug: Log which methods are being exposed
+    console.log('🔍 All API methods:', properties.sort())
+    console.log('🔍 Plugin-related methods:', properties.filter(p => p.toLowerCase().includes('plugin')).sort())
 
     const frontendPath = path.join(__dirname, '..', '..', 'out', 'renderer')
     const pluginsPath = DataPaths.getPluginsPath()

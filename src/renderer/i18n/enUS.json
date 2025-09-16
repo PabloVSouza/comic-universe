@@ -59,7 +59,8 @@
         "label": "Install Plugin",
         "description": "Download and install plugins from the repository",
         "selectPlaceholder": "Select a plugin to install",
-        "buttonTitle": "Download and Install Plugin"
+        "buttonTitle": "Download and Install Plugin",
+        "notAvailableInWebUI": "Plugin installation is not available in Web UI mode. Plugins must be installed directly on the server running the application."
       },
       "installed": {
         "title": "Installed Plugins",

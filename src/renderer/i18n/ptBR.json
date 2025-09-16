@@ -59,7 +59,8 @@
         "label": "Instalar Plugin",
         "description": "Baixar e instalar plugins do repositório",
         "selectPlaceholder": "Selecione um plugin para instalar",
-        "buttonTitle": "Baixar e Instalar Plugin"
+        "buttonTitle": "Baixar e Instalar Plugin",
+        "notAvailableInWebUI": "Instalação de plugins não está disponível no modo Web UI"
       },
       "installed": {
         "title": "Plugins Instalados",

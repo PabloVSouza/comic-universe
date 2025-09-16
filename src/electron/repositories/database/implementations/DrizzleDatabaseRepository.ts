@@ -1,6 +1,6 @@
 import { eq, and, isNull, asc } from 'drizzle-orm'
 import { IDatabaseRepository } from '../interfaces/IDatabaseRepository'
-import { comics, chapters, users, readProgress, plugins } from 'database/schema'
+import { comics, chapters, users, readProgress, plugins, type NewChapter } from 'database/schema'
 import Database from 'better-sqlite3'
 import { drizzle, type BetterSQLite3Database } from 'drizzle-orm/better-sqlite3'
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
@@ -312,7 +312,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
     const result = await db
       .insert(chapters)
-      .values(chapterData as any)
+      .values(chapterData as NewChapter)
       .returning()
     return result[0] as IChapter
   }
@@ -327,7 +327,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
         throw new Error('comicId is required for chapter creation')
       }
 
-      await db.insert(chapters).values(chapterData as any)
+      await db.insert(chapters).values(chapterData as NewChapter)
     }
   }
 

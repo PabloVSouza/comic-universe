@@ -1,4 +1,4 @@
-import { BrowserWindow, app, shell, dialog } from 'electron'
+import { BrowserWindow, app, shell, dialog, OpenDialogOptions } from 'electron'
 import pathLib from 'path'
 import fs from 'fs'
 import { is } from '@electron-toolkit/utils'
@@ -134,12 +134,10 @@ class AppRepository {
       return await this.settingsRepository.methods.getWebUISettings()
     },
 
-    updateWebUISettings: async (args: { webUISettings: unknown }) => {
+    updateWebUISettings: async (args: { webUISettings: Partial<WebUISettings> | { webUISettings: Partial<WebUISettings> } }) => {
       // Extract the actual settings from the nested structure
-      const settings = (args.webUISettings as any)?.webUISettings || args.webUISettings
-      return await this.settingsRepository.methods.updateWebUISettings(
-        settings as Partial<WebUISettings>
-      )
+      const settings = (args.webUISettings as { webUISettings: Partial<WebUISettings> })?.webUISettings || args.webUISettings as Partial<WebUISettings>
+      return await this.settingsRepository.methods.updateWebUISettings(settings)
     },
 
     restartApiServer: async () => {
@@ -158,7 +156,7 @@ class AppRepository {
       shell.openExternal(args.url)
     },
 
-    showOpenDialog: async (options: any) => {
+    showOpenDialog: async (options: OpenDialogOptions) => {
       const result = await dialog.showOpenDialog(this.win, options)
       return result
     }

@@ -6,6 +6,7 @@ import Image from 'components/Image'
 import { useTranslation } from 'react-i18next'
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
+import useEnvironment from 'hooks/useEnvironment'
 
 import infoIcon from 'assets/info.svg'
 import settingsIcon from 'assets/settings.svg'
@@ -15,6 +16,7 @@ import exitIcon from 'assets/exit-door.svg'
 const HomeNav = (): React.JSX.Element => {
   const { invoke } = useApi()
   const { menuVisible, toggleMenu } = useGlobalStore()
+  const { isWebUI } = useEnvironment()
 
   const { currentUser, setCurrentUser } = usePersistSessionStore()
 
@@ -53,7 +55,11 @@ const HomeNav = (): React.JSX.Element => {
     }
   ]
 
-  const finalMenuOptions = activeUser ? [...options, ...closeOption] : closeOption
+  const finalMenuOptions = activeUser
+    ? [...options, ...(isWebUI ? [] : closeOption)]
+    : isWebUI
+      ? []
+      : closeOption
 
   const handleClick = (onClick: () => void): void => {
     toggleMenu()

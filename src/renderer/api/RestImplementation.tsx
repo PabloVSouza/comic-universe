@@ -6,7 +6,7 @@ const getCurrentPort = (): number => {
   if (isWebUI() && typeof window !== 'undefined' && window.location.port) {
     return parseInt(window.location.port, 10)
   }
-  return 8888 // fallback to default port
+  return 8080 // fallback to default WebUI port
 }
 
 const api = axios.create({

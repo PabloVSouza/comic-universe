@@ -54,7 +54,7 @@ const SettingsWebUIPreferences = () => {
     }
 
     loadWebUIStatus()
-  }, [currentWebUI, invoke, webUI.port])
+  }, [currentWebUI, webUI.port]) // Remove invoke dependency to prevent infinite loop
 
   const handleWebUIToggle = async () => {
     const newValue = !currentWebUI

@@ -7,12 +7,12 @@ let repository: IDatabaseRepository | null = null
 
 export async function initializeDatabase(dbPath: string): Promise<IDatabaseRepository> {
   if (repository) {
-    console.log('Database already initialized')
+    // Database already initialized
     return repository
   }
 
   try {
-    console.log(`Initializing ORM-agnostic database at: ${dbPath}`)
+    // Initializing ORM-agnostic database
 
     const config: IDatabaseConfig = {
       dbPath,
@@ -24,10 +24,10 @@ export async function initializeDatabase(dbPath: string): Promise<IDatabaseRepos
     // Create and initialize repository using factory
     repository = await databaseFactory.createAndInitializeRepository(config)
 
-    console.log('✅ ORM-agnostic database initialized successfully')
+    // ORM-agnostic database initialized successfully
     return repository
   } catch (error) {
-    console.error('❌ Failed to initialize database:', error)
+    console.error('Failed to initialize database:', error)
     throw error
   }
 }
@@ -43,7 +43,7 @@ export function closeDatabase(): void {
   if (repository) {
     repository.close()
     repository = null
-    console.log('Database connection closed')
+    // Database connection closed
   }
 }
 

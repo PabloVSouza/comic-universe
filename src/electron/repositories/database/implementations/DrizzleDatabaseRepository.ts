@@ -13,12 +13,12 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async initialize(dbPath: string): Promise<void> {
     if (this.db) {
-      console.log('Database already initialized')
+      // Database already initialized
       return
     }
 
     try {
-      console.log(`Initializing Drizzle database at: ${dbPath}`)
+      // Initializing Drizzle database
 
       // Create database connection
       this.sqlite = new Database(dbPath)
@@ -34,9 +34,9 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       // Run migrations
       await this.runDrizzleMigrations()
 
-      console.log('✅ Drizzle database initialized successfully')
+      // Drizzle database initialized successfully
     } catch (error) {
-      console.error('❌ Failed to initialize Drizzle database:', error)
+      console.error('Failed to initialize Drizzle database:', error)
       throw error
     }
   }
@@ -46,7 +46,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       this.sqlite.close()
       this.sqlite = null
       this.db = null
-      console.log('Drizzle database connection closed')
+      // Database connection closed
     }
   }
 
@@ -62,7 +62,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   }
 
   async runDrizzleMigrations(): Promise<void> {
-    console.log('Starting Drizzle automatic migrations...')
+    // Starting Drizzle automatic migrations
 
     const db = this.getDb()
 
@@ -92,12 +92,12 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
         migrationsPath = path.join(process.cwd(), 'src', 'database', 'migrations')
       }
 
-      console.log('Migrations path:', migrationsPath)
+      // Running migrations from path: migrationsPath
       await migrate(db, { migrationsFolder: migrationsPath })
 
-      console.log('✅ Drizzle migrations completed successfully')
+      // Drizzle migrations completed successfully
     } catch (error) {
-      console.error('❌ Drizzle migrations failed:', error)
+      console.error('Drizzle migrations failed:', error)
       throw error
     }
   }

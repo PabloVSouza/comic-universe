@@ -98,7 +98,7 @@ class PluginsRepository {
             [instantiatedPlugin.RepoTag]: instantiatedPlugin
           }
 
-          console.log(`Successfully activated plugin: ${instantiatedPlugin.RepoTag}`)
+          // Plugin activated successfully
         } catch (error) {
           console.error(`Failed to activate plugin ${plugin.name}:`, error)
         }

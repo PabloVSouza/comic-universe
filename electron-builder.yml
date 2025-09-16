@@ -17,11 +17,13 @@ forceCodeSigning: false
 # Disable problematic dependency collection
 disableDefaultIgnoredFiles: true
 
-# Disable native module rebuilding to prevent CI issues
-# Native modules should be pre-built or rebuilt manually when needed
+# Selective native module rebuilding - only rebuild better-sqlite3
+# This ensures better-sqlite3 is compiled for the correct Electron version
 npmRebuild: false
 nodeGypRebuild: false
 buildDependenciesFromSource: false
+# Force rebuild of better-sqlite3 for correct Electron version
+beforeBuild: scripts/rebuild-sqlite.js
 
 # Generate certificate automatically if it doesn't exist
 afterExtract: scripts/after-extract.js

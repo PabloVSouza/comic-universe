@@ -46,6 +46,9 @@ module.exports = async function(context) {
         cwd: process.cwd()
       })
       console.log('✅ [BEFORE BUILD] better-sqlite3 rebuilt successfully with npm rebuild')
+      
+      // Clean up electron-gyp logs to prevent build issues
+      cleanupElectronGypLogs()
     } catch (npmError) {
       console.log('⚠️  npm rebuild failed, trying electron-rebuild...')
       
@@ -57,6 +60,9 @@ module.exports = async function(context) {
           cwd: process.cwd()
         })
         console.log('✅ [BEFORE BUILD] better-sqlite3 rebuilt successfully with electron-rebuild')
+        
+        // Clean up electron-gyp logs to prevent build issues
+        cleanupElectronGypLogs()
       } catch (electronRebuildError) {
         console.log('⚠️  electron-rebuild failed, trying direct node-gyp rebuild...')
         
@@ -68,6 +74,9 @@ module.exports = async function(context) {
             cwd: sqlite3Path
           })
           console.log('✅ [BEFORE BUILD] better-sqlite3 rebuilt successfully with node-gyp')
+          
+          // Clean up electron-gyp logs to prevent build issues
+          cleanupElectronGypLogs()
         } catch (gypError) {
           console.log('❌ [BEFORE BUILD] All rebuild methods failed')
           console.log('⚠️  Continuing build - app may have database issues')
@@ -79,6 +88,21 @@ module.exports = async function(context) {
   } catch (error) {
     console.error('❌ [BEFORE BUILD] Error rebuilding better-sqlite3:', error.message)
     console.log('⚠️  Continuing build without rebuild - app may have database issues')
+  }
+}
+
+function cleanupElectronGypLogs() {
+  try {
+    const electronGypPath = path.join(process.cwd(), '.electron-gyp')
+    if (fs.existsSync(electronGypPath)) {
+      console.log('🧹 [BEFORE BUILD] Cleaning up electron-gyp logs...')
+      
+      // Remove the entire .electron-gyp directory to prevent build issues
+      execSync(`rm -rf "${electronGypPath}"`, { stdio: 'pipe' })
+      console.log('✅ [BEFORE BUILD] electron-gyp logs cleaned up')
+    }
+  } catch (error) {
+    console.log('⚠️  [BEFORE BUILD] Failed to clean up electron-gyp logs:', error.message)
   }
 }
 

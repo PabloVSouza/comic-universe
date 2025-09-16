@@ -12,6 +12,8 @@ import infoIcon from 'assets/info.svg'
 import settingsIcon from 'assets/settings.svg'
 import userIcon from 'assets/user.svg'
 import exitIcon from 'assets/exit-door.svg'
+import logoutIcon from 'assets/logout.svg'
+import pluginIcon from 'assets/plugin.svg'
 
 const HomeNav = (): React.JSX.Element => {
   const { invoke } = useApi()
@@ -39,10 +41,19 @@ const HomeNav = (): React.JSX.Element => {
       icon: settingsIcon,
       onClick: () => openWindow({ component: 'Settings', props: {} })
     },
-
+    {
+      label: t('HomeNav.userSettings'),
+      icon: userIcon,
+      onClick: (): void => openWindow({ component: 'Settings', props: { initialTab: 'user' } })
+    },
+    {
+      label: t('HomeNav.plugins'),
+      icon: pluginIcon,
+      onClick: (): void => openWindow({ component: 'Settings', props: { initialTab: 'plugins' } })
+    },
     {
       label: t('HomeNav.changeUser'),
-      icon: userIcon,
+      icon: logoutIcon,
       onClick: (): void => setCurrentUser({} as IUser)
     }
   ]

@@ -29,6 +29,8 @@
   "HomeNav": {
     "about": "About This App",
     "settings": "Settings",
+    "userSettings": "User Settings",
+    "plugins": "Plugins",
     "changeUser": "Change User",
     "closeApp": "Close App"
   },
@@ -86,6 +88,10 @@
       "readingDirectionDescription": "Choose the reading direction for comics",
       "ltr": "Left to Right",
       "rtl": "Right to Left",
+      "defaultReadingMode": "Default Reading Mode",
+      "defaultReadingModeDescription": "Choose the default reading mode for comics (can be overridden per comic)",
+      "horizontal": "Horizontal",
+      "vertical": "Vertical",
       "theme": "Theme",
       "themeDescription": "Choose your preferred theme (overrides app theme)",
       "light": "Light",
@@ -177,6 +183,11 @@
     "read": "Read",
     "verticalReading": "Vertical Reading",
     "switchToVertical": "Switch to Vertical Reading",
-    "switchToHorizontal": "Switch to Horizontal Reading"
+    "switchToHorizontal": "Switch to Horizontal Reading",
+    "rightToLeft": "Right to Left",
+    "switchToRtl": "Switch to Right to Left Reading",
+    "switchToLtr": "Switch to Left to Right Reading",
+    "settings": "Settings",
+    "readingSettings": "Reading Settings"
   }
 }

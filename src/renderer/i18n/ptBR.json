@@ -29,6 +29,8 @@
   "HomeNav": {
     "about": "Sobre este App",
     "settings": "Configurações",
+    "userSettings": "Configurações do Usuário",
+    "plugins": "Plugins",
     "changeUser": "Trocar de Usuário",
     "closeApp": "Fechar App"
   },
@@ -86,6 +88,10 @@
       "readingDirectionDescription": "Escolha a direção de leitura para os quadrinhos",
       "ltr": "Esquerda para Direita",
       "rtl": "Direita para Esquerda",
+      "defaultReadingMode": "Modo de Leitura Padrão",
+      "defaultReadingModeDescription": "Escolha o modo de leitura padrão para quadrinhos (pode ser alterado por quadrinho)",
+      "horizontal": "Horizontal",
+      "vertical": "Vertical",
       "theme": "Tema",
       "themeDescription": "Escolha seu tema preferido (sobrescreve o tema do app)",
       "light": "Claro",
@@ -177,6 +183,11 @@
     "read": "Leitura",
     "verticalReading": "Leitura Vertical",
     "switchToVertical": "Alternar para Leitura Vertical",
-    "switchToHorizontal": "Alternar para Leitura Horizontal"
+    "switchToHorizontal": "Alternar para Leitura Horizontal",
+    "rightToLeft": "Direita para Esquerda",
+    "switchToRtl": "Alternar para Leitura da Direita para Esquerda",
+    "switchToLtr": "Alternar para Leitura da Esquerda para Direita",
+    "settings": "Configurações",
+    "readingSettings": "Configurações de Leitura"
   }
 }

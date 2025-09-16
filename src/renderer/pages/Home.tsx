@@ -47,13 +47,13 @@ const Home = (): React.JSX.Element => {
   }, [userActive])
 
   useEffect(() => {
-    const inList = comicList.includes(activeComic)
+    const inList = comicList.some((comic) => comic.id === activeComic.id)
     if (comicList.length) {
       if (!activeComic.id || !inList) setActiveComic(comicList[0])
     } else if (activeComic.id) {
       setActiveComic({} as IComic)
     }
-  }, [activeComic, comicList, setActiveComic])
+  }, [activeComic.id, comicList, setActiveComic])
 
   return (
     <div className="w-full h-full flex-shrink-0 flex-grow flex flex-col justify-start items-center text-text-default">

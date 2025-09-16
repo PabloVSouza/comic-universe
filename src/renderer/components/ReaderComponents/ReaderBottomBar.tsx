@@ -70,9 +70,7 @@ const ReaderBottomBar = ({
       {/* Center - Chapter info and progress */}
       <div className="flex-1 max-w-md mx-4 flex flex-col justify-center">
         {chapterName && (
-          <div className="text-sm text-text-default text-center mb-1 truncate">
-            {chapterName}
-          </div>
+          <div className="text-sm text-text-default text-center mb-1 truncate">{chapterName}</div>
         )}
         <div className="relative">
           <div className="w-full bg-gray-300 dark:bg-gray-600 rounded-full h-6 flex items-center">
@@ -80,7 +78,7 @@ const ReaderBottomBar = ({
               className="bg-blue-500 dark:bg-blue-400 h-6 rounded-full transition-all duration-300 ease-in-out"
               style={{ width: `${progressPercentage}%` }}
             />
-            <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white drop-shadow-sm">
+            <div className="absolute inset-0 flex items-center justify-center text-xs text-white drop-shadow-sm">
               {currentPage} / {totalPages}
             </div>
           </div>

@@ -29,6 +29,7 @@
   "HomeNav": {
     "about": "About This App",
     "settings": "Settings",
+    "userSettings": "User Settings",
     "changeUser": "Change User",
     "closeApp": "Close App"
   },

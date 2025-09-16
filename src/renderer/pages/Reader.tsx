@@ -42,8 +42,12 @@ const Reader = (): React.JSX.Element => {
     initialData: null
   })
 
-  const readingDirection = activeComic.settings?.readingDirection || userSettings?.readingPreferences?.readingDirection || 'ltr'
-  const defaultReadingMode = userSettings?.readingPreferences?.defaultReadingMode || 
+  const readingDirection =
+    activeComic.settings?.readingDirection ||
+    userSettings?.readingPreferences?.readingDirection ||
+    'ltr'
+  const defaultReadingMode =
+    userSettings?.readingPreferences?.defaultReadingMode ||
     (activeComic.type === 'manhwa' || activeComic.type === 'manhua' ? 'vertical' : 'horizontal')
   const readingMode = currentReadingMode || 'horizontal'
 
@@ -61,9 +65,14 @@ const Reader = (): React.JSX.Element => {
       const currentPageIndex = Math.round(scrollTop / pageHeight) + 1
       const clampedPage = Math.max(1, Math.min(currentPageIndex, pages.length || 1))
 
-      if (readProgress && readProgress.page !== clampedPage && !isNaN(clampedPage) && clampedPage > 0) {
-        const newReadProgress = { 
-          ...readProgress, 
+      if (
+        readProgress &&
+        readProgress.page !== clampedPage &&
+        !isNaN(clampedPage) &&
+        clampedPage > 0
+      ) {
+        const newReadProgress = {
+          ...readProgress,
           page: clampedPage,
           totalPages: readProgress.totalPages || pages.length || 1
         } as IReadProgress
@@ -205,8 +214,8 @@ const Reader = (): React.JSX.Element => {
 
   useEffect(() => {
     if (readProgress && readProgress.page === 0) {
-      const newReadProgress = { 
-        ...readProgress, 
+      const newReadProgress = {
+        ...readProgress,
         page: 1,
         totalPages: readProgress.totalPages || pages.length || 1
       } as IReadProgress
@@ -219,8 +228,8 @@ const Reader = (): React.JSX.Element => {
       const { page, totalPages } = readProgress
 
       if (page < totalPages && page > 0 && totalPages > 0) {
-        const newReadProgress = { 
-          ...readProgress, 
+        const newReadProgress = {
+          ...readProgress,
           page: page + 1,
           totalPages: totalPages || pages.length || 1
         } as IReadProgress
@@ -252,8 +261,8 @@ const Reader = (): React.JSX.Element => {
     if (readProgress) {
       const { page, totalPages } = readProgress
       if (page > 1 && totalPages > 0) {
-        const newReadProgress = { 
-          ...readProgress, 
+        const newReadProgress = {
+          ...readProgress,
           page: page - 1,
           totalPages: totalPages || pages.length || 1
         } as IReadProgress
@@ -362,7 +371,10 @@ const Reader = (): React.JSX.Element => {
     const currentDirection = readingDirection
     const newDirection = currentDirection === 'ltr' ? 'rtl' : 'ltr'
     if (activeComic.id) {
-      const newSettings = { ...activeComic.settings, readingDirection: newDirection as 'ltr' | 'rtl' }
+      const newSettings = {
+        ...activeComic.settings,
+        readingDirection: newDirection as 'ltr' | 'rtl'
+      }
       setActiveComic({ ...activeComic, settings: newSettings })
       updateReadingDirection(newDirection)
     }

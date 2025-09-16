@@ -84,9 +84,10 @@ const ReaderBottomBar = ({
       {/* Right side - Reading controls menu and next chapter */}
       <div className="flex items-center gap-3">
         <Button
-          theme="navigation"
+          theme="pure"
           onClick={toggleMenu}
           icon={settingsIcon}
+          size="xxs"
           title={t('Reader.readingSettings')}
         />
         <Button
@@ -100,11 +101,7 @@ const ReaderBottomBar = ({
       </div>
 
       {/* Slide-up menu */}
-      <SlideUpMenu
-        options={menuOptions}
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-      />
+      <SlideUpMenu options={menuOptions} isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </div>
   )
 }

@@ -1,6 +1,5 @@
 import { useEffect, useRef, MutableRefObject } from 'react'
 import classNames from 'classnames'
-import Image from 'components/Image'
 
 export type TSlideUpMenuOption = {
   title: string
@@ -54,9 +53,9 @@ const SlideUpMenu = ({ options, isOpen, onClose, children }: ISlideUpMenuProps):
       {/* Menu */}
       <div
         className={classNames(
-          'fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border z-50',
-          'transition-move-fade duration-300 ease-default',
-          isOpen ? 'translate-y-0' : 'translate-y-full'
+          'fixed bottom-20 right-4 bg-default backdrop-blur-sm border border-border rounded-lg shadow-basic z-50',
+          'transition-move-fade duration-300 ease-default min-w-64',
+          isOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
         )}
         ref={ref}
       >
@@ -67,33 +66,31 @@ const SlideUpMenu = ({ options, isOpen, onClose, children }: ISlideUpMenuProps):
         )}
         
         <div className="p-4">
-          <div className="space-y-2">
+          <div className="space-y-3">
             {options.map((option, index) => (
-              <button
+              <div
                 key={index}
-                className={classNames(
-                  'w-full flex items-center justify-between p-3 rounded-lg transition-colors',
-                  'hover:bg-list-item-hover hover:text-text-oposite',
-                  option.isActive 
-                    ? 'bg-list-item-active text-text-oposite' 
-                    : 'bg-list-item text-text-default'
-                )}
-                onClick={() => handleAction(option)}
+                className="flex items-center justify-between"
               >
-                <span className="text-left font-medium">{option.title}</span>
-                <div className="flex items-center gap-2">
-                  {option.isActive && (
-                    <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                <span className="text-text-default font-medium">{option.title}</span>
+                <button
+                  className={classNames(
+                    'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+                    option.isActive 
+                      ? 'bg-blue-500' 
+                      : 'bg-gray-300 dark:bg-gray-600'
                   )}
-                  {option.icon && (
-                    <Image
-                      className="w-5 h-5 bg-text-default"
-                      src={option.icon}
-                      svg
-                    />
-                  )}
-                </div>
-              </button>
+                  onClick={() => handleAction(option)}
+                >
+                  <span
+                    className={classNames(
+                      'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+                      option.isActive ? 'translate-x-6' : 'translate-x-1'
+                    )}
+                  />
+                </button>
+              </div>
             ))}
           </div>
         </div>

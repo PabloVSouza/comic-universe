@@ -1,5 +1,6 @@
 interface IComicSettings {
   readingMode?: 'horizontal' | 'vertical'
+  readingDirection?: 'ltr' | 'rtl'
   [key: string]: any
 }
 

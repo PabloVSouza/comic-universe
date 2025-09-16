@@ -42,7 +42,7 @@ const Reader = (): React.JSX.Element => {
     initialData: null
   })
 
-  const readingDirection = userSettings?.readingPreferences?.readingDirection || 'ltr'
+  const readingDirection = activeComic.settings?.readingDirection || userSettings?.readingPreferences?.readingDirection || 'ltr'
   const defaultReadingMode =
     activeComic.type === 'manhwa' || activeComic.type === 'manhua' ? 'vertical' : 'horizontal'
   const readingMode = currentReadingMode || 'horizontal'
@@ -153,6 +153,19 @@ const Reader = (): React.JSX.Element => {
     }
   })
 
+  const { mutate: updateReadingDirection } = useMutation({
+    mutationFn: async (readingDirection: 'ltr' | 'rtl') => {
+      if (!activeComic.id) return
+      const currentSettings = activeComic.settings || {}
+      const newSettings = { ...currentSettings, readingDirection }
+      await invoke('dbUpdateComic', { id: activeComic.id, comic: { settings: newSettings } })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comicData'] })
+      queryClient.invalidateQueries({ queryKey: ['activeComic'] })
+    }
+  })
+
   // Reset reading mode when comic changes
   useEffect(() => {
     setCurrentReadingMode(null)
@@ -167,7 +180,10 @@ const Reader = (): React.JSX.Element => {
       } else {
         setCurrentReadingMode(defaultReadingMode)
         if (activeComic.id) {
-          const newSettings = { ...activeComic.settings, readingMode: defaultReadingMode as 'horizontal' | 'vertical' }
+          const newSettings = {
+            ...activeComic.settings,
+            readingMode: defaultReadingMode as 'horizontal' | 'vertical'
+          }
           setActiveComic({ ...activeComic, settings: newSettings })
           updateReadingMode(defaultReadingMode)
         }
@@ -312,7 +328,10 @@ const Reader = (): React.JSX.Element => {
     const newMode = currentMode === 'horizontal' ? 'vertical' : 'horizontal'
     setCurrentReadingMode(newMode)
     if (activeComic.id) {
-      const newSettings = { ...activeComic.settings, readingMode: newMode as 'horizontal' | 'vertical' }
+      const newSettings = {
+        ...activeComic.settings,
+        readingMode: newMode as 'horizontal' | 'vertical'
+      }
       setActiveComic({ ...activeComic, settings: newSettings })
       updateReadingMode(newMode)
       setShouldScrollToPage(true)
@@ -320,6 +339,16 @@ const Reader = (): React.JSX.Element => {
     // Close zoom window when switching to vertical mode
     if (newMode === 'vertical') {
       setZoomVisible(false)
+    }
+  }
+
+  const toggleReadingDirection = (): void => {
+    const currentDirection = readingDirection
+    const newDirection = currentDirection === 'ltr' ? 'rtl' : 'ltr'
+    if (activeComic.id) {
+      const newSettings = { ...activeComic.settings, readingDirection: newDirection as 'ltr' | 'rtl' }
+      setActiveComic({ ...activeComic, settings: newSettings })
+      updateReadingDirection(newDirection)
     }
   }
 
@@ -532,7 +561,9 @@ const Reader = (): React.JSX.Element => {
           currentPage={readProgress?.page || 1}
           totalPages={readProgress?.totalPages || 1}
           readingMode={readingMode}
+          readingDirection={readingDirection}
           onToggleReadingMode={toggleReadingMode}
+          onToggleReadingDirection={toggleReadingDirection}
           onPreviousChapter={() => {
             if (chapterIndex > 0) {
               navigate(`/reader/${comicId}/${chapters?.[chapterIndex - 1]?.id}`)

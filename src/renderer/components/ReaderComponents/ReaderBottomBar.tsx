@@ -6,7 +6,9 @@ interface ReaderBottomBarProps {
   currentPage: number
   totalPages: number
   readingMode: 'horizontal' | 'vertical'
+  readingDirection: 'ltr' | 'rtl'
   onToggleReadingMode: () => void
+  onToggleReadingDirection: () => void
   onPreviousChapter?: () => void
   onNextChapter?: () => void
   hasPreviousChapter?: boolean
@@ -18,7 +20,9 @@ const ReaderBottomBar = ({
   currentPage,
   totalPages,
   readingMode,
+  readingDirection,
   onToggleReadingMode,
+  onToggleReadingDirection,
   onPreviousChapter,
   onNextChapter,
   hasPreviousChapter = false,
@@ -56,7 +60,7 @@ const ReaderBottomBar = ({
         </div>
       </div>
 
-      {/* Right side - Reading mode toggle and next chapter */}
+      {/* Right side - Reading controls and next chapter */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
           <span className="text-base text-text-default">{t('Reader.verticalReading')}</span>
@@ -67,6 +71,17 @@ const ReaderBottomBar = ({
               `Reader.${readingMode === 'horizontal' ? 'switchToVertical' : 'switchToHorizontal'}`
             )}
             onClick={onToggleReadingMode}
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-base text-text-default">{t('Reader.rightToLeft')}</span>
+          <Button
+            theme="toggle"
+            active={readingDirection === 'rtl'}
+            title={t(
+              `Reader.${readingDirection === 'ltr' ? 'switchToRtl' : 'switchToLtr'}`
+            )}
+            onClick={onToggleReadingDirection}
           />
         </div>
         <Button

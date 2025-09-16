@@ -24,11 +24,12 @@ module.exports = async function(context) {
     console.log('🔧 [BEFORE BUILD] Electron version:', electronVersion)
 
     // Set environment variables for Electron rebuild
+    const targetArch = getTargetArch(process.platform, context)
     const env = {
       ...process.env,
       npm_config_target: electronVersion,
-      npm_config_arch: process.platform === 'win32' ? 'x64' : process.arch,
-      npm_config_target_arch: process.platform === 'win32' ? 'x64' : process.arch,
+      npm_config_arch: targetArch,
+      npm_config_target_arch: targetArch,
       npm_config_disturl: 'https://electronjs.org/headers',
       npm_config_runtime: 'electron',
       npm_config_cache: path.join(process.cwd(), '.electron-gyp'),
@@ -78,6 +79,23 @@ module.exports = async function(context) {
   } catch (error) {
     console.error('❌ [BEFORE BUILD] Error rebuilding better-sqlite3:', error.message)
     console.log('⚠️  Continuing build without rebuild - app may have database issues')
+  }
+}
+
+function getTargetArch(platform, context) {
+  if (platform === 'win32') {
+    return 'x64'
+  } else if (platform === 'darwin') {
+    // For macOS, check if we're building universal or specific arch
+    const arch = context?.arch || process.arch
+    if (arch === 'universal') {
+      // For universal builds, we need to rebuild for both architectures
+      // But since we can't do that in one go, we'll rebuild for the current arch
+      return process.arch === 'arm64' ? 'arm64' : 'x64'
+    }
+    return arch
+  } else {
+    return process.arch
   }
 }
 

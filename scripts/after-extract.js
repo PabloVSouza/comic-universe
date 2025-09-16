@@ -17,7 +17,14 @@ module.exports = async (context) => {
       console.log('⚠️  [AFTER EXTRACT HOOK] Certificate generation failed:', error.message);
       console.log('⚠️  [AFTER EXTRACT HOOK] Continuing build process - this is not a critical failure');
     }
+  } else if (context.electronPlatformName === 'darwin') {
+    console.log('🍎 [AFTER EXTRACT HOOK] macOS detected - skipping certificate generation');
+  } else {
+    console.log('⏭️  [AFTER EXTRACT HOOK] Skipping certificate generation for platform:', context.electronPlatformName);
+  }
 
+  // Run SQLite rebuild for both Windows and macOS
+  if (context.electronPlatformName === 'win32' || context.electronPlatformName === 'darwin') {
     try {
       // Call the SQLite rebuild script
       const sqliteScriptPath = path.join(__dirname, 'rebuild-sqlite.js');
@@ -30,6 +37,6 @@ module.exports = async (context) => {
       console.log('⚠️  [AFTER EXTRACT HOOK] Continuing build process - app may have database issues');
     }
   } else {
-    console.log('⏭️  [AFTER EXTRACT HOOK] Skipping certificate generation and SQLite rebuild for platform:', context.electronPlatformName);
+    console.log('⏭️  [AFTER EXTRACT HOOK] Skipping SQLite rebuild for platform:', context.electronPlatformName);
   }
 };

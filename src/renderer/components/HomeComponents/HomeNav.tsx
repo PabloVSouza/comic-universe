@@ -49,7 +49,7 @@ const HomeNav = (): React.JSX.Element => {
     {
       label: t('HomeNav.plugins'),
       icon: pluginIcon,
-      onClick: (): void => openWindow({ component: 'Settings', props: { initialTab: 'plugin' } })
+      onClick: (): void => openWindow({ component: 'Settings', props: { initialTab: 'plugins' } })
     },
     {
       label: t('HomeNav.changeUser'),

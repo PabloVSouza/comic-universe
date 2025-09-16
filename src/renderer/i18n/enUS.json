@@ -180,6 +180,8 @@
     "switchToHorizontal": "Switch to Horizontal Reading",
     "rightToLeft": "Right to Left",
     "switchToRtl": "Switch to Right to Left Reading",
-    "switchToLtr": "Switch to Left to Right Reading"
+    "switchToLtr": "Switch to Left to Right Reading",
+    "settings": "Settings",
+    "readingSettings": "Reading Settings"
   }
 }

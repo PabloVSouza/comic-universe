@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Button from 'components/Button'
+import SlideUpMenu, { TSlideUpMenuOption } from 'components/SlideUpMenu'
 
 interface ReaderBottomBarProps {
   chapterName?: string
@@ -29,8 +31,26 @@ const ReaderBottomBar = ({
   hasNextChapter = false
 }: ReaderBottomBarProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const progressPercentage = totalPages > 0 ? (currentPage / totalPages) * 100 : 0
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
+  const menuOptions: TSlideUpMenuOption[] = [
+    {
+      title: t('Reader.verticalReading'),
+      isActive: readingMode === 'vertical',
+      action: onToggleReadingMode
+    },
+    {
+      title: t('Reader.rightToLeft'),
+      isActive: readingDirection === 'rtl',
+      action: onToggleReadingDirection
+    }
+  ]
 
   return (
     <div className="w-full h-16 bg-background/95 backdrop-blur-sm border-t border-border flex items-center justify-between px-4 z-50">
@@ -60,30 +80,16 @@ const ReaderBottomBar = ({
         </div>
       </div>
 
-      {/* Right side - Reading controls and next chapter */}
+      {/* Right side - Reading controls menu and next chapter */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2">
-          <span className="text-base text-text-default">{t('Reader.verticalReading')}</span>
-          <Button
-            theme="toggle"
-            active={readingMode === 'vertical'}
-            title={t(
-              `Reader.${readingMode === 'horizontal' ? 'switchToVertical' : 'switchToHorizontal'}`
-            )}
-            onClick={onToggleReadingMode}
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-base text-text-default">{t('Reader.rightToLeft')}</span>
-          <Button
-            theme="toggle"
-            active={readingDirection === 'rtl'}
-            title={t(
-              `Reader.${readingDirection === 'ltr' ? 'switchToRtl' : 'switchToLtr'}`
-            )}
-            onClick={onToggleReadingDirection}
-          />
-        </div>
+        <Button
+          theme="navigation"
+          onClick={toggleMenu}
+          className="text-sm"
+          title={t('Reader.readingSettings')}
+        >
+          ⚙️ {t('Reader.settings')}
+        </Button>
         <Button
           theme="navigation"
           disabled={!hasNextChapter}
@@ -93,6 +99,13 @@ const ReaderBottomBar = ({
           {t('Reader.nextChapter')} →
         </Button>
       </div>
+
+      {/* Slide-up menu */}
+      <SlideUpMenu
+        options={menuOptions}
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+      />
     </div>
   )
 }

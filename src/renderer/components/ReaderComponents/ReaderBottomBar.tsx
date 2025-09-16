@@ -80,7 +80,7 @@ const ReaderBottomBar = ({
               className="bg-blue-500 dark:bg-blue-400 h-6 rounded-full transition-all duration-300 ease-in-out"
               style={{ width: `${progressPercentage}%` }}
             />
-            <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white mix-blend-difference">
+            <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white drop-shadow-sm">
               {currentPage} / {totalPages}
             </div>
           </div>

@@ -95,6 +95,28 @@ const buttonStyling = {
         default: '',
         active: ''
       }
+    },
+    secondary: {
+      button: {
+        default:
+          'px-4 py-2 rounded-lg text-white transition-colors duration-200 cursor-pointer bg-gray-500/70 hover:bg-gray-500/90',
+        active: ''
+      },
+      icon: {
+        default: '',
+        active: ''
+      }
+    },
+    primary: {
+      button: {
+        default:
+          'px-4 py-2 rounded-lg text-white transition-colors duration-200 cursor-pointer bg-blue-500/70 hover:bg-blue-500/90',
+        active: ''
+      },
+      icon: {
+        default: '',
+        active: ''
+      }
     }
   },
   sizes: {

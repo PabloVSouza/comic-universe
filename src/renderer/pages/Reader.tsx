@@ -20,8 +20,8 @@ const Reader = (): React.JSX.Element => {
   const { currentUser } = usePersistSessionStore()
   const [mousePos, setMousePos] = useState<IMousePos>({} as IMousePos)
   const [zoomVisible, setZoomVisible] = useState(false)
-  const [currentReadingMode, setCurrentReadingMode] = useState<'horizontal' | 'vertical'>(
-    'horizontal'
+  const [currentReadingMode, setCurrentReadingMode] = useState<'horizontal' | 'vertical' | null>(
+    null
   )
   const mainContainerRef = useRef<HTMLDivElement>(null)
   const [scrollContainer, setScrollContainer] = useState<HTMLDivElement | null>(null)
@@ -45,7 +45,7 @@ const Reader = (): React.JSX.Element => {
   const readingDirection = userSettings?.readingPreferences?.readingDirection || 'ltr'
   const defaultReadingMode =
     activeComic.type === 'manhwa' || activeComic.type === 'manhua' ? 'vertical' : 'horizontal'
-  const readingMode = currentReadingMode
+  const readingMode = currentReadingMode || 'horizontal'
 
   const handleScroll = (): void => {
     if (
@@ -151,10 +151,16 @@ const Reader = (): React.JSX.Element => {
     }
   })
 
+  // Reset reading mode when comic changes
   useEffect(() => {
-    if (!currentReadingMode && activeComic.id) {
+    setCurrentReadingMode(null)
+  }, [activeComic.id])
+
+  // Initialize reading mode from comic data or default
+  useEffect(() => {
+    if (currentReadingMode === null && activeComic.id) {
       if (activeComic.readingMode) {
-        setCurrentReadingMode(activeComic.readingMode)
+        setCurrentReadingMode(activeComic.readingMode as 'horizontal' | 'vertical')
       } else {
         setCurrentReadingMode(defaultReadingMode)
         if (activeComic.id) {
@@ -298,7 +304,8 @@ const Reader = (): React.JSX.Element => {
   }
 
   const toggleReadingMode = (): void => {
-    const newMode = currentReadingMode === 'horizontal' ? 'vertical' : 'horizontal'
+    const currentMode = currentReadingMode || 'horizontal'
+    const newMode = currentMode === 'horizontal' ? 'vertical' : 'horizontal'
     setCurrentReadingMode(newMode)
     if (activeComic.id) {
       setActiveComic({ ...activeComic, readingMode: newMode })

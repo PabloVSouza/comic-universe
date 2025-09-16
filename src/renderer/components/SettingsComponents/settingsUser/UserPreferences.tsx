@@ -93,7 +93,6 @@ const UserPreferences = () => {
         descriptionI18nKey="Settings.user.readingDirectionDescription"
       >
         <Select
-          theme="native"
           value={{
             value: settings.readingPreferences.readingDirection,
             label: t(`Settings.user.${settings.readingPreferences.readingDirection}`)
@@ -117,7 +116,6 @@ const UserPreferences = () => {
         descriptionI18nKey="Settings.user.themeDescription"
       >
         <Select
-          theme="native"
           value={{
             value: settings.displayPreferences.theme,
             label: t(`Settings.user.${settings.displayPreferences.theme}`)
@@ -139,7 +137,6 @@ const UserPreferences = () => {
         descriptionI18nKey="Settings.user.languageDescription"
       >
         <Select
-          theme="native"
           value={{
             value: settings.appPreferences.language,
             label:

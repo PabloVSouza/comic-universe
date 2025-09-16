@@ -59,10 +59,7 @@ const ReaderBottomBar = ({
       {/* Right side - Reading mode toggle and next chapter */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-base text-text-default">
-            {t(`Reader.${readingMode === 'horizontal' ? 'horizontal' : 'vertical'}`)}{' '}
-            {t('Reader.read')}
-          </span>
+          <span className="text-base text-text-default">{t('Reader.verticalReading')}</span>
           <Button
             theme="toggle"
             active={readingMode === 'vertical'}

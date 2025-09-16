@@ -29,6 +29,11 @@ class EventManager {
     this.removeEvents()
     this.startEvents()
   }
+
+  public updateMethods = (newMethods: any) => {
+    this.methods = newMethods
+    this.resetEvents()
+  }
 }
 
 export default EventManager

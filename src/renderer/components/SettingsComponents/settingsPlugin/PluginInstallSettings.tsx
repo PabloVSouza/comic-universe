@@ -7,6 +7,7 @@ import Button from 'components/Button'
 import SettingsItem from '../SettingsItem'
 
 import downloadIcon from 'assets/download-icon-3.svg'
+import loadingIcon from 'assets/loading.svg'
 
 const PluginInstallSettings = () => {
   const { t } = useTranslation()
@@ -27,14 +28,12 @@ const PluginInstallSettings = () => {
 
   const { mutate: updatePlugins } = useMutation({
     mutationFn: async () => {
-      await invoke('installPlugins')
-      await invoke('activatePlugins')
-      await invoke('resetEvents')
+      await invoke('refreshPluginHandlers')
       queryClient.invalidateQueries({ queryKey: ['pluginsList'] })
     }
   })
 
-  const { mutate: downloadAndInstallPlugin } = useMutation({
+  const { mutate: downloadAndInstallPlugin, isPending: isInstalling } = useMutation({
     mutationFn: async (plugin: string) => {
       await invoke('downloadAndInstallPlugin', plugin)
       updatePlugins()
@@ -74,15 +73,15 @@ const PluginInstallSettings = () => {
           options={pluginSelectOptions}
           placeholder={t('Settings.plugin.install.selectPlaceholder')}
           onChange={(e) => handleSelectPluginToInstall(e as TOption)}
-          isDisabled={!pluginSelectOptions.length}
+          isDisabled={!pluginSelectOptions.length || isInstalling}
           value={selectedPluginToInstall}
         />
         <Button
-          className="h-10"
-          icon={downloadIcon}
+          className={`h-10 ${isInstalling ? '[&>img]:animate-spin' : ''}`}
+          icon={isInstalling ? loadingIcon : downloadIcon}
           theme="pure"
           title={t('Settings.plugin.install.buttonTitle')}
-          disabled={!selectedPluginToInstall}
+          disabled={!selectedPluginToInstall || isInstalling}
           onClick={handleInstallPlugin}
         />
       </div>

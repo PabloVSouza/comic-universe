@@ -45,15 +45,19 @@ const Select = forwardRef<HTMLSelectElement, ISelectProps>(
         unstyled
         isSearchable={false}
         className="[&>*]:cursor-pointer [&>*]:transition-fade"
+        menuPortalTarget={document.body}
+        styles={{
+          menuPortal: (base) => ({ ...base, zIndex: 9999 })
+        }}
         classNames={{
-          container: () => classNames('outline-none mr-px h-full w-44 rounded', className),
+          container: () => classNames('outline-none mr-px h-full w-44 rounded relative', className),
           input: () => '',
           control: () =>
             'pr-2 pl-5 h-full w-full overflow-hidden rounded !cursor-pointer hover:bg-list-item-hover hover:text-text-oposite',
           menu: () => 'w-full flex pt-px bg-list-item rounded overflow-hidden',
           menuList: () => 'flex flex-col w-full gap-px',
           option: () =>
-            'bg-list-item w-full h-10 !flex justify-center items-center !cursor-pointer hover:bg-list-item-hover hover:text-text-oposite'
+            'bg-list-item text-text-default w-full h-10 !flex justify-center items-center !cursor-pointer hover:bg-list-item-hover hover:text-text-oposite'
         }}
         {...props}
       />

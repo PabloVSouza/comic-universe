@@ -1,13 +1,11 @@
 {
   "General": {
-    "inDevelopment": "Function in development",
     "alertConfirmButton": "Ok",
     "version": "Version",
     "author": "Author",
     "license": "License",
     "githubRepository": "Github Repository",
     "checking": "Checking...",
-    "selectedReleaseTypes": "Selected Release Types:",
     "save": "Save",
     "cancel": "Cancel",
     "edit": "Edit",
@@ -17,13 +15,8 @@
   "Dashboard": {
     "setComplete": "Mark as Read",
     "resetProgress": "Mark as Unread",
-    "read": "Read",
     "continueReading": "Continue Reading",
     "downloadMore": "Download More",
-    "newChapter": {
-      "noNewChapterMessage": "We could not find new chapters",
-      "noNewChapterConfirm": "Ok"
-    },
     "contextMenu": {
       "deleteComic": {
         "title": "Do you really want to delete?",
@@ -33,24 +26,13 @@
       }
     }
   },
-  "DownloadComic": {
-    "chaptersTitle": "Chapters",
-    "navigation": {
-      "downloadQueue": "On Queue",
-      "downloadButton": "Download Now",
-      "addToQueue": "Add all to Queue",
-      "removeFromQueue": "Remove all from Queue"
-    }
-  },
   "HomeNav": {
     "about": "About This App",
     "settings": "Settings",
-    "darkMode": "Dark Mode",
     "changeUser": "Change User",
     "closeApp": "Close App"
   },
   "SearchComic": {
-    "windowTitle": "Search Comics",
     "textPlaceholder": "Type your Search",
     "bookmarkComic": "Bookmark",
     "alreadyBookmarked": "Bookmarked",
@@ -62,8 +44,6 @@
     "next": "Next"
   },
   "Settings": {
-    "title": "Settings",
-    "saveAll": "Save All",
     "windowTitle": "Application Settings",
     "app": {
       "title": "App Settings"
@@ -82,38 +62,24 @@
         "buttonTitle": "Download and Install Plugin"
       },
       "installed": {
-        "title": "Installed Plugins"
+        "title": "Installed Plugins",
+        "noPluginsInstalled": "No plugins installed"
       }
     },
     "user": {
       "title": "User Settings",
-      "profile": "User Profile",
       "currentUser": "Current User",
       "currentUserDescription": "The currently selected user for reading progress",
-      "userId": "User ID",
-      "userIdDescription": "Unique identifier for this user",
-      "isDefault": "Default User",
-      "isDefaultDescription": "Whether this is the default user",
       "namePlaceholder": "Enter user name",
       "noUserSelected": "No user selected",
-      "statistics": "Reading Statistics",
       "chaptersRead": "Chapters Read",
       "chaptersReadDescription": "Total number of chapters with reading progress",
       "pagesRead": "Pages Read",
       "pagesReadDescription": "Total number of pages read across all chapters",
-      "dataManagement": "Data Management",
-      "exportData": "Export User Data",
-      "exportDataDescription": "Download your reading progress and user data as a JSON file",
+      "exportData": "Export Data",
+      "exportDataDescription": "Export your reading data and settings",
       "deleteUser": "Delete User",
-      "deleteUserDescription": "Permanently delete this user and all their reading progress",
-      "deleteUser": {
-        "confirm": "Are you sure you want to delete this user? All reading progress will be lost!"
-      },
-      "preferences": "User Preferences",
-      "readingPreferences": "Reading Preferences",
-      "displayPreferences": "Display Preferences",
-      "notificationPreferences": "Notification Preferences",
-      "privacyPreferences": "Privacy Preferences",
+      "deleteUserDescription": "Permanently delete this user and all associated data",
       "readingDirection": "Reading Direction",
       "readingDirectionDescription": "Choose the reading direction for comics",
       "ltr": "Left to Right",
@@ -132,53 +98,38 @@
         "remove": "Remove",
         "removeConfirm": "Are you sure you want to remove this wallpaper?"
       },
-      "appPreferences": "App Preferences",
       "language": "Language",
-      "languageDescription": "Choose your preferred language (overrides app language)",
-      "dataManagement": "Data Management",
-      "exportData": "Export Data",
-      "exportDataDescription": "Export your reading data and settings",
-      "deleteUser": "Delete User",
-      "deleteUserDescription": "Permanently delete this user and all associated data"
+      "languageDescription": "Choose your preferred language (overrides app language)"
     },
     "about": {
       "title": "About This App",
-      "details": "Application Details",
-      "repository": "Repository",
       "repositoryDescription": "Visit the project repository on GitHub"
     },
     "general": {
       "title": "General Settings",
       "webUIPreferences": "Web UI Preferences",
-      "restartWebUI": "Restart Web UI",
       "webUIStatus": "Web UI Status",
       "webUIStatusRunning": "Running",
       "webUIStatusStopped": "Stopped",
       "webUIStatusUnknown": "Unknown",
       "language": {
-        "title": "Language Settings",
         "label": "Select Language",
         "description": "Choose your preferred language for the application interface"
       },
       "debug": {
-        "title": "Debug Settings",
         "enableLogging": "Enable Debug Logging",
         "enableLoggingDescription": "Enable detailed logging for debugging purposes"
       },
       "webUI": {
-        "title": "Web UI Settings",
         "enableWebUI": "Enable Web UI",
         "enableWebUIDescription": "Enable web-based user interface for remote access",
-        "enableWebUIDescriptionDisabled": "Cannot disable Web UI while accessing through web interface",
         "autoPort": "Automatic Port",
         "autoPortDescription": "Automatically find an available port starting from 8080",
         "port": "Web UI Port",
         "portDescription": "Port number for the Web UI server",
         "portRange": "(1024-65535)",
         "url": "Web UI URL",
-        "urlDescription": "Access the Web UI through this URL",
-        "open": "Open",
-        "openUrl": "Open Web UI in external browser"
+        "urlDescription": "Access the Web UI through this URL"
       },
       "theme": {
         "label": "Theme",
@@ -186,31 +137,12 @@
         "dark": "Dark",
         "light": "Light"
       },
-      "window": {
-        "title": "Window Management",
-        "refreshTitles": "Refresh Window Titles",
-        "refreshTitlesDescription": "Refresh all window titles to reflect current state",
-        "refresh": "Refresh"
-      },
       "updatePreferences": "Update Preferences",
-      "autoUpdate": "Enable Auto-Update",
       "checkForUpdates": "Check for Updates",
-      "currentVersion": "Current Version",
-      "releaseTypes": "Release Types to Check",
-      "stableReleases": "Stable Releases",
-      "betaReleases": "Beta Releases",
-      "alphaReleases": "Alpha Releases",
-      "optInNonStable": "Opt-in for Non-Stable Updates",
-      "optInDescription": "Allow the app to check for and install beta and alpha releases",
-      "saveSettings": "Save Settings",
-      "settingsSaved": "Settings saved successfully",
-      "updateCheckSuccess": "Update check completed",
-      "updateCheckError": "Error checking for updates"
+      "currentVersion": "Current Version"
     },
     "update": {
-      "title": "Update Preferences",
       "autoUpdate": {
-        "title": "Automatic Updates",
         "enable": "Enable Automatic Updates",
         "description": "Automatically download and install updates when available",
         "notAvailableMacOS": "Auto-update is not available on macOS. Updates must be downloaded manually.",
@@ -218,24 +150,15 @@
         "notAvailableOther": "Auto-update is not available on this platform. Updates must be downloaded manually."
       },
       "nonStable": {
-        "title": "Non-Stable Updates",
         "optIn": "Opt-in for Non-Stable Updates",
         "description": "Allow the app to check for and install beta and alpha releases",
         "notAvailableWhenAutoUpdateDisabled": "Non-stable updates are only available when auto-update is enabled."
-      },
-      "releaseTypes": {
-        "title": "Release Types",
-        "description": "Select which types of releases to check for updates",
-        "stableDescription": "Stable releases are production-ready versions",
-        "betaDescription": "Beta releases are feature-complete but may have bugs",
-        "alphaDescription": "Alpha releases are early versions with experimental features"
       }
     }
   },
   "Users": {
     "header": "Select Your User",
     "createButton": "Create new User",
-    "saveButton": "Save Info",
     "cancelButton": "Cancel",
     "namePlaceholder": "User Name",
     "deleteUser": {
@@ -246,15 +169,12 @@
     }
   },
   "Reader": {
-    "readingMode": "Reading Mode",
-    "readingModeDescription": "Choose how pages are displayed (horizontal for manga, vertical for manhwa)",
-    "horizontal": "Horizontal",
-    "vertical": "Vertical",
     "chapter": "Chapter",
-    "switchToVertical": "Switch to Vertical Reading",
-    "switchToHorizontal": "Switch to Horizontal Reading",
     "previousChapter": "Previous Chapter",
     "nextChapter": "Next Chapter",
-    "read": "Read"
+    "read": "Read",
+    "verticalReading": "Vertical Reading",
+    "switchToVertical": "Switch to Vertical Reading",
+    "switchToHorizontal": "Switch to Horizontal Reading"
   }
 }

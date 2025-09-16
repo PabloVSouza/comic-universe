@@ -1,13 +1,11 @@
 {
   "General": {
-    "inDevelopment": "Função em desenvolvimento",
     "alertConfirmButton": "Ok",
     "version": "Versão",
     "author": "Autor",
     "license": "Licença",
     "githubRepository": "Repositório Github",
     "checking": "Verificando...",
-    "selectedReleaseTypes": "Tipos de Release Selecionados:",
     "save": "Salvar",
     "cancel": "Cancelar",
     "edit": "Editar",
@@ -17,13 +15,8 @@
   "Dashboard": {
     "setComplete": "Definir como Lido",
     "resetProgress": "Remover Progresso",
-    "read": "Lido",
     "continueReading": "Continuar de onde Parou",
     "downloadMore": "Baixar mais Capítulos",
-    "newChapter": {
-      "noNewChapterMessage": "Não existem novos capítulos",
-      "noNewChapterConfirm": "Ok"
-    },
     "contextMenu": {
       "deleteComic": {
         "title": "Deseja mesmo apagar?",
@@ -33,24 +26,13 @@
       }
     }
   },
-  "DownloadComic": {
-    "chaptersTitle": "Capítulos",
-    "navigation": {
-      "downloadQueue": "Na fila",
-      "downloadButton": "Baixar agora",
-      "addToQueue": "Adicionar todos na fila",
-      "removeFromQueue": "Remover todos da fila"
-    }
-  },
   "HomeNav": {
     "about": "Sobre este App",
     "settings": "Configurações",
-    "darkMode": "Modo Noturno",
     "changeUser": "Trocar de Usuário",
     "closeApp": "Fechar App"
   },
   "SearchComic": {
-    "windowTitle": "Busca de Quadrinhos",
     "textPlaceholder": "Digite sua Busca",
     "bookmarkComic": "Favoritar",
     "alreadyBookmarked": "Favoritado",
@@ -62,8 +44,6 @@
     "next": "Próxima"
   },
   "Settings": {
-    "title": "Configurações",
-    "saveAll": "Salvar Tudo",
     "windowTitle": "Configurações",
     "app": {
       "title": "Configurações do App"
@@ -82,38 +62,24 @@
         "buttonTitle": "Baixar e Instalar Plugin"
       },
       "installed": {
-        "title": "Plugins Instalados"
+        "title": "Plugins Instalados",
+        "noPluginsInstalled": "Nenhum plugin instalado"
       }
     },
     "user": {
       "title": "Configurações de Usuário",
-      "profile": "Perfil do Usuário",
       "currentUser": "Usuário Atual",
       "currentUserDescription": "O usuário atualmente selecionado para progresso de leitura",
-      "userId": "ID do Usuário",
-      "userIdDescription": "Identificador único para este usuário",
-      "isDefault": "Usuário Padrão",
-      "isDefaultDescription": "Se este é o usuário padrão",
       "namePlaceholder": "Digite o nome do usuário",
       "noUserSelected": "Nenhum usuário selecionado",
-      "statistics": "Estatísticas de Leitura",
       "chaptersRead": "Capítulos Lidos",
       "chaptersReadDescription": "Número total de capítulos com progresso de leitura",
       "pagesRead": "Páginas Lidas",
       "pagesReadDescription": "Número total de páginas lidas em todos os capítulos",
-      "dataManagement": "Gerenciamento de Dados",
-      "exportData": "Exportar Dados do Usuário",
-      "exportDataDescription": "Baixar seu progresso de leitura e dados do usuário como arquivo JSON",
+      "exportData": "Exportar Dados",
+      "exportDataDescription": "Exportar seus dados de leitura e configurações",
       "deleteUser": "Excluir Usuário",
-      "deleteUserDescription": "Excluir permanentemente este usuário e todo seu progresso de leitura",
-      "deleteUser": {
-        "confirm": "Tem certeza de que deseja excluir este usuário? Todo o progresso de leitura será perdido!"
-      },
-      "preferences": "Preferências do Usuário",
-      "readingPreferences": "Preferências de Leitura",
-      "displayPreferences": "Preferências de Exibição",
-      "notificationPreferences": "Preferências de Notificação",
-      "privacyPreferences": "Preferências de Privacidade",
+      "deleteUserDescription": "Excluir permanentemente este usuário e todos os dados associados",
       "readingDirection": "Direção de Leitura",
       "readingDirectionDescription": "Escolha a direção de leitura para os quadrinhos",
       "ltr": "Esquerda para Direita",
@@ -132,53 +98,38 @@
         "remove": "Remover",
         "removeConfirm": "Tem certeza de que deseja remover este papel de parede?"
       },
-      "appPreferences": "Preferências do App",
       "language": "Idioma",
-      "languageDescription": "Escolha seu idioma preferido (sobrescreve o idioma do app)",
-      "dataManagement": "Gerenciamento de Dados",
-      "exportData": "Exportar Dados",
-      "exportDataDescription": "Exportar seus dados de leitura e configurações",
-      "deleteUser": "Excluir Usuário",
-      "deleteUserDescription": "Excluir permanentemente este usuário e todos os dados associados"
+      "languageDescription": "Escolha seu idioma preferido (sobrescreve o idioma do app)"
     },
     "about": {
       "title": "Sobre Este Aplicativo",
-      "details": "Detalhes do Aplicativo",
-      "repository": "Repositório",
       "repositoryDescription": "Visite o repositório do projeto no GitHub"
     },
     "general": {
       "title": "Configurações Gerais",
       "webUIPreferences": "Preferências da Interface Web",
-      "restartWebUI": "Reiniciar Interface Web",
       "webUIStatus": "Status da Interface Web",
       "webUIStatusRunning": "Executando",
       "webUIStatusStopped": "Parado",
       "webUIStatusUnknown": "Desconhecido",
       "language": {
-        "title": "Configurações de Idioma",
         "label": "Selecionar Idioma",
         "description": "Escolha seu idioma preferido para a interface do aplicativo"
       },
       "debug": {
-        "title": "Configurações de Debug",
         "enableLogging": "Ativar Log de Debug",
         "enableLoggingDescription": "Ativar log detalhado para fins de depuração"
       },
       "webUI": {
-        "title": "Configurações de Interface Web",
         "enableWebUI": "Habilitar Interface Web",
         "enableWebUIDescription": "Habilitar interface baseada em web para acesso remoto",
-        "enableWebUIDescriptionDisabled": "Não é possível desabilitar a Interface Web enquanto acessando através da interface web",
         "autoPort": "Porta Automática",
         "autoPortDescription": "Encontrar automaticamente uma porta disponível começando de 8080",
         "port": "Porta da Interface Web",
         "portDescription": "Número da porta para o servidor da Interface Web",
         "portRange": "(1024-65535)",
         "url": "URL da Interface Web",
-        "urlDescription": "Acesse a Interface Web através desta URL",
-        "open": "Abrir",
-        "openUrl": "Abrir Interface Web no navegador externo"
+        "urlDescription": "Acesse a Interface Web através desta URL"
       },
       "theme": {
         "label": "Tema",
@@ -186,31 +137,12 @@
         "dark": "Escuro",
         "light": "Claro"
       },
-      "window": {
-        "title": "Gerenciamento de Janelas",
-        "refreshTitles": "Atualizar Títulos das Janelas",
-        "refreshTitlesDescription": "Atualizar todos os títulos das janelas para refletir o estado atual",
-        "refresh": "Atualizar"
-      },
       "updatePreferences": "Preferências de Atualização",
-      "autoUpdate": "Ativar Atualização Automática",
       "checkForUpdates": "Verificar Atualizações",
-      "currentVersion": "Versão Atual",
-      "releaseTypes": "Tipos de Release para Verificar",
-      "stableReleases": "Releases Estáveis",
-      "betaReleases": "Releases Beta",
-      "alphaReleases": "Releases Alpha",
-      "optInNonStable": "Optar por Atualizações Não-Estáveis",
-      "optInDescription": "Permitir que o app verifique e instale releases beta e alpha",
-      "saveSettings": "Salvar Configurações",
-      "settingsSaved": "Configurações salvas com sucesso",
-      "updateCheckSuccess": "Verificação de atualização concluída",
-      "updateCheckError": "Erro ao verificar atualizações"
+      "currentVersion": "Versão Atual"
     },
     "update": {
-      "title": "Preferências de Atualização",
       "autoUpdate": {
-        "title": "Atualizações Automáticas",
         "enable": "Ativar Atualizações Automáticas",
         "description": "Baixar e instalar automaticamente atualizações quando disponíveis",
         "notAvailableMacOS": "Atualização automática não está disponível no macOS. Atualizações devem ser baixadas manualmente.",
@@ -218,24 +150,15 @@
         "notAvailableOther": "Atualização automática não está disponível nesta plataforma. Atualizações devem ser baixadas manualmente."
       },
       "nonStable": {
-        "title": "Atualizações Não-Estáveis",
         "optIn": "Optar por Atualizações Não-Estáveis",
         "description": "Permitir que o app verifique e instale releases beta e alpha",
         "notAvailableWhenAutoUpdateDisabled": "Atualizações não-estáveis só estão disponíveis quando a atualização automática está habilitada."
-      },
-      "releaseTypes": {
-        "title": "Tipos de Release",
-        "description": "Selecionar quais tipos de releases verificar para atualizações",
-        "stableDescription": "Releases estáveis são versões prontas para produção",
-        "betaDescription": "Releases beta são completas em recursos mas podem ter bugs",
-        "alphaDescription": "Releases alpha são versões iniciais com recursos experimentais"
       }
     }
   },
   "Users": {
     "header": "Selecione o seu Usuário",
     "createButton": "Criar Usuário",
-    "saveButton": "Salvar Usuário",
     "cancelButton": "Cancelar",
     "namePlaceholder": "Nome do Usuário",
     "deleteUser": {
@@ -246,15 +169,12 @@
     }
   },
   "Reader": {
-    "readingMode": "Modo de Leitura",
-    "readingModeDescription": "Escolha como as páginas são exibidas (horizontal para mangá, vertical para manhwa)",
-    "horizontal": "Horizontal",
-    "vertical": "Vertical",
     "chapter": "Capítulo",
-    "switchToVertical": "Alternar para Leitura Vertical",
-    "switchToHorizontal": "Alternar para Leitura Horizontal",
     "previousChapter": "Capítulo Anterior",
     "nextChapter": "Próximo Capítulo",
-    "read": "Leitura"
+    "read": "Leitura",
+    "verticalReading": "Leitura Vertical",
+    "switchToVertical": "Alternar para Leitura Vertical",
+    "switchToHorizontal": "Alternar para Leitura Horizontal"
   }
 }

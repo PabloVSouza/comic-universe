@@ -234,6 +234,7 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
     const apiManager = new ApiManager(methods)
 
     methods.setApiManager(apiManager)
+    methods.setEventManager(eventManager)
 
     eventManager.resetEvents()
 

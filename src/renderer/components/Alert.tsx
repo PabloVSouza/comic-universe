@@ -43,7 +43,11 @@ const Alert = ({ title, message, buttons, className, visible }: IAlertProps) => 
         {message && <p className="mb-4 text-text-default">{message}</p>}
         <div className="flex justify-end space-x-2">
           {buttons?.map((button, index) => (
-            <Button key={index} onClick={button.action}>
+            <Button
+              key={index}
+              onClick={button.action}
+              theme={index === 0 ? 'secondary' : 'primary'}
+            >
               {button.label}
             </Button>
           ))}

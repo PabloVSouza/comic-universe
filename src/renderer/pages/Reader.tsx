@@ -43,8 +43,8 @@ const Reader = (): React.JSX.Element => {
   })
 
   const readingDirection = activeComic.settings?.readingDirection || userSettings?.readingPreferences?.readingDirection || 'ltr'
-  const defaultReadingMode =
-    activeComic.type === 'manhwa' || activeComic.type === 'manhua' ? 'vertical' : 'horizontal'
+  const defaultReadingMode = userSettings?.readingPreferences?.defaultReadingMode || 
+    (activeComic.type === 'manhwa' || activeComic.type === 'manhua' ? 'vertical' : 'horizontal')
   const readingMode = currentReadingMode || 'horizontal'
 
   const handleScroll = (): void => {

@@ -2,6 +2,7 @@ interface IUserSettings {
   // Reading preferences
   readingPreferences: {
     readingDirection: 'ltr' | 'rtl'
+    defaultReadingMode: 'horizontal' | 'vertical'
   }
 
   // Display preferences

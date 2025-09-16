@@ -16,7 +16,8 @@ const UserPreferences = () => {
 
   const [settings, setSettings] = useState<IUserSettings>({
     readingPreferences: {
-      readingDirection: 'ltr'
+      readingDirection: 'ltr',
+      defaultReadingMode: 'horizontal'
     },
     displayPreferences: {
       theme: 'inherit',
@@ -107,6 +108,29 @@ const UserPreferences = () => {
           options={[
             { value: 'ltr', label: t('Settings.user.ltr') },
             { value: 'rtl', label: t('Settings.user.rtl') }
+          ]}
+        />
+      </SettingsItem>
+
+      <SettingsItem
+        labelI18nKey="Settings.user.defaultReadingMode"
+        descriptionI18nKey="Settings.user.defaultReadingModeDescription"
+      >
+        <Select
+          value={{
+            value: settings.readingPreferences.defaultReadingMode,
+            label: t(`Settings.user.${settings.readingPreferences.defaultReadingMode}`)
+          }}
+          onChange={(selected) =>
+            handleSettingChange(
+              'readingPreferences',
+              'defaultReadingMode',
+              (selected as any)?.value || null
+            )
+          }
+          options={[
+            { value: 'horizontal', label: t('Settings.user.horizontal') },
+            { value: 'vertical', label: t('Settings.user.vertical') }
           ]}
         />
       </SettingsItem>

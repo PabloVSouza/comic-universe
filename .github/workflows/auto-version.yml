@@ -1,14 +1,16 @@
 name: Auto Versioning
 
-on:
-  push:
-    branches:
-      - main
-      - staging
-  pull_request:
-    branches:
-      - main
-      - staging
+# DISABLED: This workflow conflicts with dedicated release workflows
+# Use stable-release.yml, beta-release.yml, alpha-release.yml, and development-release.yml instead
+# on:
+#   push:
+#     branches:
+#       - main
+#       - staging
+#   pull_request:
+#     branches:
+#       - main
+#       - staging
 
 jobs:
   auto-version:

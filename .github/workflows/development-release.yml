@@ -38,6 +38,16 @@ jobs:
         run: |
           CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
           BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
+          
+          # For development releases, increment the patch version
+          # If current version is 2.0.0, next dev should be 2.0.1-dev.X
+          if [[ $CURRENT_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            # Current version is stable (e.g., 2.0.0), increment patch for dev
+            NEW_BASE_VERSION=$(echo $BASE_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+          else
+            # Current version already has pre-release, use as base
+            NEW_BASE_VERSION=$BASE_VERSION
+          fi
 
           # Get the latest development release to determine next build number
           LATEST_DEV_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[] | select(.tag_name | contains("-dev.")) | .tag_name' | head -1)
@@ -45,10 +55,10 @@ jobs:
 
           # Extract build number from latest development release or start from 1
           # Handle both old timestamp format and new semantic format
-          if [[ $LATEST_DEV_RELEASE =~ v${BASE_VERSION}-dev\.([0-9]{14}) ]]; then
+          if [[ $LATEST_DEV_RELEASE =~ v${NEW_BASE_VERSION}-dev\.([0-9]{14}) ]]; then
             # Old timestamp format - start from 1
             BUILD_NUMBER=1
-          elif [[ $LATEST_DEV_RELEASE =~ v${BASE_VERSION}-dev\.([0-9]+) ]]; then
+          elif [[ $LATEST_DEV_RELEASE =~ v${NEW_BASE_VERSION}-dev\.([0-9]+) ]]; then
             # New semantic format - increment build number
             BUILD_NUMBER=$(( ${BASH_REMATCH[1]} + 1 ))
           else
@@ -56,7 +66,7 @@ jobs:
           fi
 
           # PR to staging/dev: Create development version (early development)
-          NEW_VERSION="${BASE_VERSION}-dev.${BUILD_NUMBER}"
+          NEW_VERSION="${NEW_BASE_VERSION}-dev.${BUILD_NUMBER}"
           RELEASE_TYPE="development"
 
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT

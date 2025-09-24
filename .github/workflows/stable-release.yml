@@ -37,10 +37,27 @@ jobs:
       - name: Generate stable version
         id: stable-version
         run: |
-          CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
-          BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
-          # For stable releases, use the base version (e.g., 2.0.0)
-          STABLE_VERSION="${BASE_VERSION}"
+          # Get the latest stable release to determine next version
+          LATEST_STABLE_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[] | select(.prerelease == false) | .tag_name' | head -1)
+          echo "Latest stable release: $LATEST_STABLE_RELEASE"
+          
+          # Extract version from stable release (remove 'v' prefix)
+          if [[ $LATEST_STABLE_RELEASE =~ v([0-9]+\.[0-9]+\.[0-9]+) ]]; then
+            CURRENT_STABLE_VERSION="${BASH_REMATCH[1]}"
+            echo "Current stable version: $CURRENT_STABLE_VERSION"
+            
+            # Increment patch version for next stable release
+            # If current stable is 2.0.0, next stable should be 2.0.1
+            STABLE_VERSION=$(echo $CURRENT_STABLE_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            echo "New stable version: $STABLE_VERSION"
+          else
+            # Fallback to current version if no stable release found
+            CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
+            BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
+            STABLE_VERSION=$(echo $BASE_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            echo "Fallback: Using current version $CURRENT_VERSION, new stable: $STABLE_VERSION"
+          fi
+          
           echo "stable-version=$STABLE_VERSION" >> $GITHUB_OUTPUT
           echo "Stable version: $STABLE_VERSION"
 

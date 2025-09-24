@@ -102,13 +102,13 @@ After studying for a long time and trying different solutions, the app has evolv
 - **Plugin Template**: Ready-to-use template for developing new plugins
 - **Repository Management**: Centralized plugin and repository handling
 
-## 2.0.0 is almost here!
+## 2.0.0 is here!
 
 Version 2.0.0 is being developed for a while, and it's the culmination of a lot o dreams that i've had for the app since it's conception (I'm looking at you, Plugin System), so if you like the project, you should be exited for what's coming!
 
 ### We need plugins!
 
-Version 2.0.0 will include a new Plugin system, to add new comic repositories in a more dynamic way.
+Version 2.0.0 includes a new Plugin system, to add new comic repositories in a more dynamic way.
 
 The template for developing new plugins is ready, and you can find and fork it [here](https://github.com/pablovsouza/comic-universe-plugin-template).
 

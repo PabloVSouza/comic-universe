@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import useApi from 'api'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import usePersistStore from 'store/usePersistStore'
-import wallpaperManager from 'renderer-utils/wallpaperManager'
 
 export const useUserSettings = () => {
   const { invoke } = useApi()
@@ -67,25 +66,6 @@ export const useUserSettings = () => {
     }
   }, [userSettings?.appPreferences?.language, appLanguage.language, i18n])
 
-  // Apply wallpaper settings
-  useEffect(() => {
-    const mainContainer = document.querySelector('.main-container')
-    if (!mainContainer) return
-
-    const applyWallpaper = async () => {
-      if (userSettings?.displayPreferences?.wallpaper) {
-        const wallpaper = userSettings.displayPreferences.wallpaper
-        const wallpaperUrl = await wallpaperManager.getWallpaperUrl(wallpaper)
-        ;(mainContainer as HTMLElement).style.backgroundImage = `url(${wallpaperUrl})`
-      } else {
-        // Use default wallpaper when no custom wallpaper is selected
-        const defaultWallpaperUrl = await wallpaperManager.getWallpaperUrl('default.webp')
-        ;(mainContainer as HTMLElement).style.backgroundImage = `url(${defaultWallpaperUrl})`
-      }
-    }
-
-    applyWallpaper()
-  }, [userSettings?.displayPreferences?.wallpaper])
 
   return {
     userSettings,
@@ -98,7 +78,8 @@ export const useUserSettings = () => {
     effectiveLanguage:
       userSettings?.appPreferences?.language === 'inherit'
         ? appLanguage.language
-        : userSettings?.appPreferences?.language
+        : userSettings?.appPreferences?.language,
+    currentWallpaper: userSettings?.displayPreferences?.wallpaper || null
   }
 }
 

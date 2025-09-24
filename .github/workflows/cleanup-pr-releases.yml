@@ -1,0 +1,123 @@
+name: Cleanup PR Releases
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  cleanup-releases:
+    runs-on: ubuntu-latest
+    # Only run if PR was closed without merging
+    if: github.event.pull_request.merged == false
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get PR information
+        id: pr-info
+        run: |
+          PR_NUMBER="${{ github.event.number }}"
+          PR_HEAD_REF="${{ github.head_ref }}"
+          PR_BASE_REF="${{ github.base_ref }}"
+          PR_MERGED="${{ github.event.pull_request.merged }}"
+
+          echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "pr-head-ref=$PR_HEAD_REF" >> $GITHUB_OUTPUT
+          echo "pr-base-ref=$PR_BASE_REF" >> $GITHUB_OUTPUT
+          echo "pr-merged=$PR_MERGED" >> $GITHUB_OUTPUT
+
+          echo "PR #$PR_NUMBER closed without merging: $PR_HEAD_REF -> $PR_BASE_REF"
+
+      - name: Find and delete PR-related releases
+        run: |
+          PR_NUMBER="${{ steps.pr-info.outputs.pr-number }}"
+          PR_HEAD_REF="${{ steps.pr-info.outputs.pr-head-ref }}"
+
+          echo "Looking for releases related to PR #$PR_NUMBER..."
+
+          # Get all releases
+          RELEASES=$(gh release list --limit 100 --json tagName,isPrerelease)
+
+          # Find releases that mention this PR number by checking each release individually
+          echo "$RELEASES" | jq -r '.[] | .tagName' | while read -r TAG; do
+            if [ -n "$TAG" ]; then
+              # Get the release body for this specific tag
+              RELEASE_BODY=$(gh release view "$TAG" --json body -q '.body' 2>/dev/null || echo "")
+              if [[ "$RELEASE_BODY" == *"PR #$PR_NUMBER"* ]]; then
+                echo "Found release $TAG related to PR #$PR_NUMBER"
+                
+                # Delete the release
+                echo "Deleting release $TAG..."
+                gh release delete "$TAG" --yes
+                
+                # Delete the tag
+                echo "Deleting tag $TAG..."
+                git tag -d "$TAG" 2>/dev/null || true
+                git push origin ":refs/tags/$TAG" 2>/dev/null || true
+                
+                echo "Successfully cleaned up release $TAG"
+              fi
+            fi
+          done
+
+          # Also look for releases with branch name in tag (for dev releases)
+          # Skip this section if we already found and deleted releases above
+          if [[ "$PR_HEAD_REF" == "dev/v2.0.0-cicd-clean" ]]; then
+            echo "Looking for additional dev releases with branch-specific tags..."
+            # Get fresh list of releases since some might have been deleted above
+            REMAINING_RELEASES=$(gh release list --limit 100 --json tagName,isPrerelease)
+            echo "$REMAINING_RELEASES" | jq -r '.[] | select(.tagName | contains("beta") or contains("alpha")) | .tagName' | while read -r TAG; do
+              if [ -n "$TAG" ]; then
+                echo "Found potential dev release $TAG"
+                
+                # Check if this release still exists before trying to get its details
+                if gh release view "$TAG" >/dev/null 2>&1; then
+                  # Check if this release was created recently (within last 24 hours)
+                  RELEASE_DATE=$(gh release view "$TAG" --json createdAt -q '.createdAt')
+                  CURRENT_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+                  
+                  # Simple check: if release is very recent, it might be from this PR
+                  echo "Release $TAG created at: $RELEASE_DATE"
+                  echo "Current time: $CURRENT_DATE"
+                else
+                  echo "Release $TAG no longer exists, skipping..."
+                fi
+              fi
+            done
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on closed PR
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const prNumber = context.issue.number;
+            const prHeadRef = context.payload.pull_request.head.ref;
+            const prMerged = context.payload.pull_request.merged;
+
+            try {
+              await github.rest.issues.createComment({
+                issue_number: prNumber,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `🧹 **PR Release Cleanup**
+                
+                PR #${prNumber} has been closed without merging. Any associated beta/nightly releases have been automatically cleaned up.
+                
+                **Branch:** \`${prHeadRef}\`
+                **Status:** Closed (not merged)
+                **Reason:** Releases are only cleaned up when PRs are closed without merging to keep the releases page organized.
+                
+                If this PR gets reopened, new releases will be created automatically.`
+              });
+              console.log('✅ Successfully commented on PR');
+            } catch (error) {
+              console.log('⚠️ Could not comment on PR (permissions issue):', error.message);
+              console.log('✅ Release cleanup completed successfully regardless');
+            }

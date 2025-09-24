@@ -5,5 +5,25 @@ out
 *.db
 *.db-journal
 .env
+.env.codesigning
 **/.DS_Store
-plugins
+/plugins*
+.yarn/
+dev-data/
+
+# Build artifacts from CI
+linux-builds/
+macos-builds/
+windows-builds/
+version-files/
+
+# Code signing certificates and keys
+*.p12
+*.pfx
+*.cer
+*.crt
+*.key
+*.pem
+certificates/
+certs/
+

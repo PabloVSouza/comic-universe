@@ -1,5 +1,11 @@
-interface ComicInterface {
-  id: number
+interface IComicSettings {
+  readingMode?: 'horizontal' | 'vertical'
+  readingDirection?: 'ltr' | 'rtl'
+  [key: string]: any
+}
+
+interface IComic {
+  id?: number
   siteId: string
   name: string
   cover: string
@@ -9,10 +15,10 @@ interface ComicInterface {
   publisher?: string | null
   status?: string | null
   genres?: string | null
-  siteLink: string
+  siteLink?: string | null
   synopsis: string
-  year?: string
-  type: string
-  chapters: Chapter[]
-  ReadProgress: ReadProgress[]
+  year?: string | null
+  type: 'hq' | 'manga' | 'manhwa' | 'manhua'
+  settings?: IComicSettings
+  chapters?: IChapter[]
 }

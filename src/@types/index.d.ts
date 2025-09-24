@@ -1,11 +1,19 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
 import { PlatformPath } from 'path'
-import { IDBInteractionsRepository } from '../electron/repositories/IDBInteractionsRepository'
+import { IDBInteractionsRepository } from 'repositories/Implementations/DBImplementations/IDBInteractionsRepository'
+import { ComicUniverseAPI } from './ApiTypes'
+
+// Extend ElectronAPI to include window control methods
+interface ExtendedElectronAPI extends ElectronAPI {
+  minimizeWindow: () => Promise<void>
+  maximizeWindow: () => Promise<void>
+  closeWindow: () => Promise<void>
+}
 
 declare global {
   interface Window {
-    Electron: ElectronAPI
-    api: unknown
+    Electron: ExtendedElectronAPI
+    api: ComicUniverseAPI
     path: PlatformPath
     app: {
       version: string

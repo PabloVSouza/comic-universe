@@ -1,4 +1,4 @@
-interface Page {
+interface IPage {
   filename: string
   path: string
 }

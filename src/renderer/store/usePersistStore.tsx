@@ -1,41 +1,87 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-const { isDev } = window
+import useGlobalStore from './useGlobalStore'
+import { createSettingsStorage } from './settingsStorage'
+import { DEFAULT_SETTINGS } from 'constants/defaultSettings'
 
-interface usePersistStore {
-  theme: string
-  lang: string
-  currentUser: UserInterface
-  repo: string
+interface IusePersistStore {
+  theme: { theme: string }
+  repo: { repo: TOption }
+  language: { language: string }
+  debug: { enableDebugLogging: boolean }
+  webUI: { enableWebUI: boolean; autoPort?: boolean; port?: number }
+  _hasHydrated: boolean
   switchTheme: (theme?: string) => void
-  changeLanguage: (lang?: string) => void
-  setCurrentUser: (currentUser: UserInterface) => void
-  setRepo: (repo: string) => void
+  setRepo: (repo: TOption) => void
+  setLanguage: (language: string) => void
+  setDebugLogging: (enabled: boolean) => void
+  setWebUI: (enabled: boolean, autoPort?: boolean, port?: number) => void
+  setWebUIAutoPort: (autoPort: boolean) => void
+  setWebUIPort: (port: number) => void
 }
 
-const usePersistStore = create<usePersistStore>()(
+const { appParams } = useGlobalStore.getState()
+
+const usePersistStore = create<IusePersistStore>()(
   persist(
     (set, get) => ({
-      theme: 'dark',
-      lang: 'ptBR',
-      currentUser: {} as UserInterface,
-      repo: 'hqnow',
+      ...DEFAULT_SETTINGS,
+      _hasHydrated: false,
 
-      switchTheme: (theme): void =>
-        set({ theme: theme || get().theme === 'dark' ? 'light' : 'dark' }),
-
-      changeLanguage: (lang): void =>
-        set({
-          lang: lang || get().lang === 'ptBR' ? 'enUS' : 'ptBR'
-        }),
-
-      setCurrentUser: (currentUser): void => set({ currentUser }),
-
-      setRepo: (repo): void => set({ repo })
+      switchTheme: (theme) => {
+        const newTheme = theme ?? (get().theme.theme === 'dark' ? 'light' : 'dark')
+        set({ theme: { theme: newTheme } })
+      },
+      setRepo: (repo) => {
+        set({ repo: { repo } })
+      },
+      setLanguage: (language) => {
+        set({ language: { language } })
+      },
+      setDebugLogging: (enabled) => {
+        set({ debug: { enableDebugLogging: enabled } })
+      },
+      setWebUI: (enabled, autoPort?: boolean, port?: number) => {
+        set((state) => ({
+          webUI: {
+            enableWebUI: enabled,
+            autoPort: autoPort !== undefined ? autoPort : state.webUI.autoPort,
+            port: port !== undefined ? port : state.webUI.port
+          }
+        }))
+      },
+      setWebUIAutoPort: (autoPort) => {
+        set((state) => ({
+          webUI: {
+            ...state.webUI,
+            autoPort
+          }
+        }))
+      },
+      setWebUIPort: (port) => {
+        set((state) => ({
+          webUI: {
+            ...state.webUI,
+            port
+          }
+        }))
+      }
     }),
     {
-      name: isDev ? 'comic-universe-dev' : 'comic-universe',
-      storage: createJSONStorage(() => localStorage)
+      name: appParams.isDev ? 'comic-universe-dev' : 'comic-universe',
+      storage: createJSONStorage(() => createSettingsStorage()),
+      partialize: (state) => ({
+        theme: state.theme,
+        repo: state.repo,
+        language: state.language,
+        debug: state.debug,
+        webUI: state.webUI
+      }),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state._hasHydrated = true
+        }
+      }
     }
   )
 )

@@ -1,0 +1,185 @@
+{
+  "General": {
+    "alertConfirmButton": "Ok",
+    "version": "Version",
+    "author": "Author",
+    "license": "License",
+    "githubRepository": "Github Repository",
+    "checking": "Checking...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "Dashboard": {
+    "setComplete": "Mark as Read",
+    "resetProgress": "Mark as Unread",
+    "continueReading": "Continue Reading",
+    "downloadMore": "Download More",
+    "contextMenu": {
+      "deleteComic": {
+        "title": "Do you really want to delete?",
+        "confirmMessage": "All the read progress will be lost!",
+        "confirmOk": "Confirm",
+        "confirmCancel": "Cancel"
+      }
+    }
+  },
+  "HomeNav": {
+    "about": "About This App",
+    "settings": "Settings",
+    "userSettings": "User Settings",
+    "plugins": "Plugins",
+    "changeUser": "Change User",
+    "closeApp": "Close App"
+  },
+  "SearchComic": {
+    "windowTitle": "Search Comics",
+    "textPlaceholder": "Type your Search",
+    "bookmarkComic": "Bookmark",
+    "alreadyBookmarked": "Bookmarked",
+    "availableChapters": "Chapters Available",
+    "noReposAvailable": "No Repos Available"
+  },
+  "Pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "Settings": {
+    "windowTitle": "Application Settings",
+    "app": {
+      "title": "App Settings"
+    },
+    "options": {
+      "generalLabel": "General",
+      "pluginsLabel": "Plugins",
+      "userLabel": "Users"
+    },
+    "plugin": {
+      "title": "Plugin Settings",
+      "install": {
+        "label": "Install Plugin",
+        "description": "Download and install plugins from the repository",
+        "selectPlaceholder": "Select a plugin to install",
+        "buttonTitle": "Download and Install Plugin",
+        "notAvailableInWebUI": "Plugin installation is not available in Web UI mode. Plugins must be installed directly on the server running the application."
+      },
+      "installed": {
+        "title": "Installed Plugins",
+        "noPluginsInstalled": "No plugins installed"
+      }
+    },
+    "user": {
+      "title": "User Settings",
+      "currentUser": "Current User",
+      "currentUserDescription": "The currently selected user for reading progress",
+      "namePlaceholder": "Enter user name",
+      "noUserSelected": "No user selected",
+      "chaptersRead": "Chapters Read",
+      "chaptersReadDescription": "Total number of chapters with reading progress",
+      "pagesRead": "Pages Read",
+      "pagesReadDescription": "Total number of pages read across all chapters",
+      "exportData": "Export Data",
+      "exportDataDescription": "Export your reading data and settings",
+      "readingDirection": "Reading Direction",
+      "readingDirectionDescription": "Choose the reading direction for comics",
+      "ltr": "Left to Right",
+      "rtl": "Right to Left",
+      "defaultReadingMode": "Default Reading Mode",
+      "defaultReadingModeDescription": "Choose the default reading mode for comics (can be overridden per comic)",
+      "horizontal": "Horizontal",
+      "vertical": "Vertical",
+      "theme": "Theme",
+      "themeDescription": "Choose your preferred theme (overrides app theme)",
+      "light": "Light",
+      "dark": "Dark",
+      "auto": "Auto",
+      "inherit": "Inherit from App",
+      "wallpaper": {
+        "label": "Wallpaper",
+        "description": "Choose a custom wallpaper for the app",
+        "addWallpaper": "Add Wallpaper",
+        "default": "Default",
+        "remove": "Remove",
+        "removeConfirm": "Are you sure you want to remove this wallpaper?"
+      },
+      "language": "Language",
+      "languageDescription": "Choose your preferred language (overrides app language)"
+    },
+    "about": {
+      "title": "About This App",
+      "repositoryDescription": "Visit the project repository on GitHub"
+    },
+    "general": {
+      "title": "General Settings",
+      "webUIPreferences": "Web UI Preferences",
+      "webUIStatus": "Web UI Status",
+      "webUIStatusRunning": "Running",
+      "webUIStatusStopped": "Stopped",
+      "webUIStatusUnknown": "Unknown",
+      "language": {
+        "label": "Select Language",
+        "description": "Choose your preferred language for the application interface"
+      },
+      "debug": {
+        "enableLogging": "Enable Debug Logging",
+        "enableLoggingDescription": "Enable detailed logging for debugging purposes"
+      },
+      "webUI": {
+        "enableWebUI": "Enable Web UI",
+        "enableWebUIDescription": "Enable web-based user interface for remote access",
+        "autoPort": "Automatic Port",
+        "autoPortDescription": "Automatically find an available port starting from 8080",
+        "port": "Web UI Port",
+        "portDescription": "Port number for the Web UI server",
+        "portRange": "(1024-65535)",
+        "url": "Web UI URL",
+        "urlDescription": "Access the Web UI through this URL"
+      },
+      "theme": {
+        "label": "Theme",
+        "description": "Choose your preferred theme for the application interface",
+        "dark": "Dark",
+        "light": "Light"
+      },
+      "updatePreferences": "Update Preferences",
+      "checkForUpdates": "Check for Updates",
+      "currentVersion": "Current Version"
+    },
+    "update": {
+      "autoUpdate": {
+        "enable": "Enable Automatic Updates",
+        "description": "Automatically download and install updates when available",
+        "notAvailableMacOS": "Auto-update is not available on macOS. Updates must be downloaded manually.",
+        "notAvailableWindows": "Auto-update is not available on Windows. Updates must be downloaded manually.",
+        "notAvailableOther": "Auto-update is not available on this platform. Updates must be downloaded manually."
+      },
+      "nonStable": {
+        "optIn": "Opt-in for Non-Stable Updates",
+        "description": "Allow the app to check for and install beta and alpha releases",
+        "notAvailableWhenAutoUpdateDisabled": "Non-stable updates are only available when auto-update is enabled."
+      }
+    }
+  },
+  "Users": {
+    "header": "Select Your User",
+    "createButton": "Create new User",
+    "cancelButton": "Cancel",
+    "namePlaceholder": "User Name"
+  },
+  "Reader": {
+    "chapter": "Chapter",
+    "previousChapter": "Previous Chapter",
+    "nextChapter": "Next Chapter",
+    "read": "Read",
+    "verticalReading": "Vertical Reading",
+    "switchToVertical": "Switch to Vertical Reading",
+    "switchToHorizontal": "Switch to Horizontal Reading",
+    "rightToLeft": "Right to Left",
+    "switchToRtl": "Switch to Right to Left Reading",
+    "switchToLtr": "Switch to Left to Right Reading",
+    "settings": "Settings",
+    "readingSettings": "Reading Settings"
+  }
+}

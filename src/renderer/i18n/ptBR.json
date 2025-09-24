@@ -1,0 +1,185 @@
+{
+  "General": {
+    "alertConfirmButton": "Ok",
+    "version": "Versão",
+    "author": "Autor",
+    "license": "Licença",
+    "githubRepository": "Repositório Github",
+    "checking": "Verificando...",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "yes": "Sim",
+    "no": "Não"
+  },
+  "Dashboard": {
+    "setComplete": "Definir como Lido",
+    "resetProgress": "Remover Progresso",
+    "continueReading": "Continuar de onde Parou",
+    "downloadMore": "Baixar mais Capítulos",
+    "contextMenu": {
+      "deleteComic": {
+        "title": "Deseja mesmo apagar?",
+        "confirmMessage": "Todo o progresso de leitura será apagado!",
+        "confirmOk": "Confirmar",
+        "confirmCancel": "Cancelar"
+      }
+    }
+  },
+  "HomeNav": {
+    "about": "Sobre este App",
+    "settings": "Configurações",
+    "userSettings": "Configurações do Usuário",
+    "plugins": "Plugins",
+    "changeUser": "Trocar de Usuário",
+    "closeApp": "Fechar App"
+  },
+  "SearchComic": {
+    "windowTitle": "Buscar Quadrinhos",
+    "textPlaceholder": "Digite sua Busca",
+    "bookmarkComic": "Favoritar",
+    "alreadyBookmarked": "Favoritado",
+    "availableChapters": "Capítulos Disponíveis",
+    "noReposAvailable": "Sem Repositórios"
+  },
+  "Pagination": {
+    "previous": "Anterior",
+    "next": "Próxima"
+  },
+  "Settings": {
+    "windowTitle": "Configurações",
+    "app": {
+      "title": "Configurações do App"
+    },
+    "options": {
+      "generalLabel": "Geral",
+      "pluginsLabel": "Plugins",
+      "userLabel": "Usuário"
+    },
+    "plugin": {
+      "title": "Configurações de Plugins",
+      "install": {
+        "label": "Instalar Plugin",
+        "description": "Baixar e instalar plugins do repositório",
+        "selectPlaceholder": "Selecione um plugin para instalar",
+        "buttonTitle": "Baixar e Instalar Plugin",
+        "notAvailableInWebUI": "Instalação de plugins não está disponível no modo Web UI"
+      },
+      "installed": {
+        "title": "Plugins Instalados",
+        "noPluginsInstalled": "Nenhum plugin instalado"
+      }
+    },
+    "user": {
+      "title": "Configurações de Usuário",
+      "currentUser": "Usuário Atual",
+      "currentUserDescription": "O usuário atualmente selecionado para progresso de leitura",
+      "namePlaceholder": "Digite o nome do usuário",
+      "noUserSelected": "Nenhum usuário selecionado",
+      "chaptersRead": "Capítulos Lidos",
+      "chaptersReadDescription": "Número total de capítulos com progresso de leitura",
+      "pagesRead": "Páginas Lidas",
+      "pagesReadDescription": "Número total de páginas lidas em todos os capítulos",
+      "exportData": "Exportar Dados",
+      "exportDataDescription": "Exportar seus dados de leitura e configurações",
+      "readingDirection": "Direção de Leitura",
+      "readingDirectionDescription": "Escolha a direção de leitura para os quadrinhos",
+      "ltr": "Esquerda para Direita",
+      "rtl": "Direita para Esquerda",
+      "defaultReadingMode": "Modo de Leitura Padrão",
+      "defaultReadingModeDescription": "Escolha o modo de leitura padrão para quadrinhos (pode ser alterado por quadrinho)",
+      "horizontal": "Horizontal",
+      "vertical": "Vertical",
+      "theme": "Tema",
+      "themeDescription": "Escolha seu tema preferido (sobrescreve o tema do app)",
+      "light": "Claro",
+      "dark": "Escuro",
+      "auto": "Automático",
+      "inherit": "Herdar do App",
+      "wallpaper": {
+        "label": "Papel de Parede",
+        "description": "Escolha um papel de parede personalizado para o app",
+        "addWallpaper": "Adicionar Papel de Parede",
+        "default": "Padrão",
+        "remove": "Remover",
+        "removeConfirm": "Tem certeza de que deseja remover este papel de parede?"
+      },
+      "language": "Idioma",
+      "languageDescription": "Escolha seu idioma preferido (sobrescreve o idioma do app)"
+    },
+    "about": {
+      "title": "Sobre Este Aplicativo",
+      "repositoryDescription": "Visite o repositório do projeto no GitHub"
+    },
+    "general": {
+      "title": "Configurações Gerais",
+      "webUIPreferences": "Preferências da Interface Web",
+      "webUIStatus": "Status da Interface Web",
+      "webUIStatusRunning": "Executando",
+      "webUIStatusStopped": "Parado",
+      "webUIStatusUnknown": "Desconhecido",
+      "language": {
+        "label": "Selecionar Idioma",
+        "description": "Escolha seu idioma preferido para a interface do aplicativo"
+      },
+      "debug": {
+        "enableLogging": "Ativar Log de Debug",
+        "enableLoggingDescription": "Ativar log detalhado para fins de depuração"
+      },
+      "webUI": {
+        "enableWebUI": "Habilitar Interface Web",
+        "enableWebUIDescription": "Habilitar interface baseada em web para acesso remoto",
+        "autoPort": "Porta Automática",
+        "autoPortDescription": "Encontrar automaticamente uma porta disponível começando de 8080",
+        "port": "Porta da Interface Web",
+        "portDescription": "Número da porta para o servidor da Interface Web",
+        "portRange": "(1024-65535)",
+        "url": "URL da Interface Web",
+        "urlDescription": "Acesse a Interface Web através desta URL"
+      },
+      "theme": {
+        "label": "Tema",
+        "description": "Escolha seu tema preferido para a interface do aplicativo",
+        "dark": "Escuro",
+        "light": "Claro"
+      },
+      "updatePreferences": "Preferências de Atualização",
+      "checkForUpdates": "Verificar Atualizações",
+      "currentVersion": "Versão Atual"
+    },
+    "update": {
+      "autoUpdate": {
+        "enable": "Ativar Atualizações Automáticas",
+        "description": "Baixar e instalar automaticamente atualizações quando disponíveis",
+        "notAvailableMacOS": "Atualização automática não está disponível no macOS. Atualizações devem ser baixadas manualmente.",
+        "notAvailableWindows": "Atualização automática não está disponível no Windows. Atualizações devem ser baixadas manualmente.",
+        "notAvailableOther": "Atualização automática não está disponível nesta plataforma. Atualizações devem ser baixadas manualmente."
+      },
+      "nonStable": {
+        "optIn": "Optar por Atualizações Não-Estáveis",
+        "description": "Permitir que o app verifique e instale releases beta e alpha",
+        "notAvailableWhenAutoUpdateDisabled": "Atualizações não-estáveis só estão disponíveis quando a atualização automática está habilitada."
+      }
+    }
+  },
+  "Users": {
+    "header": "Selecione o seu Usuário",
+    "createButton": "Criar Usuário",
+    "cancelButton": "Cancelar",
+    "namePlaceholder": "Nome do Usuário"
+  },
+  "Reader": {
+    "chapter": "Capítulo",
+    "previousChapter": "Capítulo Anterior",
+    "nextChapter": "Próximo Capítulo",
+    "read": "Leitura",
+    "verticalReading": "Leitura Vertical",
+    "switchToVertical": "Alternar para Leitura Vertical",
+    "switchToHorizontal": "Alternar para Leitura Horizontal",
+    "rightToLeft": "Direita para Esquerda",
+    "switchToRtl": "Alternar para Leitura da Direita para Esquerda",
+    "switchToLtr": "Alternar para Leitura da Esquerda para Direita",
+    "settings": "Configurações",
+    "readingSettings": "Configurações de Leitura"
+  }
+}

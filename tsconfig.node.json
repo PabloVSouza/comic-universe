@@ -1,22 +1,31 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
   "include": [
-    "src/electron/main/*",
-    "src/electron/preload/*",
+    "src/electron/**/*",
+    "src/database/**/*",
+    "src/shared/**/*",
     "electron.vite.config.*",
-    "src/@types/*.d.ts"
+    "src/@types/*.d.ts",
+    "src/**/*.d.ts"
   ],
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"],
-    "baseUrl": "src/eletron",
+    "resolveJsonModule": true,
+    "moduleResolution": "bundler",
     "paths": {
-      "lib/*": ["./lib/*"],
-      "utils/*":["./utils/*"],
-      "repositories/*": ["./repositories/*"],
-      "main/*": ["./main/*"],
-      "preload/*": ["./preload/*"],
-      "events/*": ["./events/*"],
+      "main/*": ["./src/electron/main/*"],
+      "preload/*": ["./src/electron/preload/*"],
+      "repositories/*": ["./src/electron/repositories/*"],
+      "scripts/*": ["./src/electron/scripts/*"],
+      "electron-utils": ["./src/electron/utils/utils"],
+      "electron-utils/*":["./src/electron/utils/*"],
+      "windows/*":["./src/electron/windows/*"],
+      "database/*": ["./src/database/*"],
+      "constants/*": ["./src/electron/constants/*"],
+      "shared/*": ["./src/shared/*"],
+      "shared-utils/*": ["./src/utils/*"],
+      "shared-utils": ["./src/utils/index"]
     }
   }
 }

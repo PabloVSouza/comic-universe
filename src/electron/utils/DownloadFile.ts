@@ -1,20 +1,24 @@
-import axios from 'axios'
 import fs from 'fs'
+import { pipeline } from 'stream/promises'
 
 const DownloadFile = async (path: string, url: string): Promise<string> => {
   const fileName = url.substring(url.lastIndexOf('/') + 1)
 
-  const response = await axios({
-    method: 'get',
-    url,
-    responseType: 'stream'
-  })
+  // Fetch the resource
+  const response = await fetch(url)
 
-  await response.data.pipe(fs.createWriteStream(path + fileName))
+  // Check if the request was successful
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${url}: ${response.statusText}`)
+  }
 
-  return new Promise((resolve) => {
-    resolve(fileName)
-  })
+  // Create a write stream to save the file
+  const fileStream = fs.createWriteStream(path + fileName)
+
+  // Use pipeline to handle streaming the data to the file
+  await pipeline(response.body as unknown as NodeJS.ReadableStream, fileStream)
+
+  return path + fileName
 }
 
 export default DownloadFile

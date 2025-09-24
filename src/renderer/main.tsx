@@ -1,37 +1,73 @@
 import { ReactNode, useEffect } from 'react'
 import { HashRouter } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
 import ReactDOM from 'react-dom/client'
 import Routes from 'routes'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import 'css/main.css'
 import usePersistStore from 'store/usePersistStore'
-
-import style from 'scss/main/style.module.scss'
-import themes from 'scss/main/themes.module.scss'
-
-import classNames from 'classnames'
+import { AlertProvider } from 'components/Alert'
+import { I18nextProvider } from 'react-i18next'
+import i18n from './i18n/index'
+import UpdateNotification from 'components/UpdateNotification'
+import { useUserSettings } from 'hooks/useUserSettings'
 
 interface Props {
   children: ReactNode
 }
 
-const Main = ({ children }: Props): JSX.Element => {
+const queryClient = new QueryClient()
+
+const applyInitialTheme = () => {
+  document.documentElement.classList.add('dark')
+}
+
+applyInitialTheme()
+
+const Main = ({ children }: Props): React.JSX.Element => {
   const { theme } = usePersistStore()
-  const navigate = useNavigate()
+  const { effectiveTheme } = useUserSettings()
 
   useEffect(() => {
-    const { on } = window.Electron.ipcRenderer
-    on('changeUrl', (_event, url) => {
-      navigate(url)
-    })
+    const themeToApply = effectiveTheme || theme?.theme
+
+    if (themeToApply) {
+      if (themeToApply === 'dark') {
+        document.documentElement.classList.add('dark')
+      } else if (themeToApply === 'light') {
+        document.documentElement.classList.remove('dark')
+      } else if (themeToApply === 'auto') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (prefersDark) {
+          document.documentElement.classList.add('dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
+      }
+    }
+  }, [effectiveTheme, theme])
+
+  useEffect(() => {
+    document.documentElement.classList.add('transition-colors', 'duration-300', 'ease-default')
   }, [])
 
-  return <div className={classNames(themes[theme], style.main)}>{children}</div>
+  return (
+    <div className="main-container h-[calc(100dvh)] w-screen bg-cover bg-center bg-no-repeat flex justify-center items-center relative overflow-hidden transition-colors duration-300 ease-default">
+      {children}
+    </div>
+  )
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <HashRouter>
-    <Main>
-      <Routes />
-    </Main>
-  </HashRouter>
+  <QueryClientProvider client={queryClient}>
+    <HashRouter>
+      <I18nextProvider i18n={i18n}>
+        <Main>
+          <AlertProvider>
+            <UpdateNotification />
+            <Routes />
+          </AlertProvider>
+        </Main>
+      </I18nextProvider>
+    </HashRouter>
+  </QueryClientProvider>
 )

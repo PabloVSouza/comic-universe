@@ -1,0 +1,172 @@
+name: Stable Release
+
+on:
+  push:
+    branches:
+      - main
+  # Temporarily disabled for testing
+  # push:
+  #   tags:
+  #     - v*.*.*
+jobs:
+  prepare-stable:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.stable-version.outputs.stable-version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get current version
+        id: current-version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "current-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "Current version: $CURRENT_VERSION"
+
+      - name: Generate stable version
+        id: stable-version
+        run: |
+          CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
+          BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
+          # For stable releases, use the base version (e.g., 2.0.0)
+          STABLE_VERSION="${BASE_VERSION}"
+          echo "stable-version=$STABLE_VERSION" >> $GITHUB_OUTPUT
+          echo "Stable version: $STABLE_VERSION"
+
+      - name: Update package.json version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          STABLE_VERSION="${{ steps.stable-version.outputs.stable-version }}"
+          if [ "$CURRENT_VERSION" != "$STABLE_VERSION" ]; then
+            # Use jq to update package.json directly to preserve version format
+            jq --arg version "$STABLE_VERSION" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
+            echo "Updated package.json from $CURRENT_VERSION to $STABLE_VERSION"
+          else
+            echo "Version $STABLE_VERSION is already set, no update needed"
+          fi
+
+      - name: Upload version files
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-files
+          path: |
+            package.json
+            package-lock.json
+
+  Build:
+    runs-on: ${{ matrix.os }}
+    needs: prepare-stable
+    permissions: write-all
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Code signing disabled for all builds
+      CSC_FOR_PULL_REQUEST: false
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            architecture: x64
+          - os: ubuntu-latest
+            architecture: x64
+          - os: ubuntu-latest
+            architecture: arm64
+          - os: macos-14
+            architecture: arm64
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download version files
+        uses: actions/download-artifact@v4
+        with:
+          name: version-files
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Dependencies
+        run: npm ci
+
+      # Code signing disabled for all builds
+      # - name: Setup Consistent Certificate from Secrets
+
+      - name: build-linux-x64
+        if: matrix.architecture == 'x64' && matrix.os == 'ubuntu-latest'
+        run: npm run build:linux-x64
+
+      - name: build-linux-arm
+        if: matrix.architecture == 'arm64' && matrix.os == 'ubuntu-latest'
+        run: npm run build:linux-arm
+
+      - name: build-win
+        if: matrix.os == 'windows-latest'
+        run: npm run build:win
+
+      - name: build-mac-universal
+        if: matrix.architecture == 'arm64' && matrix.os == 'macos-14'
+        run: npm run build:mac
+
+      - name: Generate release notes
+        run: |
+          # Get the previous stable tag or use HEAD~20 as fallback
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 --match="v*.*.*" HEAD~1 2>/dev/null || echo "HEAD~20")
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "## 🚀 Stable Release v${{ needs.prepare-stable.outputs.version }}" >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "This is a stable release of Comic Universe ${{ needs.prepare-stable.outputs.version }}." >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "**Version:** ${{ needs.prepare-stable.outputs.version }}" >> $GITHUB_ENV
+          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_ENV
+          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          ./scripts/generate-release-notes.sh $PREVIOUS_TAG HEAD >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "## Installation" >> $GITHUB_ENV
+          echo "Download the appropriate build for your platform from the assets below." >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "## Code Signing" >> $GITHUB_ENV
+          echo "Code signing is disabled for all builds to speed up the build process and avoid certificate issues." >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "## Testing" >> $GITHUB_ENV
+          echo "This is a stable release. Please test thoroughly and report any issues." >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: release
+        uses: softprops/action-gh-release@v2
+        continue-on-error: true
+        with:
+          tag_name: 'v${{ needs.prepare-stable.outputs.version }}'
+          name: 'Stable Release v${{ needs.prepare-stable.outputs.version }}'
+          body: ${{ env.RELEASE_NOTES }}
+          files: |
+            dist/*.exe
+            dist/*.zip
+            dist/*.dmg
+            dist/*.AppImage
+            dist/*.snap
+            dist/*.deb
+            dist/*.rpm
+            dist/*.tar.gz
+            dist/*.yml
+            dist/*.blockmap
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

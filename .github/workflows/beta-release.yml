@@ -1,0 +1,269 @@
+name: Beta Release (Merged Code)
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  prepare-beta:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.beta-version.outputs.version }}
+      release-type: ${{ steps.beta-version.outputs.release-type }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get current version
+        id: current-version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "current-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "Current version: $CURRENT_VERSION"
+
+      - name: Generate beta version
+        id: beta-version
+        run: |
+          CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
+          BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
+
+          # Get the latest beta release to determine next build number
+          LATEST_BETA_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[] | select(.tag_name | contains("-beta.")) | .tag_name' | head -1)
+          echo "Latest beta release: $LATEST_BETA_RELEASE"
+
+          # Extract build number from latest beta release or start from 1
+          # Handle both old timestamp format and new semantic format
+          if [[ $LATEST_BETA_RELEASE =~ v${BASE_VERSION}-beta\.([0-9]{14}) ]]; then
+            # Old timestamp format - start from 1
+            BUILD_NUMBER=1
+          elif [[ $LATEST_BETA_RELEASE =~ v${BASE_VERSION}-beta\.([0-9]+) ]]; then
+            # New semantic format - increment build number
+            BUILD_NUMBER=$(( ${BASH_REMATCH[1]} + 1 ))
+          else
+            BUILD_NUMBER=1
+          fi
+
+          # PR to main: Create beta version (final testing before production)
+          NEW_VERSION="${BASE_VERSION}-beta.${BUILD_NUMBER}"
+          RELEASE_TYPE="beta"
+
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "release-type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
+          echo "New version: $NEW_VERSION"
+          echo "Release type: $RELEASE_TYPE"
+
+      - name: Update package.json version
+        run: |
+          # Use jq to update package.json directly to preserve 4-digit padding
+          jq --arg version "${{ steps.beta-version.outputs.version }}" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
+          echo "Updated package.json to version ${{ steps.beta-version.outputs.version }}"
+
+      - name: Upload version files
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-files
+          path: |
+            package.json
+            package-lock.json
+
+  build-linux:
+    runs-on: ubuntu-latest
+    needs: prepare-beta
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download version files
+        uses: actions/download-artifact@v4
+        with:
+          name: version-files
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application (Linux)
+        run: npm run build:linux-x64
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-builds
+          path: |
+            dist/*.AppImage
+            dist/*.yml
+            dist/*.blockmap
+
+  build-windows:
+    runs-on: windows-latest
+    needs: prepare-beta
+    env:
+      # Disable code signing for PR builds
+      CSC_FOR_PULL_REQUEST: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download version files
+        uses: actions/download-artifact@v4
+        with:
+          name: version-files
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Certificate setup disabled for PR builds
+      # - name: Setup Consistent Certificate from Secrets
+
+      - name: Build application (Windows)
+        run: npm run build:win
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-builds
+          path: |
+            dist/*.exe
+            dist/*.yml
+            dist/*.blockmap
+
+  build-macos:
+    runs-on: macos-latest
+    needs: prepare-beta
+    env:
+      # Disable code signing for PR builds
+      CSC_FOR_PULL_REQUEST: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download version files
+        uses: actions/download-artifact@v4
+        with:
+          name: version-files
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Certificate setup disabled temporarily to fix auto-updater
+      # - name: Setup Consistent Certificate from Secrets
+
+      - name: Build application (macOS)
+        run: npm run build:mac
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-builds
+          path: |
+            dist/*.dmg
+            dist/*.zip
+            dist/*.yml
+            dist/*.blockmap
+
+  beta-release:
+    runs-on: ubuntu-latest
+    needs: [prepare-beta, build-linux, build-windows, build-macos]
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Generate release notes
+        run: |
+          # Get the base commit for comparison
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BASE_COMMIT="${{ github.event.pull_request.base.sha }}"
+            HEAD_COMMIT="${{ github.event.pull_request.head.sha }}"
+          else
+            # For push events, compare with previous commit
+            BASE_COMMIT="HEAD~1"
+            HEAD_COMMIT="HEAD"
+          fi
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "## 🧪 Beta Release for PR #${{ github.event.number }}" >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "This is a beta release created automatically for final testing before production." >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "**PR:** #${{ github.event.number }}" >> $GITHUB_ENV
+          echo "**Branch:** \`${{ github.head_ref }}\`" >> $GITHUB_ENV
+          echo "**Target:** \`${{ github.base_ref }}\`" >> $GITHUB_ENV
+          echo "**Auto-cleanup:** This release will be automatically deleted if PR #${{ github.event.number }} is closed without merging." >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "## Changes" >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          ./scripts/generate-release-notes.sh $BASE_COMMIT $HEAD_COMMIT >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "## Testing" >> $GITHUB_ENV
+          echo "Please test this beta release and provide feedback." >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "## Installation" >> $GITHUB_ENV
+          echo "Download the appropriate build for your platform from the assets below." >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "## Code Signing" >> $GITHUB_ENV
+          echo "All builds are automatically signed with self-signed certificates. Users may see security warnings - this is normal for self-signed certificates." >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Set release name
+        id: release-name
+        run: |
+          echo "name=Beta Release ${{ needs.prepare-beta.outputs.version }}" >> $GITHUB_OUTPUT
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        continue-on-error: true
+        with:
+          tag_name: 'v${{ needs.prepare-beta.outputs.version }}'
+          name: '${{ steps.release-name.outputs.name }}'
+          target_commitish: ${{ github.sha }}
+          body: ${{ env.RELEASE_NOTES }}
+          files: |
+            linux-builds/*
+            windows-builds/*
+            macos-builds/*
+          draft: false
+          prerelease: true
+          generate_release_notes: false
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # No PR comment needed for push-triggered releases

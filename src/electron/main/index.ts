@@ -1,9 +1,9 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import CreateMainWindow from '../windows/MainWindow'
+import CreateMainWindow from 'windows/MainWindow'
 
 app.whenReady().then(() => {
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('com.pablovsouza.comic-universe')
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })

@@ -36,27 +36,44 @@ jobs:
       - name: Generate version
         id: version
         run: |
-          CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
-          BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
-
-          # Get the latest development release to determine next build number
-          LATEST_DEV_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[] | select(.tag_name | contains("-dev.")) | .tag_name' | head -1)
-          echo "Latest development release: $LATEST_DEV_RELEASE"
-
-          # Extract build number from latest development release or start from 1
-          # Handle both old timestamp format and new semantic format
-          if [[ $LATEST_DEV_RELEASE =~ v${BASE_VERSION}-dev\.([0-9]{14}) ]]; then
-            # Old timestamp format - start from 1
-            BUILD_NUMBER=1
-          elif [[ $LATEST_DEV_RELEASE =~ v${BASE_VERSION}-dev\.([0-9]+) ]]; then
-            # New semantic format - increment build number
-            BUILD_NUMBER=$(( ${BASH_REMATCH[1]} + 1 ))
+          # Get the latest stable release to determine base version
+          LATEST_STABLE_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[] | select(.prerelease == false) | .tag_name' | head -1)
+          echo "Latest stable release: $LATEST_STABLE_RELEASE"
+          
+          # Extract version from stable release (remove 'v' prefix)
+          if [[ $LATEST_STABLE_RELEASE =~ v([0-9]+\.[0-9]+\.[0-9]+) ]]; then
+            STABLE_VERSION="${BASH_REMATCH[1]}"
+            echo "Stable version: $STABLE_VERSION"
+            
+            # Increment patch version for next development cycle
+            # If stable is 2.0.0, next dev should be 2.0.1-dev.X
+            NEW_BASE_VERSION=$(echo $STABLE_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            echo "New base version for dev: $NEW_BASE_VERSION"
           else
-            BUILD_NUMBER=1
+            # Fallback to current version if no stable release found
+            CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
+            BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
+            NEW_BASE_VERSION=$(echo $BASE_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            echo "Fallback: Using current version $CURRENT_VERSION, new base: $NEW_BASE_VERSION"
           fi
 
-          # PR to staging/dev: Create development version (early development)
-          NEW_VERSION="${BASE_VERSION}-dev.${BUILD_NUMBER}"
+          # Get the latest development release for this base version to determine build number
+          LATEST_DEV_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r ".[] | select(.tag_name | contains(\"${NEW_BASE_VERSION}-dev.\")) | .tag_name" | head -1)
+          echo "Latest development release for $NEW_BASE_VERSION: $LATEST_DEV_RELEASE"
+
+          # Extract build number from latest development release or start from 1
+          if [[ $LATEST_DEV_RELEASE =~ v${NEW_BASE_VERSION}-dev\.([0-9]+) ]]; then
+            # Increment build number
+            BUILD_NUMBER=$(( ${BASH_REMATCH[1]} + 1 ))
+            echo "Incrementing build number to: $BUILD_NUMBER"
+          else
+            # No existing dev release for this base version, start from 1
+            BUILD_NUMBER=1
+            echo "Starting new dev series with build number: $BUILD_NUMBER"
+          fi
+
+          # Create development version
+          NEW_VERSION="${NEW_BASE_VERSION}-dev.${BUILD_NUMBER}"
           RELEASE_TYPE="development"
 
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT

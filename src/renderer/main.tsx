@@ -10,6 +10,7 @@ import { I18nextProvider } from 'react-i18next'
 import i18n from './i18n/index'
 import UpdateNotification from 'components/UpdateNotification'
 import { useUserSettings } from 'hooks/useUserSettings'
+import WallpaperRenderer from 'components/WallpaperRenderer'
 
 interface Props {
   children: ReactNode
@@ -25,7 +26,7 @@ applyInitialTheme()
 
 const Main = ({ children }: Props): React.JSX.Element => {
   const { theme } = usePersistStore()
-  const { effectiveTheme } = useUserSettings()
+  const { effectiveTheme, currentWallpaper } = useUserSettings()
 
   useEffect(() => {
     const themeToApply = effectiveTheme || theme?.theme
@@ -51,9 +52,12 @@ const Main = ({ children }: Props): React.JSX.Element => {
   }, [])
 
   return (
-    <div className="main-container h-[calc(100dvh)] w-screen bg-cover bg-center bg-no-repeat flex justify-center items-center relative overflow-hidden transition-colors duration-300 ease-default">
-      {children}
-    </div>
+    <>
+      <WallpaperRenderer wallpaper={currentWallpaper} />
+      <div className="main-container h-[calc(100dvh)] w-screen flex justify-center items-center relative overflow-hidden transition-colors duration-300 ease-default">
+        {children}
+      </div>
+    </>
   )
 }
 

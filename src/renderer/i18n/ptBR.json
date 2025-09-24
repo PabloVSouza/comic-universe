@@ -166,7 +166,13 @@
     "header": "Selecione o seu Usuário",
     "createButton": "Criar Usuário",
     "cancelButton": "Cancelar",
-    "namePlaceholder": "Nome do Usuário"
+    "namePlaceholder": "Nome do Usuário",
+    "deleteUser": {
+      "deleteUserTitle": "Excluir Usuário",
+      "deleteUserMessage": "Tem certeza de que deseja excluir este usuário? Todo o progresso de leitura será perdido permanentemente.",
+      "confirmDeleteButton": "Excluir",
+      "cancelDeleteButton": "Cancelar"
+    }
   },
   "Reader": {
     "chapter": "Capítulo",

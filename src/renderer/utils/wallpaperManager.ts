@@ -23,7 +23,7 @@ class WallpaperManager {
   }
 
   /**
-   * Get list of available wallpapers
+   * Get list of available image wallpapers
    */
   async getAvailableWallpapers(): Promise<WallpaperInfo[]> {
     return await this.api.invoke('getAvailableWallpapers')
@@ -44,7 +44,7 @@ class WallpaperManager {
   }
 
   /**
-   * Get the URL for a wallpaper (for display purposes)
+   * Get the URL for an image wallpaper (for display purposes)
    */
   async getWallpaperUrl(filename: string): Promise<string> {
     // Handle default wallpaper - use the imported asset which has the correct hash

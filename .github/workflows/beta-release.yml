@@ -35,27 +35,44 @@ jobs:
       - name: Generate beta version
         id: beta-version
         run: |
-          CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
-          BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
-
-          # Get the latest beta release to determine next build number
-          LATEST_BETA_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[] | select(.tag_name | contains("-beta.")) | .tag_name' | head -1)
-          echo "Latest beta release: $LATEST_BETA_RELEASE"
-
-          # Extract build number from latest beta release or start from 1
-          # Handle both old timestamp format and new semantic format
-          if [[ $LATEST_BETA_RELEASE =~ v${BASE_VERSION}-beta\.([0-9]{14}) ]]; then
-            # Old timestamp format - start from 1
-            BUILD_NUMBER=1
-          elif [[ $LATEST_BETA_RELEASE =~ v${BASE_VERSION}-beta\.([0-9]+) ]]; then
-            # New semantic format - increment build number
-            BUILD_NUMBER=$(( ${BASH_REMATCH[1]} + 1 ))
+          # Get the latest stable release to determine base version
+          LATEST_STABLE_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[] | select(.prerelease == false) | .tag_name' | head -1)
+          echo "Latest stable release: $LATEST_STABLE_RELEASE"
+          
+          # Extract version from stable release (remove 'v' prefix)
+          if [[ $LATEST_STABLE_RELEASE =~ v([0-9]+\.[0-9]+\.[0-9]+) ]]; then
+            STABLE_VERSION="${BASH_REMATCH[1]}"
+            echo "Stable version: $STABLE_VERSION"
+            
+            # Increment patch version for next beta cycle
+            # If stable is 2.0.0, next beta should be 2.0.1-beta.X
+            NEW_BASE_VERSION=$(echo $STABLE_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            echo "New base version for beta: $NEW_BASE_VERSION"
           else
-            BUILD_NUMBER=1
+            # Fallback to current version if no stable release found
+            CURRENT_VERSION="${{ steps.current-version.outputs.current-version }}"
+            BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*//')
+            NEW_BASE_VERSION=$(echo $BASE_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            echo "Fallback: Using current version $CURRENT_VERSION, new base: $NEW_BASE_VERSION"
           fi
 
-          # PR to main: Create beta version (final testing before production)
-          NEW_VERSION="${BASE_VERSION}-beta.${BUILD_NUMBER}"
+          # Get the latest beta release for this base version to determine build number
+          LATEST_BETA_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r ".[] | select(.tag_name | contains(\"${NEW_BASE_VERSION}-beta.\")) | .tag_name" | head -1)
+          echo "Latest beta release for $NEW_BASE_VERSION: $LATEST_BETA_RELEASE"
+
+          # Extract build number from latest beta release or start from 1
+          if [[ $LATEST_BETA_RELEASE =~ v${NEW_BASE_VERSION}-beta\.([0-9]+) ]]; then
+            # Increment build number
+            BUILD_NUMBER=$(( ${BASH_REMATCH[1]} + 1 ))
+            echo "Incrementing build number to: $BUILD_NUMBER"
+          else
+            # No existing beta release for this base version, start from 1
+            BUILD_NUMBER=1
+            echo "Starting new beta series with build number: $BUILD_NUMBER"
+          fi
+
+          # Create beta version
+          NEW_VERSION="${NEW_BASE_VERSION}-beta.${BUILD_NUMBER}"
           RELEASE_TYPE="beta"
 
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT

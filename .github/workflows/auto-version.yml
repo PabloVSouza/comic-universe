@@ -75,15 +75,12 @@ jobs:
           elif [[ "${{ github.ref }}" == "refs/heads/staging" ]] || [[ "${{ github.ref }}" == "refs/heads/dev/v2.0.0" ]]; then
             RELEASE_TYPE="alpha"
             IS_PRERELEASE="true"
-            # Extract build number from latest release or start from 1
-            # Handle both old timestamp format and new semantic format
-            if [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]{14}) ]]; then
-              # Old timestamp format - start from 1
-              BUILD_NUMBER=1
-            elif [[ $LATEST_RELEASE =~ v${BASE_VERSION}-(alpha|beta)\.([0-9]+) ]]; then
-              # New semantic format - increment build number
-              BUILD_NUMBER=$(( ${BASH_REMATCH[2]} + 1 ))
+            # For alpha releases, check if current version is already an alpha version
+            if [[ $CURRENT_VERSION =~ ${BASE_VERSION}-alpha\.([0-9]+) ]]; then
+              # Current version is already alpha, increment the build number
+              BUILD_NUMBER=$(( ${BASH_REMATCH[1]} + 1 ))
             else
+              # Current version is not alpha, start from 1
               BUILD_NUMBER=1
             fi
             NEW_VERSION="${BASE_VERSION}-alpha.${BUILD_NUMBER}"

@@ -105,7 +105,26 @@
         "removeConfirm": "Tem certeza de que deseja remover este papel de parede?"
       },
       "language": "Idioma",
-      "languageDescription": "Escolha seu idioma preferido (sobrescreve o idioma do app)"
+      "languageDescription": "Escolha seu idioma preferido (sobrescreve o idioma do app)",
+      "websiteAuth": {
+        "title": "Conta do Site",
+        "description": "Conecte sua conta do app à sua conta do site Comic Universe",
+        "connect": "Conectar ao Site",
+        "disconnect": "Desconectar do Site",
+        "connected": "Conectado ao Site",
+        "notConnected": "Não Conectado",
+        "deviceName": "Nome do Dispositivo",
+        "deviceNamePlaceholder": "ex., Meu Computador Desktop",
+        "websiteUrl": "URL do Site",
+        "websiteUrlPlaceholder": "https://comicuniverse.com",
+        "connectSuccess": "Conectado com sucesso à conta do site",
+        "connectError": "Falha ao conectar à conta do site",
+        "disconnectSuccess": "Desconectado com sucesso da conta do site",
+        "disconnectError": "Falha ao desconectar da conta do site",
+        "tokenExpired": "Conexão expirada, reconecte-se",
+        "lastConnected": "Última conexão",
+        "never": "Nunca"
+      }
     },
     "about": {
       "title": "Sobre Este Aplicativo",

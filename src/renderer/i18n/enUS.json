@@ -105,7 +105,26 @@
         "removeConfirm": "Are you sure you want to remove this wallpaper?"
       },
       "language": "Language",
-      "languageDescription": "Choose your preferred language (overrides app language)"
+      "languageDescription": "Choose your preferred language (overrides app language)",
+      "websiteAuth": {
+        "title": "Website Account",
+        "description": "Connect your app account to your Comic Universe website account",
+        "connect": "Connect to Website",
+        "disconnect": "Disconnect from Website",
+        "connected": "Connected to Website",
+        "notConnected": "Not Connected",
+        "deviceName": "Device Name",
+        "deviceNamePlaceholder": "e.g., My Desktop Computer",
+        "websiteUrl": "Website URL",
+        "websiteUrlPlaceholder": "https://comicuniverse.com",
+        "connectSuccess": "Successfully connected to website account",
+        "connectError": "Failed to connect to website account",
+        "disconnectSuccess": "Successfully disconnected from website account",
+        "disconnectError": "Failed to disconnect from website account",
+        "tokenExpired": "Connection expired, please reconnect",
+        "lastConnected": "Last connected",
+        "never": "Never"
+      }
     },
     "about": {
       "title": "About This App",

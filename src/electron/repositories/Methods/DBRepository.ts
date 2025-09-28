@@ -187,6 +187,33 @@ class DBRepository implements IDBRepository {
       return new Promise((resolve) => {
         resolve(updatedSettings || undefined)
       })
+    },
+
+    // Website Authentication
+    dbSetWebsiteAuthToken: async ({ userId, token, expiresAt, deviceName }): Promise<void> => {
+      await this.repository.setWebsiteAuthToken(userId, token, expiresAt, deviceName)
+      return new Promise((resolve) => {
+        resolve()
+      })
+    },
+
+    dbGetWebsiteAuthToken: async ({ userId }): Promise<{
+      token: string | null
+      expiresAt: string | null
+      deviceName: string | null
+      isExpired: boolean
+    } | null> => {
+      const authData = await this.repository.getWebsiteAuthToken(userId)
+      return new Promise((resolve) => {
+        resolve(authData)
+      })
+    },
+
+    dbClearWebsiteAuthToken: async ({ userId }): Promise<void> => {
+      await this.repository.clearWebsiteAuthToken(userId)
+      return new Promise((resolve) => {
+        resolve()
+      })
     }
   }
 }

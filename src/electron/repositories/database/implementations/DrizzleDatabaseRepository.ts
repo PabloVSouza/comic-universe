@@ -420,6 +420,78 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     return updatedSettings ? (updatedSettings as IUserSettings) : undefined
   }
 
+  // Website authentication operations
+  async setWebsiteAuthToken(
+    userId: number,
+    token: string,
+    expiresAt: string,
+    deviceName: string
+  ): Promise<void> {
+    const db = this.getDb()
+    await db
+      .update(users)
+      .set({
+        websiteAuthToken: token,
+        websiteAuthExpiresAt: expiresAt,
+        websiteAuthDeviceName: deviceName
+      })
+      .where(eq(users.id, userId))
+  }
+
+  async getWebsiteAuthToken(userId: number): Promise<{
+    token: string | null
+    expiresAt: string | null
+    deviceName: string | null
+    isExpired: boolean
+  } | null> {
+    const db = this.getDb()
+    const result = await db
+      .select({
+        websiteAuthToken: users.websiteAuthToken,
+        websiteAuthExpiresAt: users.websiteAuthExpiresAt,
+        websiteAuthDeviceName: users.websiteAuthDeviceName
+      })
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1)
+
+    if (!result[0]) {
+      return null
+    }
+
+    const { websiteAuthToken, websiteAuthExpiresAt, websiteAuthDeviceName } = result[0]
+    
+    if (!websiteAuthToken || !websiteAuthExpiresAt) {
+      return {
+        token: null,
+        expiresAt: null,
+        deviceName: null,
+        isExpired: true
+      }
+    }
+
+    const isExpired = new Date() > new Date(websiteAuthExpiresAt)
+
+    return {
+      token: websiteAuthToken,
+      expiresAt: websiteAuthExpiresAt,
+      deviceName: websiteAuthDeviceName,
+      isExpired
+    }
+  }
+
+  async clearWebsiteAuthToken(userId: number): Promise<void> {
+    const db = this.getDb()
+    await db
+      .update(users)
+      .set({
+        websiteAuthToken: null,
+        websiteAuthExpiresAt: null,
+        websiteAuthDeviceName: null
+      })
+      .where(eq(users.id, userId))
+  }
+
   // ReadProgress operations
   async getReadProgressByUser(userId: number): Promise<IReadProgress[]> {
     const db = this.getDb()

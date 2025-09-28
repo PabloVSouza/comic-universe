@@ -4,7 +4,7 @@ import timeoutPromise from 'functions/timeoutPromise'
 import { confirmAlert } from 'components/Alert'
 import useQueue from './useQueue'
 
-const useFetchData = () => {
+const useFetchData = (userId: number) => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
 
@@ -40,9 +40,10 @@ const useFetchData = () => {
       await invoke('dbInsertComic', {
         comic: { ...data, ...comicDetails },
         chapters: chapterData,
-        repo
+        repo,
+        userId
       }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList', userId] })
   })
 
   const { mutate: insertChapters } = useMutation({

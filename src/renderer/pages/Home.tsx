@@ -32,14 +32,15 @@ const Home = (): React.JSX.Element => {
     .filter((window) => !window.windowStatus.isMinimized)
     .some((window) => window.windowProps.unique)
 
-  const { fetchChapterPages } = useFetchData()
+  const { fetchChapterPages } = useFetchData(currentUser.id)
 
   const { addToQueue } = useQueue(fetchChapterPages)
 
   const { data: comicList } = useQuery<IComic[]>({
-    queryKey: ['comicList'],
-    queryFn: async () => (await invoke('dbGetAllComics')) as IComic[],
-    initialData: []
+    queryKey: ['comicList', currentUser.id],
+    queryFn: async () => (await invoke('dbGetAllComics', { userId: currentUser.id })) as IComic[],
+    initialData: [],
+    enabled: !!currentUser.id
   })
 
   useEffect(() => {

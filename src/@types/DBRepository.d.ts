@@ -2,8 +2,8 @@ type IDBMethods = {
   //Comics
   dbGetComic: (input: { id: number }) => Promise<IComic>
   dbGetComicAdditionalData: (input: { id: number; userId: number }) => Promise<IComic>
-  dbGetAllComics: () => Promise<IComic[]>
-  dbInsertComic: (input: { comic: IComic; chapters: IChapter[]; repo: string }) => Promise<void>
+  dbGetAllComics: (input: { userId: number }) => Promise<IComic[]>
+  dbInsertComic: (input: { comic: IComic; chapters: IChapter[]; repo: string; userId: number }) => Promise<void>
   dbUpdateComic: (input: { id: number; comic: Partial<IComic> }) => Promise<IComic | undefined>
   dbDeleteComic: (input: { comic: IComic }) => Promise<void>
 

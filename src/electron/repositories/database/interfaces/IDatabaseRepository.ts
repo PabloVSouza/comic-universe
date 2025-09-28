@@ -11,10 +11,10 @@ export interface IDatabaseRepository {
   verifyMigrations(): Promise<boolean>
 
   // Comic operations
-  getAllComics(): Promise<IComic[]>
+  getAllComics(userId: number): Promise<IComic[]>
   getComicById(id: number): Promise<IComic | undefined>
-  getComicBySiteId(siteId: string): Promise<IComic | undefined>
-  createComic(comic: IComic, chapters: IChapter[], repo: string): Promise<void>
+  getComicBySiteId(siteId: string, userId: number): Promise<IComic | undefined>
+  createComic(comic: IComic, chapters: IChapter[], repo: string, userId: number): Promise<void>
   updateComic(id: number, comic: Partial<IComic>): Promise<IComic | undefined>
   deleteComic(id: number): Promise<void>
   getComicWithChapters(

@@ -1,0 +1,1 @@
+ALTER TABLE `Comic` ADD `userId` integer NOT NULL REFERENCES User(id);

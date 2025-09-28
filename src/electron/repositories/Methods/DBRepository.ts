@@ -52,15 +52,15 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    dbGetAllComics: async (): Promise<IComic[]> => {
-      const comics = await this.repository.getAllComics()
+    dbGetAllComics: async ({ userId }): Promise<IComic[]> => {
+      const comics = await this.repository.getAllComics(userId)
       return new Promise((resolve) => {
         resolve(comics as IComic[])
       })
     },
 
-    dbInsertComic: async ({ comic, chapters, repo }): Promise<void> => {
-      await this.repository.createComic(comic, chapters, repo)
+    dbInsertComic: async ({ comic, chapters, repo, userId }): Promise<void> => {
+      await this.repository.createComic(comic, chapters, repo, userId)
       return new Promise((resolve) => {
         resolve()
       })

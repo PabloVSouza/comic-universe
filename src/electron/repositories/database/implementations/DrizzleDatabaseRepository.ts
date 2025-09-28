@@ -113,9 +113,9 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   }
 
   // Comic operations
-  async getAllComics(): Promise<IComic[]> {
+  async getAllComics(userId: number): Promise<IComic[]> {
     const db = this.getDb()
-    const results = await db.select().from(comics).orderBy(asc(comics.name))
+    const results = await db.select().from(comics).where(eq(comics.userId, userId)).orderBy(asc(comics.name))
     return results.map((result) => ({
       ...result,
       settings: result.settings || {}
@@ -133,9 +133,9 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       : undefined
   }
 
-  async getComicBySiteId(siteId: string): Promise<IComic | undefined> {
+  async getComicBySiteId(siteId: string, userId: number): Promise<IComic | undefined> {
     const db = this.getDb()
-    const result = await db.select().from(comics).where(eq(comics.siteId, siteId)).limit(1)
+    const result = await db.select().from(comics).where(and(eq(comics.siteId, siteId), eq(comics.userId, userId))).limit(1)
     return result[0]
       ? ({
           ...result[0],
@@ -144,10 +144,10 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       : undefined
   }
 
-  async createComic(comic: IComic, chapterList: IChapter[], repo: string): Promise<void> {
+  async createComic(comic: IComic, chapterList: IChapter[], repo: string, userId: number): Promise<void> {
     const db = this.getDb()
 
-    await DebugLogger.log('createComic called with:', { comic, chapterList, repo })
+    await DebugLogger.log('createComic called with:', { comic, chapterList, repo, userId })
     await DebugLogger.log(
       'chapterList type:',
       typeof chapterList,
@@ -161,6 +161,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
     // Filter out undefined values and ensure required fields are present
     const cleanComicData = {
+      userId,
       siteId: comicData.siteId,
       name: comicData.name,
       cover: comicData.cover,

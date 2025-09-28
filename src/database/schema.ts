@@ -25,6 +25,9 @@ export const users = sqliteTable('User', {
 // Comic table
 export const comics = sqliteTable('Comic', {
   id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('userId')
+    .notNull()
+    .references(() => users.id),
   siteId: text('siteId').notNull(),
   name: text('name').notNull(),
   cover: text('cover').notNull(),
@@ -79,10 +82,15 @@ export const readProgress = sqliteTable('ReadProgress', {
 export const pluginsRelations = relations(plugins, () => ({}))
 
 export const usersRelations = relations(users, ({ many }) => ({
-  readProgress: many(readProgress)
+  readProgress: many(readProgress),
+  comics: many(comics)
 }))
 
-export const comicsRelations = relations(comics, ({ many }) => ({
+export const comicsRelations = relations(comics, ({ one, many }) => ({
+  user: one(users, {
+    fields: [comics.userId],
+    references: [users.id]
+  }),
   chapters: many(chapters),
   readProgress: many(readProgress)
 }))

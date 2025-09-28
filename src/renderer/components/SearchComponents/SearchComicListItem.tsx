@@ -7,6 +7,7 @@ import ReactHtmlParser from 'html-react-parser'
 import classNames from 'classnames'
 
 import usePersistStore from 'store/usePersistStore'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 
 import { useTranslation } from 'react-i18next'
 
@@ -29,16 +30,18 @@ const SearchComicListItem = ({
   const { t } = useTranslation()
   const { invoke } = useApi()
   const { repo } = usePersistStore()
-  const { insertComic } = useFetchData()
+  const { currentUser } = usePersistSessionStore()
+  const { insertComic } = useFetchData(currentUser.id)
 
   const navigate = useNavigate()
 
   const active = String(activeComic.siteId) === String(data.siteId)
 
   const { data: comicList, isFetching: comicListFetching } = useQuery({
-    queryKey: ['comicList'],
-    queryFn: async () => (await invoke('dbGetAllComics')) as IComic[],
-    initialData: []
+    queryKey: ['comicList', currentUser.id],
+    queryFn: async () => (await invoke('dbGetAllComics', { userId: currentUser.id })) as IComic[],
+    initialData: [],
+    enabled: !!currentUser.id
   })
 
   const { data: comicDetails, isFetching: comicDetailsFetching } = useQuery({

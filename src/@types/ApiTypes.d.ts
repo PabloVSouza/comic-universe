@@ -68,7 +68,12 @@ export interface ComicUniverseAPI {
   dbVerifyMigrations: () => Promise<boolean>
   dbGetComic: (args: { id: string }) => Promise<IComic>
   dbGetComics: (args: { userId: number }) => Promise<IComic[]>
-  dbInsertComic: (args: { comic: IComic; chapters: IChapter[]; repo: string; userId: number }) => Promise<void>
+  dbInsertComic: (args: {
+    comic: IComic
+    chapters: IChapter[]
+    repo: string
+    userId: number
+  }) => Promise<void>
   dbUpdateComic: (args: { id: number; comic: Partial<IComic> }) => Promise<IComic | undefined>
   dbDeleteComic: (args: { id: string }) => Promise<void>
   dbGetChapters: (args: { comicId: string }) => Promise<IChapter[]>

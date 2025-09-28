@@ -63,7 +63,7 @@ const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Elemen
 
   return (
     <ul className="h-full w-60 overflow-auto flex flex-col gap-px z-20 mt-px bg-list">
-      <li className="flex justify-center items-center gap-1">
+      <li className="flex justify-between items-center p-2">
         <Button
           className="z-30 h-full"
           icon={downloadIcon}
@@ -72,7 +72,7 @@ const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Elemen
           onClick={() => openWindow({ component: 'Search', props: {} })}
         />
         <Button
-          className="z-30 h-full"
+          className="z-30 h-full p-2"
           icon={refreshIcon}
           size="xs"
           theme="pure"

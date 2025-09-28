@@ -42,9 +42,22 @@ const Image = ({
   const nodeRef = useRef(null)
   const { isWebUI } = useEnvironment()
 
+  // If no src is provided, show placeholder
+  if (!src || src.trim() === '') {
+    return (
+      <div
+        className={`${className} flex items-center justify-center bg-gray-200 text-gray-500`}
+        style={style}
+        title="No image available"
+      >
+        <span className="text-xs">No image</span>
+      </div>
+    )
+  }
+
   const pureImgProps = {
     className,
-    src: getProxiedImageUrl(src || '', isWebUI),
+    src: getProxiedImageUrl(src, isWebUI),
     alt,
     style,
     referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
@@ -102,7 +115,7 @@ const Image = ({
       ...props,
       referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
       style,
-      src: getProxiedImageUrl(src || '', isWebUI),
+      src: getProxiedImageUrl(src, isWebUI),
       className,
       alt,
       ref: nodeRef,
@@ -111,7 +124,7 @@ const Image = ({
     }
 
     const loadingProps = {
-      src: getProxiedImageUrl(src || '', isWebUI),
+      src: getProxiedImageUrl(src, isWebUI),
       style: { display: 'none' },
       referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
       onLoad: (): void => setIsLoading(0),

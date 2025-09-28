@@ -197,7 +197,9 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    dbGetWebsiteAuthToken: async ({ userId }): Promise<{
+    dbGetWebsiteAuthToken: async ({
+      userId
+    }): Promise<{
       token: string | null
       expiresAt: string | null
       deviceName: string | null

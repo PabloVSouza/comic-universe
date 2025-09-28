@@ -7,6 +7,7 @@ import Button from 'components/Button'
 import { confirmAlert } from 'components/Alert'
 import { ContextMenu, openContextMenu, TContextOptions } from 'components/ContextMenu'
 import ComicListItem from 'components/HomeComponents/HomeComicListItem'
+import useSync from 'hooks/useSync'
 import downloadIcon from 'assets/download-icon.svg'
 import refreshIcon from 'assets/refresh.svg'
 import deleteIcon from 'assets/trash.svg'
@@ -21,12 +22,12 @@ const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Elemen
   })
 
   const { t } = useTranslation()
+  const { syncData, isSyncing } = useSync()
 
   const [currentCtxItem, setCurrentCtxItem] = useState({} as IComic)
 
   const handleSync = () => {
-    // TODO: Implement sync functionality
-    console.log('Sync button clicked - functionality to be implemented')
+    syncData()
   }
 
   const handleRightClick = (e: React.MouseEvent, item: IComic) => {
@@ -77,6 +78,9 @@ const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Elemen
           size="xs"
           theme="pure"
           onClick={handleSync}
+          disabled={isSyncing}
+          loading={isSyncing}
+          loadingAnimation="spin-reverse"
         />
       </li>
       <ContextMenu options={ctxOptions} />

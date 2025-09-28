@@ -27,8 +27,8 @@ const Reader = (): React.JSX.Element => {
   const [scrollContainer, setScrollContainer] = useState<HTMLDivElement | null>(null)
   const [isScrollingProgrammatically, setIsScrollingProgrammatically] = useState(false)
   const [shouldScrollToPage, setShouldScrollToPage] = useState(false)
-  const comicId = Number(useParams().comicId)
-  const chapterId = Number(useParams().chapterId)
+  const comicId = useParams().comicId
+  const chapterId = useParams().chapterId
 
   const { data: userSettings } = useQuery({
     queryKey: ['userSettings', currentUser.id],
@@ -102,7 +102,7 @@ const Reader = (): React.JSX.Element => {
     enabled: (!!currentUser.id && !activeComic.id) || !activeComic.chapters
   })
 
-  const chapter = activeComic?.chapters?.find((val) => val.id == chapterId)
+  const chapter = activeComic?.chapters?.find((val) => val.id === chapterId)
   const chapters = activeComic?.chapters
   const chapterIndex = chapters?.findIndex((val) => val.id === chapterId) ?? 0
   const pages = JSON.parse(chapter?.pages ?? '[]') as IPage[]
@@ -115,7 +115,7 @@ const Reader = (): React.JSX.Element => {
           chapterId,
           comicId,
           page: 1,
-          userId: currentUser.id ?? 0,
+          userId: currentUser.id ?? '',
           totalPages: pages.length ?? 0
         }
       })

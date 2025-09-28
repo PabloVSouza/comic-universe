@@ -132,7 +132,10 @@
         "reAuthRequired": "Autenticação do Site Necessária",
         "reAuthMessage": "Sua autenticação do site expirou ou é inválida. Por favor, re-autentique-se para continuar usando os recursos do site.",
         "skip": "Pular",
-        "reAuthenticate": "Re-autenticar"
+        "reAuthenticate": "Re-autenticar",
+        "syncRequired": "Autenticação do Site Necessária",
+        "syncRequiredMessage": "Você precisa conectar seu aplicativo à sua conta do site Comic Universe para sincronizar seus quadrinhos e progresso de leitura.",
+        "connectToSync": "Conectar ao Site"
       }
     },
     "about": {

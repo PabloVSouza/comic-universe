@@ -48,10 +48,8 @@ const useAutoWebsiteAuth = () => {
         })
 
         if (response.ok) {
-          console.log('Website authentication successful')
           // Token is valid, no need to prompt user
         } else {
-          console.log('Website authentication failed, prompting for re-authentication')
           // Token is invalid/expired, prompt user to re-authenticate
           showReAuthPrompt()
         }

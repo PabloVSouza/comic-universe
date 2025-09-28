@@ -1,6 +1,6 @@
 CREATE TABLE `Chapter` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`comicId` integer NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
+	`comicId` text NOT NULL,
 	`siteId` text NOT NULL,
 	`siteLink` text,
 	`releaseId` text,
@@ -15,7 +15,8 @@ CREATE TABLE `Chapter` (
 );
 --> statement-breakpoint
 CREATE TABLE `Comic` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
+	`userId` text NOT NULL,
 	`siteId` text NOT NULL,
 	`name` text NOT NULL,
 	`cover` text NOT NULL,
@@ -28,7 +29,9 @@ CREATE TABLE `Comic` (
 	`siteLink` text,
 	`year` text,
 	`synopsis` text NOT NULL,
-	`type` text NOT NULL
+	`type` text NOT NULL,
+	`settings` text DEFAULT '{}',
+	FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `Plugin` (
@@ -41,10 +44,10 @@ CREATE TABLE `Plugin` (
 );
 --> statement-breakpoint
 CREATE TABLE `ReadProgress` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`chapterId` integer NOT NULL,
-	`comicId` integer NOT NULL,
-	`userId` integer NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
+	`chapterId` text NOT NULL,
+	`comicId` text NOT NULL,
+	`userId` text NOT NULL,
 	`totalPages` integer NOT NULL,
 	`page` integer NOT NULL,
 	FOREIGN KEY (`chapterId`) REFERENCES `Chapter`(`id`) ON UPDATE no action ON DELETE no action,
@@ -53,8 +56,11 @@ CREATE TABLE `ReadProgress` (
 );
 --> statement-breakpoint
 CREATE TABLE `User` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
 	`default` integer DEFAULT false NOT NULL,
-	`settings` text DEFAULT '{}'
+	`settings` text DEFAULT '{}',
+	`websiteAuthToken` text,
+	`websiteAuthExpiresAt` text,
+	`websiteAuthDeviceName` text
 );

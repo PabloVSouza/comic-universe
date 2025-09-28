@@ -79,7 +79,6 @@ const WebsiteAuth = () => {
     },
     onError: (error) => {
       console.error('Disconnection error:', error)
-      // TODO: Show error toast
     }
   })
 

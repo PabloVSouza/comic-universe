@@ -145,6 +145,7 @@ type TButton = {
   disabled?: boolean
   icon?: string
   loading?: boolean
+  loadingAnimation?: 'spin' | 'spin-reverse'
   onClick?: () => void
   size?: keyof typeof buttonStyling.sizes
   theme?: keyof typeof buttonStyling.themes
@@ -159,6 +160,7 @@ const Button = ({
   disabled,
   icon,
   loading,
+  loadingAnimation = 'spin',
   onClick,
   size,
   theme = 'default',
@@ -206,7 +208,8 @@ const Button = ({
             buttonStyling.themes[safeTheme].icon.default,
             active && buttonStyling.themes[safeTheme].icon.active,
             disabled && safeTheme === 'toggle' && buttonStyling.themes[safeTheme].icon.disabled,
-            loading && buttonStyling.loading
+            loading &&
+              (loadingAnimation === 'spin-reverse' ? 'animate-spin-reverse' : buttonStyling.loading)
           )}
           src={icon}
           svg
@@ -218,7 +221,8 @@ const Button = ({
             buttonStyling.themes[safeTheme].icon.default,
             active && buttonStyling.themes[safeTheme].icon.active,
             disabled && safeTheme === 'toggle' && buttonStyling.themes[safeTheme].icon.disabled,
-            loading && buttonStyling.loading
+            loading &&
+              (loadingAnimation === 'spin-reverse' ? 'animate-spin-reverse' : buttonStyling.loading)
           )}
         />
       )}

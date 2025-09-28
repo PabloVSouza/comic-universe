@@ -1,6 +1,6 @@
 interface IChapter {
-  id?: number
-  comicId?: number
+  id?: string
+  comicId?: string
   siteId: string
   siteLink?: string | null
   releaseId?: string | null

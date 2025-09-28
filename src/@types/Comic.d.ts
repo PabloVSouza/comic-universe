@@ -5,7 +5,7 @@ interface IComicSettings {
 }
 
 interface IComic {
-  id?: number
+  id?: string
   siteId: string
   name: string
   cover: string

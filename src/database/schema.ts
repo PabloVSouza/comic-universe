@@ -1,5 +1,6 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { relations } from 'drizzle-orm'
+import { v4 as uuidv4 } from 'uuid'
 
 // Plugin table
 export const plugins = sqliteTable('Plugin', {
@@ -13,7 +14,9 @@ export const plugins = sqliteTable('Plugin', {
 
 // User table
 export const users = sqliteTable('User', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
   name: text('name').notNull(),
   default: integer('default', { mode: 'boolean' }).default(false).notNull(),
   settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({}),
@@ -24,8 +27,10 @@ export const users = sqliteTable('User', {
 
 // Comic table
 export const comics = sqliteTable('Comic', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  userId: integer('userId')
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  userId: text('userId')
     .notNull()
     .references(() => users.id),
   siteId: text('siteId').notNull(),
@@ -46,8 +51,10 @@ export const comics = sqliteTable('Comic', {
 
 // Chapter table
 export const chapters = sqliteTable('Chapter', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  comicId: integer('comicId')
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  comicId: text('comicId')
     .notNull()
     .references(() => comics.id),
   siteId: text('siteId').notNull(),
@@ -64,18 +71,21 @@ export const chapters = sqliteTable('Chapter', {
 
 // ReadProgress table
 export const readProgress = sqliteTable('ReadProgress', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  chapterId: integer('chapterId')
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  chapterId: text('chapterId')
     .notNull()
     .references(() => chapters.id),
-  comicId: integer('comicId')
+  comicId: text('comicId')
     .notNull()
     .references(() => comics.id),
-  userId: integer('userId')
+  userId: text('userId')
     .notNull()
     .references(() => users.id),
   totalPages: integer('totalPages').notNull(),
-  page: integer('page').notNull()
+  page: integer('page').notNull(),
+  updatedAt: text('updatedAt').$defaultFn(() => new Date().toISOString())
 })
 
 // Relations

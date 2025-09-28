@@ -24,7 +24,6 @@ const WebUISettings = () => {
     // Trigger API server restart when WebUI setting changes
     try {
       await invoke('restartApiServer')
-      console.log('API server restarted due to WebUI setting change')
     } catch (error) {
       console.error('Failed to restart API server:', error)
     }

@@ -96,6 +96,13 @@ class DBRepository implements IDBRepository {
       })
     },
 
+    dbGetChapterById: async ({ id }): Promise<IChapter | undefined> => {
+      const chapter = await this.repository.getChapterById(id)
+      return new Promise((resolve) => {
+        resolve(chapter)
+      })
+    },
+
     dbInsertChapters: async ({ chapters }): Promise<void> => {
       await this.repository.createChapters(chapters)
       return new Promise((resolve) => {
@@ -132,6 +139,11 @@ class DBRepository implements IDBRepository {
         await this.repository.updateReadProgress(readProgress.id, readProgress)
       }
 
+      return new Promise((resolve) => resolve())
+    },
+
+    dbInsertReadProgress: async ({ readProgress }): Promise<void> => {
+      await this.repository.createReadProgress(readProgress)
       return new Promise((resolve) => resolve())
     },
 

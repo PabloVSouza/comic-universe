@@ -119,7 +119,6 @@ const WebsiteAuth = (): React.JSX.Element => {
     },
     onError: (error) => {
       console.error('Failed to connect to website:', error)
-      // TODO: Show error toast
     }
   })
 

@@ -132,7 +132,10 @@
         "reAuthRequired": "Website Authentication Required",
         "reAuthMessage": "Your website authentication has expired or is invalid. Please re-authenticate to continue using website features.",
         "skip": "Skip",
-        "reAuthenticate": "Re-authenticate"
+        "reAuthenticate": "Re-authenticate",
+        "syncRequired": "Website Authentication Required",
+        "syncRequiredMessage": "You need to connect your app to your Comic Universe website account to sync your comics and reading progress.",
+        "connectToSync": "Connect to Website"
       }
     },
     "about": {

@@ -1,54 +1,56 @@
 type IDBMethods = {
   //Comics
-  dbGetComic: (input: { id: number }) => Promise<IComic>
-  dbGetComicAdditionalData: (input: { id: number; userId: number }) => Promise<IComic>
-  dbGetAllComics: (input: { userId: number }) => Promise<IComic[]>
+  dbGetComic: (input: { id: string }) => Promise<IComic>
+  dbGetComicAdditionalData: (input: { id: string; userId: string }) => Promise<IComic>
+  dbGetAllComics: (input: { userId: string }) => Promise<IComic[]>
   dbInsertComic: (input: {
     comic: IComic
     chapters: IChapter[]
     repo: string
-    userId: number
+    userId: string
   }) => Promise<void>
-  dbUpdateComic: (input: { id: number; comic: Partial<IComic> }) => Promise<IComic | undefined>
+  dbUpdateComic: (input: { id: string; comic: Partial<IComic> }) => Promise<IComic | undefined>
   dbDeleteComic: (input: { comic: IComic }) => Promise<void>
 
   //Chapters
   dbGetAllChaptersNoPage: () => Promise<IChapter[]>
-  dbGetChapters: (input: { comicId: number }) => Promise<IChapter[]>
+  dbGetChapters: (input: { comicId: string }) => Promise<IChapter[]>
+  dbGetChapterById: (input: { id: string }) => Promise<IChapter | undefined>
   dbInsertChapters: (input: { chapters: IChapter[] }) => Promise<void>
   dbUpdateChapter: (input: { chapter: IChapter }) => Promise<IChapter>
 
   //Read Progress
   dbGetReadProgress: (input: { search: string }) => Promise<IReadProgress[]>
-  dbGetReadProgressByUser: (input: { userId: number }) => Promise<IReadProgress[]>
+  dbGetReadProgressByUser: (input: { userId: string }) => Promise<IReadProgress[]>
   dbUpdateReadProgress: (input: { readProgress: IReadProgress }) => Promise<void>
+  dbInsertReadProgress: (input: { readProgress: IReadProgress }) => Promise<void>
 
   //Users
   dbGetAllUsers: () => Promise<IUser[]>
   dbUpdateUser: (input: { user: IUser }) => Promise<IUser>
-  dbDeleteUser: (input: { id: number }) => Promise<void>
+  dbDeleteUser: (input: { id: string }) => Promise<void>
 
   // User Settings
-  dbGetUserSettings: (input: { userId: number }) => Promise<IUserSettings | undefined>
+  dbGetUserSettings: (input: { userId: string }) => Promise<IUserSettings | undefined>
   dbUpdateUserSettings: (input: {
-    userId: number
+    userId: string
     settings: Partial<IUserSettings>
   }) => Promise<IUserSettings | undefined>
 
   // Website Authentication
   dbSetWebsiteAuthToken: (input: {
-    userId: number
+    userId: string
     token: string
     expiresAt: string
     deviceName: string
   }) => Promise<void>
-  dbGetWebsiteAuthToken: (input: { userId: number }) => Promise<{
+  dbGetWebsiteAuthToken: (input: { userId: string }) => Promise<{
     token: string | null
     expiresAt: string | null
     deviceName: string | null
     isExpired: boolean
   } | null>
-  dbClearWebsiteAuthToken: (input: { userId: number }) => Promise<void>
+  dbClearWebsiteAuthToken: (input: { userId: string }) => Promise<void>
 
   dbRunMigrations: () => Promise<void>
   dbVerifyMigrations: () => Promise<boolean>

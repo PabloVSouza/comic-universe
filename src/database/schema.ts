@@ -16,7 +16,10 @@ export const users = sqliteTable('User', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   name: text('name').notNull(),
   default: integer('default', { mode: 'boolean' }).default(false).notNull(),
-  settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({})
+  settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({}),
+  websiteAuthToken: text('websiteAuthToken'), // Token for website authentication
+  websiteAuthExpiresAt: text('websiteAuthExpiresAt'), // ISO string of expiration date
+  websiteAuthDeviceName: text('websiteAuthDeviceName') // Device name for the token
 })
 
 // Comic table

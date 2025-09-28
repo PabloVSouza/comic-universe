@@ -14,6 +14,7 @@ import useGlobalStore from 'store/useGlobalStore'
 import useWindowManagerStore from 'store/useWindowManagerStore'
 import useQueue from 'hooks/useQueue'
 import useFetchData from 'hooks/useFetchData'
+import useAutoWebsiteAuth from 'hooks/useAutoWebsiteAuth'
 import { addChaptersToQueue } from 'functions/queueUtils'
 
 const Home = (): React.JSX.Element => {
@@ -22,6 +23,9 @@ const Home = (): React.JSX.Element => {
   const userActive = !!currentUser.id
   const { activeComic, setActiveComic } = useGlobalStore()
   const { currentWindows } = useWindowManagerStore()
+
+  // Auto-authenticate with website on app startup
+  useAutoWebsiteAuth()
 
   // Check if there are any active unique windows
   const hasUniqueWindows = currentWindows

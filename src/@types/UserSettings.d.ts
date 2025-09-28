@@ -15,4 +15,12 @@ interface IUserSettings {
   appPreferences: {
     language: 'inherit' | 'enUS' | 'ptBR'
   }
+
+  // Website authentication
+  websiteAuth?: {
+    isConnected: boolean
+    websiteUrl?: string // Website base URL
+    lastConnectedAt?: string // ISO date string
+    deviceName?: string
+  }
 }

@@ -128,7 +128,11 @@
         "passwordMinLength": "Password must be at least 6 characters",
         "connecting": "Connecting...",
         "emailPlaceholder": "your@email.com",
-        "passwordPlaceholder": "••••••••"
+        "passwordPlaceholder": "••••••••",
+        "reAuthRequired": "Website Authentication Required",
+        "reAuthMessage": "Your website authentication has expired or is invalid. Please re-authenticate to continue using website features.",
+        "skip": "Skip",
+        "reAuthenticate": "Re-authenticate"
       }
     },
     "about": {

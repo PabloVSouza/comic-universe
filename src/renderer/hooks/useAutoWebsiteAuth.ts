@@ -1,11 +1,13 @@
 import { useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import useApi from 'api'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import openWindow from 'functions/openWindow'
 import { confirmAlert } from 'components/Alert'
 
 const useAutoWebsiteAuth = () => {
+  const { t } = useTranslation()
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const { currentUser } = usePersistSessionStore()
@@ -81,18 +83,17 @@ const useAutoWebsiteAuth = () => {
   // Show re-authentication prompt using Alert system
   const showReAuthPrompt = () => {
     confirmAlert({
-      title: 'Website Authentication Required',
-      message:
-        'Your website authentication has expired or is invalid. Please re-authenticate to continue using website features.',
+      title: t('Settings.user.websiteAuth.reAuthRequired'),
+      message: t('Settings.user.websiteAuth.reAuthMessage'),
       buttons: [
         {
-          label: 'Skip',
+          label: t('Settings.user.websiteAuth.skip'),
           action: () => {
             clearWebsiteAuth()
           }
         },
         {
-          label: 'Re-authenticate',
+          label: t('Settings.user.websiteAuth.reAuthenticate'),
           action: () => {
             openWindow({
               component: 'WebsiteAuth',

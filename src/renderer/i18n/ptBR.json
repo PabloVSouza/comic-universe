@@ -128,7 +128,11 @@
         "passwordMinLength": "Senha deve ter pelo menos 6 caracteres",
         "connecting": "Conectando...",
         "emailPlaceholder": "seu@email.com",
-        "passwordPlaceholder": "••••••••"
+        "passwordPlaceholder": "••••••••",
+        "reAuthRequired": "Autenticação do Site Necessária",
+        "reAuthMessage": "Sua autenticação do site expirou ou é inválida. Por favor, re-autentique-se para continuar usando os recursos do site.",
+        "skip": "Pular",
+        "reAuthenticate": "Re-autenticar"
       }
     },
     "about": {

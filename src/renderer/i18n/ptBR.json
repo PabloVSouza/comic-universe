@@ -108,22 +108,25 @@
       "languageDescription": "Escolha seu idioma preferido (sobrescreve o idioma do app)",
       "websiteAuth": {
         "title": "Conta do Site",
-        "description": "Conecte sua conta do app à sua conta do site Comic Universe",
+        "description": "Conecte sua conta do app à sua conta do site Comic Universe em comicuniverse.app",
         "connect": "Conectar ao Site",
         "disconnect": "Desconectar do Site",
         "connected": "Conectado ao Site",
         "notConnected": "Não Conectado",
         "deviceName": "Nome do Dispositivo",
         "deviceNamePlaceholder": "ex., Meu Computador Desktop",
-        "websiteUrl": "URL do Site",
-        "websiteUrlPlaceholder": "https://comicuniverse.com",
         "connectSuccess": "Conectado com sucesso à conta do site",
         "connectError": "Falha ao conectar à conta do site",
         "disconnectSuccess": "Desconectado com sucesso da conta do site",
         "disconnectError": "Falha ao desconectar da conta do site",
         "tokenExpired": "Conexão expirada, reconecte-se",
         "lastConnected": "Última conexão",
-        "never": "Nunca"
+        "never": "Nunca",
+        "emailRequired": "Email é obrigatório",
+        "emailInvalid": "Formato de email inválido",
+        "passwordRequired": "Senha é obrigatória",
+        "passwordMinLength": "Senha deve ter pelo menos 6 caracteres",
+        "connecting": "Conectando..."
       }
     },
     "about": {

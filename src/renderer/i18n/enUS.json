@@ -126,7 +126,9 @@
         "emailInvalid": "Invalid email format",
         "passwordRequired": "Password is required",
         "passwordMinLength": "Password must be at least 6 characters",
-        "connecting": "Connecting..."
+        "connecting": "Connecting...",
+        "emailPlaceholder": "your@email.com",
+        "passwordPlaceholder": "••••••••"
       }
     },
     "about": {

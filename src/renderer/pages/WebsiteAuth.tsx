@@ -171,7 +171,7 @@ const WebsiteAuth = (): React.JSX.Element => {
                       type="email"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="your@email.com"
+                      placeholder={t('Settings.user.websiteAuth.emailPlaceholder')}
                       disabled={isConnecting}
                     />
                     {field.state.meta.errors.length > 0 && (
@@ -199,7 +199,7 @@ const WebsiteAuth = (): React.JSX.Element => {
                       type="password"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="••••••••"
+                      placeholder={t('Settings.user.websiteAuth.passwordPlaceholder')}
                       disabled={isConnecting}
                     />
                     {field.state.meta.errors.length > 0 && (

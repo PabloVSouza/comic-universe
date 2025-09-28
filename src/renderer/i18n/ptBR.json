@@ -126,7 +126,9 @@
         "emailInvalid": "Formato de email inválido",
         "passwordRequired": "Senha é obrigatória",
         "passwordMinLength": "Senha deve ter pelo menos 6 caracteres",
-        "connecting": "Conectando..."
+        "connecting": "Conectando...",
+        "emailPlaceholder": "seu@email.com",
+        "passwordPlaceholder": "••••••••"
       }
     },
     "about": {

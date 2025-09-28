@@ -8,6 +8,7 @@ import { confirmAlert } from 'components/Alert'
 import { ContextMenu, openContextMenu, TContextOptions } from 'components/ContextMenu'
 import ComicListItem from 'components/HomeComponents/HomeComicListItem'
 import downloadIcon from 'assets/download-icon.svg'
+import refreshIcon from 'assets/refresh.svg'
 import deleteIcon from 'assets/trash.svg'
 
 const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Element => {
@@ -22,6 +23,11 @@ const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Elemen
   const { t } = useTranslation()
 
   const [currentCtxItem, setCurrentCtxItem] = useState({} as IComic)
+
+  const handleSync = () => {
+    // TODO: Implement sync functionality
+    console.log('Sync button clicked - functionality to be implemented')
+  }
 
   const handleRightClick = (e: React.MouseEvent, item: IComic) => {
     const position = {
@@ -57,13 +63,20 @@ const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Elemen
 
   return (
     <ul className="h-full w-60 overflow-auto flex flex-col gap-px z-20 mt-px bg-list">
-      <li className="flex justify-center items-center">
+      <li className="flex justify-center items-center gap-1">
         <Button
           className="z-30 h-full"
           icon={downloadIcon}
           size="xs"
           theme="pure"
           onClick={() => openWindow({ component: 'Search', props: {} })}
+        />
+        <Button
+          className="z-30 h-full"
+          icon={refreshIcon}
+          size="xs"
+          theme="pure"
+          onClick={handleSync}
         />
       </li>
       <ContextMenu options={ctxOptions} />

@@ -31,7 +31,7 @@ const SearchComicListItem = ({
   const { invoke } = useApi()
   const { repo } = usePersistStore()
   const { currentUser } = usePersistSessionStore()
-  const { insertComic } = useFetchData(currentUser.id)
+  const { insertComic } = useFetchData(currentUser.id ?? '')
 
   const navigate = useNavigate()
 

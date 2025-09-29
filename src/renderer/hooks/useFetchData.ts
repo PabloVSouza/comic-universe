@@ -2,9 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
 import timeoutPromise from 'functions/timeoutPromise'
 import { confirmAlert } from 'components/Alert'
-import useQueue from './useQueue'
 
-const useFetchData = (userId: number) => {
+const useFetchData = (userId: string) => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
 
@@ -52,7 +51,7 @@ const useFetchData = (userId: number) => {
       comicId
     }: {
       newChapters: IChapter[]
-      comicId: number
+      comicId: string
     }): Promise<void> => {
       const finalChapters = newChapters.map((val) => ({ ...val, comicId }))
       await invoke('dbInsertChapters', { chapters: finalChapters })
@@ -73,10 +72,9 @@ const useFetchData = (userId: number) => {
       }
       return pages.length > 0
     },
-    onSuccess: (data, chapter) => {
+    onSuccess: (data) => {
       if (data) {
-        const { removeFromQueue } = useQueue(useFetchData)
-        removeFromQueue(chapter)
+        // Queue removal should be handled by the component using useQueue
       }
     },
     onError: () => {

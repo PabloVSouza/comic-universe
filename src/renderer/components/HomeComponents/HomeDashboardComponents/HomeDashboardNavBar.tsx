@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import Button from 'components/Button'
 import { useTranslation } from 'react-i18next'
 import useFetchData from 'hooks/useFetchData'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 
 import downloadIcon from 'assets/download-icon-2.svg'
 import comicBook from 'assets/comic-book.svg'
@@ -17,7 +18,8 @@ const HomeDashboardNavBar = ({
 }): React.JSX.Element => {
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { fetchNewChapters, insertChapters } = useFetchData()
+  const { currentUser } = usePersistSessionStore()
+  const { fetchNewChapters, insertChapters } = useFetchData(currentUser.id ?? '')
 
   const getNewChapters = async () => {
     const newChapters = await fetchNewChapters(comic)

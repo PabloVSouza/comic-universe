@@ -27,7 +27,7 @@ const UsersListItem = ({
   const queryClient = useQueryClient()
 
   const { mutate: deleteUser } = useMutation({
-    mutationFn: async (id: number) => await invoke('dbDeleteUser', { id }),
+    mutationFn: async (id: string) => await invoke('dbDeleteUser', { id }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['userData'] })
   })
 

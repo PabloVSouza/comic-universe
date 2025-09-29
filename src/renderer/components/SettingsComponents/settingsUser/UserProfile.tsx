@@ -22,7 +22,7 @@ const UserProfile = () => {
   const [editName, setEditName] = useState('')
 
   const { mutate: updateUser } = useMutation({
-    mutationFn: async (userData: { id: number; name: string }) =>
+    mutationFn: async (userData: { id: string; name: string }) =>
       await invoke('dbUpdateUser', { user: userData }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userData'] })

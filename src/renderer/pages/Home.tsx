@@ -32,7 +32,7 @@ const Home = (): React.JSX.Element => {
     .filter((window) => !window.windowStatus.isMinimized)
     .some((window) => window.windowProps.unique)
 
-  const { fetchChapterPages } = useFetchData(currentUser.id)
+  const { fetchChapterPages } = useFetchData(currentUser.id ?? '')
 
   const { addToQueue } = useQueue(fetchChapterPages)
 

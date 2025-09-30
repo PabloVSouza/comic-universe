@@ -88,6 +88,21 @@ export const readProgress = sqliteTable('ReadProgress', {
   updatedAt: text('updatedAt').$defaultFn(() => new Date().toISOString())
 })
 
+export const changelog = sqliteTable('Changelog', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  userId: text('userId')
+    .notNull()
+    .references(() => users.id),
+  entityType: text('entityType').notNull(), // 'comic', 'chapter', 'readProgress', 'sync'
+  entityId: text('entityId').notNull(), // ID of the comic/chapter/readProgress, or 'sync' for sync events
+  action: text('action').notNull(), // 'created', 'updated', 'deleted', 'sync_started', 'sync_completed', 'sync_failed'
+  data: text('data'), // JSON string of the changed data or sync metadata
+  createdAt: text('createdAt').$defaultFn(() => new Date().toISOString()),
+  synced: integer('synced', { mode: 'boolean' }).default(false)
+})
+
 // Relations
 export const pluginsRelations = relations(plugins, () => ({}))
 

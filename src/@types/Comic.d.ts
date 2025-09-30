@@ -6,6 +6,7 @@ interface IComicSettings {
 
 interface IComic {
   id?: string
+  userId?: string
   siteId: string
   name: string
   cover: string

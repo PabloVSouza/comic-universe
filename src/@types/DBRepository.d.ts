@@ -54,6 +54,15 @@ type IDBMethods = {
 
   dbRunMigrations: () => Promise<void>
   dbVerifyMigrations: () => Promise<boolean>
+
+  // Changelog methods
+  dbCreateChangelogEntry: (input: { entry: IChangelogEntry }) => Promise<IChangelogEntry>
+  dbGetUnsyncedChangelogEntries: (input: { userId: string }) => Promise<IChangelogEntry[]>
+  dbMarkChangelogEntriesAsSynced: (input: { entryIds: string[] }) => Promise<void>
+  dbGetChangelogEntriesSince: (input: {
+    userId: string
+    timestamp: string
+  }) => Promise<IChangelogEntry[]>
 }
 
 interface IDBRepository {

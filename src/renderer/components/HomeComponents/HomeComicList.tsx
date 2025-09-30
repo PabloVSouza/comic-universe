@@ -7,7 +7,8 @@ import Button from 'components/Button'
 import { confirmAlert } from 'components/Alert'
 import { ContextMenu, openContextMenu, TContextOptions } from 'components/ContextMenu'
 import ComicListItem from 'components/HomeComponents/HomeComicListItem'
-import useSync from 'hooks/useSync'
+import useDatabaseChangelogSync from 'hooks/useDatabaseChangelogSync'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 import downloadIcon from 'assets/download-icon.svg'
 import refreshIcon from 'assets/refresh.svg'
 import deleteIcon from 'assets/trash.svg'
@@ -15,18 +16,37 @@ import deleteIcon from 'assets/trash.svg'
 const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Element => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
+  const { currentUser } = usePersistSessionStore()
 
   const { mutate: deleteComic } = useMutation({
-    mutationFn: async (comic: IComic) => await invoke('dbDeleteComic', { comic }),
+    mutationFn: async (comic: IComic) => {
+      // Log the deletion in database changelog
+      await invoke('dbCreateChangelogEntry', {
+        entry: {
+          userId: currentUser.id || '',
+          entityType: 'comic',
+          entityId: comic.id || '',
+          action: 'deleted',
+          data: comic
+        }
+      })
+
+      // Perform the actual deletion
+      return await invoke('dbDeleteComic', { comic })
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
   })
 
   const { t } = useTranslation()
-  const { syncData, isSyncing } = useSync()
+  const { syncData, isSyncing } = useDatabaseChangelogSync()
 
   const [currentCtxItem, setCurrentCtxItem] = useState({} as IComic)
 
   const handleSync = () => {
+    console.log('Sync button clicked')
+    console.log('isSyncing:', isSyncing)
+    console.log('syncData function:', typeof syncData)
+    // Use database changelog-based sync
     syncData()
   }
 

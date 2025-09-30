@@ -228,6 +228,35 @@ class DBRepository implements IDBRepository {
       return new Promise((resolve) => {
         resolve()
       })
+    },
+
+    // Changelog methods
+    dbCreateChangelogEntry: async ({ entry }): Promise<IChangelogEntry> => {
+      const result = await this.repository.createChangelogEntry(entry)
+      return new Promise((resolve) => {
+        resolve(result)
+      })
+    },
+
+    dbGetUnsyncedChangelogEntries: async ({ userId }): Promise<IChangelogEntry[]> => {
+      const result = await this.repository.getUnsyncedChangelogEntries(userId)
+      return new Promise((resolve) => {
+        resolve(result)
+      })
+    },
+
+    dbMarkChangelogEntriesAsSynced: async ({ entryIds }): Promise<void> => {
+      await this.repository.markChangelogEntriesAsSynced(entryIds)
+      return new Promise((resolve) => {
+        resolve()
+      })
+    },
+
+    dbGetChangelogEntriesSince: async ({ userId, timestamp }): Promise<IChangelogEntry[]> => {
+      const result = await this.repository.getChangelogEntriesSince(userId, timestamp)
+      return new Promise((resolve) => {
+        resolve(result)
+      })
     }
   }
 }

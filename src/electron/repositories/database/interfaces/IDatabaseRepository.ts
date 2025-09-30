@@ -84,6 +84,12 @@ export interface IDatabaseRepository {
   ): Promise<IReadProgress | undefined>
   deleteReadProgress(id: string): Promise<void>
 
+  // Changelog operations
+  createChangelogEntry(entry: IChangelogEntry): Promise<IChangelogEntry>
+  getUnsyncedChangelogEntries(userId: string): Promise<IChangelogEntry[]>
+  markChangelogEntriesAsSynced(entryIds: string[]): Promise<void>
+  getChangelogEntriesSince(userId: string, timestamp: string): Promise<IChangelogEntry[]>
+
   // Plugin operations
   getAllPlugins(): Promise<IPlugin[]>
   getPluginById(id: number): Promise<IPlugin | undefined>

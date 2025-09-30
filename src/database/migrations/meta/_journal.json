@@ -15,6 +15,13 @@
       "when": 1759092407134,
       "tag": "0001_bizarre_alex_power",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1759106489383,
+      "tag": "0002_keen_firebird",
+      "breakpoints": true
     }
   ]
 }

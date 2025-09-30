@@ -79,14 +79,16 @@ const useSync = () => {
       const syncResult = await compareAndMergeData(localComics, localReadProgress, cloudData)
 
       // Step 4: Update local database with merged data
-      await updateLocalDatabase(syncResult.localUpdates)
+      await updateLocalDatabase(syncResult.localUpdates, cloudData)
 
       // Step 5: Send differences to cloud
       if (
         syncResult.cloudUpdates.comics.length > 0 ||
         syncResult.cloudUpdates.readProgress.length > 0 ||
         (syncResult.cloudUpdates.readProgressDeletions &&
-          syncResult.cloudUpdates.readProgressDeletions.length > 0)
+          syncResult.cloudUpdates.readProgressDeletions.length > 0) ||
+        (syncResult.cloudUpdates.comicDeletions &&
+          syncResult.cloudUpdates.comicDeletions.length > 0)
       ) {
         // Send updates first
         if (
@@ -113,7 +115,7 @@ const useSync = () => {
           await updateResponse.json()
         }
 
-        // Send deletions
+        // Send read progress deletions
         if (
           syncResult.cloudUpdates.readProgressDeletions &&
           syncResult.cloudUpdates.readProgressDeletions.length > 0
@@ -134,6 +136,30 @@ const useSync = () => {
             if (!deleteResponse.ok) {
               const errorData = await deleteResponse.json()
               console.error('Failed to delete read progress:', errorData)
+            }
+          }
+        }
+
+        // Send comic deletions
+        if (
+          syncResult.cloudUpdates.comicDeletions &&
+          syncResult.cloudUpdates.comicDeletions.length > 0
+        ) {
+          for (const deletion of syncResult.cloudUpdates.comicDeletions) {
+            const deleteResponse = await fetch(`${websiteUrl}/api/comics`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${websiteAuth.token}`
+              },
+              body: JSON.stringify({
+                comicId: deletion.comicId
+              })
+            })
+
+            if (!deleteResponse.ok) {
+              const errorData = await deleteResponse.json()
+              console.error('Failed to delete comic:', errorData)
             }
           }
         }
@@ -169,7 +195,8 @@ const useSync = () => {
     const cloudUpdates = {
       comics: [] as IComic[],
       readProgress: [] as IReadProgress[],
-      readProgressDeletions: [] as { chapterId: string; comicId: string }[]
+      readProgressDeletions: [] as { chapterId: string; comicId: string }[],
+      comicDeletions: [] as { comicId: string }[]
     }
 
     // Compare comics
@@ -236,6 +263,22 @@ const useSync = () => {
           cloudUpdates.comics.push({
             ...localComic,
             chapters: localChapters
+          })
+        }
+      }
+    }
+
+    // Detect locally deleted comics (exist in cloud but not locally)
+    for (const cloudComic of cloudData.comics) {
+      const localComic = localComics.find((c) => c.siteId === cloudComic.siteId)
+
+      if (!localComic) {
+        // This comic exists in cloud but not locally
+        // Check if it was actually deleted locally or just never synced
+        // We'll assume it was deleted if the local database is not empty
+        if (localComics.length > 0 && cloudComic.id) {
+          cloudUpdates.comicDeletions.push({
+            comicId: cloudComic.id
           })
         }
       }
@@ -313,6 +356,7 @@ const useSync = () => {
       comics: IComic[]
       readProgress: IReadProgress[]
       readProgressDeletions: { chapterId: string; comicId: string }[]
+      comicDeletions: { comicId: string }[]
     }
   ) => {
     const readProgressConflicts = []
@@ -397,11 +441,14 @@ const useSync = () => {
     return readProgressConflicts
   }
 
-  const updateLocalDatabase = async (localUpdates: {
-    comics: IComic[]
-    chapters: IChapter[]
-    readProgress: IReadProgress[]
-  }) => {
+  const updateLocalDatabase = async (
+    localUpdates: {
+      comics: IComic[]
+      chapters: IChapter[]
+      readProgress: IReadProgress[]
+    },
+    cloudData?: SyncData
+  ) => {
     // Update comics
     for (const comic of localUpdates.comics) {
       // Get all local comics to check if this one exists
@@ -427,6 +474,19 @@ const useSync = () => {
       // When downloading from cloud, always create new read progress
       // The cloud ID is preserved in the database schema
       await invoke('dbInsertReadProgress', { readProgress: progress })
+    }
+
+    // Handle comic deletions from cloud
+    if (cloudData) {
+      const localComics = await invoke('dbGetAllComics', { userId: currentUser.id })
+      const cloudComicSiteIds = cloudData.comics.map((c) => c.siteId)
+
+      for (const localComic of localComics) {
+        // If local comic doesn't exist in cloud, delete it locally
+        if (!cloudComicSiteIds.includes(localComic.siteId)) {
+          await invoke('dbDeleteComic', { comic: localComic })
+        }
+      }
     }
   }
 

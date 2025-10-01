@@ -1,19 +1,14 @@
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import openWindow from 'functions/openWindow'
 import useApi from 'api'
 import { useTranslation } from 'react-i18next'
-import Button from 'components/Button'
 import { confirmAlert } from 'components/Alert'
-import { ContextMenu, openContextMenu, TContextOptions } from 'components/ContextMenu'
+import { ContextMenu, openContextMenu, ContextOption } from 'components/ContextMenu'
 import ComicListItem from 'components/HomeComponents/HomeComicListItem'
-import useDatabaseChangelogSync from 'hooks/useDatabaseChangelogSync'
 import usePersistSessionStore from 'store/usePersistSessionStore'
-import downloadIcon from 'assets/download-icon.svg'
-import refreshIcon from 'assets/refresh.svg'
-import deleteIcon from 'assets/trash.svg'
+import { trashIcon } from 'assets'
 
-const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Element => {
+const HomeComicList: FC<{ comicList: IComic[] }> = ({ comicList }) => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const { currentUser } = usePersistSessionStore()
@@ -38,17 +33,8 @@ const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Elemen
   })
 
   const { t } = useTranslation()
-  const { syncData, isSyncing } = useDatabaseChangelogSync()
 
   const [currentCtxItem, setCurrentCtxItem] = useState({} as IComic)
-
-  const handleSync = () => {
-    console.log('Sync button clicked')
-    console.log('isSyncing:', isSyncing)
-    console.log('syncData function:', typeof syncData)
-    // Use database changelog-based sync
-    syncData()
-  }
 
   const handleRightClick = (e: React.MouseEvent, item: IComic) => {
     const position = {
@@ -61,7 +47,7 @@ const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Elemen
   const ctxOptions = [
     {
       title: t('Dashboard.contextMenu.deleteComic.title'),
-      icon: deleteIcon,
+      icon: trashIcon,
       action: () => {
         confirmAlert({
           title: t('Dashboard.contextMenu.deleteComic.title'),
@@ -80,29 +66,10 @@ const HomeComicList = ({ comicList }: { comicList: IComic[] }): React.JSX.Elemen
         })
       }
     }
-  ] as TContextOptions[]
+  ] as ContextOption[]
 
   return (
-    <ul className="h-full w-60 overflow-auto flex flex-col gap-px z-20 mt-px bg-list">
-      <li className="flex justify-between items-center p-2">
-        <Button
-          className="z-30 h-full"
-          icon={downloadIcon}
-          size="xs"
-          theme="pure"
-          onClick={() => openWindow({ component: 'Search', props: {} })}
-        />
-        <Button
-          className="z-30 h-full p-2"
-          icon={refreshIcon}
-          size="xs"
-          theme="pure"
-          onClick={handleSync}
-          disabled={isSyncing}
-          loading={isSyncing}
-          loadingAnimation="spin-reverse"
-        />
-      </li>
+    <ul className="h-full w-60 overflow-auto flex flex-col gap-px z-20 bg-list">
       <ContextMenu options={ctxOptions} />
       {comicList.map((item) => (
         <ComicListItem

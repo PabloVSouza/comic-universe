@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import Button from 'components/Button'
 
@@ -9,13 +10,13 @@ interface ReaderBottomBarProps {
   onToggleReadingMode: () => void
 }
 
-const ReaderBottomBar = ({
+const ReaderBottomBar: FC<ReaderBottomBarProps> = ({
   chapterName,
   currentPage,
   totalPages,
   readingMode,
   onToggleReadingMode
-}: ReaderBottomBarProps): React.JSX.Element => {
+}) => {
   const { t } = useTranslation()
 
   const progressPercentage = totalPages > 0 ? (currentPage / totalPages) * 100 : 0

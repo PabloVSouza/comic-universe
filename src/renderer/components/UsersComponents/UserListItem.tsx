@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import classNames from 'classnames'
 import useApi from 'api'
@@ -7,21 +8,15 @@ import { confirmAlert } from 'components/Alert'
 import useWindowManagerStore from 'store/useWindowManagerStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 
-import plusIcon from 'assets/plus.svg'
-import userIcon from 'assets/user.svg'
-import deleteIcon from 'assets/trash.svg'
+import { plusIcon, userIcon, trashIcon } from 'assets'
 
-interface IUsersListItemProps {
+interface UserListItemProps {
   data?: IUser
   newUser?: boolean
   newUserAction?: () => void
 }
 
-const UsersListItem = ({
-  data,
-  newUser,
-  newUserAction
-}: IUsersListItemProps): React.JSX.Element => {
+const UsersListItem: FC<UserListItemProps> = ({ data, newUser, newUserAction }) => {
   const { t } = useTranslation()
   const { invoke } = useApi()
   const queryClient = useQueryClient()
@@ -92,7 +87,7 @@ const UsersListItem = ({
         className="absolute w-full h-1/5 bottom-0 z-10 text-center p-px opacity-0 hover:opacity-100 transition-fade duration-500 ease-default"
         onClick={(): Promise<void> => handleDeleteUser()}
       >
-        <Image className="h-full bg-red-500" svg src={deleteIcon} />
+        <Image className="h-full bg-red-500" svg src={trashIcon} />
       </div>
     </div>
   )

@@ -1,10 +1,11 @@
+import { FC } from 'react'
 import Cover from 'components/Cover'
 import Image from 'components/Image'
 import ProgressBar from 'components/ProgressBar'
 
-import imgLoading from 'assets/loading.svg'
+import { loadingIcon } from 'assets'
 
-interface ILoadingProps {
+interface LoadingOverlayProps {
   isLoading: boolean
   message?: string
   progress?: {
@@ -13,7 +14,7 @@ interface ILoadingProps {
   }
 }
 
-const LoadingOverlay = ({ isLoading, message, progress }: ILoadingProps): React.JSX.Element => {
+const LoadingOverlay: FC<LoadingOverlayProps> = ({ isLoading, message, progress }) => {
   return (
     <Cover visible={isLoading}>
       {message ? (
@@ -23,7 +24,7 @@ const LoadingOverlay = ({ isLoading, message, progress }: ILoadingProps): React.
           }
         >
           <h1>{message}</h1>
-          <Image src={imgLoading} alt="" className="h-full" />
+          <Image src={loadingIcon} alt="" className="h-full" />
           <ProgressBar
             current={progress?.current ?? 0}
             total={progress?.total ?? 0}
@@ -31,7 +32,7 @@ const LoadingOverlay = ({ isLoading, message, progress }: ILoadingProps): React.
           />
         </div>
       ) : (
-        <Image src={imgLoading} alt="" />
+        <Image src={loadingIcon} alt="" />
       )}
     </Cover>
   )

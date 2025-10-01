@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react'
+import { FC, ReactNode, useEffect } from 'react'
 import { HashRouter } from 'react-router-dom'
 import ReactDOM from 'react-dom/client'
 import Routes from 'routes'
@@ -24,7 +24,7 @@ const applyInitialTheme = () => {
 
 applyInitialTheme()
 
-const Main = ({ children }: Props): React.JSX.Element => {
+const Main: FC<Props> = ({ children }) => {
   const { theme } = usePersistStore()
   const { effectiveTheme, currentWallpaper } = useUserSettings()
 

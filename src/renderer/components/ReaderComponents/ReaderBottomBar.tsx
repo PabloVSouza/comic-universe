@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Button from 'components/Button'
-import SlideUpMenu, { TSlideUpMenuOption } from 'components/SlideUpMenu'
-import settingsIcon from 'assets/settings.svg'
+import SlideUpMenu, { SlideUpMenuOption } from 'components/SlideUpMenu'
+import { settingsIcon } from 'assets'
 
 interface ReaderBottomBarProps {
   chapterName?: string
@@ -18,7 +18,7 @@ interface ReaderBottomBarProps {
   hasNextChapter?: boolean
 }
 
-const ReaderBottomBar = ({
+const ReaderBottomBar: FC<ReaderBottomBarProps> = ({
   chapterName,
   currentPage,
   totalPages,
@@ -30,7 +30,7 @@ const ReaderBottomBar = ({
   onNextChapter,
   hasPreviousChapter = false,
   hasNextChapter = false
-}: ReaderBottomBarProps): React.JSX.Element => {
+}) => {
   const { t } = useTranslation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -40,7 +40,7 @@ const ReaderBottomBar = ({
     setIsMenuOpen(!isMenuOpen)
   }
 
-  const menuOptions: TSlideUpMenuOption[] = [
+  const menuOptions: SlideUpMenuOption[] = [
     {
       title: t('Reader.verticalReading'),
       isActive: readingMode === 'vertical',

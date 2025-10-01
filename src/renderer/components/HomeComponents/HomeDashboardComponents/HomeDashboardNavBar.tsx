@@ -1,21 +1,18 @@
+import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from 'components/Button'
 import { useTranslation } from 'react-i18next'
 import useFetchData from 'hooks/useFetchData'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 
-import downloadIcon from 'assets/download-icon-2.svg'
-import comicBook from 'assets/comic-book.svg'
+import { downloadIcon2, comicBookIcon } from 'assets'
 import ProgressBar from 'components/ProgressBar'
 import { confirmAlert } from 'components/Alert'
 
-const HomeDashboardNavBar = ({
-  comic,
-  additionalData
-}: {
+const HomeDashboardNavBar: FC<{
   comic: IComic
   additionalData: IComic
-}): React.JSX.Element => {
+}> = ({ comic, additionalData }) => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { currentUser } = usePersistSessionStore()
@@ -61,14 +58,14 @@ const HomeDashboardNavBar = ({
         <Button
           theme="pure"
           size="xxs"
-          icon={downloadIcon}
+          icon={downloadIcon2}
           title={t('Dashboard.downloadMore')}
           onClick={getNewChapters}
         />
         <Button
           theme="pure"
           size="xxs"
-          icon={comicBook}
+          icon={comicBookIcon}
           title={t('Dashboard.continueReading')}
           onClick={continueReading}
         />

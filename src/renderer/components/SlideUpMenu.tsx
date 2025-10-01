@@ -1,21 +1,21 @@
-import { useEffect, useRef, MutableRefObject } from 'react'
+import { FC, useEffect, useRef, MutableRefObject } from 'react'
 import classNames from 'classnames'
 
-export type TSlideUpMenuOption = {
+export type SlideUpMenuOption = {
   title: string
   icon?: string
   isActive?: boolean
   action: () => void
 }
 
-interface ISlideUpMenuProps {
-  options: TSlideUpMenuOption[]
+interface SlideUpMenuProps {
+  options: SlideUpMenuOption[]
   isOpen: boolean
   onClose: () => void
   children?: React.ReactNode
 }
 
-const SlideUpMenu = ({ options, isOpen, onClose, children }: ISlideUpMenuProps): React.JSX.Element => {
+const SlideUpMenu: FC<SlideUpMenuProps> = ({ options, isOpen, onClose, children }) => {
   const ref = useRef(null) as MutableRefObject<null> | MutableRefObject<HTMLDivElement>
 
   const handleClickOutside = (e: MouseEvent) => {
@@ -25,7 +25,7 @@ const SlideUpMenu = ({ options, isOpen, onClose, children }: ISlideUpMenuProps):
     }
   }
 
-  const handleAction = (option: TSlideUpMenuOption) => {
+  const handleAction = (option: SlideUpMenuOption) => {
     option.action()
     onClose()
   }
@@ -59,27 +59,18 @@ const SlideUpMenu = ({ options, isOpen, onClose, children }: ISlideUpMenuProps):
         )}
         ref={ref}
       >
-        {children && (
-          <div className="px-4 py-3 border-b border-border">
-            {children}
-          </div>
-        )}
-        
+        {children && <div className="px-4 py-3 border-b border-border">{children}</div>}
+
         <div className="p-4">
           <div className="space-y-3">
             {options.map((option, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between"
-              >
+              <div key={index} className="flex items-center justify-between">
                 <span className="text-text-default font-medium">{option.title}</span>
                 <button
                   className={classNames(
                     'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
                     'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-                    option.isActive 
-                      ? 'bg-blue-500' 
-                      : 'bg-gray-300 dark:bg-gray-600'
+                    option.isActive ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'
                   )}
                   onClick={() => handleAction(option)}
                 >

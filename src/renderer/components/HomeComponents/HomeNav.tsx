@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import useApi from 'api'
 import classNames from 'classnames'
 import Cover from 'components/Cover'
@@ -8,14 +9,9 @@ import useGlobalStore from 'store/useGlobalStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import useEnvironment from 'hooks/useEnvironment'
 
-import infoIcon from 'assets/info.svg'
-import settingsIcon from 'assets/settings.svg'
-import userIcon from 'assets/user.svg'
-import exitIcon from 'assets/exit-door.svg'
-import logoutIcon from 'assets/logout.svg'
-import pluginIcon from 'assets/plugin.svg'
+import { infoIcon, settingsIcon, userIcon, exitDoorIcon, logoutIcon, pluginIcon } from 'assets'
 
-const HomeNav = (): React.JSX.Element => {
+const HomeNav: FC = () => {
   const { invoke } = useApi()
   const { menuVisible, toggleMenu } = useGlobalStore()
   const { isWebUI } = useEnvironment()
@@ -61,7 +57,7 @@ const HomeNav = (): React.JSX.Element => {
   const closeOption = [
     {
       label: t('HomeNav.closeApp'),
-      icon: exitIcon,
+      icon: exitDoorIcon,
       onClick: closeApp
     }
   ]

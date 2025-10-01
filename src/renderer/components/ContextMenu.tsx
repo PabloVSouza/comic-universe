@@ -3,25 +3,25 @@ import { MutableRefObject, useEffect, useRef } from 'react'
 import classNames from 'classnames'
 import Image from 'components/Image'
 
-export type TContextOptions = {
+export type ContextOption = {
   title: string
   icon: string
   action: () => void
 }
 
-type TContextMenu = {
-  options: TContextOptions[]
+type ContextMenuProps = {
+  options: ContextOption[]
 }
 
-type TContextMenuPosition = {
+type ContextMenuPosition = {
   x: number
   y: number
 }
 
 interface useContextStore {
   visible: boolean
-  position: TContextMenuPosition
-  setPosition: (position: TContextMenuPosition) => void
+  position: ContextMenuPosition
+  setPosition: (position: ContextMenuPosition) => void
   setVisible: (visible: boolean) => void
 }
 
@@ -32,13 +32,13 @@ const useContextStore = create<useContextStore>((set) => ({
   setVisible: (visible) => set((state) => ({ ...state, visible }))
 }))
 
-export const openContextMenu = (position: TContextMenuPosition) => {
+export const openContextMenu = (position: ContextMenuPosition) => {
   const { setVisible, setPosition } = useContextStore.getState()
   setPosition(position)
   setVisible(true)
 }
 
-export const ContextMenu = ({ options }: TContextMenu) => {
+export const ContextMenu = ({ options }: ContextMenuProps) => {
   const { visible, setVisible, position } = useContextStore()
   const dynamicStyle = {
     top: position.y,
@@ -55,7 +55,7 @@ export const ContextMenu = ({ options }: TContextMenu) => {
     }
   }
 
-  const handleAction = (option: TContextOptions) => {
+  const handleAction = (option: ContextOption) => {
     option.action()
     setVisible(false)
   }

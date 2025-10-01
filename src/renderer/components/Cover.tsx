@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { FC, ReactNode } from 'react'
 import classNames from 'classnames'
 
 interface Cover {
@@ -8,7 +8,7 @@ interface Cover {
   index?: string
 }
 
-const Cover = ({ className, children, visible, index, ...props }: Cover): React.JSX.Element => {
+const Cover: FC<Cover> = ({ className, children, visible, index, ...props }) => {
   return (
     <div
       className={classNames(

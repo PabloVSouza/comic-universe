@@ -8,9 +8,7 @@ import DisplayValue from 'components/DisplayValue'
 import Input from 'components/Input'
 import SettingsItem from '../SettingsItem'
 import WebsiteAuth from './WebsiteAuth'
-import confirmIcon from 'assets/confirm.svg'
-import cancelIcon from 'assets/cancel.svg'
-import pencilIcon from 'assets/pencil.svg'
+import { confirmIcon, cancelIcon, pencilIcon } from 'assets'
 
 const UserProfile = () => {
   const { t } = useTranslation()

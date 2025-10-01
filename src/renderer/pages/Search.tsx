@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef, MutableRefObject } from 'react'
+import { FC, useState, useMemo, useEffect, useRef, MutableRefObject } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
 import debounce from 'lodash.debounce'
@@ -10,14 +10,14 @@ import Pagination from 'components/Pagination'
 import { useTranslation } from 'react-i18next'
 import usePersistStore from 'store/usePersistStore'
 
-import searchIcon from 'assets/magnifying-glass-search.svg'
+import { magnifyingGlassSearchIcon } from 'assets'
 
 type TOption = {
   value: string
   label: string
 }
 
-const Search = (): React.JSX.Element => {
+const Search: FC = () => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const [search, setSearch] = useState('')
@@ -103,7 +103,7 @@ const Search = (): React.JSX.Element => {
             ref={inputRef}
           />
           <Image
-            src={searchIcon}
+            src={magnifyingGlassSearchIcon}
             svg
             className="h-full aspect-square bg-text-default p-2 opacity-60"
           />

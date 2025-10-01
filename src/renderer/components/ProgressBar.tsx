@@ -1,17 +1,12 @@
+import { FC } from 'react'
 import classNames from 'classnames'
 
-const ProgressBar = ({
-  current,
-  total,
-  showPercentage,
-  className,
-  ...props
-}: {
+const ProgressBar: FC<{
   current: number
   total: number
   showPercentage?: boolean
   className?: string
-}): React.JSX.Element => {
+}> = ({ current, total, showPercentage, className, ...props }) => {
   const percentage = Math.round((100 / total) * current)
 
   return (

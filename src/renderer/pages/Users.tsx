@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
 import LoadingOverlay from 'components/LoadingOverlay'
@@ -6,10 +6,9 @@ import Button from 'components/Button'
 import UsersList from 'components/UsersComponents/UsersList'
 import { useTranslation } from 'react-i18next'
 
-import confirmIcon from 'assets/confirm.svg'
-import cancelIcon from 'assets/cancel.svg'
+import { confirmIcon, cancelIcon } from 'assets'
 
-const Users = (): React.JSX.Element => {
+const Users: FC = () => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
 

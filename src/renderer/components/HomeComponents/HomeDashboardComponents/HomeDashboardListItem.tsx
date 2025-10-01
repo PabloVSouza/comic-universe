@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 import classNames from 'classnames'
@@ -7,10 +8,9 @@ import Button from 'components/Button'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import useGlobalStore from 'store/useGlobalStore'
 
-import closedBook from 'assets/closed-book-icon.svg'
-import bookStack from 'assets/book-stack.svg'
+import { closedBookIcon, bookStackIcon } from 'assets'
 
-const HomeDashboardComicListItem = ({ item }: { item: IChapter }): React.JSX.Element => {
+const HomeDashboardComicListItem: FC<{ item: IChapter }> = ({ item }) => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -87,7 +87,7 @@ const HomeDashboardComicListItem = ({ item }: { item: IChapter }): React.JSX.Ele
         <Button
           theme="pure"
           size="xxs"
-          icon={closedBook}
+          icon={closedBookIcon}
           title={t('Dashboard.resetProgress')}
           onClick={() => mutation.mutate(0)}
         />
@@ -96,7 +96,7 @@ const HomeDashboardComicListItem = ({ item }: { item: IChapter }): React.JSX.Ele
         <Button
           theme="pure"
           size="xxs"
-          icon={bookStack}
+          icon={bookStackIcon}
           title={t('Dashboard.setComplete')}
           onClick={() => mutation.mutate(totalPages)}
         />

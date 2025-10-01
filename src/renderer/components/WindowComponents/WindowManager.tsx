@@ -5,12 +5,12 @@ import classNames from 'classnames'
 import Window from 'components/WindowComponents/Window'
 import useWindowManagerStore from 'store/useWindowManagerStore'
 
-type TWindowManager = {
+type WindowManagerProps = {
   children: ReactNode
   className?: string
 }
 
-const WindowManager = ({ children, className }: TWindowManager): ReactElement => {
+const WindowManager = ({ children, className }: WindowManagerProps): ReactElement => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { currentWindows, portalsRef, mouseCapture, removeMovingResizing, setContainerSize } =
     useWindowManagerStore()

@@ -1,36 +1,36 @@
-import { useState, useRef } from 'react'
+import { FC, useState, useRef } from 'react'
 import classNames from 'classnames'
 import Image from 'components/Image'
 
-export interface IMousePos {
+export interface MousePosition {
   x: number
   y: number
 }
 
-interface IZoomWindowProps {
-  mousePos: IMousePos
+interface ReaderZoomWindowProps {
+  mousePos: MousePosition
   image: string
   visible: boolean
 }
 
-interface IWindowPosition {
+interface WindowPosition {
   top: number
   left: number
 }
 
-interface IZoomPosition {
+interface ZoomPosition {
   top: number
   left: number
   width: string
   height: string
 }
 
-const ReaderZoomWindow = ({ mousePos, image, visible }: IZoomWindowProps): React.JSX.Element => {
+const ReaderZoomWindow: FC<ReaderZoomWindowProps> = ({ mousePos, image, visible }) => {
   const windowRef = useRef(null)
 
   const [zoomFactor, setZoomFactor] = useState(2)
 
-  const windowPosition = (): IWindowPosition => {
+  const windowPosition = (): WindowPosition => {
     if (!!windowRef.current && mousePos.y) {
       const { offsetHeight, offsetWidth } = windowRef.current
 
@@ -39,7 +39,7 @@ const ReaderZoomWindow = ({ mousePos, image, visible }: IZoomWindowProps): React
         left: mousePos.x - offsetWidth / 2
       }
     }
-    return {} as IWindowPosition
+    return {} as WindowPosition
   }
 
   const changeZoomFactor = (e): void => {
@@ -54,7 +54,7 @@ const ReaderZoomWindow = ({ mousePos, image, visible }: IZoomWindowProps): React
     }
   }
 
-  const zoomPosition = (): IZoomPosition => {
+  const zoomPosition = (): ZoomPosition => {
     if (!!windowRef.current && mousePos.y) {
       const { offsetHeight, offsetWidth } = windowRef.current
 
@@ -65,7 +65,7 @@ const ReaderZoomWindow = ({ mousePos, image, visible }: IZoomWindowProps): React
         height: `${zoomFactor}00vh`
       }
     }
-    return {} as IZoomPosition
+    return {} as ZoomPosition
   }
 
   return (

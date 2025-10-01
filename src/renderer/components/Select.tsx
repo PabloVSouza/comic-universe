@@ -3,12 +3,12 @@ import classNames from 'classnames'
 import { StateManagerProps } from 'react-select/dist/declarations/src/useStateManager'
 import { forwardRef } from 'react'
 
-interface ISelectProps extends Omit<StateManagerProps, 'theme'> {
+interface SelectProps extends Omit<StateManagerProps, 'theme'> {
   className?: string
   theme?: 'styled' | 'native'
 }
 
-const Select = forwardRef<HTMLSelectElement, ISelectProps>(
+const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ({ className, theme = 'styled', ...props }, ref) => {
     if (theme === 'native') {
       // For native theme, we need to convert react-select props to native select props

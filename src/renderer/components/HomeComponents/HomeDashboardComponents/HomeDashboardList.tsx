@@ -1,12 +1,11 @@
+import { FC } from 'react'
 import DashboardListItem from 'components/HomeComponents/HomeDashboardComponents/HomeDashboardListItem'
 import LoadingOverlay from 'components/LoadingOverlay'
 import useGlobalStore from 'store/useGlobalStore'
 
-const HomeDashboardComicList = ({
-  additionalData
-}: {
+const HomeDashboardComicList: FC<{
   additionalData: IComic
-}): React.JSX.Element => {
+}> = ({ additionalData }) => {
   const chapters = additionalData.chapters || []
   const { queue } = useGlobalStore()
 

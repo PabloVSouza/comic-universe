@@ -6,8 +6,7 @@ import Select from 'components/Select'
 import Button from 'components/Button'
 import SettingsItem from '../SettingsItem'
 
-import downloadIcon from 'assets/download-icon-3.svg'
-import loadingIcon from 'assets/loading.svg'
+import { downloadIcon3, loadingIcon } from 'assets'
 
 const PluginInstallSettings = () => {
   const { t } = useTranslation()
@@ -78,7 +77,7 @@ const PluginInstallSettings = () => {
         />
         <Button
           className={`h-10 ${isInstalling ? '[&>img]:animate-spin' : ''}`}
-          icon={isInstalling ? loadingIcon : downloadIcon}
+          icon={isInstalling ? loadingIcon : downloadIcon3}
           theme="pure"
           title={t('Settings.plugin.install.buttonTitle')}
           disabled={!selectedPluginToInstall || isInstalling}

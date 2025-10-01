@@ -8,9 +8,7 @@ import wallpaperManager from 'renderer-utils/wallpaperManager'
 import wallpaperList, { ExtendedWallpaperInfo } from 'renderer-utils/wallpaperList'
 import Button from 'components/Button'
 import SettingsItem from '../SettingsItem'
-import confirmButton from 'assets/confirm.svg'
-import cancelButton from 'assets/cancel.svg'
-import uploadButton from 'assets/upload.svg'
+import { confirmIcon, cancelIcon, uploadIcon } from 'assets'
 
 interface WallpaperSelectorProps {
   currentWallpaper: string | null
@@ -131,7 +129,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
           onClick={handleFileSelect}
           theme="pure"
           size="s"
-          icon={uploadButton}
+          icon={uploadIcon}
           className="!size-10"
           title={t('Settings.user.wallpaper.addWallpaper')}
         />
@@ -184,7 +182,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
                     {/* Check icon for selected wallpaper */}
                     {selectedWallpaper === wallpaper.filename && (
                       <div className="absolute top-1 left-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                        <img src={confirmButton} alt="Selected" className="w-3 h-3" />
+                        <img src={confirmIcon} alt="Selected" className="w-3 h-3" />
                       </div>
                     )}
 
@@ -206,7 +204,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
                         className="absolute top-1 right-1 w-5 h-5 bg-red-500/70 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                         title={t('Settings.user.wallpaper.remove')}
                       >
-                        <img src={cancelButton} alt="Remove" className="w-3 h-3" />
+                        <img src={cancelIcon} alt="Remove" className="w-3 h-3" />
                       </button>
                     )}
                   </div>

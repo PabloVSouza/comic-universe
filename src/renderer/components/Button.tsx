@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import Image from 'components/Image'
@@ -137,7 +137,7 @@ const buttonStyling = {
   }
 } as const
 
-type TButton = {
+type ButtonProps = {
   active?: boolean
   className?: string
   children?: React.ReactNode
@@ -152,7 +152,7 @@ type TButton = {
   to?: string
 } & React.ComponentProps<'button'>
 
-const Button = ({
+const Button: FC<ButtonProps> = ({
   active,
   className,
   children,
@@ -166,7 +166,7 @@ const Button = ({
   theme = 'default',
   to,
   ...props
-}: TButton): ReactElement => {
+}) => {
   const navigate = useNavigate()
 
   const handleClick = (): void => {

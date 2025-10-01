@@ -1,4 +1,4 @@
-import { LiHTMLAttributes } from 'react'
+import { FC, LiHTMLAttributes } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
 import LoadingOverlay from 'components/LoadingOverlay'
@@ -11,22 +11,22 @@ import usePersistSessionStore from 'store/usePersistSessionStore'
 
 import { useTranslation } from 'react-i18next'
 
-import loading from 'assets/loading.svg'
+import { loadingIcon } from 'assets'
 import Image from 'components/Image'
 import Button from 'components/Button'
 import useFetchData from 'hooks/useFetchData'
 
-interface IComicListItem extends LiHTMLAttributes<unknown> {
+interface SearchComicListItemProps extends LiHTMLAttributes<unknown> {
   data: IComic
   activeComic: IComic
   setActiveComic: (comic: IComic) => void
 }
 
-const SearchComicListItem = ({
+const SearchComicListItem: FC<SearchComicListItemProps> = ({
   data,
   activeComic,
   setActiveComic
-}: IComicListItem): React.JSX.Element => {
+}) => {
   const { t } = useTranslation()
   const { invoke } = useApi()
   const { repo } = usePersistStore()
@@ -133,7 +133,7 @@ const SearchComicListItem = ({
           placeholderClassName="h-full px-3 aspect-10/16"
           src={comicData.cover}
           lazy
-          placeholderSrc={loading}
+          placeholderSrc={loadingIcon}
         />
       </div>
     </li>

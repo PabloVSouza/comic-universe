@@ -11,7 +11,7 @@ interface AlertButton {
   action?: () => void
 }
 
-interface IAlertProps {
+interface AlertProps {
   title?: string
   message?: string
   buttons?: AlertButton[]
@@ -19,7 +19,7 @@ interface IAlertProps {
   visible?: boolean
 }
 
-const Alert = ({ title, message, buttons, className, visible }: IAlertProps) => {
+const Alert = ({ title, message, buttons, className, visible }: AlertProps) => {
   const [currentVisible, setCurrentVisible] = useState(visible)
 
   useEffect(() => {
@@ -57,21 +57,21 @@ const Alert = ({ title, message, buttons, className, visible }: IAlertProps) => 
   )
 }
 
-let showAlert: (props: IAlertProps) => void
+let showAlert: (props: AlertProps) => void
 
-export const confirmAlert = (props: IAlertProps) => {
+export const confirmAlert = (props: AlertProps) => {
   if (showAlert) {
     showAlert(props)
   }
 }
 
 export const AlertProvider = ({ children }: { children: ReactNode }) => {
-  const [alertProps, setAlertProps] = useState<IAlertProps | null>(null)
+  const [alertProps, setAlertProps] = useState<AlertProps | null>(null)
   const { t } = useTranslation()
 
   const { theme } = usePersistStore()
 
-  showAlert = (props: IAlertProps) => {
+  showAlert = (props: AlertProps) => {
     setAlertProps(props)
   }
 

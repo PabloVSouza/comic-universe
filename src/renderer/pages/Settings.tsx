@@ -6,10 +6,7 @@ import SettingsPlugin from 'components/SettingsComponents/settingsPlugin'
 import SettingsAbout from 'components/SettingsComponents/settingsAbout'
 import { useTranslation } from 'react-i18next'
 
-import pluginIcon from 'assets/plugin.svg'
-import userIcon from 'assets/user.svg'
-import settingsIcon from 'assets/settings.svg'
-import infoIcon from 'assets/info.svg'
+import { pluginIcon, userIcon, settingsIcon, infoIcon } from 'assets'
 
 const Settings = ({ initialTab }: { initialTab?: string }): ReactElement => {
   const [activeOption, setActiveOption] = useState(initialTab || 'general')

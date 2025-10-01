@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import LoadingOverlay from 'components/LoadingOverlay'
 import useApi from 'api'
@@ -7,7 +8,7 @@ import HomeDashboardList from 'components/HomeComponents/HomeDashboardComponents
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 
-const HomeDashboard = (): React.JSX.Element => {
+const HomeDashboard: FC = () => {
   const { invoke } = useApi()
   const { activeComic } = useGlobalStore()
   const { currentUser } = usePersistSessionStore()

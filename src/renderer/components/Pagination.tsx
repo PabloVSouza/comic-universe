@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 
-interface IPaginationProps {
+interface PaginationProps {
   setOffset: (offset: number) => void
   itemsPerPage: number
   className?: string
   list: unknown[]
 }
 
-const Pagination = ({ setOffset, className, itemsPerPage, list, ...props }: IPaginationProps) => {
+const Pagination = ({ setOffset, className, itemsPerPage, list, ...props }: PaginationProps) => {
   const { t } = useTranslation()
 
   const [page, setPage] = useState(0)

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { FC, useEffect, useState, useCallback, useRef } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate } from 'react-router-dom'
 import Image from 'components/Image'
@@ -6,19 +6,19 @@ import useApi from 'api'
 import FixFilePaths from 'functions/fixFilePaths'
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
-import ReaderZoomWindow, { IMousePos } from 'components/ReaderComponents/ReaderZoomWindow'
+import ReaderZoomWindow, { MousePosition } from 'components/ReaderComponents/ReaderZoomWindow'
 import ReaderBottomBar from 'components/ReaderComponents/ReaderBottomBar'
 
-import loading from 'assets/loading.svg'
+import { loadingIcon } from 'assets'
 import Cover from 'components/Cover'
 
-const Reader = (): React.JSX.Element => {
+const Reader: FC = () => {
   const navigate = useNavigate()
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const { activeComic, setActiveComic } = useGlobalStore()
   const { currentUser } = usePersistSessionStore()
-  const [mousePos, setMousePos] = useState<IMousePos>({} as IMousePos)
+  const [mousePos, setMousePos] = useState<MousePosition>({} as MousePosition)
   const [zoomVisible, setZoomVisible] = useState(false)
   const [currentReadingMode, setCurrentReadingMode] = useState<'horizontal' | 'vertical' | null>(
     null
@@ -504,7 +504,7 @@ const Reader = (): React.JSX.Element => {
                           className="w-full h-full object-contain"
                           src={page.path}
                           lazy
-                          placeholderSrc={loading}
+                          placeholderSrc={loadingIcon}
                           placeholderClassName="w-1/4"
                         />
                       </div>
@@ -547,7 +547,7 @@ const Reader = (): React.JSX.Element => {
                         className="w-full h-full object-contain"
                         src={page.path}
                         lazy
-                        placeholderSrc={loading}
+                        placeholderSrc={loadingIcon}
                         placeholderClassName="w-1/4"
                       />
                     </div>

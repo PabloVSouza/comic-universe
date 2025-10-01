@@ -11,7 +11,7 @@ const getProxiedImageUrl = (originalUrl: string, isWebUI: boolean): string => {
   return originalUrl
 }
 
-interface IImageProps extends Partial<ImgHTMLAttributes<HTMLImageElement>> {
+interface ImageProps extends Partial<ImgHTMLAttributes<HTMLImageElement>> {
   placeholderSrc?: string
   placeholderClassName?: string
   placeholderStyle?: CSSProperties
@@ -36,7 +36,7 @@ const Image = ({
   svgSize,
   SvgComponent,
   ...props
-}: IImageProps): ReactElement => {
+}: ImageProps): ReactElement => {
   const [isLoading, setIsLoading] = useState(1)
   const [hasError, setHasError] = useState(false)
   const nodeRef = useRef(null)

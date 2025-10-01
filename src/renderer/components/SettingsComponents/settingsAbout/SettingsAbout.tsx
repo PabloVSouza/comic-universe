@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import useApi from 'api'
 import { useQuery } from '@tanstack/react-query'
 import DisplayValue from 'components/DisplayValue'
@@ -7,9 +8,9 @@ import SettingsBox from '../SettingsBox'
 import SettingsTitle from '../SettingsTitle'
 import SettingsItem from '../SettingsItem'
 
-import appIcon from 'assets/icon.svg'
+import { iconIcon } from 'assets'
 
-const SettingsAbout = (): React.JSX.Element => {
+const SettingsAbout: FC = () => {
   const { invoke } = useApi()
   const { data: appData, isLoading: appDataLoading } = useQuery({
     queryKey: ['appData'],
@@ -34,7 +35,7 @@ const SettingsAbout = (): React.JSX.Element => {
               {/* App Information */}
               <div className="flex flex-col items-center text-center space-y-4">
                 <LoadingOverlay isLoading={isLoading} />
-                <Image src={appIcon} className="w-24 h-24 flex-shrink-0" />
+                <Image src={iconIcon} className="w-24 h-24 flex-shrink-0" />
                 <div className="space-y-2">
                   <h1 className="text-3xl text-text-default">Comic Universe</h1>
                   <p className="text-base text-text-default opacity-70">{appData?.description}</p>

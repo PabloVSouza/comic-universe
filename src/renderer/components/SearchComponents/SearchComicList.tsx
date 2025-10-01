@@ -1,20 +1,20 @@
-import { useEffect, useState, useRef } from 'react'
+import { FC, useEffect, useState, useRef } from 'react'
 import classNames from 'classnames'
 import SearchComicListItem from 'components/SearchComponents/SearchComicListItem'
 
-interface ISearchComicList {
+interface SearchComicListProps {
   className?: string
   list: IComic[]
   itemsPerPage?: number
   offset: number
 }
 
-const SearchComicList = ({
+const SearchComicList: FC<SearchComicListProps> = ({
   className,
   list,
   itemsPerPage = 10,
   offset
-}: ISearchComicList): React.JSX.Element => {
+}) => {
   const refScrollElement = useRef<HTMLUListElement>(null)
   const endOffset = offset + itemsPerPage
   const currentItems = list?.slice(offset, endOffset)

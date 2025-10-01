@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
 import openWindow from 'functions/openWindow'
@@ -16,8 +16,9 @@ import useQueue from 'hooks/useQueue'
 import useFetchData from 'hooks/useFetchData'
 import useAutoWebsiteAuth from 'hooks/useAutoWebsiteAuth'
 import { addChaptersToQueue } from 'functions/queueUtils'
+import { HomeComicNav } from 'components/HomeComponents/HomeComicNav'
 
-const Home = (): React.JSX.Element => {
+const Home: FC = () => {
   const { invoke } = useApi()
   const { currentUser } = usePersistSessionStore()
   const userActive = !!currentUser.id
@@ -68,15 +69,15 @@ const Home = (): React.JSX.Element => {
         <div className="flex h-full gap-px">
           <HomeBlankArea active={!userActive} />
           {userActive && (
-            <>
+            <div className="flex h-full flex-col w-60 mt-px gap-px">
+              <HomeComicNav />
               <HomeComicList comicList={comicList} />
-              <HomeComicDashboard />
-            </>
+            </div>
           )}
+          <HomeComicDashboard />
         </div>
       </WindowManager>
 
-      {/* Cover overlay for unique windows to block clicks outside */}
       {hasUniqueWindows && <Cover visible className="z-40" />}
     </div>
   )

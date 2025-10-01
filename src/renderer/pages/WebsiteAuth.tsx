@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { FC, useState, useEffect } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
@@ -10,7 +10,7 @@ import SettingsBox from 'components/SettingsComponents/SettingsBox'
 import SettingsTitle from 'components/SettingsComponents/SettingsTitle'
 import useWindowManagerStore from 'store/useWindowManagerStore'
 
-const WebsiteAuth = (): React.JSX.Element => {
+const WebsiteAuth: FC = () => {
   const { t } = useTranslation()
   const { invoke } = useApi()
   const queryClient = useQueryClient()

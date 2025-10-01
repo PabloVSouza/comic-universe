@@ -1,13 +1,14 @@
+import { FC } from 'react'
 import classNames from 'classnames'
 import ReactHtmlParser from 'html-react-parser'
 import Image from 'components/Image'
 import FixFilePaths from 'functions/fixFilePaths'
 import useGlobalStore from 'store/useGlobalStore'
 
-const ComicListItem = ({
+const ComicListItem: FC<{ item: IComic } & Partial<React.LiHTMLAttributes<HTMLLIElement>>> = ({
   item,
   ...props
-}: { item: IComic } & Partial<React.LiHTMLAttributes<HTMLLIElement>>): React.JSX.Element => {
+}) => {
   const { activeComic, setActiveComic } = useGlobalStore()
 
   const active = activeComic.id === item.id

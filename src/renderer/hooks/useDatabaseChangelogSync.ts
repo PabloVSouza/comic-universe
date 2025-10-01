@@ -139,12 +139,13 @@ const useDatabaseChangelogSync = () => {
 
         if (result.conflicts && result.conflicts.length > 0) {
           errors.push(...result.conflicts.map((c: any) => c.error || 'Unknown conflict'))
+          console.warn('⚠️ Sync had conflicts:', result.conflicts)
         }
 
-        // Mark sent entries as synced
-        const sentEntryIds = dataEntries.map((entry) => entry.id!).filter(Boolean)
-        if (sentEntryIds.length > 0) {
-          await invoke('dbMarkChangelogEntriesAsSynced', { entryIds: sentEntryIds })
+        // Mark sent entries as synced (only the ones successfully processed by server)
+        if (result.syncedEntryIds && result.syncedEntryIds.length > 0) {
+          await invoke('dbMarkChangelogEntriesAsSynced', { entryIds: result.syncedEntryIds })
+          console.log('Marked as synced:', result.syncedEntryIds.length, 'entries')
         }
 
         // Handle server entries if provided
@@ -174,6 +175,12 @@ const useDatabaseChangelogSync = () => {
               lastSyncTimestamp: new Date().toISOString()
             } as SyncMetadata
           }
+        })
+
+        console.log('✅ Sync completed successfully!', {
+          processedEntries,
+          conflicts,
+          duration: syncDuration + 'ms'
         })
 
         return {
@@ -259,20 +266,33 @@ const useDatabaseChangelogSync = () => {
             break
         }
 
-        // Log the server entry as applied locally
-        await invoke('dbCreateChangelogEntry', {
-          entry: {
-            userId: currentUser.id,
-            entityType: entry.entityType,
-            entityId: entry.entityId,
-            action: entry.action,
-            data: entry.data,
-            synced: true // Mark as already synced since it came from server
-          }
-        })
+        // Note: Don't create changelog entries for server data - the database insert methods
+        // will create them automatically, and we'll mark them as synced in the next step
       } catch (error) {
         console.error(`Failed to apply server entry:`, error)
       }
+    }
+
+    // Mark all recently created changelog entries from server data as synced
+    // This prevents them from being sent back to the server
+    const recentUnsyncedEntries = await invoke('dbGetUnsyncedChangelogEntries', {
+      userId: currentUser.id
+    })
+    const recentEntryIds = recentUnsyncedEntries
+      .filter((entry) => {
+        // Filter entries that match the server entries we just applied
+        return serverEntries.some(
+          (serverEntry) =>
+            serverEntry.entityType === entry.entityType &&
+            serverEntry.entityId === entry.entityId &&
+            serverEntry.action === entry.action
+        )
+      })
+      .map((entry) => entry.id!)
+      .filter(Boolean)
+
+    if (recentEntryIds.length > 0) {
+      await invoke('dbMarkChangelogEntriesAsSynced', { entryIds: recentEntryIds })
     }
   }
 

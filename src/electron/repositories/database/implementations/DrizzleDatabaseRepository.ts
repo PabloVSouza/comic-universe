@@ -1,4 +1,4 @@
-import { eq, and, isNull, asc } from 'drizzle-orm'
+import { eq, and, isNull, asc, inArray } from 'drizzle-orm'
 import { IDatabaseRepository } from '../interfaces/IDatabaseRepository'
 import {
   comics,
@@ -184,16 +184,21 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
         }
 
         try {
-          await db.insert(chapters).values(cleanChapterData as NewChapter)
+          const insertedChapter = await db
+            .insert(chapters)
+            .values(cleanChapterData as NewChapter)
+            .returning()
 
-          // Log chapter creation in changelog
-          await this.createChangelogEntry({
-            userId,
-            entityType: 'chapter',
-            entityId: cleanChapterData.id || '',
-            action: 'created',
-            data: cleanChapterData
-          })
+          // Log chapter creation in changelog with the actual inserted data
+          if (insertedChapter[0]?.id) {
+            await this.createChangelogEntry({
+              userId,
+              entityType: 'chapter',
+              entityId: insertedChapter[0].id,
+              action: 'created',
+              data: insertedChapter[0]
+            })
+          }
         } catch (error) {
           await DebugLogger.error('Error inserting chapter:', error)
           await DebugLogger.error('Chapter data:', cleanChapterData)
@@ -348,14 +353,16 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     // Get userId from comic for changelog
     const comic = await this.getComicById(chapterData.comicId)
 
-    // Log chapter creation in changelog
-    await this.createChangelogEntry({
-      userId: comic?.userId || '',
-      entityType: 'chapter',
-      entityId: newChapter.id || '',
-      action: 'created',
-      data: newChapter
-    })
+    // Log chapter creation in changelog (only if we have valid data)
+    if (comic?.userId && newChapter.id) {
+      await this.createChangelogEntry({
+        userId: comic.userId,
+        entityType: 'chapter',
+        entityId: newChapter.id,
+        action: 'created',
+        data: newChapter
+      })
+    }
 
     return newChapter
   }
@@ -378,14 +385,16 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       // Get userId from comic for changelog
       const comic = await this.getComicById(chapterData.comicId)
 
-      // Log chapter creation in changelog
-      await this.createChangelogEntry({
-        userId: comic?.userId || '',
-        entityType: 'chapter',
-        entityId: newChapter.id,
-        action: 'created',
-        data: newChapter
-      })
+      // Log chapter creation in changelog (only if we have valid data)
+      if (comic?.userId && newChapter.id) {
+        await this.createChangelogEntry({
+          userId: comic.userId,
+          entityType: 'chapter',
+          entityId: newChapter.id,
+          action: 'created',
+          data: newChapter
+        })
+      }
     }
   }
 
@@ -807,15 +816,12 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async markChangelogEntriesAsSynced(entryIds: string[]): Promise<void> {
     const db = this.getDb()
+    if (entryIds.length === 0) return
+
     await db
       .update(changelog)
       .set({ synced: true })
-      .where(
-        and(
-          eq(changelog.id, entryIds[0]), // This is a simplified version - would need to handle multiple IDs properly
-          eq(changelog.synced, false)
-        )
-      )
+      .where(and(inArray(changelog.id, entryIds), eq(changelog.synced, false)))
   }
 
   async getChangelogEntriesSince(userId: string, _timestamp: string): Promise<IChangelogEntry[]> {

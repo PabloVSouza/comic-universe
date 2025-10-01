@@ -57,6 +57,21 @@ export interface IDatabaseRepository {
     settings: Partial<IUserSettings>
   ): Promise<IUserSettings | undefined>
 
+  // Website authentication operations
+  setWebsiteAuthToken(
+    userId: number,
+    token: string,
+    expiresAt: string,
+    deviceName: string
+  ): Promise<void>
+  getWebsiteAuthToken(userId: number): Promise<{
+    token: string | null
+    expiresAt: string | null
+    deviceName: string | null
+    isExpired: boolean
+  } | null>
+  clearWebsiteAuthToken(userId: number): Promise<void>
+
   // ReadProgress operations
   getReadProgressByUser(userId: number): Promise<IReadProgress[]>
   getReadProgressByComic(comicId: number, userId: number): Promise<IReadProgress[]>

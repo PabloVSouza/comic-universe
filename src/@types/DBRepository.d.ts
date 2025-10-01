@@ -30,6 +30,21 @@ type IDBMethods = {
     settings: Partial<IUserSettings>
   }) => Promise<IUserSettings | undefined>
 
+  // Website Authentication
+  dbSetWebsiteAuthToken: (input: {
+    userId: number
+    token: string
+    expiresAt: string
+    deviceName: string
+  }) => Promise<void>
+  dbGetWebsiteAuthToken: (input: { userId: number }) => Promise<{
+    token: string | null
+    expiresAt: string | null
+    deviceName: string | null
+    isExpired: boolean
+  } | null>
+  dbClearWebsiteAuthToken: (input: { userId: number }) => Promise<void>
+
   dbRunMigrations: () => Promise<void>
   dbVerifyMigrations: () => Promise<boolean>
 }

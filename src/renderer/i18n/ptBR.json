@@ -105,7 +105,35 @@
         "removeConfirm": "Tem certeza de que deseja remover este papel de parede?"
       },
       "language": "Idioma",
-      "languageDescription": "Escolha seu idioma preferido (sobrescreve o idioma do app)"
+      "languageDescription": "Escolha seu idioma preferido (sobrescreve o idioma do app)",
+      "websiteAuth": {
+        "title": "Conta do Site",
+        "description": "Conecte sua conta do app à sua conta do site Comic Universe em comicuniverse.app",
+        "connect": "Conectar ao Site",
+        "disconnect": "Desconectar do Site",
+        "connected": "Conectado ao Site",
+        "notConnected": "Não Conectado",
+        "deviceName": "Nome do Dispositivo",
+        "deviceNamePlaceholder": "ex., Meu Computador Desktop",
+        "connectSuccess": "Conectado com sucesso à conta do site",
+        "connectError": "Falha ao conectar à conta do site",
+        "disconnectSuccess": "Desconectado com sucesso da conta do site",
+        "disconnectError": "Falha ao desconectar da conta do site",
+        "tokenExpired": "Conexão expirada, reconecte-se",
+        "lastConnected": "Última conexão",
+        "never": "Nunca",
+        "emailRequired": "Email é obrigatório",
+        "emailInvalid": "Formato de email inválido",
+        "passwordRequired": "Senha é obrigatória",
+        "passwordMinLength": "Senha deve ter pelo menos 6 caracteres",
+        "connecting": "Conectando...",
+        "emailPlaceholder": "seu@email.com",
+        "passwordPlaceholder": "••••••••",
+        "reAuthRequired": "Autenticação do Site Necessária",
+        "reAuthMessage": "Sua autenticação do site expirou ou é inválida. Por favor, re-autentique-se para continuar usando os recursos do site.",
+        "skip": "Pular",
+        "reAuthenticate": "Re-autenticar"
+      }
     },
     "about": {
       "title": "Sobre Este Aplicativo",

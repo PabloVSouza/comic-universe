@@ -6,5 +6,6 @@ interface IUser {
   websiteAuthToken?: string | null
   websiteAuthExpiresAt?: string | null
   websiteAuthDeviceName?: string | null
+  websiteUserId?: string | null
   ReadProgress?: ReadProgress[]
 }

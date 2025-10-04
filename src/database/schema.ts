@@ -22,7 +22,8 @@ export const users = sqliteTable('User', {
   settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({}),
   websiteAuthToken: text('websiteAuthToken'), // Token for website authentication
   websiteAuthExpiresAt: text('websiteAuthExpiresAt'), // ISO string of expiration date
-  websiteAuthDeviceName: text('websiteAuthDeviceName') // Device name for the token
+  websiteAuthDeviceName: text('websiteAuthDeviceName'), // Device name for the token
+  websiteUserId: text('websiteUserId') // User ID from the website
 })
 
 // Comic table

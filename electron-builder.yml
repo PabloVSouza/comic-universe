@@ -37,6 +37,8 @@ files:
   - '**/*'
   - '!**/.vscode/*'
   - '!src/*'
+  - '!dev-data'
+  - '!plugins'
   - '!electron.vite.config.{js,ts,mjs,cjs}'
   - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
@@ -100,7 +102,7 @@ asarUnpack:
   - 'build/icon-256.png'
 win:
   executableName: comic-universe
-  icon: build/icons/icon.ico
+  icon: build/icon.ico
   # Force icon embedding with multiple approaches
   extraResources:
     - from: build/icon-256.png
@@ -111,7 +113,7 @@ win:
   extraFiles:
     - from: build/icon-256.png
       to: icon.png
-    - from: build/icons/icon.ico
+    - from: build/icon.ico
       to: icon.ico
   # Additional Windows icon settings
   requestedExecutionLevel: asInvoker

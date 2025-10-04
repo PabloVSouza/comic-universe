@@ -67,19 +67,32 @@ export class SyncService {
       if (!userId || !token) {
         const defaultUser = await this.db.getDefaultUser()
         if (!defaultUser || !defaultUser.id) {
-          throw new Error('No user found. Please log in first.')
+          throw new Error(
+            'No default user found. Please ensure you are logged in and have set a default user.'
+          )
         }
         userId = defaultUser.id
         token = defaultUser.websiteAuthToken || ''
 
         if (!token) {
-          throw new Error('No authentication token found. Please log in to the website.')
+          throw new Error(
+            'No authentication token found. Please connect your app to your website account.'
+          )
         }
       }
 
       // At this point, userId and token are guaranteed to be strings
       const syncUserId = userId as string
       const syncToken = token as string
+
+      // Get website user ID once for the entire sync
+      const websiteUserId = await this.getWebsiteUserId(syncToken)
+
+      // Store website user ID for reference (optional, for caching)
+      const defaultUser = await this.db.getDefaultUser()
+      if (defaultUser && defaultUser.websiteUserId !== websiteUserId) {
+        await this.db.updateUser(syncUserId, { websiteUserId })
+      }
 
       // Log sync start
       await this.db.createChangelogEntry({
@@ -98,13 +111,13 @@ export class SyncService {
 
       switch (direction) {
         case 'push':
-          result = await this.pushToCloud(syncUserId, syncToken)
+          result = await this.pushToCloud(syncUserId, syncToken, websiteUserId)
           break
         case 'pull':
           result = await this.pullFromCloud(syncUserId, syncToken)
           break
         case 'bidirectional':
-          result = await this.bidirectionalSync(syncUserId, syncToken)
+          result = await this.bidirectionalSync(syncUserId, syncToken, websiteUserId)
           break
         default:
           throw new Error(`Invalid sync direction: ${direction}`)
@@ -159,9 +172,31 @@ export class SyncService {
   }
 
   /**
+   * Get website user ID from token
+   */
+  private async getWebsiteUserId(token: string): Promise<string> {
+    const response = await fetch(`${this.config.apiBaseUrl}/api/auth/verify-app-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token })
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to verify token and get website user ID')
+    }
+
+    const data = await response.json()
+    return data.user.id
+  }
+
+  /**
    * Push local changes to cloud
    */
-  private async pushToCloud(userId: string, token: string): Promise<SyncResult> {
+  private async pushToCloud(
+    userId: string,
+    token: string,
+    websiteUserId: string
+  ): Promise<SyncResult> {
     const conflicts: SyncConflict[] = []
     const errors: string[] = []
     let entriesProcessed = 0
@@ -182,15 +217,26 @@ export class SyncService {
         }
       }
 
+      // Remap entries to use website user ID
+      const remappedEntries = unsyncedEntries.map((entry) => ({
+        ...entry,
+        userId: websiteUserId
+      }))
+
       // Send to server
-      const response = await fetch(`${this.config.apiBaseUrl}/api/sync/database-changelog`, {
+      const requestBody: SyncRequest = {
+        token,
+        entries: remappedEntries
+      }
+
+      if (this.lastSyncTimestamp) {
+        requestBody.lastSyncTimestamp = this.lastSyncTimestamp
+      }
+
+      const response = await fetch(`${this.config.apiBaseUrl}/api/sync/changelog`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token,
-          entries: unsyncedEntries,
-          lastSyncTimestamp: this.lastSyncTimestamp
-        } as SyncRequest)
+        body: JSON.stringify(requestBody)
       })
 
       if (!response.ok) {
@@ -246,19 +292,31 @@ export class SyncService {
 
     try {
       // Request server changes
-      const response = await fetch(`${this.config.apiBaseUrl}/api/sync/database-changelog`, {
+      const requestBody: SyncRequest = {
+        token,
+        entries: [] // Empty - we're just pulling
+      }
+
+      // Only include lastSyncTimestamp if it exists
+      if (this.lastSyncTimestamp) {
+        requestBody.lastSyncTimestamp = this.lastSyncTimestamp
+      }
+
+      DebugLogger.info('Pull sync - Request body:', requestBody)
+
+      const response = await fetch(`${this.config.apiBaseUrl}/api/sync/changelog`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token,
-          entries: [], // Empty - we're just pulling
-          lastSyncTimestamp: this.lastSyncTimestamp
-        } as SyncRequest)
+        body: JSON.stringify(requestBody)
       })
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`)
+        DebugLogger.error('Pull sync - Server error:', errorData)
+        const errorMessage = errorData.details
+          ? `${errorData.error}: ${JSON.stringify(errorData.details)}`
+          : errorData.error || `HTTP ${response.status}: ${response.statusText}`
+        throw new Error(errorMessage)
       }
 
       const data: SyncResponse = await response.json()
@@ -304,7 +362,11 @@ export class SyncService {
   /**
    * Bidirectional sync - push and pull
    */
-  private async bidirectionalSync(userId: string, token: string): Promise<SyncResult> {
+  private async bidirectionalSync(
+    userId: string,
+    token: string,
+    websiteUserId: string
+  ): Promise<SyncResult> {
     const conflicts: SyncConflict[] = []
     const errors: string[] = []
     let entriesProcessed = 0
@@ -313,15 +375,26 @@ export class SyncService {
       // Get local unsynced entries
       const localEntries = await this.db.getUnsyncedChangelogEntries(userId)
 
+      // Remap entries to use website user ID
+      const remappedEntries = localEntries.map((entry) => ({
+        ...entry,
+        userId: websiteUserId
+      }))
+
       // Send local changes and get server changes
-      const response = await fetch(`${this.config.apiBaseUrl}/api/sync/database-changelog`, {
+      const requestBody: SyncRequest = {
+        token,
+        entries: remappedEntries
+      }
+
+      if (this.lastSyncTimestamp) {
+        requestBody.lastSyncTimestamp = this.lastSyncTimestamp
+      }
+
+      const response = await fetch(`${this.config.apiBaseUrl}/api/sync/changelog`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token,
-          entries: localEntries,
-          lastSyncTimestamp: this.lastSyncTimestamp
-        } as SyncRequest)
+        body: JSON.stringify(requestBody)
       })
 
       if (!response.ok) {
@@ -339,6 +412,8 @@ export class SyncService {
 
       // Apply server changes locally
       if (data.serverEntries && data.serverEntries.length > 0) {
+        DebugLogger.info(`Applying ${data.serverEntries.length} server entries locally`)
+
         const { conflicts: detectedConflicts } = generateChangelogDiff(
           localEntries,
           data.serverEntries
@@ -347,13 +422,20 @@ export class SyncService {
 
         for (const entry of data.serverEntries) {
           try {
+            DebugLogger.info(
+              `Applying ${entry.entityType} ${entry.action} for entity ${entry.entityId}`
+            )
             await this.applyChangelogEntry(entry, userId)
             entriesProcessed++
+            DebugLogger.info(`Successfully applied ${entry.entityType} ${entry.entityId}`)
           } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+            DebugLogger.error(`Failed to apply ${entry.entityType} ${entry.action}:`, errorMessage)
             errors.push(`Failed to apply ${entry.entityType} ${entry.action}: ${errorMessage}`)
           }
         }
+      } else {
+        DebugLogger.info('No server entries to apply')
       }
 
       // Process conflicts
@@ -426,6 +508,7 @@ export class SyncService {
    */
   private async applyComicChange(entry: IChangelogEntry, userId: string): Promise<void> {
     const comic = entry.data as IComic
+    DebugLogger.info(`Applying comic change: ${entry.action} for comic ${comic.name || comic.id}`)
 
     switch (entry.action) {
       case 'created':
@@ -433,14 +516,18 @@ export class SyncService {
         if (!comic.id) throw new Error('Comic ID is required')
         const existing = await this.db.getComicById(comic.id)
         if (existing) {
+          DebugLogger.info(`Updating existing comic: ${comic.id}`)
           await this.db.updateComic(comic.id, comic)
         } else {
+          DebugLogger.info(`Creating new comic: ${comic.id} with userId: ${userId}`)
           // Create comic without chapters (they'll be synced separately)
           await this.db.createComic({ ...comic, userId }, [], comic.repo, userId)
+          DebugLogger.info(`Successfully created comic: ${comic.id}`)
         }
         break
       }
       case 'deleted':
+        DebugLogger.info(`Deleting comic: ${entry.entityId}`)
         await this.db.deleteComic(entry.entityId)
         break
     }

@@ -22,6 +22,13 @@
       "when": 1759106489383,
       "tag": "0002_keen_firebird",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1759584459034,
+      "tag": "0003_fast_madame_hydra",
+      "breakpoints": true
     }
   ]
 }

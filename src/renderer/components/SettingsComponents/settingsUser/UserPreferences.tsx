@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
-import usePersistSessionStore from 'store/usePersistSessionStore'
 import LoadingOverlay from 'components/LoadingOverlay'
 import Select from 'components/Select'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 import SettingsItem from '../SettingsItem'
 import WallpaperSelector from './WallpaperSelector'
 

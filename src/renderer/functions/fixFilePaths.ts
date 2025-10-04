@@ -1,5 +1,5 @@
-import useGlobalStore from 'store/useGlobalStore'
 import { isWebUI } from 'renderer-utils/environment'
+import useGlobalStore from 'store/useGlobalStore'
 
 const FixFilePaths = (path: string) => {
   if (path.startsWith('http')) return path
@@ -17,7 +17,7 @@ const FixFilePaths = (path: string) => {
     // becomes: comic-universe-plugin-hqnow/icon.svg
     const pluginsIndexUnix = cleanPath.indexOf('/plugins/')
     const pluginsIndexWindows = cleanPath.indexOf('\\plugins\\')
-    
+
     if (pluginsIndexUnix !== -1) {
       const relativePath = cleanPath.substring(pluginsIndexUnix + '/plugins/'.length)
       return `/api/plugins/${relativePath}`

@@ -1,14 +1,14 @@
 import { FC, ReactNode } from 'react'
 import classNames from 'classnames'
 
-interface Cover {
+interface CoverProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string
   children?: ReactNode
   visible?: boolean
   index?: string
 }
 
-const Cover: FC<Cover> = ({ className, children, visible, index, ...props }) => {
+const Cover: FC<CoverProps> = ({ className, children, visible, index, ...props }) => {
   return (
     <div
       className={classNames(

@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
-import usePersistSessionStore from 'store/usePersistSessionStore'
 import { confirmAlert } from 'components/Alert'
 import openWindow from 'functions/openWindow'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 // SyncMetadata is now a global type
 
 const useDatabaseChangelogSync = () => {

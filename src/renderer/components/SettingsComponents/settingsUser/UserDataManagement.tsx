@@ -1,8 +1,8 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import useApi from 'api'
-import usePersistSessionStore from 'store/usePersistSessionStore'
 import Button from 'components/Button'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 import SettingsItem from '../SettingsItem'
 
 const UserDataManagement = () => {

@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import usePersistStore from 'store/usePersistStore'
-import { useUserSettings } from 'hooks/useUserSettings'
 import Select from 'components/Select'
-import SettingsItem from '../SettingsItem'
 import { updateWindowTitles } from 'functions/openWindow'
+import { useUserSettings } from 'hooks/useUserSettings'
+import usePersistStore from 'store/usePersistStore'
+import SettingsItem from '../SettingsItem'
 
 const LanguageSettings = () => {
   const { i18n } = useTranslation()

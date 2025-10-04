@@ -1,14 +1,13 @@
 import { FC } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import classNames from 'classnames'
-import useApi from 'api'
 import { useTranslation } from 'react-i18next'
-import Image from 'components/Image'
-import { confirmAlert } from 'components/Alert'
-import useWindowManagerStore from 'store/useWindowManagerStore'
-import usePersistSessionStore from 'store/usePersistSessionStore'
-
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import useApi from 'api'
 import { plusIcon, userIcon, trashIcon } from 'assets'
+import classNames from 'classnames'
+import { confirmAlert } from 'components/Alert'
+import Image from 'components/Image'
+import usePersistSessionStore from 'store/usePersistSessionStore'
+import useWindowManagerStore from 'store/useWindowManagerStore'
 
 interface UserListItemProps {
   data?: IUser

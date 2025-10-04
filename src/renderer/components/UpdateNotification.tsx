@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { confirmAlert } from 'components/Alert'
 import useApi from 'api'
+import { confirmAlert } from 'components/Alert'
 
 const UpdateNotification = () => {
   const { invoke, on, removeAllListeners } = useApi()

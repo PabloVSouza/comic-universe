@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import usePersistStore from 'store/usePersistStore'
 import useApi from 'api'
-import useEnvironment from 'hooks/useEnvironment'
 import Button from 'components/Button'
 import DisplayValue from 'components/DisplayValue'
 import Input from 'components/Input'
+import useEnvironment from 'hooks/useEnvironment'
+import usePersistStore from 'store/usePersistStore'
 import SettingsItem from '../SettingsItem'
 
 const SettingsWebUIPreferences = () => {

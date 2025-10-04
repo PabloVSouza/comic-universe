@@ -5,6 +5,7 @@ const react = require('eslint-plugin-react')
 const reactHooks = require('eslint-plugin-react-hooks')
 const prettier = require('eslint-plugin-prettier')
 const prettierConfig = require('eslint-config-prettier')
+const importPlugin = require('eslint-plugin-import')
 const globals = require('globals')
 
 module.exports = [
@@ -60,7 +61,8 @@ module.exports = [
       '@typescript-eslint': typescript,
       react: react,
       'react-hooks': reactHooks,
-      prettier: prettier
+      prettier: prettier,
+      import: importPlugin
     },
     rules: {
       ...typescript.configs.recommended.rules,
@@ -81,7 +83,63 @@ module.exports = [
       'no-useless-catch': 'warn',
       'react-hooks/rules-of-hooks': 'warn',
       'react-hooks/exhaustive-deps': 'warn',
-      'prettier/prettier': 'error'
+      'prettier/prettier': 'error',
+
+      // Import sorting rules
+      'import/order': [
+        'error',
+        {
+          groups: [
+            'builtin', // Node.js built-in modules
+            'external', // npm packages
+            'internal', // Aliased modules
+            ['parent', 'sibling'], // Relative imports
+            'index', // Index imports
+            'object',
+            'type' // Type imports
+          ],
+          pathGroups: [
+            {
+              pattern: 'react',
+              group: 'external',
+              position: 'before'
+            },
+            {
+              pattern: 'react-**',
+              group: 'external',
+              position: 'before'
+            },
+            {
+              pattern: '@tanstack/**',
+              group: 'external',
+              position: 'before'
+            },
+            {
+              pattern: '{components,pages,hooks,store,api,functions,utils,constants}/**',
+              group: 'internal',
+              position: 'after'
+            },
+            {
+              pattern: 'assets/**',
+              group: 'internal',
+              position: 'after'
+            },
+            {
+              pattern: '*.{css,scss,sass,less}',
+              group: 'object',
+              position: 'after'
+            }
+          ],
+          pathGroupsExcludedImportTypes: ['react'],
+          'newlines-between': 'never',
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true
+          }
+        }
+      ],
+      'import/newline-after-import': 'error',
+      'import/no-duplicates': 'error'
     },
     settings: {
       react: {

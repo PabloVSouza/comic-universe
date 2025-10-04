@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
-import SettingsPluginList from './SettingsPluginList'
 import PluginInstallSettings from './PluginInstallSettings'
+import SettingsPluginList from './SettingsPluginList'
 import SettingsBox from '../SettingsBox'
 import SettingsTitle from '../SettingsTitle'
 

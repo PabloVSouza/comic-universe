@@ -1,5 +1,5 @@
-import useApi from 'api'
 import path from 'path'
+import useApi from 'api'
 import defaultWallpaper from 'assets/wallpaper.webp'
 
 export interface WallpaperInfo {

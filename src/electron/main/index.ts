@@ -1,5 +1,5 @@
-import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
+import { app, BrowserWindow } from 'electron'
 import CreateMainWindow from 'windows/MainWindow'
 
 app.whenReady().then(() => {

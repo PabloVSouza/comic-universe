@@ -1,11 +1,10 @@
 import { FC } from 'react'
+import { logoIcon } from 'assets'
 import classNames from 'classnames'
 import Button from 'components/Button'
+import Image from 'components/Image'
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
-
-import Image from 'components/Image'
-import { logoIcon } from 'assets'
 
 const HomeTopBar: FC = () => {
   const { toggleMenu, menuVisible } = useGlobalStore((state) => state)

@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
-import usePersistSessionStore from 'store/usePersistSessionStore'
+import { confirmIcon, cancelIcon, pencilIcon } from 'assets'
 import Button from 'components/Button'
 import DisplayValue from 'components/DisplayValue'
 import Input from 'components/Input'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 import SettingsItem from '../SettingsItem'
 import WebsiteAuth from './WebsiteAuth'
-import { confirmIcon, cancelIcon, pencilIcon } from 'assets'
 
 const UserProfile = () => {
   const { t } = useTranslation()

@@ -1,12 +1,12 @@
 import { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
-import { useTranslation } from 'react-i18next'
+import { trashIcon } from 'assets'
 import { confirmAlert } from 'components/Alert'
 import { ContextMenu, openContextMenu, ContextOption } from 'components/ContextMenu'
 import ComicListItem from 'components/HomeComponents/HomeComicListItem'
 import usePersistSessionStore from 'store/usePersistSessionStore'
-import { trashIcon } from 'assets'
 
 const HomeComicList: FC<{ comicList: IComic[] }> = ({ comicList }) => {
   const { invoke } = useApi()

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
-import usePersistSessionStore from 'store/usePersistSessionStore'
 import Button from 'components/Button'
-import SettingsItem from '../SettingsItem'
 import openWindow from 'functions/openWindow'
+import usePersistSessionStore from 'store/usePersistSessionStore'
+import SettingsItem from '../SettingsItem'
 
 const WebsiteAuth = () => {
   const { t } = useTranslation()

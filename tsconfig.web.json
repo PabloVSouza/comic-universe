@@ -11,10 +11,8 @@
       "preload/*": ["../../src/electron/preload/*"],
       "repositories/*": ["../../src/electron/repositories/*"],
       "scripts/*": ["../../src/electron/scripts/*"],
-      "electron-utils/*": ["../../src/electron/utils/*"],
       "windows/*": ["../../src/electron/windows/*"],
       "database/*": ["../../src/database/*"],
-
       "assets/*": ["./assets/*"],
       "components/*": ["./components/*"],
       "electron/*": ["./electron/*"],
@@ -30,6 +28,9 @@
       "shared/*": ["../shared/*"],
       "shared-utils/*": ["../utils/*"],
       "shared-utils": ["../utils/index"],
+      "electron-utils": ["../../src/electron/utils/index"],
+      "electron-utils/*": ["../../src/electron/utils/*"],
+      "renderer-utils": ["./utils/index"],
       "renderer-utils/*": ["./utils/*"]
     }
   }

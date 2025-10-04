@@ -1,12 +1,11 @@
 import { ReactElement, useState, useEffect, useMemo } from 'react'
-import SettingsList from 'components/SettingsComponents/SettingsList'
-import SettingsApp from 'components/SettingsComponents/settingsApp'
-import SettingsUser from 'components/SettingsComponents/settingsUser'
-import SettingsPlugin from 'components/SettingsComponents/settingsPlugin'
-import SettingsAbout from 'components/SettingsComponents/settingsAbout'
 import { useTranslation } from 'react-i18next'
-
 import { pluginIcon, userIcon, settingsIcon, infoIcon } from 'assets'
+import SettingsAbout from 'components/SettingsComponents/settingsAbout'
+import SettingsApp from 'components/SettingsComponents/settingsApp'
+import SettingsList from 'components/SettingsComponents/SettingsList'
+import SettingsPlugin from 'components/SettingsComponents/settingsPlugin'
+import SettingsUser from 'components/SettingsComponents/settingsUser'
 
 const Settings = ({ initialTab }: { initialTab?: string }): ReactElement => {
   const [activeOption, setActiveOption] = useState(initialTab || 'general')

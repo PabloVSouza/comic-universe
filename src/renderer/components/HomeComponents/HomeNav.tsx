@@ -1,15 +1,14 @@
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import useApi from 'api'
+import { infoIcon, settingsIcon, userIcon, exitDoorIcon, logoutIcon, pluginIcon } from 'assets'
 import classNames from 'classnames'
 import Cover from 'components/Cover'
-import openWindow from 'functions/openWindow'
 import Image from 'components/Image'
-import { useTranslation } from 'react-i18next'
+import openWindow from 'functions/openWindow'
+import useEnvironment from 'hooks/useEnvironment'
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
-import useEnvironment from 'hooks/useEnvironment'
-
-import { infoIcon, settingsIcon, userIcon, exitDoorIcon, logoutIcon, pluginIcon } from 'assets'
 
 const HomeNav: FC = () => {
   const { invoke } = useApi()
@@ -74,7 +73,7 @@ const HomeNav: FC = () => {
   }
 
   return (
-    <Cover visible={menuVisible}>
+    <Cover visible={menuVisible} className="z-40" onClick={toggleMenu}>
       <ul
         className={classNames(
           'transition-move-fade bg-default h-full w-52 duration-500 ease-default ml-auto mb-auto pt-14 flex gap-px flex-col',

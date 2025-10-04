@@ -1,6 +1,6 @@
-import useWindowManagerStore from 'store/useWindowManagerStore'
-import { v4 as randomUUID } from 'uuid'
 import PageList from 'pages'
+import { v4 as randomUUID } from 'uuid'
+import useWindowManagerStore from 'store/useWindowManagerStore'
 import i18n from '../i18n'
 
 // Function to update window titles when language changes

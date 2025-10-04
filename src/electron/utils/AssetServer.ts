@@ -1,8 +1,8 @@
-import express from 'express'
 import { Server } from 'http'
 import path from 'path'
-import { DataPaths } from 'electron-utils/utils'
 import { getPortToUse } from 'electron-utils/portManager'
+import { DataPaths } from 'electron-utils/utils'
+import express from 'express'
 
 class AssetServer {
   private server: Server | null = null

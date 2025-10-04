@@ -1,7 +1,7 @@
+import { forwardRef } from 'react'
 import ReactSelect from 'react-select'
 import classNames from 'classnames'
 import { StateManagerProps } from 'react-select/dist/declarations/src/useStateManager'
-import { forwardRef } from 'react'
 
 interface SelectProps extends Omit<StateManagerProps, 'theme'> {
   className?: string

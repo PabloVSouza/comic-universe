@@ -1,13 +1,12 @@
 import { FC } from 'react'
-import { useNavigate } from 'react-router-dom'
-import Button from 'components/Button'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import { downloadIcon2, comicBookIcon } from 'assets'
+import { confirmAlert } from 'components/Alert'
+import Button from 'components/Button'
+import ProgressBar from 'components/ProgressBar'
 import useFetchData from 'hooks/useFetchData'
 import usePersistSessionStore from 'store/usePersistSessionStore'
-
-import { downloadIcon2, comicBookIcon } from 'assets'
-import ProgressBar from 'components/ProgressBar'
-import { confirmAlert } from 'components/Alert'
 
 const HomeDashboardNavBar: FC<{
   comic: IComic

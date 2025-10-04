@@ -1,9 +1,8 @@
 import { FC } from 'react'
+import { loadingIcon } from 'assets'
 import Cover from 'components/Cover'
 import Image from 'components/Image'
 import ProgressBar from 'components/ProgressBar'
-
-import { loadingIcon } from 'assets'
 
 interface LoadingOverlayProps {
   isLoading: boolean

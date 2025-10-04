@@ -1,12 +1,11 @@
 import { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
-import LoadingOverlay from 'components/LoadingOverlay'
-import Button from 'components/Button'
-import UsersList from 'components/UsersComponents/UsersList'
-import { useTranslation } from 'react-i18next'
-
 import { confirmIcon, cancelIcon } from 'assets'
+import Button from 'components/Button'
+import LoadingOverlay from 'components/LoadingOverlay'
+import UsersList from 'components/UsersComponents/UsersList'
 
 const Users: FC = () => {
   const { invoke } = useApi()

@@ -1,16 +1,15 @@
 import { FC, useEffect, useState, useCallback, useRef } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate } from 'react-router-dom'
-import Image from 'components/Image'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
+import { loadingIcon } from 'assets'
+import Cover from 'components/Cover'
+import Image from 'components/Image'
+import ReaderBottomBar from 'components/ReaderComponents/ReaderBottomBar'
+import ReaderZoomWindow, { MousePosition } from 'components/ReaderComponents/ReaderZoomWindow'
 import FixFilePaths from 'functions/fixFilePaths'
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
-import ReaderZoomWindow, { MousePosition } from 'components/ReaderComponents/ReaderZoomWindow'
-import ReaderBottomBar from 'components/ReaderComponents/ReaderBottomBar'
-
-import { loadingIcon } from 'assets'
-import Cover from 'components/Cover'
 
 const Reader: FC = () => {
   const navigate = useNavigate()

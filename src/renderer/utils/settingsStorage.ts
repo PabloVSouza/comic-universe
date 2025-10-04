@@ -1,9 +1,8 @@
-import { StateStorage } from 'zustand/middleware'
 import useApi from 'api'
-import { DEFAULT_SETTINGS } from 'constants/defaultSettings'
 import { deepMerge } from 'shared-utils'
+import { StateStorage } from 'zustand/middleware'
+import { DEFAULT_SETTINGS } from 'constants/defaultSettings'
 
-// Pre-load settings to avoid async issues
 let cachedSettings: string | null = null
 
 const loadSettingsOnce = async (): Promise<string> => {
@@ -14,10 +13,8 @@ const loadSettingsOnce = async (): Promise<string> => {
   try {
     const { invoke } = useApi()
 
-    // Get all settings from settings.json in a single call
     const allSettings = await invoke('getAllSettings')
 
-    // Merge defaults with loaded settings (loaded settings override defaults)
     const sourceSettings = {
       theme: allSettings.theme || DEFAULT_SETTINGS.theme,
       repo: allSettings.repo || DEFAULT_SETTINGS.repo,
@@ -32,19 +29,16 @@ const loadSettingsOnce = async (): Promise<string> => {
     return cachedSettings
   } catch (error) {
     console.error('❌ Error loading settings from settings.json:', error)
-    // Return defaults if loading fails
     cachedSettings = JSON.stringify(DEFAULT_SETTINGS)
     return cachedSettings
   }
 }
 
-// Custom storage implementation for Zustand that uses settings.json
 export const createSettingsStorage = (): StateStorage => {
   return {
-    getItem: async (_name: string): Promise<string | null> => {
+    getItem: async (): Promise<string | null> => {
       const settings = await loadSettingsOnce()
 
-      // Zustand expects the data to be wrapped in a 'state' property
       const wrappedSettings = { state: JSON.parse(settings) }
       const wrappedSettingsString = JSON.stringify(wrappedSettings)
 
@@ -56,15 +50,12 @@ export const createSettingsStorage = (): StateStorage => {
         const { invoke } = useApi()
         const state = JSON.parse(value)
 
-        // Extract the actual state from Zustand's structure
         const actualState = state.state || state
 
-        // Use the nested structure directly (already in correct format)
         const settingsToUpdate: any = actualState
 
         await invoke('updateAllSettings', settingsToUpdate)
 
-        // Clear cache so next getItem will reload from file
         cachedSettings = null
       } catch (error) {
         console.error('❌ Error saving settings to settings.json:', error)
@@ -72,8 +63,6 @@ export const createSettingsStorage = (): StateStorage => {
       }
     },
 
-    removeItem: async (_name: string): Promise<void> => {
-      // For now, we don't implement removal - settings persist in settings.json
-    }
+    removeItem: async (): Promise<void> => {}
   }
 }

@@ -1,5 +1,5 @@
-import LanguageSettings from './LanguageSettings'
 import DebugSettings from './DebugSettings'
+import LanguageSettings from './LanguageSettings'
 import ThemeSettings from './ThemeSettings'
 import UpdatePreferences from './UpdatePreferences'
 import WebUIPreferences from './WebUIPreferences'

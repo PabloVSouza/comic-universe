@@ -1,5 +1,5 @@
-import { ElectronAPI } from '@electron-toolkit/preload'
 import { PlatformPath } from 'path'
+import { ElectronAPI } from '@electron-toolkit/preload'
 import { IDBInteractionsRepository } from 'repositories/Implementations/DBImplementations/IDBInteractionsRepository'
 import { ComicUniverseAPI } from './ApiTypes'
 

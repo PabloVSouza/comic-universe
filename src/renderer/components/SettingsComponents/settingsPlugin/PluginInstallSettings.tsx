@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
-import Select from 'components/Select'
-import Button from 'components/Button'
-import SettingsItem from '../SettingsItem'
-
 import { downloadIcon3, loadingIcon } from 'assets'
+import Button from 'components/Button'
+import Select from 'components/Select'
+import SettingsItem from '../SettingsItem'
 
 const PluginInstallSettings = () => {
   const { t } = useTranslation()

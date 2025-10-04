@@ -1,16 +1,15 @@
 import { FC, useState, useMemo, useEffect, useRef, MutableRefObject } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
+import { magnifyingGlassSearchIcon } from 'assets'
 import debounce from 'lodash.debounce'
-import Select from 'components/Select'
 import Image from 'components/Image'
-import SearchComicList from 'components/SearchComponents/SearchComicList'
 import Loading from 'components/LoadingOverlay'
 import Pagination from 'components/Pagination'
-import { useTranslation } from 'react-i18next'
+import SearchComicList from 'components/SearchComponents/SearchComicList'
+import Select from 'components/Select'
 import usePersistStore from 'store/usePersistStore'
-
-import { magnifyingGlassSearchIcon } from 'assets'
 
 type TOption = {
   value: string

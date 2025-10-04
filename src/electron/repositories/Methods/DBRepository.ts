@@ -1,5 +1,5 @@
-import { initializeDatabase, IDatabaseRepository } from '../database'
 import { DataPaths } from 'electron-utils/utils'
+import { initializeDatabase, IDatabaseRepository } from '../database'
 
 class DBRepository implements IDBRepository {
   private repository!: IDatabaseRepository

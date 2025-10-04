@@ -1,5 +1,5 @@
-import { eq, and, isNull, asc, inArray } from 'drizzle-orm'
-import { IDatabaseRepository } from '../interfaces/IDatabaseRepository'
+import path from 'path'
+import Database from 'better-sqlite3'
 import {
   comics,
   chapters,
@@ -9,11 +9,11 @@ import {
   changelog,
   type NewChapter
 } from 'database/schema'
-import Database from 'better-sqlite3'
+import { eq, and, isNull, asc, inArray } from 'drizzle-orm'
 import { drizzle, type BetterSQLite3Database } from 'drizzle-orm/better-sqlite3'
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
-import path from 'path'
 import DebugLogger from 'electron-utils/DebugLogger'
+import { IDatabaseRepository } from '../interfaces/IDatabaseRepository'
 
 export class DrizzleDatabaseRepository implements IDatabaseRepository {
   private db: BetterSQLite3Database<Record<string, unknown>> | null = null
@@ -476,7 +476,25 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async deleteUser(id: string): Promise<void> {
     const db = this.getDb()
 
+    // Delete in order to respect foreign key constraints:
+    // 1. First delete readProgress (references both users and comics)
     await db.delete(readProgress).where(eq(readProgress.userId, id))
+
+    // 2. Delete changelog entries for this user
+    await db.delete(changelog).where(eq(changelog.userId, id))
+
+    // 3. Get user's comics to delete chapters first
+    const userComics = await db.select({ id: comics.id }).from(comics).where(eq(comics.userId, id))
+
+    // 4. Delete chapters for each comic owned by this user
+    for (const comic of userComics) {
+      await db.delete(chapters).where(eq(chapters.comicId, comic.id))
+    }
+
+    // 5. Delete comics owned by this user
+    await db.delete(comics).where(eq(comics.userId, id))
+
+    // 6. Finally, delete the user
     await db.delete(users).where(eq(users.id, id))
   }
 

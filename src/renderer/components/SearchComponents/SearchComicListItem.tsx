@@ -1,20 +1,17 @@
 import { FC, LiHTMLAttributes } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
-import LoadingOverlay from 'components/LoadingOverlay'
-import { useNavigate } from 'react-router-dom'
-import ReactHtmlParser from 'html-react-parser'
-import classNames from 'classnames'
-
-import usePersistStore from 'store/usePersistStore'
-import usePersistSessionStore from 'store/usePersistSessionStore'
-
-import { useTranslation } from 'react-i18next'
-
 import { loadingIcon } from 'assets'
-import Image from 'components/Image'
+import classNames from 'classnames'
+import ReactHtmlParser from 'html-react-parser'
 import Button from 'components/Button'
+import Image from 'components/Image'
+import LoadingOverlay from 'components/LoadingOverlay'
 import useFetchData from 'hooks/useFetchData'
+import usePersistSessionStore from 'store/usePersistSessionStore'
+import usePersistStore from 'store/usePersistStore'
 
 interface SearchComicListItemProps extends LiHTMLAttributes<unknown> {
   data: IComic

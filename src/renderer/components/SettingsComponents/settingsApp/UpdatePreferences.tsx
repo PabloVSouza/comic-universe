@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from '@tanstack/react-query'
 import useApi from 'api'
-import Button from 'components/Button'
 import { refreshIcon } from 'assets'
+import Button from 'components/Button'
 import SettingsUpdatePreferences from './SettingsUpdatePreferences'
 
 const UpdatePreferences = () => {

@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import HtmlParser from 'html-react-parser'
-import FixFilePaths from 'functions/fixFilePaths'
 import Image from 'components/Image'
+import FixFilePaths from 'functions/fixFilePaths'
 
 type HomeDashboardHeaderProps = {
   comic: IComic

@@ -1,6 +1,6 @@
+import { createRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
-import { createRef } from 'react'
 import SettingsPluginListItem from './SettingsPluginListItem'
 
 const SettingsPluginList = ({ pluginsList }: { pluginsList: IRepoPluginInfo[] }) => {

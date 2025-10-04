@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import usePersistStore from 'store/usePersistStore'
@@ -65,7 +65,6 @@ export const useUserSettings = () => {
       i18n.changeLanguage(languageToApply)
     }
   }, [userSettings?.appPreferences?.language, appLanguage.language, i18n])
-
 
   return {
     userSettings,

@@ -1,6 +1,5 @@
 import { ReactElement } from 'react'
 import { Route, Routes, Navigate, RoutesProps } from 'react-router-dom'
-
 import Home from 'pages/Home'
 import Reader from 'pages/Reader'
 

@@ -1,8 +1,15 @@
-import React, { ReactElement, useRef, useState, ImgHTMLAttributes, CSSProperties } from 'react'
+import {
+  useRef,
+  useState,
+  ImgHTMLAttributes,
+  CSSProperties,
+  FC,
+  SVGProps,
+  HTMLAttributeReferrerPolicy
+} from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
 import useEnvironment from 'hooks/useEnvironment'
 
-// Utility function to get proxied image URL for Web UI
 const getProxiedImageUrl = (originalUrl: string, isWebUI: boolean): string => {
   if (isWebUI && (originalUrl.startsWith('http://') || originalUrl.startsWith('https://'))) {
     const proxiedUrl = `/api/proxy-image?url=${encodeURIComponent(originalUrl)}`
@@ -19,10 +26,10 @@ interface ImageProps extends Partial<ImgHTMLAttributes<HTMLImageElement>> {
   svg?: boolean
   svgColor?: string
   svgSize?: number | string
-  SvgComponent?: React.ComponentType<React.SVGProps<SVGSVGElement>>
+  SvgComponent?: FC<SVGProps<SVGSVGElement>>
 }
 
-const Image = ({
+const Image: FC<ImageProps> = ({
   placeholderSrc,
   placeholderClassName,
   placeholderStyle,
@@ -36,7 +43,7 @@ const Image = ({
   svgSize,
   SvgComponent,
   ...props
-}: ImageProps): ReactElement => {
+}) => {
   const [isLoading, setIsLoading] = useState(1)
   const [hasError, setHasError] = useState(false)
   const nodeRef = useRef(null)
@@ -60,7 +67,7 @@ const Image = ({
     src: getProxiedImageUrl(src, isWebUI),
     alt,
     style,
-    referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
+    referrerPolicy: 'no-referrer' as HTMLAttributeReferrerPolicy,
     onError: () => setHasError(true),
     onLoad: () => setHasError(false),
     ...props
@@ -68,7 +75,7 @@ const Image = ({
 
   if (svg) {
     const iconSize = svgSize || style?.width || style?.height || 24
-    const iconStyle: React.CSSProperties = {
+    const iconStyle: CSSProperties = {
       width: iconSize,
       height: iconSize,
       color: svgColor || style?.color || 'currentColor',
@@ -108,12 +115,12 @@ const Image = ({
       className: placeholderClassName,
       style: placeholderStyle,
       ref: nodeRef,
-      referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy
+      referrerPolicy: 'no-referrer' as HTMLAttributeReferrerPolicy
     }
 
     const lazyImageProps = {
       ...props,
-      referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
+      referrerPolicy: 'no-referrer' as HTMLAttributeReferrerPolicy,
       style,
       src: getProxiedImageUrl(src, isWebUI),
       className,
@@ -126,7 +133,7 @@ const Image = ({
     const loadingProps = {
       src: getProxiedImageUrl(src, isWebUI),
       style: { display: 'none' },
-      referrerPolicy: 'no-referrer' as React.HTMLAttributeReferrerPolicy,
+      referrerPolicy: 'no-referrer' as HTMLAttributeReferrerPolicy,
       onLoad: (): void => setIsLoading(0),
       onError: (): void => {
         setHasError(true)

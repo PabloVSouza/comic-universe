@@ -1,8 +1,8 @@
 import { FC } from 'react'
-import { downloadIcon, refreshIcon } from 'assets/index'
 import Button from 'components/Button'
-import useDatabaseChangelogSync from 'hooks/useDatabaseChangelogSync'
 import openWindow from 'functions/openWindow'
+import useDatabaseChangelogSync from 'hooks/useDatabaseChangelogSync'
+import { downloadIcon, refreshIcon } from 'assets/index'
 
 export const HomeComicNav: FC = () => {
   const { syncData, isSyncing } = useDatabaseChangelogSync()
@@ -16,8 +16,8 @@ export const HomeComicNav: FC = () => {
   }
 
   return (
-    <ul>
-      <li className="flex justify-between items-center p-2 w-60 bg-list">
+    <ul className="bg-default">
+      <li className="flex justify-between items-center p-2 w-60">
         <Button
           className="z-30 h-full"
           icon={downloadIcon}

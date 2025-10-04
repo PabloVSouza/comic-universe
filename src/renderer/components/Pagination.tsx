@@ -1,7 +1,7 @@
-import ReactPaginate from 'react-paginate'
 import { useState, useEffect } from 'react'
-import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
+import ReactPaginate from 'react-paginate'
+import classNames from 'classnames'
 
 interface PaginationProps {
   setOffset: (offset: number) => void

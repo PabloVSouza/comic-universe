@@ -1,7 +1,7 @@
-import { BrowserWindow } from 'electron'
-import { is } from '@electron-toolkit/utils'
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
+import { is } from '@electron-toolkit/utils'
+import { BrowserWindow } from 'electron'
 import {
   CreateDirectory,
   githubApi,

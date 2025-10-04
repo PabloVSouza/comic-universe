@@ -1,5 +1,5 @@
-import usePersistStore from 'store/usePersistStore'
 import Button from 'components/Button'
+import usePersistStore from 'store/usePersistStore'
 import SettingsItem from '../SettingsItem'
 
 const DebugSettings = () => {

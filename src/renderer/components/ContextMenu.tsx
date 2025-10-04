@@ -1,6 +1,6 @@
-import { create } from 'zustand'
 import { MutableRefObject, useEffect, useRef } from 'react'
 import classNames from 'classnames'
+import { create } from 'zustand'
 import Image from 'components/Image'
 
 export type ContextOption = {

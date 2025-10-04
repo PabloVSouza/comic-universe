@@ -1,11 +1,11 @@
-import { shell, BrowserWindow, app, dialog } from 'electron'
-import { is } from '@electron-toolkit/utils'
-import { join } from 'path'
 import { accessSync } from 'fs'
+import { join } from 'path'
+import { is } from '@electron-toolkit/utils'
+import { shell, BrowserWindow, app, dialog } from 'electron'
 import { autoUpdater } from 'electron-updater'
-import Methods from 'repositories/Methods'
-import EventManager from 'repositories/EventManager'
 import ApiManager from 'repositories/ApiManager'
+import EventManager from 'repositories/EventManager'
+import Methods from 'repositories/Methods'
 import SettingsRepository from 'repositories/Methods/SettingsRepository'
 
 function getVersionTypeString(version: string): string {

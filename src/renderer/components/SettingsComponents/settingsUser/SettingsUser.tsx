@@ -3,10 +3,10 @@ import useApi from 'api'
 import LoadingOverlay from 'components/LoadingOverlay'
 import SettingsBox from '../SettingsBox'
 import SettingsTitle from '../SettingsTitle'
-import UserProfile from './UserProfile'
-import UserStatistics from './UserStatistics'
 import UserDataManagement from './UserDataManagement'
 import UserPreferences from './UserPreferences'
+import UserProfile from './UserProfile'
+import UserStatistics from './UserStatistics'
 
 const SettingsUser = () => {
   const { invoke } = useApi()

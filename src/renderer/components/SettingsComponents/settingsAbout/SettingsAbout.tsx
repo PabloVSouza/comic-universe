@@ -1,14 +1,13 @@
 import { FC } from 'react'
-import useApi from 'api'
 import { useQuery } from '@tanstack/react-query'
+import useApi from 'api'
+import { iconIcon } from 'assets'
 import DisplayValue from 'components/DisplayValue'
 import Image from 'components/Image'
 import LoadingOverlay from 'components/LoadingOverlay'
 import SettingsBox from '../SettingsBox'
-import SettingsTitle from '../SettingsTitle'
 import SettingsItem from '../SettingsItem'
-
-import { iconIcon } from 'assets'
+import SettingsTitle from '../SettingsTitle'
 
 const SettingsAbout: FC = () => {
   const { invoke } = useApi()

@@ -1,14 +1,14 @@
 import { useState, useEffect, createRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
-import { confirmAlert } from 'components/Alert'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
-import wallpaperManager from 'renderer-utils/wallpaperManager'
+import { confirmIcon, cancelIcon, uploadIcon } from 'assets'
 import wallpaperList, { ExtendedWallpaperInfo } from 'renderer-utils/wallpaperList'
+import wallpaperManager from 'renderer-utils/wallpaperManager'
+import { confirmAlert } from 'components/Alert'
 import Button from 'components/Button'
 import SettingsItem from '../SettingsItem'
-import { confirmIcon, cancelIcon, uploadIcon } from 'assets'
 
 interface WallpaperSelectorProps {
   currentWallpaper: string | null

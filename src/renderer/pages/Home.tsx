@@ -1,22 +1,22 @@
 import { FC, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
-import openWindow from 'functions/openWindow'
 import Cover from 'components/Cover'
-import HomeTopBar from 'components/HomeComponents/HomeTopBar'
+import HomeBlankArea from 'components/HomeComponents/HomeBlankArea'
 import HomeComicList from 'components/HomeComponents/HomeComicList'
+import { HomeComicNav } from 'components/HomeComponents/HomeComicNav'
 import HomeComicDashboard from 'components/HomeComponents/HomeDashboardComponents/HomeDashboard'
 import HomeNav from 'components/HomeComponents/HomeNav'
-import HomeBlankArea from 'components/HomeComponents/HomeBlankArea'
+import HomeTopBar from 'components/HomeComponents/HomeTopBar'
 import WindowManager from 'components/WindowComponents/WindowManager'
-import usePersistSessionStore from 'store/usePersistSessionStore'
-import useGlobalStore from 'store/useGlobalStore'
-import useWindowManagerStore from 'store/useWindowManagerStore'
-import useQueue from 'hooks/useQueue'
-import useFetchData from 'hooks/useFetchData'
-import useAutoWebsiteAuth from 'hooks/useAutoWebsiteAuth'
+import openWindow from 'functions/openWindow'
 import { addChaptersToQueue } from 'functions/queueUtils'
-import { HomeComicNav } from 'components/HomeComponents/HomeComicNav'
+import useAutoWebsiteAuth from 'hooks/useAutoWebsiteAuth'
+import useFetchData from 'hooks/useFetchData'
+import useQueue from 'hooks/useQueue'
+import useGlobalStore from 'store/useGlobalStore'
+import usePersistSessionStore from 'store/usePersistSessionStore'
+import useWindowManagerStore from 'store/useWindowManagerStore'
 
 const Home: FC = () => {
   const { invoke } = useApi()
@@ -67,7 +67,7 @@ const Home: FC = () => {
       <HomeNav />
       <WindowManager>
         <div className="flex h-full gap-px">
-          <HomeBlankArea active={!userActive} />
+          <HomeBlankArea />
           {userActive && (
             <div className="flex h-full flex-col w-60 mt-px gap-px">
               <HomeComicNav />

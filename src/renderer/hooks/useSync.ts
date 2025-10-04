@@ -1,9 +1,9 @@
+import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
-import usePersistSessionStore from 'store/usePersistSessionStore'
 import { confirmAlert } from 'components/Alert'
-import { useTranslation } from 'react-i18next'
 import openWindow from 'functions/openWindow'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 
 interface SyncData {
   comics: IComic[]

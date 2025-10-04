@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
-import usePersistSessionStore from 'store/usePersistSessionStore'
 import DisplayValue from 'components/DisplayValue'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 import SettingsItem from '../SettingsItem'
 
 const UserStatistics = () => {

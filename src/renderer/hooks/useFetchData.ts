@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
-import timeoutPromise from 'functions/timeoutPromise'
 import { confirmAlert } from 'components/Alert'
+import timeoutPromise from 'functions/timeoutPromise'
 
 const useFetchData = (userId: string) => {
   const { invoke } = useApi()

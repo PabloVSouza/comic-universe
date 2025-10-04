@@ -1,13 +1,9 @@
+import { FC } from 'react'
 import classNames from 'classnames'
 
-const HomeBlankArea = ({ active }: { active?: boolean }) => {
+const HomeBlankArea: FC = () => {
   return (
-    <div
-      className={classNames(
-        'w-full h-full absolute flex justify-center items-center z-10',
-        active ? 'bg-default' : ''
-      )}
-    />
+    <div className={classNames('w-full h-full absolute flex justify-center items-center z-10')} />
   )
 }
 

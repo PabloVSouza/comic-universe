@@ -1,8 +1,10 @@
 import { DataPaths } from 'electron-utils/utils'
+import { SyncService } from '../../services/SyncService'
 import { initializeDatabase, IDatabaseRepository } from '../database'
 
 class DBRepository implements IDBRepository {
   private repository!: IDatabaseRepository
+  private syncService!: SyncService
 
   constructor() {
     // Use the centralized data paths utility
@@ -13,6 +15,14 @@ class DBRepository implements IDBRepository {
     // Initialize ORM-agnostic database with custom path
     const dbPath = DataPaths.getDatabaseFilePath()
     this.repository = await initializeDatabase(dbPath)
+
+    // Initialize sync service
+    // TODO: Get API base URL from settings
+    const apiBaseUrl = process.env.API_BASE_URL || 'https://comicuniverse.app'
+    this.syncService = new SyncService(this.repository, {
+      apiBaseUrl,
+      syncInterval: 0 // Manual sync only for now
+    })
   }
 
   methods: IDBMethods = {
@@ -256,6 +266,17 @@ class DBRepository implements IDBRepository {
       const result = await this.repository.getChangelogEntriesSince(userId, timestamp)
       return new Promise((resolve) => {
         resolve(result)
+      })
+    },
+
+    // Sync methods
+    dbSyncData: async ({ direction, userId, token }): Promise<SyncResult> => {
+      return await this.syncService.sync(direction, userId, token)
+    },
+
+    dbGetSyncStatus: async (): Promise<SyncState> => {
+      return new Promise((resolve) => {
+        resolve(this.syncService.getSyncStatus())
       })
     }
   }

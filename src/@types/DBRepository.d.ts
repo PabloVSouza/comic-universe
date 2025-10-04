@@ -63,6 +63,14 @@ type IDBMethods = {
     userId: string
     timestamp: string
   }) => Promise<IChangelogEntry[]>
+
+  // Sync methods
+  dbSyncData: (input: {
+    direction: SyncDirection
+    userId?: string
+    token?: string
+  }) => Promise<SyncResult>
+  dbGetSyncStatus: () => Promise<SyncState>
 }
 
 interface IDBRepository {

@@ -3,5 +3,8 @@ interface IUser {
   name: string
   default?: boolean
   settings?: Record<string, any> | null
+  websiteAuthToken?: string | null
+  websiteAuthExpiresAt?: string | null
+  websiteAuthDeviceName?: string | null
   ReadProgress?: ReadProgress[]
 }

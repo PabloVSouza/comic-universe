@@ -141,13 +141,15 @@ nsis:
   uninstallerIcon: null
 mac:
   artifactName: ${name}-${version}-mac-${arch}.${ext}
-  icon: build/icon.icns
+  icon: build/icon.iconset
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+    - UIDesignRequiresCompatibility: true
+    - LSRequiresNativeExecution: true
 
   # Code signing disabled for macOS
   identity: null

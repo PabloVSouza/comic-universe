@@ -2,6 +2,8 @@ import { forwardRef } from 'react'
 import ReactSelect, { Props as StateManagerProps } from 'react-select'
 import classNames from 'classnames'
 
+type SelectOption = { value: string; label: string }
+
 interface SelectProps extends Omit<StateManagerProps, 'theme'> {
   className?: string
   theme?: 'styled' | 'native'
@@ -11,15 +13,22 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ({ className, theme = 'styled', ...props }, ref) => {
     if (theme === 'native') {
       // For native theme, we need to convert react-select props to native select props
-      const { options, value, onChange, placeholder, ...nativeProps } = props as any
+      const { options, value, onChange, placeholder, ...nativeProps } = props as {
+        options?: SelectOption[]
+        value?: SelectOption
+        onChange?: (value: SelectOption, action: { action: string }) => void
+        placeholder?: string
+      }
 
       return (
         <select
           ref={ref}
           value={value?.value || ''}
           onChange={(e) => {
-            const selectedOption = options?.find((opt: any) => opt.value === e.target.value)
-            onChange?.(selectedOption, { action: 'select-option' })
+            const selectedOption = options?.find((opt) => opt.value === e.target.value)
+            if (selectedOption) {
+              onChange?.(selectedOption, { action: 'select-option' })
+            }
           }}
           className={classNames(
             'px-3 py-2 bg-list-item text-text-default rounded-lg focus:outline-none transition-colors duration-200',
@@ -30,7 +39,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           {...nativeProps}
         >
           {placeholder && <option value="">{placeholder}</option>}
-          {options?.map((option: any) => (
+          {options?.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>

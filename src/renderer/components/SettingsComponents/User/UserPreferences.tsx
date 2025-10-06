@@ -101,7 +101,7 @@ const UserPreferences = () => {
             handleSettingChange(
               'readingPreferences',
               'readingDirection',
-              (selected as any)?.value || null
+              (selected as { value: string })?.value || null
             )
           }
           options={[
@@ -124,7 +124,7 @@ const UserPreferences = () => {
             handleSettingChange(
               'readingPreferences',
               'defaultReadingMode',
-              (selected as any)?.value || null
+              (selected as { value: string })?.value || null
             )
           }
           options={[
@@ -141,7 +141,11 @@ const UserPreferences = () => {
             label: t(`Settings.user.${settings.displayPreferences.theme}`)
           }}
           onChange={(selected) =>
-            handleSettingChange('displayPreferences', 'theme', (selected as any)?.value || null)
+            handleSettingChange(
+              'displayPreferences',
+              'theme',
+              (selected as { value: string })?.value || null
+            )
           }
           options={[
             { value: 'inherit', label: t('Settings.user.inherit') },
@@ -167,7 +171,11 @@ const UserPreferences = () => {
                   : 'Português'
           }}
           onChange={(selected) =>
-            handleSettingChange('appPreferences', 'language', (selected as any)?.value || null)
+            handleSettingChange(
+              'appPreferences',
+              'language',
+              (selected as { value: string })?.value || null
+            )
           }
           options={[
             { value: 'inherit', label: t('Settings.user.inherit') },

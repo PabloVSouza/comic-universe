@@ -14,7 +14,7 @@ const api = axios.create({
 })
 
 const RestImplementation = {
-  invoke: async (method: string, args: unknown) => {
+  invoke: async <T = unknown,>(method: string, args: unknown): Promise<T> => {
     const { data } = await api.post(method, args)
     return data
   },

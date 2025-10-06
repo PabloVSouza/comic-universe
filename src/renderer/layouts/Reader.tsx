@@ -104,7 +104,10 @@ const Reader: FC = () => {
   const pages = JSON.parse(chapter?.pages ?? '[]') as IPage[]
 
   const getReadProgress = async () => {
-    let result = await invoke<IReadProgress[]>('dbGetReadProgress', { chapterId, userId: currentUser.id })
+    let result = await invoke<IReadProgress[]>('dbGetReadProgress', {
+      chapterId,
+      userId: currentUser.id
+    })
     if (!result.length) {
       await invoke<void>('dbUpdateReadProgress', {
         readProgress: {
@@ -115,7 +118,10 @@ const Reader: FC = () => {
           totalPages: pages.length ?? 0
         }
       })
-      result = await invoke<IReadProgress[]>('dbGetReadProgress', { chapterId, userId: currentUser.id })
+      result = await invoke<IReadProgress[]>('dbGetReadProgress', {
+        chapterId,
+        userId: currentUser.id
+      })
     }
 
     return result[0] as IReadProgress

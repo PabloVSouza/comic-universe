@@ -64,7 +64,9 @@ const WebsiteAuth = () => {
       await invoke<void>('dbClearWebsiteAuthToken', { userId: currentUser.id })
 
       // Also update user settings to reflect disconnection
-      const currentSettings = await invoke<IUserSettings | null>('dbGetUserSettings', { userId: currentUser.id })
+      const currentSettings = await invoke<IUserSettings | null>('dbGetUserSettings', {
+        userId: currentUser.id
+      })
       const updatedSettings = {
         ...currentSettings,
         websiteAuth: {
@@ -73,7 +75,10 @@ const WebsiteAuth = () => {
           lastConnectedAt: undefined
         }
       }
-      await invoke<void>('dbUpdateUserSettings', { userId: currentUser.id, settings: updatedSettings })
+      await invoke<void>('dbUpdateUserSettings', {
+        userId: currentUser.id,
+        settings: updatedSettings
+      })
     },
     onSuccess: () => {
       // Refresh website auth status

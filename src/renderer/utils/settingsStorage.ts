@@ -1,8 +1,8 @@
-import IpcImplementation from 'hooks/api/IpcImplementation'
-import RestImplementation from 'hooks/api/RestImplementation'
 import { deepMerge } from 'shared/utils'
 import { StateStorage } from 'zustand/middleware'
 import { DEFAULT_SETTINGS } from 'constants/defaultSettings'
+import IpcImplementation from 'hooks/api/IpcImplementation'
+import RestImplementation from 'hooks/api/RestImplementation'
 
 // Get API implementation without using the hook
 const getApi = () => {

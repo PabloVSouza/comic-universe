@@ -68,7 +68,9 @@ const useFetchData = (userId: string) => {
         10000
       )
       if (pages.length > 0) {
-        await invoke<void>('dbUpdateChapter', { chapter: { ...chapter, pages: JSON.stringify(pages) } })
+        await invoke<void>('dbUpdateChapter', {
+          chapter: { ...chapter, pages: JSON.stringify(pages) }
+        })
       }
       return pages.length > 0
     },

@@ -19,7 +19,6 @@ class PluginsRepository {
   }
 
   public startUp = async () => {
-    // Reset DataPaths cache to ensure fresh path resolution
     DataPaths.resetCache()
     if (!this.methods.verifyPluginFolderExists()) CreateDirectory(this.pluginsFinalPath)
     await this.methods.installPlugins()

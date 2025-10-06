@@ -3,7 +3,6 @@ import * as WindowList from 'windows'
 import useWindowManagerStore from 'store/useWindowManagerStore'
 import i18n from '../i18n'
 
-// Function to update window titles when language changes
 export const updateWindowTitles = (): void => {
   const { currentWindows, updateWindowProps } = useWindowManagerStore.getState()
 

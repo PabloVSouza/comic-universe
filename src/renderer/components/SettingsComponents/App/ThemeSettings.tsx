@@ -24,7 +24,6 @@ const ThemeSettings = () => {
     switchTheme(selectedOption.value)
   }
 
-  // Show loading state while store is hydrating
   if (!_hasHydrated) {
     return (
       <Item

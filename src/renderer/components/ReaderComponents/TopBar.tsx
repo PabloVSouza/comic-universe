@@ -23,14 +23,14 @@ const ReaderBottomBar: FC<ReaderBottomBarProps> = ({
 
   return (
     <div className="w-full h-12 bg-background border-t border-border flex items-center justify-between px-4 z-50">
-      {/* Left side - Chapter name */}
+      {}
       <div className="flex-1 min-w-0">
         <h2 className="text-sm font-medium text-foreground truncate">
           {chapterName || t('Reader.chapter')}
         </h2>
       </div>
 
-      {/* Center - Progress bar */}
+      {}
       <div className="flex-1 max-w-xs mx-4">
         <div className="w-full bg-muted rounded-full h-2">
           <div
@@ -43,7 +43,7 @@ const ReaderBottomBar: FC<ReaderBottomBarProps> = ({
         </div>
       </div>
 
-      {/* Right side - Reading mode toggle */}
+      {}
       <div className="flex-1 flex justify-end">
         <Button
           theme="pure"

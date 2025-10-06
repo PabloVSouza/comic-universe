@@ -14,10 +14,8 @@ const Home: FC = () => {
   const { activeComic, setActiveComic } = useGlobalStore()
   const { currentWindows } = useWindowManagerStore()
 
-  // Auto-authenticate with website on app startup
   useAutoWebsiteAuth()
 
-  // Check if there are any active unique windows
   const hasUniqueWindows = currentWindows
     .filter((window) => !window.windowStatus.isMinimized)
     .some((window) => window.windowProps.unique)

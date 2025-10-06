@@ -12,7 +12,6 @@ export class DatabaseFactory implements IDatabaseFactory {
   private currentORM: SupportedORM = 'drizzle'
 
   private constructor() {
-    // Private constructor for singleton pattern
   }
 
   static getInstance(): DatabaseFactory {
@@ -23,7 +22,6 @@ export class DatabaseFactory implements IDatabaseFactory {
   }
 
   createRepository(_config: IDatabaseConfig): IDatabaseRepository {
-    // Create repository based on current ORM
     switch (this.currentORM) {
       case 'drizzle':
         return new DrizzleDatabaseRepository()
@@ -47,14 +45,12 @@ export class DatabaseFactory implements IDatabaseFactory {
       throw new Error(`Unsupported ORM: ${orm}`)
     }
     this.currentORM = orm
-    // ORM switched successfully
   }
 
   getCurrentORM(): SupportedORM {
     return this.currentORM
   }
 
-  // Convenience method to create and initialize a repository
   async createAndInitializeRepository(config: IDatabaseConfig): Promise<IDatabaseRepository> {
     const repository = this.createRepository(config)
     await repository.initialize(config.dbPath)
@@ -62,5 +58,4 @@ export class DatabaseFactory implements IDatabaseFactory {
   }
 }
 
-// Export singleton instance
 export const databaseFactory = DatabaseFactory.getInstance()

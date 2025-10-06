@@ -49,7 +49,6 @@ const Image: FC<ImageProps> = ({
   const nodeRef = useRef(null)
   const { isWebUI } = useEnvironment()
 
-  // If no src is provided, show placeholder
   if (!src || src.trim() === '') {
     return (
       <div
@@ -83,14 +82,12 @@ const Image: FC<ImageProps> = ({
       ...style
     }
 
-    // If SvgComponent is provided, use it directly
     if (SvgComponent) {
       return (
         <SvgComponent className={className} style={iconStyle} aria-label={alt} aria-hidden={!alt} />
       )
     }
 
-    // Fallback to the original mask approach for string paths
     if (src) {
       const svgImgProps = {
         ...pureImgProps,
@@ -165,7 +162,6 @@ const Image: FC<ImageProps> = ({
     )
   }
 
-  // If there's an error loading the image, show a placeholder
   if (hasError) {
     return (
       <div

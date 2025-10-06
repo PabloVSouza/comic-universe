@@ -14,7 +14,6 @@ const initializePreload = async (): Promise<void> => {
       console.error(error)
     }
   } else {
-    // @ts-ignore (define in dts)
     window.Electron = {
       ...electronAPI,
       minimizeWindow: () => ipcRenderer.invoke('minimize-window'),

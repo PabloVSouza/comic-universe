@@ -43,10 +43,8 @@ const openWindow = ({
     const shouldCreate = !(alreadyExist && windowProps.unique)
 
     if (shouldCreate) {
-      // Apply dynamic translations to window title
       const translatedWindowProps = { ...windowProps }
       if (translatedWindowProps.title) {
-        // Map component names to translation keys
         const titleMap: { [key: string]: string } = {
           Settings: 'Settings.windowTitle',
           About: 'HomeNav.about',

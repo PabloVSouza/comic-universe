@@ -7,7 +7,6 @@ interface WallpaperRendererProps {
   className?: string
 }
 
-// Placeholder component for unregistered wallpapers
 const WallpaperPlaceholder: React.FC<{ name: string }> = ({ name }) => (
   <div className="w-full h-full flex items-center justify-center bg-gray-900 text-white">
     {name} Placeholder
@@ -21,27 +20,23 @@ const WallpaperRenderer: React.FC<WallpaperRendererProps> = ({ wallpaper, classN
   useEffect(() => {
     const loadWallpaper = async () => {
       if (!wallpaper) {
-        // Use StarrySky as default wallpaper when none is specified
         setIsComponent(true)
         setWallpaperUrl('')
         return
       }
 
-      // Check if it's a special component wallpaper
       if (wallpaperComponents[wallpaper]) {
         setIsComponent(true)
         setWallpaperUrl('')
         return
       }
 
-      // Handle regular image wallpapers
       try {
         const url = await wallpaperManager.getWallpaperUrl(wallpaper)
         setWallpaperUrl(url)
         setIsComponent(false)
       } catch (error) {
         console.error('Error loading wallpaper:', error)
-        // Fallback to default
         const defaultUrl = await wallpaperManager.getWallpaperUrl('default.webp')
         setWallpaperUrl(defaultUrl)
         setIsComponent(false)
@@ -51,9 +46,7 @@ const WallpaperRenderer: React.FC<WallpaperRendererProps> = ({ wallpaper, classN
     loadWallpaper()
   }, [wallpaper])
 
-  // Render component wallpapers
   if (isComponent) {
-    // Use StarrySky as default if no wallpaper specified
     const effectiveWallpaper = wallpaper || 'starry-sky'
     const wallpaperInfo = wallpaperComponents[effectiveWallpaper]
     const WallpaperComponent = wallpaperInfo?.component || null
@@ -69,7 +62,6 @@ const WallpaperRenderer: React.FC<WallpaperRendererProps> = ({ wallpaper, classN
     )
   }
 
-  // Render image wallpapers
   if (wallpaperUrl) {
     return (
       <div
@@ -82,7 +74,6 @@ const WallpaperRenderer: React.FC<WallpaperRendererProps> = ({ wallpaper, classN
     )
   }
 
-  // Fallback: no wallpaper
   return null
 }
 

@@ -30,7 +30,6 @@ export class FallbackUpdateManager {
   }
 
   private setupIpcHandlers(): void {
-    // Handle download requests from renderer
     ipcMain.handle('download-update-manually', async (_event, options: FallbackUpdateOptions) => {
       return await this.downloadUpdateManually(options)
     })
@@ -40,19 +39,15 @@ export class FallbackUpdateManager {
     })
   }
 
-  /**
-   * Main fallback update handler - tries auto-update first, falls back to manual if needed
-   */
+  
   public async handleUpdateWithFallback(updateInfo: UpdateInfo): Promise<UpdateFallbackResult> {
     const currentVersion = app.getVersion()
     const versionInfo = this.analyzeVersionGap(currentVersion, updateInfo.version)
 
-    // If version is very old, skip auto-update and go straight to manual
     if (versionInfo.isVeryOld) {
       return await this.handleVeryOldVersion(updateInfo, versionInfo)
     }
 
-    // Try auto-update first
     try {
       return await this.attemptAutoUpdate()
     } catch (error) {
@@ -61,9 +56,7 @@ export class FallbackUpdateManager {
     }
   }
 
-  /**
-   * Analyze the gap between current and target version
-   */
+  
   private analyzeVersionGap(currentVersion: string, targetVersion: string) {
     const currentDate = this.getVersionReleaseDate(currentVersion)
     const targetDate = this.getVersionReleaseDate(targetVersion)
@@ -75,15 +68,13 @@ export class FallbackUpdateManager {
       targetVersion,
       daysSinceCurrent: Math.floor(daysSinceCurrent),
       daysSinceTarget: Math.floor(daysSinceTarget),
-      isOld: daysSinceCurrent > 180, // 6 months
-      isVeryOld: daysSinceCurrent > 365, // 1 year
+      isOld: daysSinceCurrent > 180,
+      isVeryOld: daysSinceCurrent > 365,
       hasMajorVersionJump: this.hasMajorVersionJump(currentVersion, targetVersion)
     }
   }
 
-  /**
-   * Handle very old versions (1+ year old)
-   */
+  
   private async handleVeryOldVersion(
     updateInfo: UpdateInfo,
     versionInfo: {
@@ -107,7 +98,7 @@ export class FallbackUpdateManager {
     })
 
     switch (result.response) {
-      case 0: // Download Now
+      case 0:
         return await this.downloadUpdateManually({
           downloadUrl: this.getDownloadUrl(updateInfo),
           version: updateInfo.version,
@@ -119,7 +110,7 @@ export class FallbackUpdateManager {
             false
         })
 
-      case 1: // Download in Background
+      case 1:
         return await this.downloadUpdateInBackground({
           downloadUrl: this.getDownloadUrl(updateInfo),
           version: updateInfo.version,
@@ -131,7 +122,7 @@ export class FallbackUpdateManager {
             false
         })
 
-      default: // Remind Me Later
+      default:
         return {
           success: false,
           method: 'manual',
@@ -140,14 +131,12 @@ export class FallbackUpdateManager {
     }
   }
 
-  /**
-   * Attempt auto-update with timeout
-   */
+  
   private async attemptAutoUpdate(): Promise<UpdateFallbackResult> {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Auto-update timeout'))
-      }, 30000) // 30 second timeout
+      }, 30000)
 
       const onSuccess = () => {
         clearTimeout(timeout)
@@ -163,18 +152,14 @@ export class FallbackUpdateManager {
         reject(error)
       }
 
-      // Set up one-time listeners
       autoUpdater.once('update-downloaded', onSuccess)
       autoUpdater.once('error', onError)
 
-      // Start the update
       autoUpdater.downloadUpdate()
     })
   }
 
-  /**
-   * Handle auto-update failure with fallback options
-   */
+  
   private async handleAutoUpdateFailure(
     updateInfo: UpdateInfo,
     error: Error
@@ -208,7 +193,7 @@ export class FallbackUpdateManager {
     })
 
     switch (result.response) {
-      case 0: // Download Manually
+      case 0:
         return await this.downloadUpdateManually({
           downloadUrl: this.getDownloadUrl(updateInfo),
           version: updateInfo.version,
@@ -220,7 +205,7 @@ export class FallbackUpdateManager {
             false
         })
 
-      case 1: // Download in Background
+      case 1:
         return await this.downloadUpdateInBackground({
           downloadUrl: this.getDownloadUrl(updateInfo),
           version: updateInfo.version,
@@ -232,10 +217,10 @@ export class FallbackUpdateManager {
             false
         })
 
-      case 2: // Try Again
+      case 2:
         return await this.handleUpdateWithFallback(updateInfo)
 
-      default: // Cancel
+      default:
         return {
           success: false,
           method: 'auto',
@@ -244,14 +229,11 @@ export class FallbackUpdateManager {
     }
   }
 
-  /**
-   * Download update manually and guide user through installation
-   */
+  
   private async downloadUpdateManually(
     options: FallbackUpdateOptions
   ): Promise<UpdateFallbackResult> {
     try {
-      // Show download progress dialog
       await dialog.showMessageBox(this.mainWindow, {
         type: 'info',
         title: 'Downloading Update',
@@ -261,10 +243,8 @@ export class FallbackUpdateManager {
         buttons: ['OK']
       })
 
-      // Open download URL in browser
       shell.openExternal(options.downloadUrl)
 
-      // Show installation instructions
       setTimeout(() => {
         this.showInstallationInstructions(options)
       }, 2000)
@@ -284,9 +264,7 @@ export class FallbackUpdateManager {
     }
   }
 
-  /**
-   * Download update in background and notify when ready
-   */
+  
   private async downloadUpdateInBackground(
     options: FallbackUpdateOptions
   ): Promise<UpdateFallbackResult> {
@@ -301,16 +279,12 @@ export class FallbackUpdateManager {
     this.isDownloading = true
 
     try {
-      // Create download directory
       if (!existsSync(this.downloadPath)) {
         mkdirSync(this.downloadPath, { recursive: true })
       }
 
-      // Show background download notification
       this.showBackgroundDownloadNotification(options)
 
-      // In a real implementation, you would download the file here
-      // For now, we'll simulate the download
       setTimeout(() => {
         this.completeBackgroundDownload(options)
       }, 5000)
@@ -331,9 +305,7 @@ export class FallbackUpdateManager {
     }
   }
 
-  /**
-   * Show installation instructions
-   */
+  
   private showInstallationInstructions(options: FallbackUpdateOptions): void {
     const instructions = this.getInstallationInstructions(options)
 
@@ -353,9 +325,7 @@ export class FallbackUpdateManager {
       })
   }
 
-  /**
-   * Get platform-specific installation instructions
-   */
+  
   private getInstallationInstructions(options: FallbackUpdateOptions): string {
     const platform = process.platform
     const version = options.version
@@ -363,7 +333,7 @@ export class FallbackUpdateManager {
     let instructions = `Version ${version} Installation Instructions:\n\n`
 
     switch (platform) {
-      case 'darwin': // macOS
+      case 'darwin':
         instructions += `1. Download the .dmg file from the GitHub releases page
 2. Open the downloaded .dmg file
 3. Drag Comic Universe to your Applications folder
@@ -373,7 +343,7 @@ export class FallbackUpdateManager {
 Your data and settings will be preserved.`
         break
 
-      case 'win32': // Windows
+      case 'win32':
         instructions += `1. Download the .exe installer from the GitHub releases page
 2. Run the downloaded installer
 3. Follow the installation wizard
@@ -382,7 +352,7 @@ Your data and settings will be preserved.`
 Your data and settings will be preserved.`
         break
 
-      case 'linux': // Linux
+      case 'linux':
         instructions += `1. Download the .AppImage file from the GitHub releases page
 2. Make the file executable: chmod +x comic-universe-*.AppImage
 3. Run the new AppImage: ./comic-universe-*.AppImage
@@ -400,9 +370,7 @@ Your data and settings will be preserved.`
     return instructions
   }
 
-  /**
-   * Show background download notification
-   */
+  
   private showBackgroundDownloadNotification(options: FallbackUpdateOptions): void {
     dialog.showMessageBox(this.mainWindow, {
       type: 'info',
@@ -413,9 +381,7 @@ Your data and settings will be preserved.`
     })
   }
 
-  /**
-   * Complete background download and notify user
-   */
+  
   private completeBackgroundDownload(options: FallbackUpdateOptions): void {
     this.isDownloading = false
 
@@ -430,22 +396,18 @@ Your data and settings will be preserved.`
       })
       .then((result) => {
         switch (result.response) {
-          case 0: // Install Now
+          case 0:
             this.showInstallationInstructions(options)
             break
-          case 2: // Open Downloads Folder
+          case 2:
             shell.openPath(this.downloadPath)
             break
-          // case 1: Install Later - do nothing
         }
       })
   }
 
-  /**
-   * Get download URL for the update
-   */
+  
   private getDownloadUrl(updateInfo: UpdateInfo): string {
-    // Construct GitHub releases URL
     const baseUrl = 'https://github.com/PabloVSouza/comic-universe/releases'
 
     if (updateInfo.releaseName) {
@@ -455,54 +417,39 @@ Your data and settings will be preserved.`
     }
   }
 
-  /**
-   * Check if error is certificate-related
-   */
+  
   private isCertificateError(errorMessage: string): boolean {
     const certKeywords = ['certificate', 'signature', 'code signature', 'expired', 'invalid']
     return certKeywords.some((keyword) => errorMessage.toLowerCase().includes(keyword))
   }
 
-  /**
-   * Check if error is network-related
-   */
+  
   private isNetworkError(errorMessage: string): boolean {
     const networkKeywords = ['network', 'connection', 'timeout', 'dns', 'unreachable']
     return networkKeywords.some((keyword) => errorMessage.toLowerCase().includes(keyword))
   }
 
-  /**
-   * Check if there's a major version jump
-   */
+  
   private hasMajorVersionJump(currentVersion: string, targetVersion: string): boolean {
     const currentMajor = parseInt(currentVersion.split('.')[0])
     const targetMajor = parseInt(targetVersion.split('.')[0])
     return targetMajor > currentMajor
   }
 
-  /**
-   * Get version release date (simplified implementation)
-   */
+  
   private getVersionReleaseDate(version: string): number {
-    // This is a simplified implementation
-    // In reality, you'd need to map versions to their actual release dates
 
     if (version.includes('alpha')) {
-      return Date.now() - 30 * 24 * 60 * 60 * 1000 // 30 days ago
+      return Date.now() - 30 * 24 * 60 * 60 * 1000
     } else if (version.includes('beta')) {
-      return Date.now() - 60 * 24 * 60 * 60 * 1000 // 60 days ago
+      return Date.now() - 60 * 24 * 60 * 60 * 1000
     } else {
-      // Assume stable versions are older
-      return Date.now() - 365 * 24 * 60 * 60 * 1000 // 1 year ago
+      return Date.now() - 365 * 24 * 60 * 60 * 1000
     }
   }
 
-  /**
-   * Check for fallback update (public method)
-   */
+  
   public async checkForFallbackUpdate(): Promise<UpdateFallbackResult> {
-    // This would integrate with your existing update checking logic
-    // For now, return a placeholder
     return {
       success: false,
       method: 'auto',

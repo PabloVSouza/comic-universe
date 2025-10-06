@@ -43,7 +43,7 @@ const SettingsAbout: FC = () => {
         <div className="mx-auto">
           <Box>
             <div className="space-y-6">
-              {/* App Information */}
+              {}
               <div className="flex flex-col items-center text-center space-y-4">
                 <LoadingOverlay isLoading={isLoading} />
                 <Image src={iconIcon} className="w-24 h-24 flex-shrink-0" />
@@ -53,7 +53,7 @@ const SettingsAbout: FC = () => {
                 </div>
               </div>
 
-              {/* App Details */}
+              {}
               <div className="space-y-4">
                 <Item labelI18nKey="General.version">
                   <DisplayValue>{appVersion || appData?.version}</DisplayValue>
@@ -68,7 +68,7 @@ const SettingsAbout: FC = () => {
                 </Item>
               </div>
 
-              {/* Repository Link */}
+              {}
               <div className="space-y-4">
                 <Item
                   labelI18nKey="General.githubRepository"

@@ -1,16 +1,13 @@
-// src/@types/global.d.ts
-
 declare global {
   type FC<P = {}> = import('react').FC<P>
 
-  // Changelog types
   interface IChangelogEntry {
     id?: string
     userId: string
     entityType: 'comic' | 'chapter' | 'readProgress' | 'sync'
-    entityId: string // ID of the entity, or 'sync' for sync events
+    entityId: string
     action: 'created' | 'updated' | 'deleted' | 'sync_started' | 'sync_completed' | 'sync_failed'
-    data?: any // JSON data of the changed entity or sync metadata
+    data?: unknown
     createdAt?: string
     synced?: boolean
   }
@@ -21,7 +18,7 @@ declare global {
     entriesProcessed?: number
     conflicts?: number
     errors?: string[]
-    duration?: number // in milliseconds
+    duration?: number
     lastSyncTimestamp?: string
   }
 }

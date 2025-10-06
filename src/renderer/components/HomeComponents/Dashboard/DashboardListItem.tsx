@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { closedBookIcon, bookStackIcon } from 'assets'
 import classNames from 'classnames'
-import { useApi } from 'hooks'
+import { useApi, useWebsiteSync } from 'hooks'
 import { useGlobalStore, usePersistSessionStore } from 'store'
 import { Button } from 'components/UiComponents'
 
 const DashboardListItem: FC<{ item: IChapter }> = ({ item }) => {
   const { invoke } = useApi()
+  const { queueSync } = useWebsiteSync()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const { activeComic } = useGlobalStore()
@@ -52,6 +53,7 @@ const DashboardListItem: FC<{ item: IChapter }> = ({ item }) => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['activeComicData'] })
+      queueSync('readProgress')
     }
   })
 

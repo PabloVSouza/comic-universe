@@ -23,7 +23,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
   const { data: wallpapers = [], isLoading } = useQuery({
     queryKey: ['wallpapers'],
     queryFn: () => wallpaperList.getAllWallpapers(),
-    staleTime: 5 * 60 * 1000 // 5 minutes
+    staleTime: 5 * 60 * 1000
   })
 
   const { mutate: addWallpaper } = useMutation({
@@ -37,7 +37,6 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
     mutationFn: (filename: string) => wallpaperManager.removeWallpaper(filename),
     onSuccess: (_, filename) => {
       queryClient.invalidateQueries({ queryKey: ['wallpapers'] })
-      // If the removed wallpaper was selected, reset to default
       if (selectedWallpaper && selectedWallpaper.includes(filename)) {
         setSelectedWallpaper(null)
         onWallpaperChange(null)
@@ -67,11 +66,9 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
   }
 
   const handleWallpaperSelect = (wallpaper: ExtendedWallpaperInfo) => {
-    // If selecting the default StarrySky wallpaper, save null (meaning "use default")
-    // But keep the selectedWallpaper as 'starry-sky' for UI display
     const wallpaperValue = wallpaper.isDefault ? null : wallpaper.filename
-    setSelectedWallpaper(wallpaper.filename) // Always use filename for UI selection state
-    onWallpaperChange(wallpaperValue) // Save null for default, actual filename for custom wallpapers
+    setSelectedWallpaper(wallpaper.filename)
+    onWallpaperChange(wallpaperValue)
   }
 
   const handleRemoveWallpaper = (filename: string) => {
@@ -93,11 +90,9 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
   const [wallpaperUrls, setWallpaperUrls] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    // If no wallpaper is selected, default to StarrySky (which is the actual default being used)
     setSelectedWallpaper(currentWallpaper || 'starry-sky')
   }, [currentWallpaper])
 
-  // Load URLs for all wallpapers when they change
   useEffect(() => {
     const loadUrls = async () => {
       const urlPromises = wallpapers.map(async (wallpaper) => {
@@ -134,7 +129,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
         />
       </Item>
 
-      {/* Wallpaper grid */}
+      {}
       <div className="max-h-64 overflow-y-auto">
         {isLoading ? (
           <div className="text-center text-text-default opacity-70 py-4">
@@ -167,7 +162,6 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
                         alt={wallpaper.filename}
                         className="w-full aspect-video object-cover"
                         onError={(e) => {
-                          // Fallback to a placeholder if image fails to load
                           e.currentTarget.src =
                             'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjgwIiB2aWV3Qm94PSIwIDAgMTAwIDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iODAiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSI1MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SW1hZ2U8L3RleHQ+PC9zdmc+'
                         }}
@@ -178,14 +172,14 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
                       </div>
                     )}
 
-                    {/* Check icon for selected wallpaper */}
+                    {}
                     {selectedWallpaper === wallpaper.filename && (
                       <div className="absolute top-1 left-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
                         <img src={confirmIcon} alt="Selected" className="w-3 h-3" />
                       </div>
                     )}
 
-                    {/* File name overlay on hover */}
+                    {}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                       <div className="p-2">
                         <p className="text-white text-xs truncate">
@@ -194,7 +188,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
                       </div>
                     </div>
 
-                    {/* Remove button for custom wallpapers */}
+                    {}
                     {wallpaperList.canRemoveWallpaper(wallpaper) && (
                       <button
                         onClick={() => {

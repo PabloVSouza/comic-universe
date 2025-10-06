@@ -174,7 +174,6 @@ const Button: FC<ButtonProps> = ({
     if (to) navigate(to)
   }
 
-  // Ensure theme exists, fallback to 'default' if not
   const safeTheme = buttonStyling.themes[theme] ? theme : 'default'
 
   const classProps = {
@@ -215,7 +214,6 @@ const Button: FC<ButtonProps> = ({
           svg
         />
       ) : (
-        // For themes that don't use icons (like burger, toggle), render the icon styling directly
         <div
           className={classNames(
             buttonStyling.themes[safeTheme].icon.default,

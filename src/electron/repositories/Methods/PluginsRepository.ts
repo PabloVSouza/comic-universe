@@ -54,7 +54,6 @@ class PluginsRepository {
         const { platform } = process
 
         const pluginPath = path.join(this.pluginsFinalPath, plugin)
-        // Fix Windows path issue: don't prepend './' to absolute paths
         const devPath = is.dev && !path.isAbsolute(pluginPath) ? './' + pluginPath : pluginPath
         const finalPath = platform === 'win32' ? 'file://' + devPath : devPath
         const destPath = path.join(
@@ -69,7 +68,6 @@ class PluginsRepository {
     },
 
     activatePlugins: async () => {
-      // Clear existing plugins to ensure fresh activation
       this.activePlugins = {}
 
       const pluginsList = this.methods.getPluginInfoList()
@@ -82,7 +80,6 @@ class PluginsRepository {
         const importPath = platform === 'win32' ? 'file://' + pluginPath : pluginPath
 
         try {
-          // Clear module cache to ensure fresh import
           if (require.cache[importPath]) {
             delete require.cache[importPath]
           }
@@ -97,7 +94,6 @@ class PluginsRepository {
             [instantiatedPlugin.RepoTag]: instantiatedPlugin
           }
 
-          // Plugin activated successfully
         } catch (error) {
           console.error(`Failed to activate plugin ${plugin.name}:`, error)
         }

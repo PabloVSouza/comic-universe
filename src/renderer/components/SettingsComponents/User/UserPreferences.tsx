@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useApi } from 'hooks'
 import { usePersistSessionStore } from 'store'
-import { LoadingOverlay, Select } from 'components/UiComponents'
+import { LoadingOverlay, Select, Button } from 'components/UiComponents'
 import Item from '../Item'
 import WallpaperSelector from './WallpaperSelector'
 
@@ -49,14 +49,46 @@ const UserPreferences = () => {
       }
       return null
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      setSettings((prev) => ({
+        ...prev,
+        ...variables
+      }))
       queryClient.invalidateQueries({ queryKey: ['userSettings', currentUser.id] })
     }
   })
 
   useEffect(() => {
     if (userSettings) {
-      setSettings((prev) => ({ ...prev, ...userSettings }))
+      setSettings((prev) => {
+        const merged: IUserSettings = {
+          ...prev,
+          ...userSettings,
+          readingPreferences: { ...prev.readingPreferences, ...userSettings.readingPreferences },
+          displayPreferences: { ...prev.displayPreferences, ...userSettings.displayPreferences },
+          appPreferences: { ...prev.appPreferences, ...userSettings.appPreferences }
+        }
+
+        if (userSettings.syncPreferences || prev.syncPreferences) {
+          merged.syncPreferences = {
+            autoSync:
+              userSettings.syncPreferences?.autoSync ?? prev.syncPreferences?.autoSync ?? true
+          }
+        }
+
+        if (userSettings.websiteAuth || prev.websiteAuth) {
+          merged.websiteAuth = {
+            isConnected:
+              userSettings.websiteAuth?.isConnected ?? prev.websiteAuth?.isConnected ?? false,
+            websiteUrl: userSettings.websiteAuth?.websiteUrl ?? prev.websiteAuth?.websiteUrl,
+            lastConnectedAt:
+              userSettings.websiteAuth?.lastConnectedAt ?? prev.websiteAuth?.lastConnectedAt,
+            deviceName: userSettings.websiteAuth?.deviceName ?? prev.websiteAuth?.deviceName
+          }
+        }
+
+        return merged
+      })
     }
   }, [userSettings])
 
@@ -185,7 +217,37 @@ const UserPreferences = () => {
         />
       </Item>
 
-      {/* Wallpaper Selection */}
+      {}
+      <Item
+        labelI18nKey="Settings.user.autoSync"
+        descriptionI18nKey={
+          settings.websiteAuth?.isConnected
+            ? 'Settings.user.autoSyncDescription'
+            : 'Settings.user.autoSyncDisabledDescription'
+        }
+      >
+        <Button
+          onClick={() => {
+            const currentAutoSync = settings.syncPreferences?.autoSync ?? true
+            const newAutoSync = !currentAutoSync
+
+            const newSettings = {
+              ...settings,
+              syncPreferences: {
+                ...settings.syncPreferences,
+                autoSync: newAutoSync
+              }
+            }
+            setSettings(newSettings)
+
+            updateSettings({ syncPreferences: { autoSync: newAutoSync } })
+          }}
+          theme="toggle"
+          active={settings.syncPreferences?.autoSync ?? true}
+        />
+      </Item>
+
+      {}
       <WallpaperSelector
         currentWallpaper={settings.displayPreferences.wallpaper}
         onWallpaperChange={(wallpaper) =>

@@ -22,7 +22,6 @@ const SettingsUpdatePreferences = () => {
   const [currentVersion, setCurrentVersion] = useState<string>('')
   const [platform, setPlatform] = useState<string>('')
 
-  // Load settings on component mount
   useEffect(() => {
     const loadUpdateSettings = async () => {
       try {
@@ -58,9 +57,8 @@ const SettingsUpdatePreferences = () => {
     loadUpdateSettings()
     loadCurrentVersion()
     loadPlatform()
-  }, []) // Remove invoke dependency to prevent infinite loop
+  }, [])
 
-  // Auto-save functions
   const saveUpdateSettings = async (settings: UpdateSettings) => {
     try {
       await invoke('updateUpdateSettings', { updateSettings: settings })
@@ -69,7 +67,6 @@ const SettingsUpdatePreferences = () => {
     }
   }
 
-  // Event handlers
   const handleAutoUpdateChange = async (checked: boolean) => {
     const newSettings = { ...updateSettings, autoUpdate: checked }
     setUpdateSettings(newSettings)
@@ -77,7 +74,6 @@ const SettingsUpdatePreferences = () => {
   }
 
   const handleOptInChange = async (checked: boolean) => {
-    // Automatically set release types based on opt-in setting
     const newReleaseTypes = checked ? ['stable', 'beta', 'alpha'] : ['stable']
     const newSettings = {
       ...updateSettings,
@@ -90,14 +86,14 @@ const SettingsUpdatePreferences = () => {
 
   return (
     <div className="space-y-6">
-      {/* Current Version Section */}
+      {}
       <Item labelI18nKey="Settings.general.currentVersion">
         <div className="text-base bg-list-item text-text-default px-3 py-2 rounded-md">
           {currentVersion}
         </div>
       </Item>
 
-      {/* Auto-Update Toggle */}
+      {}
       <Item
         label={t('Settings.update.autoUpdate.enable')}
         description={
@@ -119,7 +115,7 @@ const SettingsUpdatePreferences = () => {
         />
       </Item>
 
-      {/* Non-Stable Updates */}
+      {}
       <Item
         label={t('Settings.update.nonStable.optIn')}
         description={

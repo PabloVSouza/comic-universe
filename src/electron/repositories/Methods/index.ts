@@ -27,7 +27,6 @@ class Methods {
     await this.refreshMethods()
   }
 
-  // New method to refresh all methods including plugin methods
   refreshMethods = async () => {
     const apiRepository = new ApiRepository(this.pluginsRepository!)
     const appRepository = new AppRepository(this.path, this.runningPath, this.win)
@@ -45,13 +44,11 @@ class Methods {
       ...settingsRepository.methods,
       ...wallpaperRepository.methods,
       ...assetServer.methods,
-      // Add method to refresh plugin handlers
       refreshPluginHandlers: async () => {
         await this.pluginsRepository!.methods.installPlugins()
         await this.pluginsRepository!.methods.activatePlugins()
         await this.refreshMethods()
 
-        // Reset the event manager with new methods
         if (this.eventManager) {
           this.eventManager.updateMethods(this.methods)
         }
@@ -67,7 +64,6 @@ class Methods {
 
   setApiManager = (apiManager: ApiManager) => {
     this.apiManager = apiManager
-    // Update the restartApiServer method to use the actual ApiManager
     if (this.methods && this.methods.restartApiServer) {
       this.methods.restartApiServer = async () => {
         if (this.apiManager) {
@@ -77,7 +73,6 @@ class Methods {
         return { message: 'API manager not available' }
       }
     }
-    // Update the getWebUIPort method to use the actual ApiManager
     if (this.methods && this.methods.getWebUIPort) {
       this.methods.getWebUIPort = async () => {
         if (this.apiManager) {

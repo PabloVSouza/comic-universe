@@ -12,7 +12,6 @@ interface SelectProps extends Omit<StateManagerProps, 'theme'> {
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ({ className, theme = 'styled', ...props }, ref) => {
     if (theme === 'native') {
-      // For native theme, we need to convert react-select props to native select props
       const { options, value, onChange, placeholder, ...nativeProps } = props as {
         options?: SelectOption[]
         value?: SelectOption

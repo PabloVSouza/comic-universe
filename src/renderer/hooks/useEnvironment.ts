@@ -8,10 +8,7 @@ import {
   canModifyWebUISettings as canModifyWebUISettingsUtil
 } from 'renderer-utils/environment'
 
-/**
- * Hook to detect the current environment (Electron vs Web UI)
- * @returns Object with environment detection flags and utilities
- */
+
 export const useEnvironment = () => {
   const environment = useMemo(() => {
     return {

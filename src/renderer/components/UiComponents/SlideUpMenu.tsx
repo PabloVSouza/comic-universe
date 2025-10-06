@@ -41,7 +41,7 @@ const SlideUpMenu: FC<SlideUpMenuProps> = ({ options, isOpen, onClose, children 
 
   return (
     <>
-      {/* Backdrop */}
+      {}
       <div
         className={classNames(
           'fixed inset-0 bg-black/20 backdrop-blur-sm z-40 transition-fade',
@@ -50,7 +50,7 @@ const SlideUpMenu: FC<SlideUpMenuProps> = ({ options, isOpen, onClose, children 
         onClick={onClose}
       />
 
-      {/* Menu */}
+      {}
       <div
         className={classNames(
           'fixed bottom-20 right-4 bg-default backdrop-blur-sm border border-border rounded-lg shadow-basic z-50',

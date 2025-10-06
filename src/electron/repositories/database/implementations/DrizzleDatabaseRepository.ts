@@ -143,10 +143,9 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   ): Promise<void> {
     const db = this.getDb()
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { chapters: comicChapters, ...comicData } = comic
     const cleanComicData = {
-      ...(comic.id && { id: comic.id }), // Only include ID if it exists (from cloud)
+      ...(comic.id && { id: comic.id }),
       userId,
       siteId: comicData.siteId,
       name: comicData.name,
@@ -167,10 +166,9 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
     if (chapterList && chapterList.length > 0 && newComic[0]?.id) {
       for (const chapter of chapterList) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { comicId, Comic, ReadProgress, ...chapterData } = chapter
         const cleanChapterData = {
-          ...(chapter.id && { id: chapter.id }), // Only include ID if it exists (from cloud)
+          ...(chapter.id && { id: chapter.id }),
           siteId: chapterData.siteId,
           siteLink: chapterData.siteLink || null,
           releaseId: chapterData.releaseId || null,
@@ -181,7 +179,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
           date: chapterData.date || null,
           offline: chapterData.offline || false,
           language: chapterData.language || null,
-          comicId: newComic[0].id // Use the comic ID from the database
+          comicId: newComic[0].id
         }
 
         try {
@@ -190,7 +188,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
             .values(cleanChapterData as NewChapter)
             .returning()
 
-          // Log chapter creation in changelog with the actual inserted data
           if (insertedChapter[0]?.id) {
             await this.createChangelogEntry({
               userId,
@@ -208,7 +205,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       }
     }
 
-    // Log comic creation in changelog
     await this.createChangelogEntry({
       userId,
       entityType: 'comic',
@@ -221,8 +217,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async updateComic(id: string, comic: Partial<IComic>): Promise<IComic | undefined> {
     const db = this.getDb()
 
-    // Filter out fields that don't exist in SQLite schema (addedAt, updatedAt are PostgreSQL only)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { chapters, addedAt, updatedAt, ...comicData } = comic as any
 
     const result = await db.update(comics).set(comicData).where(eq(comics.id, id)).returning()
@@ -235,7 +229,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       : undefined
 
     if (updatedComic) {
-      // Log comic update in changelog
       await this.createChangelogEntry({
         userId: updatedComic.userId || '',
         entityType: 'comic',
@@ -251,17 +244,14 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async deleteComic(id: string): Promise<void> {
     const db = this.getDb()
 
-    // Get comic data before deletion for changelog
     const comicToDelete = await this.getComicById(id)
 
-    // Get chapters before deletion for changelog
     const chaptersToDelete = await this.getChaptersByComicId(id)
 
     await db.delete(readProgress).where(eq(readProgress.comicId, id))
     await db.delete(chapters).where(eq(chapters.comicId, id))
     await db.delete(comics).where(eq(comics.id, id))
 
-    // Log comic deletion in changelog
     if (comicToDelete) {
       await this.createChangelogEntry({
         userId: comicToDelete.userId || '',
@@ -272,7 +262,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       })
     }
 
-    // Log chapter deletions in changelog
     for (const chapter of chaptersToDelete) {
       await this.createChangelogEntry({
         userId: comicToDelete?.userId || '',
@@ -348,7 +337,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       throw new Error('comicId is required for chapter creation')
     }
 
-    // EXPLICITLY only include SQLite schema fields - no destructuring, no spreading
     const cleanChapterData: any = {
       comicId: chapter.comicId,
       siteId: chapter.siteId,
@@ -357,12 +345,10 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       offline: chapter.offline || false
     }
 
-    // Add optional ID if provided (for sync)
     if (chapter.id) {
       cleanChapterData.id = chapter.id
     }
 
-    // Add other optional fields
     if (chapter.siteLink) cleanChapterData.siteLink = chapter.siteLink
     if (chapter.releaseId) cleanChapterData.releaseId = chapter.releaseId
     if (chapter.name) cleanChapterData.name = chapter.name
@@ -374,10 +360,8 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
     const newChapter = result[0] as IChapter
 
-    // Get userId from comic for changelog
     const comic = await this.getComicById(chapter.comicId)
 
-    // Log chapter creation in changelog (only if we have valid data)
     if (comic?.userId && newChapter.id) {
       await this.createChangelogEntry({
         userId: comic.userId,
@@ -394,13 +378,11 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async createChapters(chapterList: IChapter[]): Promise<void> {
     const db = this.getDb()
     for (const chapter of chapterList) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { Comic, ReadProgress, createdAt, ...chapterData } = chapter as any
       if (!chapterData.comicId) {
         throw new Error('comicId is required for chapter creation')
       }
 
-      // Only include fields that exist in the SQLite schema
       const cleanChapterData = {
         ...(chapterData.id && { id: chapterData.id }),
         comicId: chapterData.comicId,
@@ -422,10 +404,8 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
         .returning()
       const newChapter = result[0]
 
-      // Get userId from comic for changelog
       const comic = await this.getComicById(chapterData.comicId)
 
-      // Log chapter creation in changelog (only if we have valid data)
       if (comic?.userId && newChapter.id) {
         await this.createChangelogEntry({
           userId: comic.userId,
@@ -441,10 +421,8 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async updateChapter(id: string, chapter: Partial<IChapter>): Promise<IChapter | undefined> {
     const db = this.getDb()
 
-    // EXPLICITLY only include SQLite schema fields
     const cleanChapterData: any = {}
 
-    // Only add fields that exist in SQLite schema and are provided
     if (chapter.comicId !== undefined) cleanChapterData.comicId = chapter.comicId
     if (chapter.siteId !== undefined) cleanChapterData.siteId = chapter.siteId
     if (chapter.siteLink !== undefined) cleanChapterData.siteLink = chapter.siteLink
@@ -466,10 +444,8 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     const updatedChapter = result[0]
 
     if (updatedChapter) {
-      // Get userId from comic for changelog
       const comic = await this.getComicById(updatedChapter.comicId)
 
-      // Log chapter update in changelog
       await this.createChangelogEntry({
         userId: comic?.userId || '',
         entityType: 'chapter',
@@ -485,16 +461,13 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async deleteChapter(id: string): Promise<void> {
     const db = this.getDb()
 
-    // Get chapter data before deletion for changelog
     const chapterToDelete = await this.getChapterById(id)
 
     await db.delete(chapters).where(eq(chapters.id, id))
 
     if (chapterToDelete && chapterToDelete.comicId) {
-      // Get userId from comic for changelog
       const comic = await this.getComicById(chapterToDelete.comicId)
 
-      // Log chapter deletion in changelog
       await this.createChangelogEntry({
         userId: comic?.userId || '',
         entityType: 'chapter',
@@ -537,25 +510,18 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async deleteUser(id: string): Promise<void> {
     const db = this.getDb()
 
-    // Delete in order to respect foreign key constraints:
-    // 1. First delete readProgress (references both users and comics)
     await db.delete(readProgress).where(eq(readProgress.userId, id))
 
-    // 2. Delete changelog entries for this user
     await db.delete(changelog).where(eq(changelog.userId, id))
 
-    // 3. Get user's comics to delete chapters first
     const userComics = await db.select({ id: comics.id }).from(comics).where(eq(comics.userId, id))
 
-    // 4. Delete chapters for each comic owned by this user
     for (const comic of userComics) {
       await db.delete(chapters).where(eq(chapters.comicId, comic.id))
     }
 
-    // 5. Delete comics owned by this user
     await db.delete(comics).where(eq(comics.userId, id))
 
-    // 6. Finally, delete the user
     await db.delete(users).where(eq(users.id, id))
   }
 
@@ -600,17 +566,14 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   ): Promise<{ userId: string; userIdChanged: boolean }> {
     const db = this.getDb()
 
-    // First, get the website user ID from the token
     const websiteUserId = await this.getWebsiteUserIdFromToken(token)
 
     let userIdChanged = false
     if (websiteUserId && websiteUserId !== userId) {
-      // Update user ID across all related tables
       await this.updateUserIdRecursively(userId, websiteUserId)
       userIdChanged = true
     }
 
-    // Update the auth token (user ID may have changed)
     const finalUserId = websiteUserId || userId
     await db
       .update(users)
@@ -649,24 +612,18 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   private async updateUserIdRecursively(oldUserId: string, newUserId: string): Promise<void> {
     const db = this.getDb()
 
-    // Update comics
     await db.update(comics).set({ userId: newUserId }).where(eq(comics.userId, oldUserId))
 
-    // Update read progress
     await db
       .update(readProgress)
       .set({ userId: newUserId })
       .where(eq(readProgress.userId, oldUserId))
 
-    // Update changelog entries
     await db.update(changelog).set({ userId: newUserId }).where(eq(changelog.userId, oldUserId))
 
-    // Finally, update the user record itself
-    // Get the old user data first
     const oldUser = await db.select().from(users).where(eq(users.id, oldUserId)).limit(1)
 
     if (oldUser.length > 0) {
-      // Create new user with website user ID
       await db
         .insert(users)
         .values({
@@ -675,7 +632,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
         })
         .onConflictDoNothing()
 
-      // Delete old user
       await db.delete(users).where(eq(users.id, oldUserId))
     }
   }
@@ -817,7 +773,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       updatedAt: result[0].updatedAt || undefined
     }
 
-    // Log read progress creation in changelog
     await this.createChangelogEntry({
       userId: progress.userId,
       entityType: 'readProgress',
@@ -851,7 +806,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       : undefined
 
     if (updatedProgress) {
-      // Log read progress update in changelog
       await this.createChangelogEntry({
         userId: updatedProgress.userId,
         entityType: 'readProgress',
@@ -867,7 +821,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async deleteReadProgress(id: string): Promise<void> {
     const db = this.getDb()
 
-    // Get read progress data before deletion for changelog
     const progressToDelete = await db
       .select()
       .from(readProgress)
@@ -877,7 +830,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     await db.delete(readProgress).where(eq(readProgress.id, id))
 
     if (progressToDelete[0]) {
-      // Log read progress deletion in changelog
       await this.createChangelogEntry({
         userId: progressToDelete[0].userId,
         entityType: 'readProgress',
@@ -925,7 +877,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     await db.delete(plugins).where(eq(plugins.id, id))
   }
 
-  // Changelog operations
   async createChangelogEntry(entry: IChangelogEntry): Promise<IChangelogEntry> {
     const db = this.getDb()
     const result = await db
@@ -982,8 +933,6 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       .where(
         and(
           eq(changelog.userId, userId)
-          // Note: This would need proper timestamp comparison
-          // For now, returning all entries
         )
       )
       .orderBy(asc(changelog.createdAt))

@@ -1,12 +1,10 @@
 import React, { useRef, useEffect } from 'react'
 
-// Types for our starry sky components
 interface Position {
   x: number
   y: number
 }
 
-// Star types based on the shapes in the original SVG
 type StarType =
   | 'small-dot'
   | 'medium-star'
@@ -28,7 +26,6 @@ interface StarProps {
   baseOpacity: number
 }
 
-// Theme paths for each star type
 interface StarTheme {
   pathData: string
   className: string
@@ -50,7 +47,6 @@ interface Meteor {
   reset: (canvas?: HTMLCanvasElement) => void
 }
 
-// Star theme definitions with normalized path data (starting from 0,0)
 const starThemes: Record<StarType, StarTheme> = {
   'complex-shape': {
     pathData:
@@ -97,7 +93,6 @@ const starThemes: Record<StarType, StarTheme> = {
   }
 }
 
-// Individual Star Component
 const Star: React.FC<StarProps> = ({
   position,
   size,
@@ -124,7 +119,6 @@ const Star: React.FC<StarProps> = ({
   )
 }
 
-// Create meteor class outside component to avoid dependency issues
 class MeteorClass {
   x: number = 0
   y: number = 0
@@ -146,19 +140,18 @@ class MeteorClass {
   reset(canvas?: HTMLCanvasElement) {
     if (!canvas) return
 
-    // Start from left or top borders only
-    const border = Math.floor(Math.random() * 2) // 0-1 for 2 borders
+    const border = Math.floor(Math.random() * 2)
 
     switch (border) {
-      case 0: // Left border
+      case 0:
         this.x = -50 - Math.random() * 100
-        this.y = Math.random() * canvas.height // Random height along left edge
-        this.angle = Math.PI / 4 + (Math.random() * Math.PI) / 4 // 45° to 90° (always right)
+        this.y = Math.random() * canvas.height
+        this.angle = Math.PI / 4 + (Math.random() * Math.PI) / 4
         break
-      case 1: // Top border
-        this.x = Math.random() * canvas.width // Random width along top edge
+      case 1:
+        this.x = Math.random() * canvas.width
         this.y = -50 - Math.random() * 100
-        this.angle = Math.PI / 4 + (Math.random() * Math.PI) / 4 // 45° to 90° (always right)
+        this.angle = Math.PI / 4 + (Math.random() * Math.PI) / 4
         break
     }
 
@@ -168,72 +161,59 @@ class MeteorClass {
     this.fade = Math.random() * 0.004 + 0.001
     this.trail = []
 
-    // Distance simulation - keep meteors feeling far away
-    const distance = Math.random() * 0.6 + 0.4 // 0.4 to 1.0 (closer = smaller number, but not too close)
-    this.size = (1 / distance) * (Math.random() * 0.4 + 0.2) // Much smaller base size
-    this.brightness = (1 / distance) * (Math.random() * 0.3 + 0.2) // Dimmer overall
+    const distance = Math.random() * 0.6 + 0.4
+    this.size = (1 / distance) * (Math.random() * 0.4 + 0.2)
+    this.brightness = (1 / distance) * (Math.random() * 0.3 + 0.2)
 
-    // Add random delay before this meteor becomes active
-    this.delay = Math.random() * 5000 + 2000 // 2-7 seconds delay
+    this.delay = Math.random() * 5000 + 2000
     this.activeTime = Date.now() + this.delay
   }
 
   update(canvas: HTMLCanvasElement) {
     if (!canvas) return
 
-    // Check if meteor should be active yet
     if (Date.now() < this.activeTime) {
-      return // Don't update if still in delay period
+      return
     }
 
-    // Add current position to trail
     this.trail.push({ x: this.x, y: this.y, opacity: this.opacity })
 
-    // Limit trail length
     if (this.trail.length > 10) {
       this.trail.shift()
     }
 
-    // Update position
     this.x += this.speed * Math.cos(this.angle)
     this.y += this.speed * Math.sin(this.angle)
     this.opacity -= this.fade
 
-    // Reset if meteor is off screen or faded out
     if (this.opacity <= 0 || this.x > canvas.width + 200 || this.y > canvas.height + 200) {
       this.reset(canvas)
     }
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    // Don't draw if meteor is still in delay period
     if (Date.now() < this.activeTime) {
       return
     }
 
-    // Draw filled meteor shape (like the original SVG meteors)
     const tailX = this.x - this.length * Math.cos(this.angle)
     const tailY = this.y - this.length * Math.sin(this.angle)
 
-    // Create meteor shape with varying width based on distance
     const baseWidth = 3 + Math.random() * 2
-    const width = baseWidth * this.size // Scale width based on distance
+    const width = baseWidth * this.size
 
-    // Create gradient from head to tail with brightness variation
     const gradient = ctx.createLinearGradient(this.x, this.y, tailX, tailY)
     const headOpacity = this.opacity * this.brightness
     const middleOpacity = this.opacity * this.brightness * 0.7
     const tailOpacity = this.opacity * this.brightness * 0.2
 
-    gradient.addColorStop(0, `rgba(230, 243, 255, ${headOpacity})`) // Bright head
-    gradient.addColorStop(0.5, `rgba(230, 243, 255, ${middleOpacity})`) // Middle
-    gradient.addColorStop(1, `rgba(230, 243, 255, ${tailOpacity})`) // Faded tail
+    gradient.addColorStop(0, `rgba(230, 243, 255, ${headOpacity})`)
+    gradient.addColorStop(0.5, `rgba(230, 243, 255, ${middleOpacity})`)
+    gradient.addColorStop(1, `rgba(230, 243, 255, ${tailOpacity})`)
 
-    // Draw main meteor body as filled shape
     ctx.fillStyle = gradient
     ctx.beginPath()
 
-    // Create meteor shape with curved edges
     const perpX = width * Math.cos(this.angle + Math.PI / 2)
     const perpY = width * Math.sin(this.angle + Math.PI / 2)
 
@@ -244,14 +224,12 @@ class MeteorClass {
     ctx.closePath()
     ctx.fill()
 
-    // Draw bright head with size variation
     const headSize = 2 * this.size
     ctx.fillStyle = `rgba(255, 255, 255, ${headOpacity})`
     ctx.beginPath()
     ctx.arc(this.x, this.y, headSize, 0, Math.PI * 2)
     ctx.fill()
 
-    // Draw subtle glow around the meteor with brightness variation
     ctx.strokeStyle = `rgba(255, 255, 255, ${headOpacity * 0.3})`
     ctx.lineWidth = this.size
     ctx.beginPath()
@@ -264,13 +242,11 @@ class MeteorClass {
   }
 }
 
-// Canvas-based Meteor Component
 const MeteorShower: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const meteorsRef = useRef<Meteor[]>([])
   const animationRef = useRef<number | undefined>(undefined)
 
-  // Initialize meteors
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -278,19 +254,15 @@ const MeteorShower: React.FC = () => {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // Set canvas size
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    // Create meteors
     meteorsRef.current = []
     for (let i = 0; i < 2; i++) {
       meteorsRef.current.push(new MeteorClass(canvas) as unknown as Meteor)
     }
 
-    // Animation loop
     const animate = () => {
-      // Clear canvas with transparent background
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       meteorsRef.current.forEach((meteor) => {
@@ -303,7 +275,6 @@ const MeteorShower: React.FC = () => {
 
     animate()
 
-    // Handle resize
     const handleResize = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
@@ -338,11 +309,9 @@ const MeteorShower: React.FC = () => {
   )
 }
 
-// Main StarrySky Component
 const StarrySky: React.FC = () => {
   const [stars, setStars] = React.useState<StarProps[]>([])
 
-  // Generate random stars array on client side only
   React.useEffect(() => {
     const generateRandomStars = (): StarProps[] => {
       const starTypes: StarType[] = [
@@ -358,19 +327,18 @@ const StarrySky: React.FC = () => {
       ]
       const stars: StarProps[] = []
 
-      // Generate 80 random stars for higher density
       for (let i = 0; i < 80; i++) {
         stars.push({
           id: `star-${i + 1}`,
           position: {
-            x: Math.random() * 100, // Random x position (0-100)
-            y: Math.random() * 100 // Random y position (0-100)
+            x: Math.random() * 100,
+            y: Math.random() * 100
           },
-          size: Math.random() * 0.5 + 0.5, // Random size (0.5-1.0)
-          type: starTypes[Math.floor(Math.random() * starTypes.length)], // Random star type
-          glowDelay: Math.random() * 5 + 2, // Random delay 2-7 seconds
-          glowDuration: 5, // Fixed duration 5 seconds
-          baseOpacity: Math.random() * 0.2 + 0.5 // Random base opacity 0.5-0.7 (50-70%)
+          size: Math.random() * 0.5 + 0.5,
+          type: starTypes[Math.floor(Math.random() * starTypes.length)],
+          glowDelay: Math.random() * 5 + 2,
+          glowDuration: 5,
+          baseOpacity: Math.random() * 0.2 + 0.5
         })
       }
 
@@ -394,7 +362,7 @@ const StarrySky: React.FC = () => {
         zIndex: 1
       }}
     >
-      {/* SVG Stars Layer */}
+      {}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
@@ -418,7 +386,7 @@ const StarrySky: React.FC = () => {
                 fill: #fff;
               }
               
-              /* Star type themes - static */
+              
               .star-complex-shape {
                 fill: #ffffff;
                 filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
@@ -464,7 +432,7 @@ const StarrySky: React.FC = () => {
                 filter: drop-shadow(0 0 2px rgba(255, 248, 225, 0.8));
               }
               
-              /* Star glow animation */
+              
               .star-glow {
                 animation: starGlow infinite;
               }
@@ -494,7 +462,7 @@ const StarrySky: React.FC = () => {
           <g id="Layer_1">
             <g id="Layer_3">
               <g>
-                {/* Render Stars using Star components */}
+                {}
                 {stars.map((star) => (
                   <Star
                     key={star.id}
@@ -513,7 +481,7 @@ const StarrySky: React.FC = () => {
         </g>
       </svg>
 
-      {/* Canvas Meteor Layer */}
+      {}
       <MeteorShower />
     </div>
   )

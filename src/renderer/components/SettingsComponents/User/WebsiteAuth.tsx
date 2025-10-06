@@ -15,20 +15,16 @@ const WebsiteAuth = () => {
 
   const [deviceName, setDeviceName] = useState('')
 
-  // Automatically generate device name
   useEffect(() => {
     const generateDeviceName = () => {
       try {
-        // Try to get platform information
         const userAgent = navigator.userAgent || ''
 
-        // Extract OS information
         let os = 'Unknown OS'
         if (userAgent.includes('Windows')) os = 'Windows'
         else if (userAgent.includes('Mac')) os = 'macOS'
         else if (userAgent.includes('Linux')) os = 'Linux'
 
-        // Generate a simple device name
         const deviceName = `${os} Device`
         setDeviceName(deviceName)
       } catch (error) {
@@ -40,7 +36,6 @@ const WebsiteAuth = () => {
     generateDeviceName()
   }, [])
 
-  // Get current website auth status
   const { data: websiteAuth, isLoading } = useQuery({
     queryKey: ['websiteAuth', currentUser.id],
     queryFn: async () => {
@@ -56,14 +51,12 @@ const WebsiteAuth = () => {
     initialData: null
   })
 
-  // Disconnect from website mutation
   const { mutate: disconnectFromWebsite } = useMutation({
     mutationFn: async () => {
       if (!currentUser.id) throw new Error('No user selected')
 
       await invoke<void>('dbClearWebsiteAuthToken', { userId: currentUser.id })
 
-      // Also update user settings to reflect disconnection
       const currentSettings = await invoke<IUserSettings | null>('dbGetUserSettings', {
         userId: currentUser.id
       })
@@ -81,7 +74,6 @@ const WebsiteAuth = () => {
       })
     },
     onSuccess: () => {
-      // Refresh website auth status
       queryClient.invalidateQueries({ queryKey: ['websiteAuth', currentUser.id] })
       queryClient.invalidateQueries({ queryKey: ['userSettings', currentUser.id] })
     },
@@ -120,7 +112,7 @@ const WebsiteAuth = () => {
       descriptionI18nKey="Settings.user.websiteAuth.description"
     >
       <div className="flex flex-col gap-4">
-        {/* Connection Status */}
+        {}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div
@@ -134,9 +126,9 @@ const WebsiteAuth = () => {
           </div>
         </div>
 
-        {/* Connected Info - Device name removed */}
+        {}
 
-        {/* Action Buttons */}
+        {}
         <div className="flex gap-2 justify-end pt-2">
           {isConnected ? (
             <Button

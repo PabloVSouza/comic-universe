@@ -104,6 +104,8 @@
       "webUI": {
         "autoPort": "Automatic Port",
         "autoPortDescription": "Automatically find an available port starting from 8080",
+        "autoSync": "Automatic Sync",
+        "autoSyncDescription": "Automatically sync changes to the cloud after editing comics, chapters, or read progress. Operations are batched together when performed in sequence.",
         "enableWebUI": "Enable Web UI",
         "enableWebUIDescription": "Enable web-based user interface for remote access",
         "port": "Web UI Port",
@@ -170,6 +172,9 @@
       "ltr": "Left to Right",
       "namePlaceholder": "Enter user name",
       "noUserSelected": "No user selected",
+      "autoSync": "Automatic Sync",
+      "autoSyncDescription": "Automatically sync your data to the website after making changes (batches operations for 2 seconds)",
+      "autoSyncDisabledDescription": "Connect to the website to enable automatic sync",
       "pagesRead": "Pages Read",
       "pagesReadDescription": "Total number of pages read across all chapters",
       "readingDirection": "Reading Direction",

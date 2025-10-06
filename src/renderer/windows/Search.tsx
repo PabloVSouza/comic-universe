@@ -125,7 +125,7 @@ const getWindowSettings = () => {
       closeable: true,
       titleBar: true,
       unique: true,
-      title: 'Search' // Will be translated dynamically in openWindow
+      title: 'Search'
     },
     initialStatus: {
       startPosition: 'center',

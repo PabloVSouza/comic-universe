@@ -2,7 +2,6 @@ import { relations } from 'drizzle-orm'
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { v4 as uuidv4 } from 'uuid'
 
-// Plugin table
 export const plugins = sqliteTable('Plugin', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   enabled: integer('enabled', { mode: 'boolean' }).default(true).notNull(),
@@ -12,7 +11,6 @@ export const plugins = sqliteTable('Plugin', {
   path: text('path').notNull()
 })
 
-// User table
 export const users = sqliteTable('User', {
   id: text('id')
     .primaryKey()
@@ -20,13 +18,12 @@ export const users = sqliteTable('User', {
   name: text('name').notNull(),
   default: integer('default', { mode: 'boolean' }).default(false).notNull(),
   settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({}),
-  websiteAuthToken: text('websiteAuthToken'), // Token for website authentication
-  websiteAuthExpiresAt: text('websiteAuthExpiresAt'), // ISO string of expiration date
-  websiteAuthDeviceName: text('websiteAuthDeviceName'), // Device name for the token
-  websiteUserId: text('websiteUserId') // User ID from the website
+  websiteAuthToken: text('websiteAuthToken'),
+  websiteAuthExpiresAt: text('websiteAuthExpiresAt'),
+  websiteAuthDeviceName: text('websiteAuthDeviceName'),
+  websiteUserId: text('websiteUserId')
 })
 
-// Comic table
 export const comics = sqliteTable('Comic', {
   id: text('id')
     .primaryKey()
@@ -50,7 +47,6 @@ export const comics = sqliteTable('Comic', {
   settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({})
 })
 
-// Chapter table
 export const chapters = sqliteTable('Chapter', {
   id: text('id')
     .primaryKey()
@@ -70,7 +66,6 @@ export const chapters = sqliteTable('Chapter', {
   language: text('language')
 })
 
-// ReadProgress table
 export const readProgress = sqliteTable('ReadProgress', {
   id: text('id')
     .primaryKey()
@@ -96,15 +91,14 @@ export const changelog = sqliteTable('Changelog', {
   userId: text('userId')
     .notNull()
     .references(() => users.id),
-  entityType: text('entityType').notNull(), // 'comic', 'chapter', 'readProgress', 'sync'
-  entityId: text('entityId').notNull(), // ID of the comic/chapter/readProgress, or 'sync' for sync events
-  action: text('action').notNull(), // 'created', 'updated', 'deleted', 'sync_started', 'sync_completed', 'sync_failed'
-  data: text('data'), // JSON string of the changed data or sync metadata
+  entityType: text('entityType').notNull(),
+  entityId: text('entityId').notNull(),
+  action: text('action').notNull(),
+  data: text('data'),
   createdAt: text('createdAt').$defaultFn(() => new Date().toISOString()),
   synced: integer('synced', { mode: 'boolean' }).default(false)
 })
 
-// Relations
 export const pluginsRelations = relations(plugins, () => ({}))
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -144,7 +138,6 @@ export const readProgressRelations = relations(readProgress, ({ one }) => ({
   })
 }))
 
-// Export types for TypeScript
 export type Plugin = typeof plugins.$inferSelect
 export type NewPlugin = typeof plugins.$inferInsert
 

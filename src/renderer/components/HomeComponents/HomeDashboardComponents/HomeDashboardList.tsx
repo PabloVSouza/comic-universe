@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import DashboardListItem from 'components/HomeComponents/HomeDashboardComponents/HomeDashboardListItem'
-import LoadingOverlay from 'components/LoadingOverlay'
+import { LoadingOverlay } from 'components/ui'
 import useGlobalStore from 'store/useGlobalStore'
 
 const HomeDashboardComicList: FC<{

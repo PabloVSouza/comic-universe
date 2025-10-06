@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import Image from 'components/Image'
+import { Image } from 'components/ui'
 import FixFilePaths from 'functions/fixFilePaths'
 
 const SettingsPluginListItem = ({ plugin }: { plugin: IRepoPluginInfo }) => {

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import Select from 'components/Select'
+import { Select } from 'components/ui'
 import { updateWindowTitles } from 'functions/openWindow'
 import { useUserSettings } from 'hooks/useUserSettings'
 import usePersistStore from 'store/usePersistStore'

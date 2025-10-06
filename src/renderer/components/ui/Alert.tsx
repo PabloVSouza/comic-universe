@@ -2,9 +2,9 @@ import { ReactNode, useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import classNames from 'classnames'
-import Button from 'components/Button'
-import Cover from 'components/Cover'
 import usePersistStore from 'store/usePersistStore'
+import Button from './Button'
+import Cover from './Cover'
 
 interface AlertButton {
   label: string

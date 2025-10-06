@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import useApi from 'api'
-import Button from 'components/Button'
+import { Button } from 'components/ui'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import SettingsItem from '../SettingsItem'
 

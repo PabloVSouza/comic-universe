@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
-import { confirmAlert } from 'components/Alert'
+import { confirmAlert } from 'components/ui'
 import timeoutPromise from 'functions/timeoutPromise'
 
 const useFetchData = (userId: string) => {

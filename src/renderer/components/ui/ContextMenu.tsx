@@ -1,7 +1,7 @@
 import { MutableRefObject, useEffect, useRef } from 'react'
 import classNames from 'classnames'
 import { create } from 'zustand'
-import Image from 'components/Image'
+import Image from './Image'
 
 export type ContextOption = {
   title: string

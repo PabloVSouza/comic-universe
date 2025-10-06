@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useMutation } from '@tanstack/react-query'
 import useApi from 'api'
 import { refreshIcon } from 'assets'
-import Button from 'components/Button'
+import { Button } from 'components/ui'
 import SettingsUpdatePreferences from './SettingsUpdatePreferences'
 
 const UpdatePreferences = () => {

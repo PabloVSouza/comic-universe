@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
-import Image from 'components/Image'
+import { Image } from 'components/ui'
 
 const buttonStyling = {
   base: 'cursor-pointer relative overflow-hidden transition-all duration-500 ease-default',

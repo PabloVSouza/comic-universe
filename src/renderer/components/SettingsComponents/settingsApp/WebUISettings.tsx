@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import useApi from 'api'
-import Button from 'components/Button'
+import { Button } from 'components/ui'
 import usePersistStore from 'store/usePersistStore'
 import SettingsItem from '../SettingsItem'
 

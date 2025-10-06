@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
-import Cover from 'components/Cover'
+import { Cover } from 'components/ui'
 import HomeBlankArea from 'components/HomeComponents/HomeBlankArea'
 import HomeComicList from 'components/HomeComponents/HomeComicList'
 import { HomeComicNav } from 'components/HomeComponents/HomeComicNav'

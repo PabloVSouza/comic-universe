@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
-import DisplayValue from 'components/DisplayValue'
+import { DisplayValue } from 'components/ui'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import SettingsItem from '../SettingsItem'
 

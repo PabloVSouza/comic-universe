@@ -4,7 +4,7 @@ import useApi from 'api'
 import HomeDashboardHeader from 'components/HomeComponents/HomeDashboardComponents/HomeDashboardHeader'
 import HomeDashboardList from 'components/HomeComponents/HomeDashboardComponents/HomeDashboardList'
 import HomeDashboardNavBar from 'components/HomeComponents/HomeDashboardComponents/HomeDashboardNavBar'
-import LoadingOverlay from 'components/LoadingOverlay'
+import { LoadingOverlay } from 'components/ui'
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 

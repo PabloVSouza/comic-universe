@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { downloadIcon, refreshIcon, confirmIcon } from 'assets'
 import { openWindow } from 'functions'
 import { useWebsiteSync } from 'hooks'
-import Button from 'components/Button'
+import { Button } from 'components/ui'
 
 export const HomeComicNav: FC = () => {
   const { handleSync, isSyncing, showSuccess } = useWebsiteSync()

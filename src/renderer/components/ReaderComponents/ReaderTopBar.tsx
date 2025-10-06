@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import Button from 'components/Button'
+import { Button } from 'components/ui'
 
 interface ReaderBottomBarProps {
   chapterName?: string

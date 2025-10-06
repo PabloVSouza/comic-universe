@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import HtmlParser from 'html-react-parser'
-import Image from 'components/Image'
+import { Image } from 'components/ui'
 import FixFilePaths from 'functions/fixFilePaths'
 
 type HomeDashboardHeaderProps = {

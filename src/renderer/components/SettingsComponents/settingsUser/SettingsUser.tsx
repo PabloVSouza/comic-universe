@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
-import LoadingOverlay from 'components/LoadingOverlay'
+import { LoadingOverlay } from 'components/ui'
 import SettingsBox from '../SettingsBox'
 import SettingsTitle from '../SettingsTitle'
 import UserDataManagement from './UserDataManagement'

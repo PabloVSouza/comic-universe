@@ -1,8 +1,8 @@
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { settingsIcon } from 'assets'
-import Button from 'components/Button'
-import SlideUpMenu, { SlideUpMenuOption } from 'components/SlideUpMenu'
+import { Button } from 'components/ui'
+import { SlideUpMenu, SlideUpMenuOption } from 'components/ui'
 
 interface ReaderBottomBarProps {
   chapterName?: string

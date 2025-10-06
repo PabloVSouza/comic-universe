@@ -5,7 +5,7 @@ import { useQueryClient, useMutation } from '@tanstack/react-query'
 import useApi from 'api'
 import { closedBookIcon, bookStackIcon } from 'assets'
 import classNames from 'classnames'
-import Button from 'components/Button'
+import { Button } from 'components/ui'
 import useGlobalStore from 'store/useGlobalStore'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 

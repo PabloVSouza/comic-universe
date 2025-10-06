@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
 import { openWindow } from 'functions'
-import { confirmAlert } from 'components/Alert'
+import { confirmAlert } from 'components/ui'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 
 interface SyncResult {

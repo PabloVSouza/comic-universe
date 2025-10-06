@@ -1,12 +1,11 @@
 import { BrowserWindow } from 'electron'
-
+import AssetServer from 'electron-utils/AssetServer'
 import ApiRepository from './ApiRepository'
 import AppRepository from './AppRepository'
 import DBRepository from './DBRepository'
 import PluginsRepository from './PluginsRepository'
 import SettingsRepository from './SettingsRepository'
 import WallpaperRepository from './WallpaperRepository'
-import AssetServer from 'electron-utils/AssetServer'
 import ApiManager from '../ApiManager'
 import EventManager from '../EventManager'
 

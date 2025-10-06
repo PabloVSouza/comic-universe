@@ -1,8 +1,8 @@
+import { settingsStorageUtils } from 'renderer-utils'
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import useGlobalStore from './useGlobalStore'
-import { createSettingsStorage } from './settingsStorage'
 import { DEFAULT_SETTINGS } from 'constants/defaultSettings'
+import useGlobalStore from './useGlobalStore'
 
 interface IusePersistStore {
   theme: { theme: string }
@@ -69,7 +69,7 @@ const usePersistStore = create<IusePersistStore>()(
     }),
     {
       name: appParams.isDev ? 'comic-universe-dev' : 'comic-universe',
-      storage: createJSONStorage(() => createSettingsStorage()),
+      storage: createJSONStorage(() => settingsStorageUtils.createSettingsStorage()),
       partialize: (state) => ({
         theme: state.theme,
         repo: state.repo,

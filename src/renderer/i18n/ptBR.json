@@ -1,55 +1,122 @@
 {
-  "General": {
-    "alertConfirmButton": "Ok",
-    "version": "Versão",
-    "author": "Autor",
-    "license": "Licença",
-    "githubRepository": "Repositório Github",
-    "checking": "Verificando...",
-    "save": "Salvar",
-    "cancel": "Cancelar",
-    "edit": "Editar",
-    "yes": "Sim",
-    "no": "Não"
-  },
   "Dashboard": {
-    "setComplete": "Definir como Lido",
-    "resetProgress": "Remover Progresso",
-    "continueReading": "Continuar de onde Parou",
-    "downloadMore": "Baixar mais Capítulos",
     "contextMenu": {
       "deleteComic": {
-        "title": "Deseja mesmo apagar?",
+        "confirmCancel": "Cancelar",
         "confirmMessage": "Todo o progresso de leitura será apagado!",
         "confirmOk": "Confirmar",
-        "confirmCancel": "Cancelar"
+        "title": "Deseja mesmo apagar?"
       }
-    }
+    },
+    "continueReading": "Continuar de onde Parou",
+    "downloadMore": "Baixar mais Capítulos",
+    "resetProgress": "Remover Progresso",
+    "setComplete": "Definir como Lido"
+  },
+  "General": {
+    "alertConfirmButton": "Ok",
+    "author": "Autor",
+    "cancel": "Cancelar",
+    "checking": "Verificando...",
+    "edit": "Editar",
+    "githubRepository": "Repositório Github",
+    "license": "Licença",
+    "no": "Não",
+    "save": "Salvar",
+    "version": "Versão",
+    "yes": "Sim"
   },
   "HomeNav": {
     "about": "Sobre este App",
+    "changeUser": "Trocar de Usuário",
+    "closeApp": "Fechar App",
+    "plugins": "Plugins",
     "settings": "Configurações",
     "userSettings": "Configurações do Usuário",
-    "plugins": "Plugins",
-    "changeUser": "Trocar de Usuário",
-    "closeApp": "Fechar App"
-  },
-  "SearchComic": {
-    "windowTitle": "Buscar Quadrinhos",
-    "textPlaceholder": "Digite sua Busca",
-    "bookmarkComic": "Favoritar",
-    "alreadyBookmarked": "Favoritado",
-    "availableChapters": "Capítulos Disponíveis",
-    "noReposAvailable": "Sem Repositórios"
+    "sync": {
+      "noUserTitle": "Nenhum Usuário Encontrado",
+      "noUserMessage": "Por favor, faça login primeiro.",
+      "partialSuccessTitle": "Sincronização Parcialmente Completa",
+      "partialSuccessMessage": "Sincronizados {{synced}} de {{total}} itens com sucesso.\n\nAlguns itens falharam ao sincronizar.",
+      "failedTitle": "Sincronização Falhou",
+      "failedMessage": "Falha ao sincronizar. Por favor, verifique sua conexão e tente novamente.",
+      "authRequiredTitle": "Autenticação Necessária",
+      "authRequiredMessage": "Por favor, conecte-se à sua conta do site para sincronizar.",
+      "errorTitle": "Erro de Sincronização",
+      "errorMessage": "Ocorreu um erro durante a sincronização. Por favor, tente novamente.",
+      "connectButton": "Conectar",
+      "okButton": "OK"
+    }
   },
   "Pagination": {
-    "previous": "Anterior",
-    "next": "Próxima"
+    "next": "Próxima",
+    "previous": "Anterior"
+  },
+  "Reader": {
+    "chapter": "Capítulo",
+    "nextChapter": "Próximo Capítulo",
+    "previousChapter": "Capítulo Anterior",
+    "read": "Leitura",
+    "readingSettings": "Configurações de Leitura",
+    "rightToLeft": "Direita para Esquerda",
+    "settings": "Configurações",
+    "switchToHorizontal": "Alternar para Leitura Horizontal",
+    "switchToLtr": "Alternar para Leitura da Esquerda para Direita",
+    "switchToRtl": "Alternar para Leitura da Direita para Esquerda",
+    "switchToVertical": "Alternar para Leitura Vertical",
+    "verticalReading": "Leitura Vertical"
+  },
+  "SearchComic": {
+    "alreadyBookmarked": "Favoritado",
+    "availableChapters": "Capítulos Disponíveis",
+    "bookmarkComic": "Favoritar",
+    "noReposAvailable": "Sem Repositórios",
+    "textPlaceholder": "Digite sua Busca",
+    "windowTitle": "Buscar Quadrinhos"
   },
   "Settings": {
-    "windowTitle": "Configurações",
+    "about": {
+      "repositoryDescription": "Visite o repositório do projeto no GitHub",
+      "title": "Sobre Este Aplicativo"
+    },
     "app": {
       "title": "Configurações do App"
+    },
+    "general": {
+      "checkForUpdates": "Verificar Atualizações",
+      "currentVersion": "Versão Atual",
+      "debug": {
+        "enableLogging": "Ativar Log de Debug",
+        "enableLoggingDescription": "Ativar log detalhado para fins de depuração"
+      },
+      "language": {
+        "description": "Escolha seu idioma preferido para a interface do aplicativo",
+        "label": "Selecionar Idioma"
+      },
+      "theme": {
+        "dark": "Escuro",
+        "description": "Escolha seu tema preferido para a interface do aplicativo",
+        "label": "Tema",
+        "light": "Claro"
+      },
+      "title": "Configurações Gerais",
+      "updatePreferences": "Preferências de Atualização",
+      "webUI": {
+        "autoPort": "Porta Automática",
+        "autoPortDescription": "Encontrar automaticamente uma porta disponível começando de 8080",
+        "enableWebUI": "Habilitar Interface Web",
+        "enableWebUIDescription": "Habilitar interface baseada em web para acesso remoto",
+        "port": "Porta da Interface Web",
+        "portDescription": "Número da porta para o servidor da Interface Web",
+        "portRange": "(1024-65535)",
+        "url": "URL da Interface Web",
+        "urlDescription": "Acesse a Interface Web através desta URL"
+      },
+      "webUIPreferences": "Preferências da Interface Web",
+      "webUIStatus": "Status da Interface Web",
+      "webUIStatusRunning": "Executando",
+      "webUIStatusStopped": "Parado",
+      "webUIStatusUnknown": "Desconhecido"
     },
     "options": {
       "generalLabel": "Geral",
@@ -57,163 +124,114 @@
       "userLabel": "Usuário"
     },
     "plugin": {
-      "title": "Configurações de Plugins",
       "install": {
-        "label": "Instalar Plugin",
-        "description": "Baixar e instalar plugins do repositório",
-        "selectPlaceholder": "Selecione um plugin para instalar",
         "buttonTitle": "Baixar e Instalar Plugin",
-        "notAvailableInWebUI": "Instalação de plugins não está disponível no modo Web UI"
+        "description": "Baixar e instalar plugins do repositório",
+        "label": "Instalar Plugin",
+        "notAvailableInWebUI": "Instalação de plugins não está disponível no modo Web UI",
+        "selectPlaceholder": "Selecione um plugin para instalar"
       },
       "installed": {
-        "title": "Plugins Instalados",
-        "noPluginsInstalled": "Nenhum plugin instalado"
-      }
-    },
-    "user": {
-      "title": "Configurações de Usuário",
-      "currentUser": "Usuário Atual",
-      "currentUserDescription": "O usuário atualmente selecionado para progresso de leitura",
-      "namePlaceholder": "Digite o nome do usuário",
-      "noUserSelected": "Nenhum usuário selecionado",
-      "chaptersRead": "Capítulos Lidos",
-      "chaptersReadDescription": "Número total de capítulos com progresso de leitura",
-      "pagesRead": "Páginas Lidas",
-      "pagesReadDescription": "Número total de páginas lidas em todos os capítulos",
-      "exportData": "Exportar Dados",
-      "exportDataDescription": "Exportar seus dados de leitura e configurações",
-      "readingDirection": "Direção de Leitura",
-      "readingDirectionDescription": "Escolha a direção de leitura para os quadrinhos",
-      "ltr": "Esquerda para Direita",
-      "rtl": "Direita para Esquerda",
-      "defaultReadingMode": "Modo de Leitura Padrão",
-      "defaultReadingModeDescription": "Escolha o modo de leitura padrão para quadrinhos (pode ser alterado por quadrinho)",
-      "horizontal": "Horizontal",
-      "vertical": "Vertical",
-      "theme": "Tema",
-      "themeDescription": "Escolha seu tema preferido (sobrescreve o tema do app)",
-      "light": "Claro",
-      "dark": "Escuro",
-      "auto": "Automático",
-      "inherit": "Herdar do App",
-      "wallpaper": {
-        "label": "Papel de Parede",
-        "description": "Escolha um papel de parede personalizado para o app",
-        "addWallpaper": "Adicionar Papel de Parede",
-        "default": "Padrão",
-        "remove": "Remover",
-        "removeConfirm": "Tem certeza de que deseja remover este papel de parede?"
+        "noPluginsInstalled": "Nenhum plugin instalado",
+        "title": "Plugins Instalados"
       },
-      "language": "Idioma",
-      "languageDescription": "Escolha seu idioma preferido (sobrescreve o idioma do app)",
-      "websiteAuth": {
-        "title": "Conta do Site",
-        "description": "Conecte sua conta do app à sua conta do site Comic Universe em comicuniverse.app",
-        "connect": "Conectar ao Site",
-        "disconnect": "Desconectar do Site",
-        "connected": "Conectado ao Site",
-        "notConnected": "Não Conectado",
-        "deviceName": "Nome do Dispositivo",
-        "deviceNamePlaceholder": "ex., Meu Computador Desktop",
-        "connectSuccess": "Conectado com sucesso à conta do site",
-        "connectError": "Falha ao conectar à conta do site",
-        "disconnectSuccess": "Desconectado com sucesso da conta do site",
-        "disconnectError": "Falha ao desconectar da conta do site",
-        "tokenExpired": "Conexão expirada, reconecte-se",
-        "lastConnected": "Última conexão",
-        "never": "Nunca",
-        "emailRequired": "Email é obrigatório",
-        "emailInvalid": "Formato de email inválido",
-        "passwordRequired": "Senha é obrigatória",
-        "passwordMinLength": "Senha deve ter pelo menos 6 caracteres",
-        "connecting": "Conectando...",
-        "emailPlaceholder": "seu@email.com",
-        "passwordPlaceholder": "••••••••",
-        "reAuthRequired": "Autenticação do Site Necessária",
-        "reAuthMessage": "Sua autenticação do site expirou ou é inválida. Por favor, re-autentique-se para continuar usando os recursos do site.",
-        "skip": "Pular",
-        "reAuthenticate": "Re-autenticar"
-      }
-    },
-    "about": {
-      "title": "Sobre Este Aplicativo",
-      "repositoryDescription": "Visite o repositório do projeto no GitHub"
-    },
-    "general": {
-      "title": "Configurações Gerais",
-      "webUIPreferences": "Preferências da Interface Web",
-      "webUIStatus": "Status da Interface Web",
-      "webUIStatusRunning": "Executando",
-      "webUIStatusStopped": "Parado",
-      "webUIStatusUnknown": "Desconhecido",
-      "language": {
-        "label": "Selecionar Idioma",
-        "description": "Escolha seu idioma preferido para a interface do aplicativo"
-      },
-      "debug": {
-        "enableLogging": "Ativar Log de Debug",
-        "enableLoggingDescription": "Ativar log detalhado para fins de depuração"
-      },
-      "webUI": {
-        "enableWebUI": "Habilitar Interface Web",
-        "enableWebUIDescription": "Habilitar interface baseada em web para acesso remoto",
-        "autoPort": "Porta Automática",
-        "autoPortDescription": "Encontrar automaticamente uma porta disponível começando de 8080",
-        "port": "Porta da Interface Web",
-        "portDescription": "Número da porta para o servidor da Interface Web",
-        "portRange": "(1024-65535)",
-        "url": "URL da Interface Web",
-        "urlDescription": "Acesse a Interface Web através desta URL"
-      },
-      "theme": {
-        "label": "Tema",
-        "description": "Escolha seu tema preferido para a interface do aplicativo",
-        "dark": "Escuro",
-        "light": "Claro"
-      },
-      "updatePreferences": "Preferências de Atualização",
-      "checkForUpdates": "Verificar Atualizações",
-      "currentVersion": "Versão Atual"
+      "title": "Configurações de Plugins"
     },
     "update": {
       "autoUpdate": {
-        "enable": "Ativar Atualizações Automáticas",
         "description": "Baixar e instalar automaticamente atualizações quando disponíveis",
+        "enable": "Ativar Atualizações Automáticas",
         "notAvailableMacOS": "Atualização automática não está disponível no macOS. Atualizações devem ser baixadas manualmente.",
-        "notAvailableWindows": "Atualização automática não está disponível no Windows. Atualizações devem ser baixadas manualmente.",
-        "notAvailableOther": "Atualização automática não está disponível nesta plataforma. Atualizações devem ser baixadas manualmente."
+        "notAvailableOther": "Atualização automática não está disponível nesta plataforma. Atualizações devem ser baixadas manualmente.",
+        "notAvailableWindows": "Atualização automática não está disponível no Windows. Atualizações devem ser baixadas manualmente."
       },
       "nonStable": {
-        "optIn": "Optar por Atualizações Não-Estáveis",
         "description": "Permitir que o app verifique e instale releases beta e alpha",
-        "notAvailableWhenAutoUpdateDisabled": "Atualizações não-estáveis só estão disponíveis quando a atualização automática está habilitada."
+        "notAvailableWhenAutoUpdateDisabled": "Atualizações não-estáveis só estão disponíveis quando a atualização automática está habilitada.",
+        "optIn": "Optar por Atualizações Não-Estáveis"
       }
-    }
+    },
+    "user": {
+      "auto": "Automático",
+      "chaptersRead": "Capítulos Lidos",
+      "chaptersReadDescription": "Número total de capítulos com progresso de leitura",
+      "currentUser": "Usuário Atual",
+      "currentUserDescription": "O usuário atualmente selecionado para progresso de leitura",
+      "dark": "Escuro",
+      "defaultReadingMode": "Modo de Leitura Padrão",
+      "defaultReadingModeDescription": "Escolha o modo de leitura padrão para quadrinhos (pode ser alterado por quadrinho)",
+      "exportData": "Exportar Dados",
+      "exportDataDescription": "Exportar seus dados de leitura e configurações",
+      "horizontal": "Horizontal",
+      "inherit": "Herdar do App",
+      "language": "Idioma",
+      "languageDescription": "Escolha seu idioma preferido (sobrescreve o idioma do app)",
+      "light": "Claro",
+      "ltr": "Esquerda para Direita",
+      "namePlaceholder": "Digite o nome do usuário",
+      "noUserSelected": "Nenhum usuário selecionado",
+      "pagesRead": "Páginas Lidas",
+      "pagesReadDescription": "Número total de páginas lidas em todos os capítulos",
+      "readingDirection": "Direção de Leitura",
+      "readingDirectionDescription": "Escolha a direção de leitura para os quadrinhos",
+      "rtl": "Direita para Esquerda",
+      "theme": "Tema",
+      "themeDescription": "Escolha seu tema preferido (sobrescreve o tema do app)",
+      "title": "Configurações de Usuário",
+      "vertical": "Vertical",
+      "wallpaper": {
+        "addWallpaper": "Adicionar Papel de Parede",
+        "default": "Padrão",
+        "description": "Escolha um papel de parede personalizado para o app",
+        "label": "Papel de Parede",
+        "remove": "Remover",
+        "removeConfirm": "Tem certeza de que deseja remover este papel de parede?"
+      },
+      "websiteAuth": {
+        "connect": "Conectar ao Site",
+        "connected": "Conectado ao Site",
+        "connectError": "Falha ao conectar à conta do site",
+        "connecting": "Conectando...",
+        "connectSuccess": "Conectado com sucesso à conta do site",
+        "connectToSync": "Conectar ao Site",
+        "description": "Conecte sua conta do app à sua conta do site Comic Universe em comicuniverse.app",
+        "deviceName": "Nome do Dispositivo",
+        "deviceNamePlaceholder": "ex., Meu Computador Desktop",
+        "disconnect": "Desconectar do Site",
+        "disconnectError": "Falha ao desconectar da conta do site",
+        "disconnectSuccess": "Desconectado com sucesso da conta do site",
+        "emailInvalid": "Formato de email inválido",
+        "emailPlaceholder": "seu@email.com",
+        "emailRequired": "Email é obrigatório",
+        "lastConnected": "Última conexão",
+        "never": "Nunca",
+        "notConnected": "Não Conectado",
+        "passwordMinLength": "Senha deve ter pelo menos 6 caracteres",
+        "passwordPlaceholder": "••••••••",
+        "passwordRequired": "Senha é obrigatória",
+        "reAuthenticate": "Re-autenticar",
+        "reAuthMessage": "Sua autenticação do site expirou ou é inválida. Por favor, re-autentique-se para continuar usando os recursos do site.",
+        "reAuthRequired": "Autenticação do Site Necessária",
+        "skip": "Pular",
+        "syncRequired": "Autenticação do Site Necessária",
+        "syncRequiredMessage": "Você precisa conectar seu aplicativo à sua conta do site Comic Universe para sincronizar seus quadrinhos e progresso de leitura.",
+        "title": "Conta do Site",
+        "tokenExpired": "Conexão expirada, reconecte-se",
+        "cancelButton": "Cancelar"
+      }
+    },
+    "windowTitle": "Configurações"
   },
   "Users": {
-    "header": "Selecione o seu Usuário",
-    "createButton": "Criar Usuário",
     "cancelButton": "Cancelar",
-    "namePlaceholder": "Nome do Usuário",
+    "createButton": "Criar Usuário",
     "deleteUser": {
-      "deleteUserTitle": "Excluir Usuário",
-      "deleteUserMessage": "Tem certeza de que deseja excluir este usuário? Todo o progresso de leitura será perdido permanentemente.",
+      "cancelDeleteButton": "Cancelar",
       "confirmDeleteButton": "Excluir",
-      "cancelDeleteButton": "Cancelar"
-    }
-  },
-  "Reader": {
-    "chapter": "Capítulo",
-    "previousChapter": "Capítulo Anterior",
-    "nextChapter": "Próximo Capítulo",
-    "read": "Leitura",
-    "verticalReading": "Leitura Vertical",
-    "switchToVertical": "Alternar para Leitura Vertical",
-    "switchToHorizontal": "Alternar para Leitura Horizontal",
-    "rightToLeft": "Direita para Esquerda",
-    "switchToRtl": "Alternar para Leitura da Direita para Esquerda",
-    "switchToLtr": "Alternar para Leitura da Esquerda para Direita",
-    "settings": "Configurações",
-    "readingSettings": "Configurações de Leitura"
+      "deleteUserMessage": "Tem certeza de que deseja excluir este usuário? Todo o progresso de leitura será perdido permanentemente.",
+      "deleteUserTitle": "Excluir Usuário"
+    },
+    "header": "Selecione o seu Usuário",
+    "namePlaceholder": "Nome do Usuário"
   }
 }

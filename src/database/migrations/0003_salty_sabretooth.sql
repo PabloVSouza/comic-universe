@@ -1,2 +1,0 @@
-ALTER TABLE `Comic` ADD COLUMN `settings` text DEFAULT '{}';--> statement-breakpoint
-UPDATE `Comic` SET `settings` = CASE WHEN `readingMode` IS NOT NULL THEN '{"readingMode":"' || `readingMode` || '"}' ELSE '{}' END;

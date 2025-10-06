@@ -1,6 +1,5 @@
+import { dialog, shell, app, BrowserWindow } from 'electron'
 import { autoUpdater, UpdateInfo } from 'electron-updater'
-import { dialog, shell, app } from 'electron'
-import { BrowserWindow } from 'electron'
 
 export interface UpdateSettings {
   autoUpdate: boolean
@@ -49,7 +48,7 @@ export class UpdateManager {
   private setUpdateChannel(): void {
     const currentVersion = app.getVersion()
     const versionType = this.getVersionTypeString(currentVersion)
-    
+
     // Set the update channel to match the current version type
     // This ensures each version type only updates to the same type
     if (versionType === 'alpha') {
@@ -61,7 +60,7 @@ export class UpdateManager {
     } else {
       autoUpdater.channel = 'latest' // stable releases
     }
-    
+
     console.log(`Auto-updater configured for ${versionType} channel (version: ${currentVersion})`)
   }
 

@@ -1,8 +1,12 @@
+import { app } from 'electron'
+import { DataPaths } from 'electron-utils'
+import { getApiBaseUrl } from 'shared/constants'
+import { SyncService } from '../../services/SyncService'
 import { initializeDatabase, IDatabaseRepository } from '../database'
-import { DataPaths } from 'electron-utils/utils'
 
 class DBRepository implements IDBRepository {
   private repository!: IDatabaseRepository
+  private syncService!: SyncService
 
   constructor() {
     // Use the centralized data paths utility
@@ -13,6 +17,15 @@ class DBRepository implements IDBRepository {
     // Initialize ORM-agnostic database with custom path
     const dbPath = DataPaths.getDatabaseFilePath()
     this.repository = await initializeDatabase(dbPath)
+
+    // Initialize sync service
+    // Use localhost in development, production URL otherwise
+    const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
+    const apiBaseUrl = getApiBaseUrl(isDev)
+    this.syncService = new SyncService(this.repository, {
+      apiBaseUrl,
+      syncInterval: 0 // Manual sync only for now
+    })
   }
 
   methods: IDBMethods = {
@@ -52,15 +65,15 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    dbGetAllComics: async (): Promise<IComic[]> => {
-      const comics = await this.repository.getAllComics()
+    dbGetAllComics: async ({ userId }): Promise<IComic[]> => {
+      const comics = await this.repository.getAllComics(userId)
       return new Promise((resolve) => {
         resolve(comics as IComic[])
       })
     },
 
-    dbInsertComic: async ({ comic, chapters, repo }): Promise<void> => {
-      await this.repository.createComic(comic, chapters, repo)
+    dbInsertComic: async ({ comic, chapters, repo, userId }): Promise<void> => {
+      await this.repository.createComic(comic, chapters, repo, userId)
       return new Promise((resolve) => {
         resolve()
       })
@@ -93,6 +106,13 @@ class DBRepository implements IDBRepository {
       const chapters = await this.repository.getChaptersByComicId(comicId)
       return new Promise((resolve) => {
         resolve(chapters as IChapter[])
+      })
+    },
+
+    dbGetChapterById: async ({ id }): Promise<IChapter | undefined> => {
+      const chapter = await this.repository.getChapterById(id)
+      return new Promise((resolve) => {
+        resolve(chapter)
       })
     },
 
@@ -132,6 +152,11 @@ class DBRepository implements IDBRepository {
         await this.repository.updateReadProgress(readProgress.id, readProgress)
       }
 
+      return new Promise((resolve) => resolve())
+    },
+
+    dbInsertReadProgress: async ({ readProgress }): Promise<void> => {
+      await this.repository.createReadProgress(readProgress)
       return new Promise((resolve) => resolve())
     },
 
@@ -190,14 +215,18 @@ class DBRepository implements IDBRepository {
     },
 
     // Website Authentication
-    dbSetWebsiteAuthToken: async ({ userId, token, expiresAt, deviceName }): Promise<void> => {
-      await this.repository.setWebsiteAuthToken(userId, token, expiresAt, deviceName)
-      return new Promise((resolve) => {
-        resolve()
-      })
+    dbSetWebsiteAuthToken: async ({
+      userId,
+      token,
+      expiresAt,
+      deviceName
+    }): Promise<{ userId: string; userIdChanged: boolean }> => {
+      return await this.repository.setWebsiteAuthToken(userId, token, expiresAt, deviceName)
     },
 
-    dbGetWebsiteAuthToken: async ({ userId }): Promise<{
+    dbGetWebsiteAuthToken: async ({
+      userId
+    }): Promise<{
       token: string | null
       expiresAt: string | null
       deviceName: string | null
@@ -213,6 +242,46 @@ class DBRepository implements IDBRepository {
       await this.repository.clearWebsiteAuthToken(userId)
       return new Promise((resolve) => {
         resolve()
+      })
+    },
+
+    // Changelog methods
+    dbCreateChangelogEntry: async ({ entry }): Promise<IChangelogEntry> => {
+      const result = await this.repository.createChangelogEntry(entry)
+      return new Promise((resolve) => {
+        resolve(result)
+      })
+    },
+
+    dbGetUnsyncedChangelogEntries: async ({ userId }): Promise<IChangelogEntry[]> => {
+      const result = await this.repository.getUnsyncedChangelogEntries(userId)
+      return new Promise((resolve) => {
+        resolve(result)
+      })
+    },
+
+    dbMarkChangelogEntriesAsSynced: async ({ entryIds }): Promise<void> => {
+      await this.repository.markChangelogEntriesAsSynced(entryIds)
+      return new Promise((resolve) => {
+        resolve()
+      })
+    },
+
+    dbGetChangelogEntriesSince: async ({ userId, timestamp }): Promise<IChangelogEntry[]> => {
+      const result = await this.repository.getChangelogEntriesSince(userId, timestamp)
+      return new Promise((resolve) => {
+        resolve(result)
+      })
+    },
+
+    // Sync methods
+    dbSyncData: async ({ direction, userId, token }): Promise<SyncResult> => {
+      return await this.syncService.sync(direction, userId, token)
+    },
+
+    dbGetSyncStatus: async (): Promise<SyncState> => {
+      return new Promise((resolve) => {
+        resolve(this.syncService.getSyncStatus())
       })
     }
   }

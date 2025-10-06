@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import useApi from 'api'
+import { useQuery } from '@tanstack/react-query'
+import { useApi } from 'hooks'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import usePersistStore from 'store/usePersistStore'
 
@@ -15,7 +15,7 @@ export const useUserSettings = () => {
     queryKey: ['userSettings', currentUser.id],
     queryFn: async () => {
       if (currentUser.id) {
-        return await invoke('dbGetUserSettings', { userId: currentUser.id })
+        return await invoke<IUserSettings | null>('dbGetUserSettings', { userId: currentUser.id })
       }
       return null
     },
@@ -65,7 +65,6 @@ export const useUserSettings = () => {
       i18n.changeLanguage(languageToApply)
     }
   }, [userSettings?.appPreferences?.language, appLanguage.language, i18n])
-
 
   return {
     userSettings,

@@ -1,0 +1,89 @@
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { downloadIcon3, loadingIcon } from 'assets'
+import { useApi } from 'hooks'
+import { Button, Select } from 'components/UiComponents'
+import Item from '../Item'
+
+const PluginInstallSettings = () => {
+  const { t } = useTranslation()
+  const { invoke } = useApi()
+  const queryClient = useQueryClient()
+
+  const { data: pluginsList } = useQuery({
+    queryKey: ['pluginsList'],
+    queryFn: async () => await invoke<IRepoPluginInfo[]>('getPluginInfoList'),
+    initialData: []
+  })
+
+  const { data: apiPlugins } = useQuery({
+    queryKey: ['apiPlugins'],
+    queryFn: async () => await invoke<IRepoApiPluginList[]>('getPluginsFromApi'),
+    initialData: []
+  })
+
+  const { mutate: updatePlugins } = useMutation({
+    mutationFn: async () => {
+      await invoke<void>('refreshPluginHandlers')
+      queryClient.invalidateQueries({ queryKey: ['pluginsList'] })
+    }
+  })
+
+  const { mutate: downloadAndInstallPlugin, isPending: isInstalling } = useMutation({
+    mutationFn: async (plugin: string) => {
+      await invoke<void>('downloadAndInstallPlugin', plugin)
+      updatePlugins()
+    }
+  })
+
+  const [selectedPluginToInstall, setSelectedPluginToInstall] = useState('' as string | TOption)
+
+  const handleSelectPluginToInstall = (val: TOption) => {
+    setSelectedPluginToInstall(val)
+  }
+
+  const handleInstallPlugin = () => {
+    if (typeof selectedPluginToInstall === 'object')
+      downloadAndInstallPlugin(selectedPluginToInstall.value)
+  }
+
+  useEffect(() => {
+    setSelectedPluginToInstall('')
+  }, [pluginsList])
+
+  const pluginSelectOptions = apiPlugins
+    .map((val) => ({
+      label: val.name,
+      value: val.repo
+    }))
+    .filter((val) => !pluginsList.find((plugin) => plugin.name == val.label))
+
+  return (
+    <Item
+      labelI18nKey="Settings.plugin.install.label"
+      descriptionI18nKey="Settings.plugin.install.description"
+    >
+      <div className="flex gap-2 items-center">
+        <Select
+          className="!w-64 bg-list-item rounded-lg"
+          options={pluginSelectOptions}
+          placeholder={t('Settings.plugin.install.selectPlaceholder')}
+          onChange={(e) => handleSelectPluginToInstall(e as TOption)}
+          isDisabled={!pluginSelectOptions.length || isInstalling}
+          value={selectedPluginToInstall}
+        />
+        <Button
+          className={`h-10 ${isInstalling ? '[&>img]:animate-spin' : ''}`}
+          icon={isInstalling ? loadingIcon : downloadIcon3}
+          theme="pure"
+          title={t('Settings.plugin.install.buttonTitle')}
+          disabled={!selectedPluginToInstall || isInstalling}
+          onClick={handleInstallPlugin}
+        />
+      </div>
+    </Item>
+  )
+}
+
+export default PluginInstallSettings

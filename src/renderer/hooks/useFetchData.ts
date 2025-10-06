@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import useApi from 'api'
+import { useApi } from 'hooks'
+import { confirmAlert } from 'components/UiComponents'
 import timeoutPromise from 'functions/timeoutPromise'
-import { confirmAlert } from 'components/Alert'
-import useQueue from './useQueue'
 
-const useFetchData = () => {
+const useFetchData = (userId: string) => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
 
@@ -12,11 +11,11 @@ const useFetchData = () => {
     mutationFn: async (comic: IComic) => {
       const { repo, siteId, id: comicId } = comic
 
-      const webChaptersList = (await invoke('getChapters', {
+      const webChaptersList = await invoke<IChapter[]>('getChapters', {
         repo,
         data: { siteId }
-      })) as IChapter[]
-      const dbChaptersList = (await invoke('dbGetChapters', { comicId })) as IChapter[]
+      })
+      const dbChaptersList = await invoke<IChapter[]>('dbGetChapters', { comicId })
       const newChapters = webChaptersList.filter(
         (chapter) => !dbChaptersList.find((val) => val.number === chapter.number)
       )
@@ -33,16 +32,17 @@ const useFetchData = () => {
       repo
     }: {
       data: IComic
-      comicDetails: IComic
+      comicDetails: Partial<IComic>
       chapterData: IChapter[]
       repo: string
     }): Promise<void> =>
-      await invoke('dbInsertComic', {
+      await invoke<void>('dbInsertComic', {
         comic: { ...data, ...comicDetails },
         chapters: chapterData,
-        repo
+        repo,
+        userId
       }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList', userId] })
   })
 
   const { mutate: insertChapters } = useMutation({
@@ -51,10 +51,10 @@ const useFetchData = () => {
       comicId
     }: {
       newChapters: IChapter[]
-      comicId: number
+      comicId: string
     }): Promise<void> => {
       const finalChapters = newChapters.map((val) => ({ ...val, comicId }))
-      await invoke('dbInsertChapters', { chapters: finalChapters })
+      await invoke<void>('dbInsertChapters', { chapters: finalChapters })
     },
 
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
@@ -64,18 +64,19 @@ const useFetchData = () => {
     mutationFn: async (chapter: IChapter): Promise<boolean> => {
       const { repo } = chapter
       const pages = await timeoutPromise<IPage[]>(
-        invoke('getPages', { repo, data: { chapter } }),
+        invoke<IPage[]>('getPages', { repo, data: { chapter } }),
         10000
       )
       if (pages.length > 0) {
-        await invoke('dbUpdateChapter', { chapter: { ...chapter, pages: JSON.stringify(pages) } })
+        await invoke<void>('dbUpdateChapter', {
+          chapter: { ...chapter, pages: JSON.stringify(pages) }
+        })
       }
       return pages.length > 0
     },
-    onSuccess: (data, chapter) => {
+    onSuccess: (data) => {
       if (data) {
-        const { removeFromQueue } = useQueue(useFetchData)
-        removeFromQueue(chapter)
+        // Queue removal should be handled by the component using useQueue
       }
     },
     onError: () => {

@@ -2,11 +2,11 @@ import { ReactElement } from 'react'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import MinimizedItem from './MinimizedItem'
 
-interface IMinimizeBarProps {
+interface MinimizedBarProps {
   MinimizedList: TWindow[]
 }
 
-const MinimizedBar = ({ MinimizedList }: IMinimizeBarProps): ReactElement => {
+const MinimizedBar = ({ MinimizedList }: MinimizedBarProps): ReactElement => {
   const animationSettings = {
     duration: 50,
     easing: 'ease'

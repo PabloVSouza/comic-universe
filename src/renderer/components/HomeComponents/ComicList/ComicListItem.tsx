@@ -2,8 +2,8 @@ import { FC } from 'react'
 import classNames from 'classnames'
 import { FixFilePaths } from 'functions'
 import ReactHtmlParser from 'html-react-parser'
-import { Image } from 'components/ui'
 import { useGlobalStore } from 'store'
+import { Image } from 'components/ui'
 
 const ComicListItem: FC<{ item: IComic } & Partial<React.LiHTMLAttributes<HTMLLIElement>>> = ({
   item,

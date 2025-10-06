@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import useApi from 'api'
 import { iconIcon } from 'assets'
+import { useApi } from 'hooks'
 import { DisplayValue, Image, LoadingOverlay } from 'components/ui'
 import Box from '../Box'
 import Item from '../Item'

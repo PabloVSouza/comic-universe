@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
-import useApi from 'api'
 import { openWindow } from 'functions'
+import { useApi } from 'hooks'
 import { confirmAlert } from 'components/ui'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 

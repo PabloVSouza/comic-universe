@@ -8,7 +8,7 @@ import {
   HTMLAttributeReferrerPolicy
 } from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
-import useEnvironment from 'hooks/useEnvironment'
+import { useEnvironment } from 'hooks'
 
 const getProxiedImageUrl = (originalUrl: string, isWebUI: boolean): string => {
   if (isWebUI && (originalUrl.startsWith('http://') || originalUrl.startsWith('https://'))) {

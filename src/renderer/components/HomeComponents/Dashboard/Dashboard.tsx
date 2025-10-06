@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import useApi from 'api'
+import { useApi } from 'hooks'
 import { useGlobalStore, usePersistSessionStore } from 'store'
 import { LoadingOverlay } from 'components/ui'
 import DashboardHeader from './DashboardHeader'

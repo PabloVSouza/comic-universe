@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import useApi from 'api'
+import { useApi } from 'hooks'
 import PluginInstallSettings from './PluginInstallSettings'
 import PluginList from './PluginList'
 import Box from '../Box'

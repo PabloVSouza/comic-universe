@@ -1,4 +1,4 @@
-import useApi from 'api'
+import { useApi } from 'hooks'
 import { deepMerge } from 'shared/utils'
 import { StateStorage } from 'zustand/middleware'
 import { DEFAULT_SETTINGS } from 'constants/defaultSettings'

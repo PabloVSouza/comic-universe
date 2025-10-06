@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import useApi from 'api'
+import { useApi } from 'hooks'
 import { confirmAlert } from 'components/ui'
 import timeoutPromise from 'functions/timeoutPromise'
 

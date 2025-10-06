@@ -1,5 +1,5 @@
-import IpcImplementation from './IpcImplementation'
-import RestImplemention from './RestImplementation'
+import IpcImplementation from '../api/IpcImplementation'
+import RestImplemention from '../api/RestImplementation'
 
 interface ApiImplementation {
   invoke: (method: string, args?: any) => Promise<any>

@@ -1,12 +1,12 @@
 import { FC, useEffect, useState, useCallback, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import useApi from 'api'
 import { loadingIcon } from 'assets'
+import { FixFilePaths } from 'functions'
+import { useApi } from 'hooks'
 import { useGlobalStore, usePersistSessionStore } from 'store'
 import { BottomBar, ZoomWindow, type MousePosition } from 'components/ReaderComponents'
 import { Cover, Image } from 'components/ui'
-import FixFilePaths from 'functions/fixFilePaths'
 
 const Reader: FC = () => {
   const navigate = useNavigate()

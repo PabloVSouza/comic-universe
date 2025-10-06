@@ -1,9 +1,9 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import useApi from 'api'
 import { plusIcon, userIcon, trashIcon } from 'assets'
 import classNames from 'classnames'
+import { useApi } from 'hooks'
 import { usePersistSessionStore, useWindowManagerStore } from 'store'
 import { confirmAlert, Image } from 'components/ui'
 

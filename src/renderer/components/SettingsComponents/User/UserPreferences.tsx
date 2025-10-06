@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import useApi from 'api'
-import { LoadingOverlay, Select } from 'components/ui'
+import { useApi } from 'hooks'
 import { usePersistSessionStore } from 'store'
+import { LoadingOverlay, Select } from 'components/ui'
 import Item from '../Item'
 import WallpaperSelector from './WallpaperSelector'
 

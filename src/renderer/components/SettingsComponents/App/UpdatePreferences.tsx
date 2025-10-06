@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import useApi from 'api'
+import { useApi } from 'hooks'
 import { Button } from 'components/ui'
 import Item from '../Item'
 

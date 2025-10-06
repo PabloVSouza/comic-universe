@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import useApi from 'api'
+import { useApi } from 'hooks'
 import { confirmAlert } from './Alert'
 
 const UpdateNotification = () => {

@@ -1,3 +1,4 @@
+export { default as useApi } from './useApi'
 export { default as useAutoWebsiteAuth } from './useAutoWebsiteAuth'
 export { default as useEnvironment } from './useEnvironment'
 export { default as useFetchData } from './useFetchData'

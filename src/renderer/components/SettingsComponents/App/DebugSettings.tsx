@@ -1,5 +1,5 @@
-import { Button } from 'components/ui'
 import { usePersistStore } from 'store'
+import { Button } from 'components/ui'
 import Item from '../Item'
 
 const DebugSettings = () => {

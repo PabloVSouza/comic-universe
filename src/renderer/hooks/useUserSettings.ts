@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
-import useApi from 'api'
+import { useApi } from 'hooks'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import usePersistStore from 'store/usePersistStore'
 

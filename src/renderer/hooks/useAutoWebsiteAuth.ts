@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import useApi from 'api'
+import { useApi } from 'hooks'
 import { getApiBaseUrl } from 'shared/constants'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 

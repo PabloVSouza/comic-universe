@@ -1,4 +1,4 @@
-import useApi from 'api'
+import { useApi } from 'hooks'
 
 export interface SettingsOutput {
   update?: {

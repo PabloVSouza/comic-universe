@@ -1,8 +1,8 @@
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import useApi from 'api'
 import { confirmIcon, cancelIcon } from 'assets'
+import { useApi } from 'hooks'
 import { Button, LoadingOverlay } from 'components/ui'
 import { List } from 'components/UsersComponents'
 

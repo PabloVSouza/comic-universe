@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Select } from 'components/ui'
-import { updateWindowTitles } from 'functions/openWindow'
-import { useUserSettings } from 'hooks/useUserSettings'
+import { updateWindowTitles } from 'functions'
+import { useUserSettings } from 'hooks'
 import { usePersistStore } from 'store'
+import { Select } from 'components/ui'
 import Item from '../Item'
 
 const LanguageSettings = () => {

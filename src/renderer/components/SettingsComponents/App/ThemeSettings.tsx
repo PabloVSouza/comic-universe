@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Select } from 'components/ui'
 import { usePersistStore } from 'store'
+import { Select } from 'components/ui'
 import Item from '../Item'
 
 const ThemeSettings = () => {

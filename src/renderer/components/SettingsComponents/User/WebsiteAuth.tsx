@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import useApi from 'api'
-import { Button } from 'components/ui'
-import openWindow from 'functions/openWindow'
+import { openWindow } from 'functions'
+import { useApi } from 'hooks'
 import { usePersistSessionStore } from 'store'
+import { Button } from 'components/ui'
 import Item from '../Item'
 
 const WebsiteAuth = () => {

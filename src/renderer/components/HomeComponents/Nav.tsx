@@ -1,12 +1,11 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import useApi from 'api'
 import { infoIcon, settingsIcon, userIcon, exitDoorIcon, logoutIcon, pluginIcon } from 'assets'
 import classNames from 'classnames'
+import { openWindow } from 'functions'
+import { useApi, useEnvironment } from 'hooks'
 import { useGlobalStore, usePersistSessionStore } from 'store'
 import { Cover, Image } from 'components/ui'
-import openWindow from 'functions/openWindow'
-import useEnvironment from 'hooks/useEnvironment'
 
 const Nav: FC = () => {
   const { invoke } = useApi()

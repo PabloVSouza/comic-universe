@@ -86,7 +86,10 @@ const WebsiteAuth: FC = () => {
         const data = await response.json()
 
         // Store the token in the app database
-        const authResult = await invoke('dbSetWebsiteAuthToken', {
+        const authResult = await invoke<{
+          userId: string
+          userIdChanged: boolean
+        }>('dbSetWebsiteAuthToken', {
           userId: currentUser.id,
           token: data.token,
           expiresAt: data.expiresAt, // This is already an ISO string from the API

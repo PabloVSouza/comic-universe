@@ -12,7 +12,7 @@ const Users: FC = () => {
 
   const { data: users, isLoading } = useQuery({
     queryKey: ['userData'],
-    queryFn: async () => await invoke('dbGetAllUsers'),
+    queryFn: async () => await invoke<IUser[]>('dbGetAllUsers'),
     initialData: []
   })
 
@@ -23,7 +23,7 @@ const Users: FC = () => {
   const { t } = useTranslation()
 
   const { mutate: createUser } = useMutation({
-    mutationFn: async () => await invoke('dbUpdateUser', { user: { name } }),
+    mutationFn: async () => await invoke<void>('dbUpdateUser', { user: { name } }),
     onSuccess: () => {
       setNewUser(false)
       queryClient.invalidateQueries({ queryKey: ['userData'] })

@@ -31,7 +31,7 @@ const UserPreferences = () => {
     queryKey: ['userSettings', currentUser.id],
     queryFn: async () => {
       if (currentUser.id) {
-        return await invoke('dbGetUserSettings', { userId: currentUser.id })
+        return await invoke<IUserSettings | null>('dbGetUserSettings', { userId: currentUser.id })
       }
       return null
     },
@@ -42,7 +42,7 @@ const UserPreferences = () => {
   const { mutate: updateSettings } = useMutation({
     mutationFn: async (newSettings: Partial<IUserSettings>) => {
       if (currentUser.id) {
-        return await invoke('dbUpdateUserSettings', {
+        return await invoke<void>('dbUpdateUserSettings', {
           userId: currentUser.id,
           settings: newSettings
         })

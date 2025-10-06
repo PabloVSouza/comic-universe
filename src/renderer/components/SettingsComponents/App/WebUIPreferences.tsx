@@ -36,7 +36,7 @@ const SettingsWebUIPreferences = () => {
 
         // Load the actual port from the server
         if (currentWebUI) {
-          const portResult = await invoke('getWebUIPort')
+          const portResult = await invoke<{ port?: number }>('getWebUIPort')
           if (portResult && portResult.port) {
             setActualPort(portResult.port)
             // Update the input field to show the actual port if no manual port is set
@@ -59,7 +59,7 @@ const SettingsWebUIPreferences = () => {
     setWebUI(newValue)
 
     try {
-      await invoke('restartApiServer')
+      await invoke<void>('restartApiServer')
     } catch {
       // Failed to restart API server
     }
@@ -71,10 +71,10 @@ const SettingsWebUIPreferences = () => {
 
     if (!isNaN(portNumber) && portNumber >= 1024 && portNumber <= 65535) {
       try {
-        await invoke('updateWebUISettings', { port: portNumber })
+        await invoke<void>('updateWebUISettings', { port: portNumber })
         setWebUIPort(portNumber) // Update the store
         // Restart the server to use the new port
-        await invoke('restartApiServer')
+        await invoke<void>('restartApiServer')
       } catch {
         // Error updating port setting
       }
@@ -87,7 +87,7 @@ const SettingsWebUIPreferences = () => {
     setWebUIAutoPort(newAutoPort)
 
     try {
-      await invoke('updateWebUISettings', { autoPort: newAutoPort })
+      await invoke<void>('updateWebUISettings', { autoPort: newAutoPort })
     } catch {
       // Error updating auto port setting
     }

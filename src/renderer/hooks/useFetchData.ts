@@ -11,11 +11,11 @@ const useFetchData = (userId: string) => {
     mutationFn: async (comic: IComic) => {
       const { repo, siteId, id: comicId } = comic
 
-      const webChaptersList = (await invoke('getChapters', {
+      const webChaptersList = await invoke<IChapter[]>('getChapters', {
         repo,
         data: { siteId }
-      })) as IChapter[]
-      const dbChaptersList = (await invoke('dbGetChapters', { comicId })) as IChapter[]
+      })
+      const dbChaptersList = await invoke<IChapter[]>('dbGetChapters', { comicId })
       const newChapters = webChaptersList.filter(
         (chapter) => !dbChaptersList.find((val) => val.number === chapter.number)
       )
@@ -32,11 +32,11 @@ const useFetchData = (userId: string) => {
       repo
     }: {
       data: IComic
-      comicDetails: IComic
+      comicDetails: Partial<IComic>
       chapterData: IChapter[]
       repo: string
     }): Promise<void> =>
-      await invoke('dbInsertComic', {
+      await invoke<void>('dbInsertComic', {
         comic: { ...data, ...comicDetails },
         chapters: chapterData,
         repo,
@@ -54,7 +54,7 @@ const useFetchData = (userId: string) => {
       comicId: string
     }): Promise<void> => {
       const finalChapters = newChapters.map((val) => ({ ...val, comicId }))
-      await invoke('dbInsertChapters', { chapters: finalChapters })
+      await invoke<void>('dbInsertChapters', { chapters: finalChapters })
     },
 
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
@@ -64,11 +64,11 @@ const useFetchData = (userId: string) => {
     mutationFn: async (chapter: IChapter): Promise<boolean> => {
       const { repo } = chapter
       const pages = await timeoutPromise<IPage[]>(
-        invoke('getPages', { repo, data: { chapter } }),
+        invoke<IPage[]>('getPages', { repo, data: { chapter } }),
         10000
       )
       if (pages.length > 0) {
-        await invoke('dbUpdateChapter', { chapter: { ...chapter, pages: JSON.stringify(pages) } })
+        await invoke<void>('dbUpdateChapter', { chapter: { ...chapter, pages: JSON.stringify(pages) } })
       }
       return pages.length > 0
     },

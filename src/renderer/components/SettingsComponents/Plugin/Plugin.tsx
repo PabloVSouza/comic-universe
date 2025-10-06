@@ -10,7 +10,7 @@ const SettingsPlugin = () => {
 
   const { data: pluginsList } = useQuery({
     queryKey: ['pluginsList'],
-    queryFn: async () => await invoke('getPluginInfoList'),
+    queryFn: async () => await invoke<IRepoPluginInfo[]>('getPluginInfoList'),
     initialData: []
   })
 

@@ -26,12 +26,12 @@ const Search: FC = () => {
   const { data: repoList } = useQuery({
     queryKey: ['repoList'],
     queryFn: async () => {
-      const repos = (await invoke('getRepoList')) as TOption[]
+      const repos = await invoke<TOption[]>('getRepoList')
       if (repos.length) {
         if (!repo.repo.value || !repos.includes(repo.repo)) setRepo(repos[0])
         setNoRepos(false)
       }
-      return repos as TOption[]
+      return repos
     },
     initialData: []
   })
@@ -44,8 +44,8 @@ const Search: FC = () => {
     queryKey: ['searchList', search, repo],
     queryFn: async () => {
       return search.length > 0
-        ? await invoke('search', { repo: repo.repo.value, data: { search } })
-        : await invoke('getList', { repo: repo.repo.value })
+        ? await invoke<IComic[]>('search', { repo: repo.repo.value, data: { search } })
+        : await invoke<IComic[]>('getList', { repo: repo.repo.value })
     },
     initialData: [],
     enabled: !!repoList.length

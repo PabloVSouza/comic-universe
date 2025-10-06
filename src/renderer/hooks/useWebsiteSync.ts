@@ -34,7 +34,10 @@ const useWebsiteSync = () => {
 
     try {
       // Get website authentication token
-      const websiteAuth = await invoke('dbGetWebsiteAuthToken', { userId: currentUser.id })
+      const websiteAuth = await invoke<{
+        token?: string
+        isExpired?: boolean
+      } | null>('dbGetWebsiteAuthToken', { userId: currentUser.id })
 
       // Check if user is authenticated
       if (!websiteAuth?.token || websiteAuth.isExpired) {
@@ -54,11 +57,11 @@ const useWebsiteSync = () => {
       }
 
       // Perform bidirectional sync
-      const result = (await invoke('dbSyncData', {
+      const result = await invoke<SyncResult>('dbSyncData', {
         direction: 'bidirectional',
         userId: currentUser.id,
         token: websiteAuth.token
-      })) as SyncResult
+      })
 
       // Invalidate queries if any entries were processed
       if (result.entriesProcessed > 0) {

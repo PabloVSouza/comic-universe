@@ -13,26 +13,26 @@ const PluginInstallSettings = () => {
 
   const { data: pluginsList } = useQuery({
     queryKey: ['pluginsList'],
-    queryFn: async () => await invoke('getPluginInfoList'),
+    queryFn: async () => await invoke<IRepoPluginInfo[]>('getPluginInfoList'),
     initialData: []
   })
 
   const { data: apiPlugins } = useQuery({
     queryKey: ['apiPlugins'],
-    queryFn: async () => (await invoke('getPluginsFromApi')) as IRepoApiPluginList[],
+    queryFn: async () => await invoke<IRepoApiPluginList[]>('getPluginsFromApi'),
     initialData: []
   })
 
   const { mutate: updatePlugins } = useMutation({
     mutationFn: async () => {
-      await invoke('refreshPluginHandlers')
+      await invoke<void>('refreshPluginHandlers')
       queryClient.invalidateQueries({ queryKey: ['pluginsList'] })
     }
   })
 
   const { mutate: downloadAndInstallPlugin, isPending: isInstalling } = useMutation({
     mutationFn: async (plugin: string) => {
-      await invoke('downloadAndInstallPlugin', plugin)
+      await invoke<void>('downloadAndInstallPlugin', plugin)
       updatePlugins()
     }
   })

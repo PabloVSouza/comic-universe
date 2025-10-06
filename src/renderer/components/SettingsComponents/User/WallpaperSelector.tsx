@@ -47,7 +47,7 @@ const WallpaperSelector = ({ currentWallpaper, onWallpaperChange }: WallpaperSel
 
   const handleFileSelect = async () => {
     try {
-      const result = await invoke('showOpenDialog', {
+      const result = await invoke<{ canceled: boolean; filePaths?: string[] }>('showOpenDialog', {
         properties: ['openFile'],
         filters: [
           {

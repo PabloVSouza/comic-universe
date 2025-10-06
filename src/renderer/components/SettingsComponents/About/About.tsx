@@ -11,12 +11,26 @@ const SettingsAbout: FC = () => {
   const { invoke } = useApi()
   const { data: appData, isLoading: appDataLoading } = useQuery({
     queryKey: ['appData'],
-    queryFn: async () => await invoke('getAppData')
+    queryFn: async () => {
+      return await invoke<{
+        version: string
+        electronVersion: string
+        chromeVersion: string
+        nodeVersion: string
+        v8Version: string
+        platform: string
+        arch: string
+        description?: string
+        author?: string
+        license?: string
+        repository?: string
+      }>('getAppData')
+    }
   })
 
   const { data: appVersion, isLoading: versionLoading } = useQuery({
     queryKey: ['appVersion'],
-    queryFn: async () => await invoke('getAppVersion')
+    queryFn: async () => await invoke<string>('getAppVersion')
   })
 
   const isLoading = appDataLoading || versionLoading

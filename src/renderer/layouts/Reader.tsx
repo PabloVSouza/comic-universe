@@ -30,7 +30,7 @@ const Reader: FC = () => {
     queryKey: ['userSettings', currentUser.id],
     queryFn: async () => {
       if (currentUser.id) {
-        return await invoke('dbGetUserSettings', { userId: currentUser.id })
+        return await invoke<IUserSettings | null>('dbGetUserSettings', { userId: currentUser.id })
       }
       return null
     },
@@ -88,10 +88,10 @@ const Reader: FC = () => {
   useQuery({
     queryKey: ['activeComicData'],
     queryFn: async () => {
-      const comicData = (await invoke('dbGetComicAdditionalData', {
+      const comicData = await invoke<IComic>('dbGetComicAdditionalData', {
         id: comicId,
         userId: currentUser.id
-      })) as IComic
+      })
       if (!activeComic.id || !activeComic.chapters) setActiveComic(comicData)
       return comicData
     },
@@ -104,9 +104,9 @@ const Reader: FC = () => {
   const pages = JSON.parse(chapter?.pages ?? '[]') as IPage[]
 
   const getReadProgress = async () => {
-    let result = await invoke('dbGetReadProgress', { chapterId, userId: currentUser.id })
+    let result = await invoke<IReadProgress[]>('dbGetReadProgress', { chapterId, userId: currentUser.id })
     if (!result.length) {
-      await invoke('dbUpdateReadProgress', {
+      await invoke<void>('dbUpdateReadProgress', {
         readProgress: {
           chapterId,
           comicId,
@@ -115,7 +115,7 @@ const Reader: FC = () => {
           totalPages: pages.length ?? 0
         }
       })
-      result = await invoke('dbGetReadProgress', { chapterId, userId: currentUser.id })
+      result = await invoke<IReadProgress[]>('dbGetReadProgress', { chapterId, userId: currentUser.id })
     }
 
     return result[0] as IReadProgress
@@ -144,7 +144,7 @@ const Reader: FC = () => {
 
   const { mutate: updateReadProgress } = useMutation({
     mutationFn: async (readProgress: IReadProgress) => {
-      await invoke('dbUpdateReadProgress', { readProgress })
+      await invoke<void>('dbUpdateReadProgress', { readProgress })
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['readProgressData'] })
   })
@@ -154,7 +154,7 @@ const Reader: FC = () => {
       if (!activeComic.id) return
       const currentSettings = activeComic.settings || {}
       const newSettings = { ...currentSettings, readingMode }
-      await invoke('dbUpdateComic', { id: activeComic.id, comic: { settings: newSettings } })
+      await invoke<void>('dbUpdateComic', { id: activeComic.id, comic: { settings: newSettings } })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comicData'] })
@@ -167,7 +167,7 @@ const Reader: FC = () => {
       if (!activeComic.id) return
       const currentSettings = activeComic.settings || {}
       const newSettings = { ...currentSettings, readingDirection }
-      await invoke('dbUpdateComic', { id: activeComic.id, comic: { settings: newSettings } })
+      await invoke<void>('dbUpdateComic', { id: activeComic.id, comic: { settings: newSettings } })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comicData'] })

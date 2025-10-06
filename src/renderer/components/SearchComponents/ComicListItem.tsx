@@ -32,7 +32,7 @@ const SearchComicListItem: FC<SearchComicListItemProps> = ({
 
   const { data: comicList, isFetching: comicListFetching } = useQuery({
     queryKey: ['comicList', currentUser.id],
-    queryFn: async () => (await invoke('dbGetAllComics', { userId: currentUser.id })) as IComic[],
+    queryFn: async () => await invoke<IComic[]>('dbGetAllComics', { userId: currentUser.id }),
     initialData: [],
     enabled: !!currentUser.id
   })
@@ -42,7 +42,7 @@ const SearchComicListItem: FC<SearchComicListItemProps> = ({
     queryFn: async () => {
       const search = { siteId: data.siteId, siteLink: data.siteLink ?? '' }
 
-      return await invoke('getDetails', {
+      return await invoke<Partial<IComic>>('getDetails', {
         repo: repo.repo.value,
         data: search
       })
@@ -53,10 +53,10 @@ const SearchComicListItem: FC<SearchComicListItemProps> = ({
   const { data: chapterData, isFetching: chapterDataFetching } = useQuery({
     queryKey: [`chapterData-${repo.repo.value}-${data.siteId}`],
     queryFn: async () =>
-      (await invoke('getChapters', {
+      await invoke<IChapter[]>('getChapters', {
         repo: repo.repo.value,
         data: { siteId: data.siteId }
-      })) as IChapter[],
+      }),
     initialData: [],
     enabled: active && !data.chapters
   })
@@ -74,7 +74,7 @@ const SearchComicListItem: FC<SearchComicListItemProps> = ({
   }
 
   const addToList = (): void => {
-    insertComic({ data, comicDetails, chapterData, repo: repo.repo.value })
+    insertComic({ data, comicDetails: comicDetails ?? {}, chapterData, repo: repo.repo.value })
     navigate('/')
   }
 

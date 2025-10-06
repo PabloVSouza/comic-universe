@@ -28,7 +28,7 @@ const Home: FC = () => {
 
   const { data: comicList } = useQuery<IComic[]>({
     queryKey: ['comicList', currentUser.id],
-    queryFn: async () => (await invoke('dbGetAllComics', { userId: currentUser.id })) as IComic[],
+    queryFn: async () => await invoke<IComic[]>('dbGetAllComics', { userId: currentUser.id }),
     initialData: [],
     enabled: !!currentUser.id
   })

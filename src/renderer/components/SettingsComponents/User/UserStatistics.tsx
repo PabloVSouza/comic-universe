@@ -12,7 +12,7 @@ const UserStatistics = () => {
     queryKey: ['userReadProgress', currentUser.id],
     queryFn: async () => {
       if (currentUser.id) {
-        return await invoke('dbGetReadProgressByUser', { userId: currentUser.id })
+        return await invoke<Array<{ page: number }>>('dbGetReadProgressByUser', { userId: currentUser.id })
       }
       return []
     },

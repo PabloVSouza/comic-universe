@@ -14,7 +14,10 @@ const useAutoWebsiteAuth = () => {
       if (!currentUser) return
 
       try {
-        const authData = await invoke('dbGetWebsiteAuthToken', { userId: currentUser.id })
+        const authData = await invoke<{
+          token?: string
+          isExpired?: boolean
+        } | null>('dbGetWebsiteAuthToken', { userId: currentUser.id })
 
         if (authData && authData.token && !authData.isExpired) {
           // User is authenticated and token is valid

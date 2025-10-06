@@ -45,7 +45,10 @@ const WebsiteAuth = () => {
     queryKey: ['websiteAuth', currentUser.id],
     queryFn: async () => {
       if (currentUser.id) {
-        return await invoke('dbGetWebsiteAuthToken', { userId: currentUser.id })
+        return await invoke<{ token?: string; isExpired?: boolean } | null>(
+          'dbGetWebsiteAuthToken',
+          { userId: currentUser.id }
+        )
       }
       return null
     },
@@ -58,19 +61,19 @@ const WebsiteAuth = () => {
     mutationFn: async () => {
       if (!currentUser.id) throw new Error('No user selected')
 
-      await invoke('dbClearWebsiteAuthToken', { userId: currentUser.id })
+      await invoke<void>('dbClearWebsiteAuthToken', { userId: currentUser.id })
 
       // Also update user settings to reflect disconnection
-      const currentSettings = await invoke('dbGetUserSettings', { userId: currentUser.id })
+      const currentSettings = await invoke<IUserSettings | null>('dbGetUserSettings', { userId: currentUser.id })
       const updatedSettings = {
         ...currentSettings,
         websiteAuth: {
-          ...currentSettings.websiteAuth,
+          ...(currentSettings?.websiteAuth || {}),
           isConnected: false,
           lastConnectedAt: undefined
         }
       }
-      await invoke('dbUpdateUserSettings', { userId: currentUser.id, settings: updatedSettings })
+      await invoke<void>('dbUpdateUserSettings', { userId: currentUser.id, settings: updatedSettings })
     },
     onSuccess: () => {
       // Refresh website auth status

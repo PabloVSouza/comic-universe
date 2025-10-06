@@ -1,9 +1,18 @@
-import { useApi } from 'hooks'
+import IpcImplementation from 'hooks/api/IpcImplementation'
+import RestImplementation from 'hooks/api/RestImplementation'
 import { deepMerge } from 'shared/utils'
 import { StateStorage } from 'zustand/middleware'
 import { DEFAULT_SETTINGS } from 'constants/defaultSettings'
 
-const api = useApi()
+// Get API implementation without using the hook
+const getApi = () => {
+  if (typeof window !== 'undefined' && window.Electron) {
+    return IpcImplementation
+  }
+  return RestImplementation
+}
+
+const api = getApi()
 
 let cachedSettings: string | null = null
 
@@ -13,7 +22,13 @@ const loadSettingsOnce = async (): Promise<string> => {
   }
 
   try {
-    const allSettings = await api.invoke('getAllSettings', undefined)
+    const allSettings = await api.invoke<{
+      theme?: string
+      repo?: string
+      language?: string
+      debug?: boolean
+      webUI?: unknown
+    }>('getAllSettings', undefined)
 
     const sourceSettings = {
       theme: allSettings.theme || DEFAULT_SETTINGS.theme,
@@ -21,7 +36,7 @@ const loadSettingsOnce = async (): Promise<string> => {
       language: allSettings.language || DEFAULT_SETTINGS.language,
       debug: allSettings.debug || DEFAULT_SETTINGS.debug,
       webUI: allSettings.webUI || DEFAULT_SETTINGS.webUI
-    }
+    } as Partial<typeof DEFAULT_SETTINGS>
 
     const state = deepMerge(DEFAULT_SETTINGS, sourceSettings)
 
@@ -53,7 +68,7 @@ export const createSettingsStorage = (): StateStorage => {
 
         const settingsToUpdate: Record<string, unknown> = actualState
 
-        await api.invoke('updateAllSettings', settingsToUpdate)
+        await api.invoke<void>('updateAllSettings', settingsToUpdate)
 
         cachedSettings = null
       } catch (error) {

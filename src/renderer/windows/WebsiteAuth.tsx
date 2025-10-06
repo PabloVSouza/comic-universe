@@ -96,8 +96,6 @@ const WebsiteAuth: FC = () => {
           deviceName: deviceName || 'Unknown Device'
         })
 
-        console.log('Auth result:', authResult)
-
         return {
           success: true,
           token: data.token,

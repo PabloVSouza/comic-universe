@@ -6,7 +6,7 @@
  */
 
 import DebugLogger from 'electron-utils/DebugLogger'
-import { generateChangelogDiff, validateEntityData } from 'electron-utils/sync/changelogDiff'
+import { generateChangelogDiff, validateEntityData } from 'electron-utils/ChangelogDiff'
 import { IDatabaseRepository } from '../repositories/database/interfaces/IDatabaseRepository'
 
 export interface SyncServiceConfig {

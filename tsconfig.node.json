@@ -4,7 +4,6 @@
     "src/electron/**/*",
     "src/database/**/*",
     "src/shared/**/*",
-    "src/utils/**/*",
     "electron.vite.config.*",
     "src/@types/*.d.ts",
     "src/**/*.d.ts"
@@ -24,9 +23,7 @@
       "windows/*":["./src/electron/windows/*"],
       "database/*": ["./src/database/*"],
       "constants/*": ["./src/electron/constants/*"],
-      "shared/*": ["./src/shared/*"],
-      "shared-utils": ["./src/utils/index"],
-      "shared-utils/*": ["./src/utils/*"]
+      "shared/*": ["./src/shared/*"]
     }
   }
 }

@@ -1,7 +1,9 @@
 import useApi from 'api'
-import { deepMerge } from 'shared-utils'
+import { deepMerge } from 'shared/utils'
 import { StateStorage } from 'zustand/middleware'
 import { DEFAULT_SETTINGS } from 'constants/defaultSettings'
+
+const api = useApi()
 
 let cachedSettings: string | null = null
 
@@ -11,9 +13,7 @@ const loadSettingsOnce = async (): Promise<string> => {
   }
 
   try {
-    const { invoke } = useApi()
-
-    const allSettings = await invoke('getAllSettings')
+    const allSettings = await api.invoke('getAllSettings', undefined)
 
     const sourceSettings = {
       theme: allSettings.theme || DEFAULT_SETTINGS.theme,
@@ -47,14 +47,13 @@ export const createSettingsStorage = (): StateStorage => {
 
     setItem: async (_name: string, value: string): Promise<void> => {
       try {
-        const { invoke } = useApi()
         const state = JSON.parse(value)
 
         const actualState = state.state || state
 
-        const settingsToUpdate: any = actualState
+        const settingsToUpdate: Record<string, unknown> = actualState
 
-        await invoke('updateAllSettings', settingsToUpdate)
+        await api.invoke('updateAllSettings', settingsToUpdate)
 
         cachedSettings = null
       } catch (error) {

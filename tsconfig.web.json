@@ -27,8 +27,6 @@
       "constants/*": ["./constants/*"],
       "@types/*": ["./@types/*"],
       "shared/*": ["../shared/*"],
-      "shared-utils": ["../../src/utils/index"],
-      "shared-utils/*": ["../../src/utils/*"],
       "electron-utils": ["../../src/electron/utils/index"],
       "electron-utils/*": ["../../src/electron/utils/*"],
       "renderer-utils": ["./utils/index"],

@@ -1,5 +1,6 @@
 import { app } from 'electron'
 import { DataPaths } from 'electron-utils'
+import { getApiBaseUrl } from 'shared/constants'
 import { SyncService } from '../../services/SyncService'
 import { initializeDatabase, IDatabaseRepository } from '../database'
 
@@ -20,7 +21,7 @@ class DBRepository implements IDBRepository {
     // Initialize sync service
     // Use localhost in development, production URL otherwise
     const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
-    const apiBaseUrl = isDev ? 'http://localhost:3000' : 'https://comicuniverse.app'
+    const apiBaseUrl = getApiBaseUrl(isDev)
     this.syncService = new SyncService(this.repository, {
       apiBaseUrl,
       syncInterval: 0 // Manual sync only for now

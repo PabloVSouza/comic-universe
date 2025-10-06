@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
+import { getApiBaseUrl } from 'shared/constants'
 import Button from 'components/Button'
 import Input from 'components/Input'
 import SettingsBox from 'components/SettingsComponents/SettingsBox'
@@ -21,8 +22,7 @@ const WebsiteAuth: FC = () => {
   const [deviceName, setDeviceName] = useState('')
 
   // Use localhost in development, production URL otherwise
-  const websiteUrl =
-    process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://comicuniverse.app'
+  const websiteUrl = getApiBaseUrl(process.env.NODE_ENV === 'development')
 
   // Automatically generate device name
   useEffect(() => {
@@ -117,8 +117,6 @@ const WebsiteAuth: FC = () => {
 
         // Remove all queries for the old user ID to prevent refetch errors
         queryClient.removeQueries()
-
-        console.log('User ID changed from', currentUser.id, 'to', data.newUserId)
       } else {
         // Just invalidate queries for the current user to refresh data
         queryClient.invalidateQueries()

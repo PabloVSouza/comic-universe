@@ -13,6 +13,7 @@ import { eq, and, isNull, asc, inArray } from 'drizzle-orm'
 import { drizzle, type BetterSQLite3Database } from 'drizzle-orm/better-sqlite3'
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
 import DebugLogger from 'electron-utils/DebugLogger'
+import { API_URLS } from 'shared/constants'
 import { IDatabaseRepository } from '../interfaces/IDatabaseRepository'
 
 export class DrizzleDatabaseRepository implements IDatabaseRepository {
@@ -627,7 +628,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   private async getWebsiteUserIdFromToken(token: string): Promise<string | null> {
     try {
       const response = await fetch(
-        `${process.env.WEBSITE_URL || 'http://localhost:3000'}/api/auth/verify-app-token`,
+        `${process.env.WEBSITE_URL || API_URLS.DEV}/api/auth/verify-app-token`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

@@ -219,7 +219,12 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async updateComic(id: string, comic: Partial<IComic>): Promise<IComic | undefined> {
     const db = this.getDb()
-    const result = await db.update(comics).set(comic).where(eq(comics.id, id)).returning()
+
+    // Filter out fields that don't exist in SQLite schema (addedAt, updatedAt are PostgreSQL only)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { chapters, addedAt, updatedAt, ...comicData } = comic as any
+
+    const result = await db.update(comics).set(comicData).where(eq(comics.id, id)).returning()
 
     const updatedComic = result[0]
       ? ({
@@ -337,21 +342,39 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async createChapter(chapter: IChapter): Promise<IChapter> {
     const db = this.getDb()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, Comic, ReadProgress, ...chapterData } = chapter
-    if (!chapterData.comicId) {
+
+    if (!chapter.comicId) {
       throw new Error('comicId is required for chapter creation')
     }
 
-    const result = await db
-      .insert(chapters)
-      .values(chapterData as NewChapter)
-      .returning()
+    // EXPLICITLY only include SQLite schema fields - no destructuring, no spreading
+    const cleanChapterData: any = {
+      comicId: chapter.comicId,
+      siteId: chapter.siteId,
+      repo: chapter.repo,
+      number: chapter.number,
+      offline: chapter.offline || false
+    }
+
+    // Add optional ID if provided (for sync)
+    if (chapter.id) {
+      cleanChapterData.id = chapter.id
+    }
+
+    // Add other optional fields
+    if (chapter.siteLink) cleanChapterData.siteLink = chapter.siteLink
+    if (chapter.releaseId) cleanChapterData.releaseId = chapter.releaseId
+    if (chapter.name) cleanChapterData.name = chapter.name
+    if (chapter.pages) cleanChapterData.pages = chapter.pages
+    if (chapter.date) cleanChapterData.date = chapter.date
+    if (chapter.language) cleanChapterData.language = chapter.language
+
+    const result = await db.insert(chapters).values(cleanChapterData).returning()
 
     const newChapter = result[0] as IChapter
 
     // Get userId from comic for changelog
-    const comic = await this.getComicById(chapterData.comicId)
+    const comic = await this.getComicById(chapter.comicId)
 
     // Log chapter creation in changelog (only if we have valid data)
     if (comic?.userId && newChapter.id) {
@@ -371,14 +394,30 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     const db = this.getDb()
     for (const chapter of chapterList) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { id, Comic, ReadProgress, ...chapterData } = chapter
+      const { Comic, ReadProgress, createdAt, ...chapterData } = chapter as any
       if (!chapterData.comicId) {
         throw new Error('comicId is required for chapter creation')
       }
 
+      // Only include fields that exist in the SQLite schema
+      const cleanChapterData = {
+        ...(chapterData.id && { id: chapterData.id }),
+        comicId: chapterData.comicId,
+        siteId: chapterData.siteId,
+        siteLink: chapterData.siteLink || null,
+        releaseId: chapterData.releaseId || null,
+        repo: chapterData.repo,
+        name: chapterData.name || null,
+        number: chapterData.number,
+        pages: chapterData.pages || null,
+        date: chapterData.date || null,
+        offline: chapterData.offline || false,
+        language: chapterData.language || null
+      }
+
       const result = await db
         .insert(chapters)
-        .values(chapterData as NewChapter)
+        .values(cleanChapterData as NewChapter)
         .returning()
       const newChapter = result[0]
 
@@ -400,7 +439,28 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
   async updateChapter(id: string, chapter: Partial<IChapter>): Promise<IChapter | undefined> {
     const db = this.getDb()
-    const result = await db.update(chapters).set(chapter).where(eq(chapters.id, id)).returning()
+
+    // EXPLICITLY only include SQLite schema fields
+    const cleanChapterData: any = {}
+
+    // Only add fields that exist in SQLite schema and are provided
+    if (chapter.comicId !== undefined) cleanChapterData.comicId = chapter.comicId
+    if (chapter.siteId !== undefined) cleanChapterData.siteId = chapter.siteId
+    if (chapter.siteLink !== undefined) cleanChapterData.siteLink = chapter.siteLink
+    if (chapter.releaseId !== undefined) cleanChapterData.releaseId = chapter.releaseId
+    if (chapter.repo !== undefined) cleanChapterData.repo = chapter.repo
+    if (chapter.name !== undefined) cleanChapterData.name = chapter.name
+    if (chapter.number !== undefined) cleanChapterData.number = chapter.number
+    if (chapter.pages !== undefined) cleanChapterData.pages = chapter.pages
+    if (chapter.date !== undefined) cleanChapterData.date = chapter.date
+    if (chapter.offline !== undefined) cleanChapterData.offline = chapter.offline
+    if (chapter.language !== undefined) cleanChapterData.language = chapter.language
+
+    const result = await db
+      .update(chapters)
+      .set(cleanChapterData)
+      .where(eq(chapters.id, id))
+      .returning()
 
     const updatedChapter = result[0]
 
@@ -536,16 +596,87 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     token: string,
     expiresAt: string,
     deviceName: string
-  ): Promise<void> {
+  ): Promise<{ userId: string; userIdChanged: boolean }> {
     const db = this.getDb()
+
+    // First, get the website user ID from the token
+    const websiteUserId = await this.getWebsiteUserIdFromToken(token)
+
+    let userIdChanged = false
+    if (websiteUserId && websiteUserId !== userId) {
+      // Update user ID across all related tables
+      await this.updateUserIdRecursively(userId, websiteUserId)
+      userIdChanged = true
+    }
+
+    // Update the auth token (user ID may have changed)
+    const finalUserId = websiteUserId || userId
     await db
       .update(users)
       .set({
         websiteAuthToken: token,
         websiteAuthExpiresAt: expiresAt,
-        websiteAuthDeviceName: deviceName
+        websiteAuthDeviceName: deviceName,
+        websiteUserId: websiteUserId
       })
-      .where(eq(users.id, userId))
+      .where(eq(users.id, finalUserId))
+
+    return { userId: finalUserId, userIdChanged }
+  }
+
+  private async getWebsiteUserIdFromToken(token: string): Promise<string | null> {
+    try {
+      const response = await fetch(
+        `${process.env.WEBSITE_URL || 'http://localhost:3000'}/api/auth/verify-app-token`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token })
+        }
+      )
+
+      if (!response.ok) return null
+
+      const data = await response.json()
+      return data.user?.id || null
+    } catch (error) {
+      console.error('Failed to get website user ID:', error)
+      return null
+    }
+  }
+
+  private async updateUserIdRecursively(oldUserId: string, newUserId: string): Promise<void> {
+    const db = this.getDb()
+
+    // Update comics
+    await db.update(comics).set({ userId: newUserId }).where(eq(comics.userId, oldUserId))
+
+    // Update read progress
+    await db
+      .update(readProgress)
+      .set({ userId: newUserId })
+      .where(eq(readProgress.userId, oldUserId))
+
+    // Update changelog entries
+    await db.update(changelog).set({ userId: newUserId }).where(eq(changelog.userId, oldUserId))
+
+    // Finally, update the user record itself
+    // Get the old user data first
+    const oldUser = await db.select().from(users).where(eq(users.id, oldUserId)).limit(1)
+
+    if (oldUser.length > 0) {
+      // Create new user with website user ID
+      await db
+        .insert(users)
+        .values({
+          ...oldUser[0],
+          id: newUserId
+        })
+        .onConflictDoNothing()
+
+      // Delete old user
+      await db.delete(users).where(eq(users.id, oldUserId))
+    }
   }
 
   async getWebsiteAuthToken(userId: string): Promise<{

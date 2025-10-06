@@ -89,14 +89,21 @@ const WebsiteAuth: FC = () => {
         const data = await response.json()
 
         // Store the token in the app database
-        await invoke('dbSetWebsiteAuthToken', {
+        const authResult = await invoke('dbSetWebsiteAuthToken', {
           userId: currentUser.id,
           token: data.token,
           expiresAt: data.expiresAt, // This is already an ISO string from the API
           deviceName: deviceName || 'Unknown Device'
         })
 
-        return { success: true, token: data.token }
+        console.log('Auth result:', authResult)
+
+        return {
+          success: true,
+          token: data.token,
+          newUserId: authResult?.userId || currentUser.id,
+          userIdChanged: authResult?.userIdChanged || false
+        }
       } catch (error) {
         console.error('Failed to connect to website:', error)
         throw error
@@ -104,7 +111,21 @@ const WebsiteAuth: FC = () => {
         setIsConnecting(false)
       }
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // If user ID changed, update the session store
+      if (data.userIdChanged && data.newUserId) {
+        const { setCurrentUser } = usePersistSessionStore.getState()
+        setCurrentUser({ ...currentUser, id: data.newUserId })
+
+        // Remove all queries for the old user ID to prevent refetch errors
+        queryClient.removeQueries()
+
+        console.log('User ID changed from', currentUser.id, 'to', data.newUserId)
+      } else {
+        // Just invalidate queries for the current user to refresh data
+        queryClient.invalidateQueries()
+      }
+
       // Close the window and refresh data
       const currentWindows = useWindowManagerStore.getState().currentWindows
       const websiteAuthWindow = currentWindows.find(
@@ -113,9 +134,6 @@ const WebsiteAuth: FC = () => {
       if (websiteAuthWindow) {
         removeWindow(websiteAuthWindow.id)
       }
-
-      queryClient.invalidateQueries({ queryKey: ['websiteAuth', currentUser.id] })
-      queryClient.invalidateQueries({ queryKey: ['userSettings', currentUser.id] })
     },
     onError: (error) => {
       console.error('Failed to connect to website:', error)

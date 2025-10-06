@@ -323,7 +323,10 @@ export class SyncService {
 
       // Apply server entries locally
       if (data.serverEntries && data.serverEntries.length > 0) {
-        for (const entry of data.serverEntries) {
+        // Sort entries by dependency order: comics -> chapters -> readProgress
+        const sortedEntries = this.sortEntriesByDependency(data.serverEntries)
+
+        for (const entry of sortedEntries) {
           try {
             await this.applyChangelogEntry(entry, userId)
             entriesProcessed++
@@ -420,7 +423,22 @@ export class SyncService {
         )
         conflicts.push(...detectedConflicts)
 
-        for (const entry of data.serverEntries) {
+        // Sort entries by dependency order: comics -> chapters -> readProgress
+        const sortedEntries = this.sortEntriesByDependency(data.serverEntries)
+
+        // Log the sorted order for debugging
+        DebugLogger.info('Sorted entries order:')
+        sortedEntries.forEach((entry, index) => {
+          const entityId =
+            entry.entityType === 'comic'
+              ? (entry.data as IComic)?.id
+              : entry.entityType === 'chapter'
+                ? `${(entry.data as IChapter)?.id} (comicId: ${(entry.data as IChapter)?.comicId})`
+                : entry.entityId
+          DebugLogger.info(`  ${index + 1}. ${entry.entityType} ${entry.action}: ${entityId}`)
+        })
+
+        for (const entry of sortedEntries) {
           try {
             DebugLogger.info(
               `Applying ${entry.entityType} ${entry.action} for entity ${entry.entityId}`
@@ -430,8 +448,17 @@ export class SyncService {
             DebugLogger.info(`Successfully applied ${entry.entityType} ${entry.entityId}`)
           } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+            const errorStack = error instanceof Error ? error.stack : ''
+            console.error(`❌ Failed to apply ${entry.entityType} ${entry.action}:`, error)
+            console.error('Full error:', errorMessage)
+            console.error('Stack:', errorStack)
             DebugLogger.error(`Failed to apply ${entry.entityType} ${entry.action}:`, errorMessage)
-            errors.push(`Failed to apply ${entry.entityType} ${entry.action}: ${errorMessage}`)
+            errors.push(`Failed to process ${entry.entityType} change: ${errorMessage}`)
+
+            // If it's a chapter error, log the chapter data
+            if (entry.entityType === 'chapter') {
+              console.error('Chapter data:', JSON.stringify(entry.data, null, 2))
+            }
           }
         }
       } else {
@@ -469,6 +496,33 @@ export class SyncService {
   }
 
   /**
+   * Sort changelog entries by dependency order
+   * Comics must be created before chapters, chapters before read progress
+   */
+  private sortEntriesByDependency(entries: IChangelogEntry[]): IChangelogEntry[] {
+    const priority: Record<string, number> = {
+      comic: 1,
+      chapter: 2,
+      readProgress: 3,
+      sync: 4
+    }
+
+    return [...entries].sort((a, b) => {
+      const priorityA = priority[a.entityType] || 999
+      const priorityB = priority[b.entityType] || 999
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB
+      }
+
+      // Within same entity type, sort by createdAt timestamp
+      const timeA = new Date(a.createdAt || 0).getTime()
+      const timeB = new Date(b.createdAt || 0).getTime()
+      return timeA - timeB
+    })
+  }
+
+  /**
    * Apply a changelog entry to the local database
    */
   private async applyChangelogEntry(entry: IChangelogEntry, userId: string): Promise<void> {
@@ -485,7 +539,7 @@ export class SyncService {
 
     switch (entry.entityType) {
       case 'comic':
-        await this.applyComicChange(entry, userId)
+        await this.applyComicChange(entry)
         break
       case 'chapter':
         await this.applyChapterChange(entry)
@@ -506,23 +560,37 @@ export class SyncService {
   /**
    * Apply comic changes
    */
-  private async applyComicChange(entry: IChangelogEntry, userId: string): Promise<void> {
+  private async applyComicChange(entry: IChangelogEntry): Promise<void> {
     const comic = entry.data as IComic
+
     DebugLogger.info(`Applying comic change: ${entry.action} for comic ${comic.name || comic.id}`)
+    DebugLogger.info(`Comic ID: ${comic.id}, userId: ${comic.userId}`)
 
     switch (entry.action) {
       case 'created':
       case 'updated': {
         if (!comic.id) throw new Error('Comic ID is required')
+        if (!comic.userId) throw new Error('Comic userId is required')
+
         const existing = await this.db.getComicById(comic.id)
         if (existing) {
           DebugLogger.info(`Updating existing comic: ${comic.id}`)
-          await this.db.updateComic(comic.id, comic)
+          // Remove chapters from comic data before updating - they're synced separately
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { chapters, ...comicWithoutChapters } = comic
+          await this.db.updateComic(comic.id, comicWithoutChapters)
         } else {
-          DebugLogger.info(`Creating new comic: ${comic.id} with userId: ${userId}`)
-          // Create comic without chapters (they'll be synced separately)
-          await this.db.createComic({ ...comic, userId }, [], comic.repo, userId)
-          DebugLogger.info(`Successfully created comic: ${comic.id}`)
+          DebugLogger.info(`Creating new comic: ${comic.id} with userId: ${comic.userId}`)
+          // Use the comic's userId directly - it matches the local user after auth
+          await this.db.createComic(comic, [], comic.repo, comic.userId)
+
+          // Verify the comic was created
+          const created = await this.db.getComicById(comic.id)
+          if (created) {
+            DebugLogger.info(`✓ Successfully created comic: ${comic.id}`)
+          } else {
+            throw new Error(`Failed to create comic ${comic.id} - verification failed`)
+          }
         }
         break
       }
@@ -539,15 +607,35 @@ export class SyncService {
   private async applyChapterChange(entry: IChangelogEntry): Promise<void> {
     const chapter = entry.data as IChapter
 
+    DebugLogger.info(`Applying chapter change: ${entry.action} for chapter ${chapter.id}`)
+    DebugLogger.info(`Chapter comicId: ${chapter.comicId}, type: ${typeof chapter.comicId}`)
+
     switch (entry.action) {
       case 'created':
       case 'updated': {
         if (!chapter.id) throw new Error('Chapter ID is required')
+        if (!chapter.comicId) throw new Error('Chapter comicId is required')
+
+        // Verify the parent comic exists
+        const comic = await this.db.getComicById(chapter.comicId)
+
+        if (!comic) {
+          DebugLogger.error(`Comic ${chapter.comicId} not found for chapter ${chapter.id}`)
+          throw new Error(
+            `Cannot create chapter ${chapter.id}: parent comic ${chapter.comicId} does not exist`
+          )
+        }
+
+        DebugLogger.info(`✓ Found parent comic: ${comic.id} "${comic.name}"`)
+
         const existing = await this.db.getChapterById(chapter.id)
         if (existing) {
+          DebugLogger.info(`Updating existing chapter: ${chapter.id}`)
           await this.db.updateChapter(chapter.id, chapter)
         } else {
+          DebugLogger.info(`Creating new chapter: ${chapter.id} for comic: ${chapter.comicId}`)
           await this.db.createChapter(chapter)
+          DebugLogger.info(`✓ Successfully created chapter: ${chapter.id}`)
         }
         break
       }

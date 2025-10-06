@@ -63,7 +63,7 @@ export interface IDatabaseRepository {
     token: string,
     expiresAt: string,
     deviceName: string
-  ): Promise<void>
+  ): Promise<{ userId: string; userIdChanged: boolean }>
   getWebsiteAuthToken(userId: string): Promise<{
     token: string | null
     expiresAt: string | null

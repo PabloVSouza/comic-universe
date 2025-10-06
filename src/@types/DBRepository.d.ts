@@ -43,7 +43,7 @@ type IDBMethods = {
     token: string
     expiresAt: string
     deviceName: string
-  }) => Promise<void>
+  }) => Promise<{ userId: string; userIdChanged: boolean }>
   dbGetWebsiteAuthToken: (input: { userId: string }) => Promise<{
     token: string | null
     expiresAt: string | null

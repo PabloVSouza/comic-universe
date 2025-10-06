@@ -1,3 +1,4 @@
+import { app } from 'electron'
 import { DataPaths } from 'electron-utils/utils'
 import { SyncService } from '../../services/SyncService'
 import { initializeDatabase, IDatabaseRepository } from '../database'
@@ -17,8 +18,9 @@ class DBRepository implements IDBRepository {
     this.repository = await initializeDatabase(dbPath)
 
     // Initialize sync service
-    // TODO: Get API base URL from settings
-    const apiBaseUrl = process.env.API_BASE_URL || 'https://comicuniverse.app'
+    // Use localhost in development, production URL otherwise
+    const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
+    const apiBaseUrl = isDev ? 'http://localhost:3000' : 'https://comicuniverse.app'
     this.syncService = new SyncService(this.repository, {
       apiBaseUrl,
       syncInterval: 0 // Manual sync only for now
@@ -212,11 +214,13 @@ class DBRepository implements IDBRepository {
     },
 
     // Website Authentication
-    dbSetWebsiteAuthToken: async ({ userId, token, expiresAt, deviceName }): Promise<void> => {
-      await this.repository.setWebsiteAuthToken(userId, token, expiresAt, deviceName)
-      return new Promise((resolve) => {
-        resolve()
-      })
+    dbSetWebsiteAuthToken: async ({
+      userId,
+      token,
+      expiresAt,
+      deviceName
+    }): Promise<{ userId: string; userIdChanged: boolean }> => {
+      return await this.repository.setWebsiteAuthToken(userId, token, expiresAt, deviceName)
     },
 
     dbGetWebsiteAuthToken: async ({

@@ -8,7 +8,7 @@ import {
   ComicUniverseApi,
   DownloadFile,
   DataPaths
-} from 'electron-utils/utils'
+} from 'electron-utils'
 import { extract } from 'pacote'
 
 class PluginsRepository {

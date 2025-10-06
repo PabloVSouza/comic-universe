@@ -1,4 +1,4 @@
-export function deepMerge<T>(target: T, source: Partial<T>): T {
+export default function deepMerge<T>(target: T, source: Partial<T>): T {
   const result = { ...target } as T
 
   for (const key in source) {
@@ -14,10 +14,8 @@ export function deepMerge<T>(target: T, source: Partial<T>): T {
         typeof targetValue === 'object' &&
         !Array.isArray(targetValue)
       ) {
-        // Recursively merge nested objects
         ;(result as Record<string, unknown>)[key] = deepMerge(targetValue, sourceValue)
       } else {
-        // Override with source value
         ;(result as Record<string, unknown>)[key] = sourceValue
       }
     }

@@ -1,5 +1,5 @@
 import { app } from 'electron'
-import { DataPaths } from 'electron-utils/utils'
+import { DataPaths } from 'electron-utils'
 import { SyncService } from '../../services/SyncService'
 import { initializeDatabase, IDatabaseRepository } from '../database'
 

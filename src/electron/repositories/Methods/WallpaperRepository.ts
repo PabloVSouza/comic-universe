@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readdirSync, copyFileSync, unlinkSync, statSync } from 'fs'
 import path from 'path'
-import { DataPaths } from 'electron-utils/utils'
+import { DataPaths } from 'electron-utils'
 
 interface WallpaperInfo {
   filename: string

@@ -1,6 +1,6 @@
 import { useGlobalStore, usePersistSessionStore } from 'store'
 import { create } from 'zustand'
-import { confirmAlert } from 'components/ui'
+import { confirmAlert } from 'components/UiComponents'
 
 interface useDownloadStore {
   queue: IChapter[]

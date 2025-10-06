@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { logoIcon } from 'assets'
 import classNames from 'classnames'
 import { useGlobalStore, usePersistSessionStore } from 'store'
-import { Button, Image } from 'components/ui'
+import { Button, Image } from 'components/UiComponents'
 
 const TopBar: FC = () => {
   const { toggleMenu, menuVisible } = useGlobalStore((state) => state)

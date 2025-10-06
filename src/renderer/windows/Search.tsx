@@ -6,7 +6,7 @@ import { useApi } from 'hooks'
 import debounce from 'lodash.debounce'
 import { usePersistStore } from 'store'
 import { ComicList } from 'components/SearchComponents'
-import { Image, LoadingOverlay as Loading, Pagination, Select } from 'components/ui'
+import { Image, LoadingOverlay as Loading, Pagination, Select } from 'components/UiComponents'
 
 type TOption = {
   value: string

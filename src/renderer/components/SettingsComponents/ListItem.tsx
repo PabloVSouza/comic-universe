@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Image } from 'components/ui'
+import { Image } from 'components/UiComponents'
 
 const SettingsListItem = ({ option, active }: { option: ISettingsOption; active?: boolean }) => {
   return (

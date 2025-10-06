@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { useGlobalStore } from 'store'
-import { LoadingOverlay } from 'components/ui'
+import { LoadingOverlay } from 'components/UiComponents'
 import DashboardListItem from './DashboardListItem'
 
 const DashboardList: FC<{

@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { FixFilePaths } from 'functions'
 import ReactHtmlParser from 'html-react-parser'
 import { useGlobalStore } from 'store'
-import { Image } from 'components/ui'
+import { Image } from 'components/UiComponents'
 
 const ComicListItem: FC<{ item: IComic } & Partial<React.LiHTMLAttributes<HTMLLIElement>>> = ({
   item,

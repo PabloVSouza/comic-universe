@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useApi } from 'hooks'
-import { Button } from 'components/ui'
+import { Button } from 'components/UiComponents'
 import Item from '../Item'
 
 interface UpdateSettings {

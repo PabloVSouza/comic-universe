@@ -7,7 +7,7 @@ import classNames from 'classnames'
 import { useApi, useFetchData } from 'hooks'
 import ReactHtmlParser from 'html-react-parser'
 import { usePersistSessionStore, usePersistStore } from 'store'
-import { Button, Image, LoadingOverlay } from 'components/ui'
+import { Button, Image, LoadingOverlay } from 'components/UiComponents'
 
 interface SearchComicListItemProps extends LiHTMLAttributes<unknown> {
   data: IComic

@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { confirmIcon, cancelIcon, pencilIcon } from 'assets'
 import { useApi } from 'hooks'
 import { usePersistSessionStore } from 'store'
-import { Button, DisplayValue, Input } from 'components/ui'
+import { Button, DisplayValue, Input } from 'components/UiComponents'
 import Item from '../Item'
 import WebsiteAuth from './WebsiteAuth'
 

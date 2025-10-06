@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { updateWindowTitles } from 'functions'
 import { useUserSettings } from 'hooks'
 import { usePersistStore } from 'store'
-import { Select } from 'components/ui'
+import { Select } from 'components/UiComponents'
 import Item from '../Item'
 
 const LanguageSettings = () => {

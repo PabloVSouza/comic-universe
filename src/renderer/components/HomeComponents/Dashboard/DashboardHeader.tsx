@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { FixFilePaths } from 'functions'
 import HtmlParser from 'html-react-parser'
-import { Image } from 'components/ui'
+import { Image } from 'components/UiComponents'
 
 type DashboardHeaderProps = {
   comic: IComic

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useApi } from 'hooks'
-import { LoadingOverlay } from 'components/ui'
+import { LoadingOverlay } from 'components/UiComponents'
 import Box from '../Box'
 import Title from '../Title'
 import UserDataManagement from './UserDataManagement'

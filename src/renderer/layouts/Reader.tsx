@@ -6,7 +6,7 @@ import { FixFilePaths } from 'functions'
 import { useApi } from 'hooks'
 import { useGlobalStore, usePersistSessionStore } from 'store'
 import { BottomBar, ZoomWindow, type MousePosition } from 'components/ReaderComponents'
-import { Cover, Image } from 'components/ui'
+import { Cover, Image } from 'components/UiComponents'
 
 const Reader: FC = () => {
   const navigate = useNavigate()

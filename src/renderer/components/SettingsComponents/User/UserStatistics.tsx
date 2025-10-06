@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useApi } from 'hooks'
 import { usePersistSessionStore } from 'store'
-import { DisplayValue } from 'components/ui'
+import { DisplayValue } from 'components/UiComponents'
 import Item from '../Item'
 
 const UserStatistics = () => {

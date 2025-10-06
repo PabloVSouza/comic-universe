@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { FixFilePaths } from 'functions'
-import { Image } from 'components/ui'
+import { Image } from 'components/UiComponents'
 
 const SettingsPluginListItem = ({ plugin }: { plugin: IRepoPluginInfo }) => {
   const { t } = useTranslation()

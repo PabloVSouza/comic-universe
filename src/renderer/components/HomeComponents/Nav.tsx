@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import { openWindow } from 'functions'
 import { useApi, useEnvironment } from 'hooks'
 import { useGlobalStore, usePersistSessionStore } from 'store'
-import { Cover, Image } from 'components/ui'
+import { Cover, Image } from 'components/UiComponents'
 
 const Nav: FC = () => {
   const { invoke } = useApi()

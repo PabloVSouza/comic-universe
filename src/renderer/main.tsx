@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom/client'
 import Routes from 'routes'
 import 'css/main.css'
 import { usePersistStore } from 'store'
-import { AlertProvider, UpdateNotification, WallpaperRenderer } from 'components/ui'
+import { AlertProvider, UpdateNotification, WallpaperRenderer } from 'components/UiComponents'
 
 interface Props {
   children: ReactNode

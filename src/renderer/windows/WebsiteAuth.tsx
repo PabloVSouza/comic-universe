@@ -6,7 +6,7 @@ import { useApi } from 'hooks'
 import { getApiBaseUrl } from 'shared/constants'
 import { usePersistSessionStore, useWindowManagerStore } from 'store'
 import { Box, Title } from 'components/SettingsComponents'
-import { Button, Input } from 'components/ui'
+import { Button, Input } from 'components/UiComponents'
 
 const WebsiteAuth: FC = () => {
   const { t } = useTranslation()

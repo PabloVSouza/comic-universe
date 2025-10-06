@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useApi } from 'hooks'
 import { usePersistStore } from 'store'
-import { Button } from 'components/ui'
+import { Button } from 'components/UiComponents'
 import Item from '../Item'
 
 const WebUISettings = () => {

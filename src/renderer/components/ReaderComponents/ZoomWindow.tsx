@@ -1,6 +1,6 @@
 import { FC, useState, useRef } from 'react'
 import classNames from 'classnames'
-import { Image } from 'components/ui'
+import { Image } from 'components/UiComponents'
 
 export interface MousePosition {
   x: number

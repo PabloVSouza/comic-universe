@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { downloadIcon2, comicBookIcon } from 'assets'
 import { useFetchData } from 'hooks'
 import { usePersistSessionStore } from 'store'
-import { confirmAlert, Button, ProgressBar } from 'components/ui'
+import { confirmAlert, Button, ProgressBar } from 'components/UiComponents'
 
 const DashboardNav: FC<{
   comic: IComic

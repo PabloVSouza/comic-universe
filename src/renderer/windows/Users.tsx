@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { confirmIcon, cancelIcon } from 'assets'
 import { useApi } from 'hooks'
-import { Button, LoadingOverlay } from 'components/ui'
+import { Button, LoadingOverlay } from 'components/UiComponents'
 import { List } from 'components/UsersComponents'
 
 const Users: FC = () => {

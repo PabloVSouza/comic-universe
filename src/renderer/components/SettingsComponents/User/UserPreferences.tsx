@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useApi } from 'hooks'
 import { usePersistSessionStore } from 'store'
-import { LoadingOverlay, Select } from 'components/ui'
+import { LoadingOverlay, Select } from 'components/UiComponents'
 import Item from '../Item'
 import WallpaperSelector from './WallpaperSelector'
 

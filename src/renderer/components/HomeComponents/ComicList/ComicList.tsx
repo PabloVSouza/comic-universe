@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { trashIcon } from 'assets'
 import { useApi } from 'hooks'
 import { usePersistSessionStore } from 'store'
-import { confirmAlert, ContextMenu, openContextMenu, ContextOption } from 'components/ui'
+import { confirmAlert, ContextMenu, openContextMenu, ContextOption } from 'components/UiComponents'
 import ComicListItem from './ComicListItem'
 
 const ComicList: FC<{ comicList: IComic[] }> = ({ comicList }) => {

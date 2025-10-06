@@ -4,7 +4,7 @@ import { openWindow, addChaptersToQueue } from 'functions'
 import { useApi, useAutoWebsiteAuth, useQueue, useFetchData } from 'hooks'
 import { useGlobalStore, usePersistSessionStore, useWindowManagerStore } from 'store'
 import { BlankArea, ComicList, ComicNav, Dashboard, Nav, TopBar } from 'components/HomeComponents'
-import { Cover } from 'components/ui'
+import { Cover } from 'components/UiComponents'
 import { WindowManager } from 'components/WindowComponents'
 
 const Home: FC = () => {

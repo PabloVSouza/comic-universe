@@ -5,7 +5,7 @@ import { plusIcon, userIcon, trashIcon } from 'assets'
 import classNames from 'classnames'
 import { useApi } from 'hooks'
 import { usePersistSessionStore, useWindowManagerStore } from 'store'
-import { confirmAlert, Image } from 'components/ui'
+import { confirmAlert, Image } from 'components/UiComponents'
 
 interface UserListItemProps {
   data?: IUser

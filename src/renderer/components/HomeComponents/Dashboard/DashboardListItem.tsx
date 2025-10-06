@@ -6,7 +6,7 @@ import { closedBookIcon, bookStackIcon } from 'assets'
 import classNames from 'classnames'
 import { useApi } from 'hooks'
 import { useGlobalStore, usePersistSessionStore } from 'store'
-import { Button } from 'components/ui'
+import { Button } from 'components/UiComponents'
 
 const DashboardListItem: FC<{ item: IChapter }> = ({ item }) => {
   const { invoke } = useApi()

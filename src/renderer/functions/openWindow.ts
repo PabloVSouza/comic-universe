@@ -1,5 +1,5 @@
-import PageList from 'pages'
 import { v4 as randomUUID } from 'uuid'
+import * as WindowList from 'windows'
 import useWindowManagerStore from 'store/useWindowManagerStore'
 import i18n from '../i18n'
 
@@ -36,8 +36,8 @@ const openWindow = ({
 }): void => {
   const { addWindow, currentWindows } = useWindowManagerStore.getState()
 
-  if (PageList[component]) {
-    const { windowProps, windowStatus, initialStatus } = PageList[component] as TWindow
+  if (WindowList[component]) {
+    const { windowProps, windowStatus, initialStatus } = WindowList[component] as TWindow
 
     const alreadyExist = currentWindows.find((window) => window.component.name === component)
 
@@ -64,7 +64,7 @@ const openWindow = ({
 
       const window = {
         id: randomUUID(),
-        component: PageList[component][component],
+        component: WindowList[component][component],
         componentProps: props,
         windowProps: translatedWindowProps,
         windowStatus: windowStatus ?? {},

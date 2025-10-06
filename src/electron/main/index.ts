@@ -1,6 +1,6 @@
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { app, BrowserWindow } from 'electron'
-import CreateMainWindow from 'windows/MainWindow'
+import CreateMainWindow from '../windows/MainWindow'
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.pablovsouza.comic-universe')

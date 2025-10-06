@@ -1,7 +1,6 @@
 import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
-import svgr from 'vite-plugin-svgr'
 import { copyFileSync, mkdirSync, existsSync, readdirSync, statSync, cpSync } from 'fs'
 
 export default defineConfig({
@@ -16,14 +15,12 @@ export default defineConfig({
       {
         name: 'copy-migrations',
         writeBundle() {
-          // Copy migration files to build output
           const migrationsSource = resolve('src/database/migrations')
           const migrationsTarget = resolve('out/database/migrations')
 
           if (existsSync(migrationsSource)) {
             mkdirSync(migrationsTarget, { recursive: true })
 
-            // Copy all files from migrations directory
             const files = readdirSync(migrationsSource)
 
             for (const file of files) {
@@ -31,7 +28,6 @@ export default defineConfig({
               const targetPath = resolve(migrationsTarget, file)
 
               if (statSync(sourcePath).isDirectory()) {
-                // Copy directory recursively
                 cpSync(sourcePath, targetPath, { recursive: true })
               } else {
                 copyFileSync(sourcePath, targetPath)
@@ -71,19 +67,14 @@ export default defineConfig({
       assetsInlineLimit: 0
     },
     plugins: [
-      react(), 
-      svgr(),
+      react(),
       {
         name: 'copy-icons',
         writeBundle() {
-          // Copy icon files to build output for favicon
-          const iconFiles = [
-            'src/renderer/assets/icon.svg',
-            'build/icon-256.png'
-          ]
-          
+          const iconFiles = ['src/renderer/assets/icon.svg', 'build/icon-256.png']
+
           const targetDir = resolve('out/renderer')
-          
+
           for (const iconFile of iconFiles) {
             if (existsSync(iconFile)) {
               const fileName = iconFile.split('/').pop()
@@ -105,7 +96,8 @@ export default defineConfig({
         components: resolve('src/renderer/components'),
         lang: resolve('src/renderer/lang'),
         hooks: resolve('src/renderer/hooks'),
-        pages: resolve('src/renderer/pages'),
+        layouts: resolve('src/renderer/layouts'),
+        windows: resolve('src/renderer/windows'),
         functions: resolve('src/renderer/functions'),
         routes: resolve('src/renderer/routes'),
         css: resolve('src/renderer/css'),

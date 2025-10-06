@@ -105,7 +105,8 @@ export default defineConfig({
         constants: resolve('src/renderer/constants'),
         'renderer-utils': resolve('src/renderer/utils'),
         shared: resolve('src/shared'),
-        'shared-utils': resolve('src/utils')
+        'shared-utils': resolve('src/utils'),
+        i18n: resolve('src/renderer/i18n')
       }
     }
   }

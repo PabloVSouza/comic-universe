@@ -2,7 +2,7 @@ import { ReactNode, useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import classNames from 'classnames'
-import usePersistStore from 'store/usePersistStore'
+import { usePersistStore } from 'store'
 import Button from './Button'
 import Cover from './Cover'
 

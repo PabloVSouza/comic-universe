@@ -2,13 +2,13 @@ import { FC, ReactNode, useEffect } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { HashRouter } from 'react-router-dom'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import { useUserSettings } from 'hooks'
+import i18n from 'i18n'
 import ReactDOM from 'react-dom/client'
 import Routes from 'routes'
 import 'css/main.css'
 import { AlertProvider, UpdateNotification, WallpaperRenderer } from 'components/ui'
-import { useUserSettings } from 'hooks/useUserSettings'
-import usePersistStore from 'store/usePersistStore'
-import i18n from './i18n/index'
+import { usePersistStore } from 'store'
 
 interface Props {
   children: ReactNode

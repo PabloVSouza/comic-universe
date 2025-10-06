@@ -1,7 +1,7 @@
 import { useRef, useEffect, ReactElement } from 'react'
 import classNames from 'classnames'
 import { Button } from 'components/ui'
-import useWindowManagerStore from 'store/useWindowManagerStore'
+import { useWindowManagerStore } from 'store'
 
 const Window = ({
   children,

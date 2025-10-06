@@ -16,6 +16,7 @@
       "assets/*": ["./assets/*"],
       "components/*": ["./components/*"],
       "electron/*": ["./electron/*"],
+      "hooks": ["./hooks/index"],
       "hooks/*": ["./hooks/*"],
       "layouts/*": ["./layouts/*"],
       "windows/*": ["./windows/*"],
@@ -30,7 +31,9 @@
       "electron-utils": ["../../src/electron/utils/index"],
       "electron-utils/*": ["../../src/electron/utils/*"],
       "renderer-utils": ["./utils/index"],
-      "renderer-utils/*": ["./utils/*"]
+      "renderer-utils/*": ["./utils/*"],
+      "i18n": ["./i18n/index"],
+      "i18n/*": ["./i18n/*"]
     }
   }
 }

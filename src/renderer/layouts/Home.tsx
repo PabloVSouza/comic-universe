@@ -1,22 +1,12 @@
 import { FC, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import useApi from 'api'
+import { openWindow, addChaptersToQueue } from 'functions'
+import { useAutoWebsiteAuth, useQueue, useFetchData } from 'hooks'
+import { useGlobalStore, usePersistSessionStore, useWindowManagerStore } from 'store'
+import { BlankArea, ComicList, ComicNav, Dashboard, Nav, TopBar } from 'components/HomeComponents'
 import { Cover } from 'components/ui'
-import HomeBlankArea from 'components/HomeComponents/HomeBlankArea'
-import HomeComicList from 'components/HomeComponents/HomeComicList'
-import { HomeComicNav } from 'components/HomeComponents/HomeComicNav'
-import HomeComicDashboard from 'components/HomeComponents/HomeDashboardComponents/HomeDashboard'
-import HomeNav from 'components/HomeComponents/HomeNav'
-import HomeTopBar from 'components/HomeComponents/HomeTopBar'
-import WindowManager from 'components/WindowComponents/WindowManager'
-import openWindow from 'functions/openWindow'
-import { addChaptersToQueue } from 'functions/queueUtils'
-import useAutoWebsiteAuth from 'hooks/useAutoWebsiteAuth'
-import useFetchData from 'hooks/useFetchData'
-import useQueue from 'hooks/useQueue'
-import useGlobalStore from 'store/useGlobalStore'
-import usePersistSessionStore from 'store/usePersistSessionStore'
-import useWindowManagerStore from 'store/useWindowManagerStore'
+import { WindowManager } from 'components/WindowComponents'
 
 const Home: FC = () => {
   const { invoke } = useApi()
@@ -63,18 +53,18 @@ const Home: FC = () => {
 
   return (
     <div className="w-full h-full flex-shrink-0 flex-grow flex flex-col justify-start items-center text-text-default">
-      <HomeTopBar />
-      <HomeNav />
+      <TopBar />
+      <Nav />
       <WindowManager>
         <div className="flex h-full gap-px">
-          <HomeBlankArea />
+          <BlankArea />
           {userActive && (
             <div className="flex h-full flex-col w-60 mt-px gap-px">
-              <HomeComicNav />
-              <HomeComicList comicList={comicList} />
+              <ComicNav />
+              <ComicList comicList={comicList} />
             </div>
           )}
-          <HomeComicDashboard />
+          <Dashboard />
         </div>
       </WindowManager>
 

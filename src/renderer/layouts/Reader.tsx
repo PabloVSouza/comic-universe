@@ -3,13 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
 import { loadingIcon } from 'assets'
-import { Cover } from 'components/ui'
-import { Image } from 'components/ui'
-import ReaderBottomBar from 'components/ReaderComponents/ReaderBottomBar'
-import ReaderZoomWindow, { MousePosition } from 'components/ReaderComponents/ReaderZoomWindow'
+import { useGlobalStore, usePersistSessionStore } from 'store'
+import { BottomBar, ZoomWindow, type MousePosition } from 'components/ReaderComponents'
+import { Cover, Image } from 'components/ui'
 import FixFilePaths from 'functions/fixFilePaths'
-import useGlobalStore from 'store/useGlobalStore'
-import usePersistSessionStore from 'store/usePersistSessionStore'
 
 const Reader: FC = () => {
   const navigate = useNavigate()
@@ -468,7 +465,7 @@ const Reader: FC = () => {
             </svg>
           </button>
           {!!pages?.length && readProgress?.page && readingMode === 'horizontal' && (
-            <ReaderZoomWindow
+            <ZoomWindow
               mousePos={mousePos}
               image={
                 FixFilePaths(
@@ -585,7 +582,7 @@ const Reader: FC = () => {
         </div>
 
         {/* Reader Bottom Bar */}
-        <ReaderBottomBar
+        <BottomBar
           chapterName={chapters?.[chapterIndex]?.name || undefined}
           currentPage={readProgress?.page || 1}
           totalPages={readProgress?.totalPages || 1}

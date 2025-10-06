@@ -1,4 +1,4 @@
-import { usePersistSessionStore, useGlobalStore } from 'store'
+import { useGlobalStore, usePersistSessionStore } from 'store'
 import { create } from 'zustand'
 import { confirmAlert } from 'components/ui'
 

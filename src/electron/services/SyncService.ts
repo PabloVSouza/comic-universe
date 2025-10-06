@@ -5,8 +5,8 @@
  * Uses changelog-based approach to track and merge changes.
  */
 
-import DebugLogger from 'electron-utils/DebugLogger'
 import { generateChangelogDiff, validateEntityData } from 'electron-utils/ChangelogDiff'
+import DebugLogger from 'electron-utils/DebugLogger'
 import { IDatabaseRepository } from '../repositories/database/interfaces/IDatabaseRepository'
 
 export interface SyncServiceConfig {

@@ -4,12 +4,9 @@ import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
 import { getApiBaseUrl } from 'shared/constants'
-import { Button } from 'components/ui'
-import { Input } from 'components/ui'
-import SettingsBox from 'components/SettingsComponents/SettingsBox'
-import SettingsTitle from 'components/SettingsComponents/SettingsTitle'
-import usePersistSessionStore from 'store/usePersistSessionStore'
-import useWindowManagerStore from 'store/useWindowManagerStore'
+import { usePersistSessionStore, useWindowManagerStore } from 'store'
+import { Box, Title } from 'components/SettingsComponents'
+import { Button, Input } from 'components/ui'
 
 const WebsiteAuth: FC = () => {
   const { t } = useTranslation()
@@ -148,12 +145,12 @@ const WebsiteAuth: FC = () => {
 
   return (
     <div className="h-full w-full flex flex-col relative">
-      <SettingsTitle i18nKey="Settings.user.websiteAuth.title" variant="main" />
+      <Title i18nKey="Settings.user.websiteAuth.title" variant="main" />
 
       <div className="flex-1 overflow-y-auto pt-20 p-6">
         <div className="mx-auto max-w-md space-y-6">
-          <SettingsBox>
-            <SettingsTitle i18nKey="Settings.user.websiteAuth.connect" variant="section" />
+          <Box>
+            <Title i18nKey="Settings.user.websiteAuth.connect" variant="section" />
             <p className="text-sm text-text-default opacity-70 mb-4">
               {t('Settings.user.websiteAuth.description')}
             </p>
@@ -244,7 +241,7 @@ const WebsiteAuth: FC = () => {
                 </Button>
               </div>
             </form>
-          </SettingsBox>
+          </Box>
         </div>
       </div>
     </div>

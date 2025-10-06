@@ -4,12 +4,9 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import useApi from 'api'
 import { magnifyingGlassSearchIcon } from 'assets'
 import debounce from 'lodash.debounce'
-import { Image } from 'components/ui'
-import { LoadingOverlay as Loading } from 'components/ui'
-import { Pagination } from 'components/ui'
-import SearchComicList from 'components/SearchComponents/SearchComicList'
-import { Select } from 'components/ui'
-import usePersistStore from 'store/usePersistStore'
+import { ComicList } from 'components/SearchComponents'
+import { Image, LoadingOverlay as Loading, Pagination, Select } from 'components/ui'
+import { usePersistStore } from 'store'
 
 type TOption = {
   value: string
@@ -108,7 +105,7 @@ const Search: FC = () => {
           />
         </div>
       </div>
-      <SearchComicList list={list} offset={offset} className="pt-24 pb-14" />
+      <ComicList list={list} offset={offset} className="pt-24 pb-14" />
       <div className="w-full flex items-center justify-center shadow-basic absolute bottom-0 h-14 bg-modal backdrop-blur-sm">
         <Pagination
           setOffset={setOffset}

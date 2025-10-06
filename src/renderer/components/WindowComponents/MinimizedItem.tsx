@@ -1,5 +1,5 @@
 import { ReactElement } from 'react'
-import useWindowManagerStore from 'store/useWindowManagerStore'
+import { useWindowManagerStore } from 'store'
 
 const MinimizedItem = ({ title, id }: Partial<TWindowProps>): ReactElement => {
   const { setIsMinimized, removeWindow } = useWindowManagerStore()

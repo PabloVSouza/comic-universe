@@ -1,7 +1,7 @@
-import { app } from 'electron'
-import { is } from '@electron-toolkit/utils'
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
+import { is } from '@electron-toolkit/utils'
+import { app } from 'electron'
 
 /**
  * Utility class for managing data paths in development and production

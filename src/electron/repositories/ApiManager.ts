@@ -1,12 +1,11 @@
-import express, { Router } from 'express'
 import { Server } from 'http'
 import path from 'path'
-
 import cors from 'cors'
+import { DataPaths } from 'electron-utils'
+import { getPortToUse } from 'electron-utils/portManager'
+import express, { Router } from 'express'
 import Methods from './Methods'
 import SettingsRepository from './Methods/SettingsRepository'
-import { getPortToUse } from 'electron-utils/portManager'
-import { DataPaths } from 'electron-utils/utils'
 
 class ApiManager {
   private settingsRepository: SettingsRepository

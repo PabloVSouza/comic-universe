@@ -18,14 +18,12 @@
       "preload/*": ["./src/electron/preload/*"],
       "repositories/*": ["./src/electron/repositories/*"],
       "scripts/*": ["./src/electron/scripts/*"],
-      "electron-utils": ["./src/electron/utils/utils"],
+      "electron-utils": ["./src/electron/utils/index"],
       "electron-utils/*":["./src/electron/utils/*"],
       "windows/*":["./src/electron/windows/*"],
       "database/*": ["./src/database/*"],
       "constants/*": ["./src/electron/constants/*"],
-      "shared/*": ["./src/shared/*"],
-      "shared-utils/*": ["./src/utils/*"],
-      "shared-utils": ["./src/utils/index"]
+      "shared/*": ["./src/shared/*"]
     }
   }
 }

@@ -1,8 +1,8 @@
-import { dialog, shell, app, BrowserWindow, ipcMain } from 'electron'
-import { autoUpdater, UpdateInfo } from 'electron-updater'
-import { join } from 'path'
 import { existsSync, mkdirSync } from 'fs'
 import { homedir } from 'os'
+import { join } from 'path'
+import { dialog, shell, app, BrowserWindow, ipcMain } from 'electron'
+import { autoUpdater, UpdateInfo } from 'electron-updater'
 
 export interface FallbackUpdateOptions {
   downloadUrl: string

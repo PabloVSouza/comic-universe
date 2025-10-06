@@ -1,55 +1,122 @@
 {
-  "General": {
-    "alertConfirmButton": "Ok",
-    "version": "Version",
-    "author": "Author",
-    "license": "License",
-    "githubRepository": "Github Repository",
-    "checking": "Checking...",
-    "save": "Save",
-    "cancel": "Cancel",
-    "edit": "Edit",
-    "yes": "Yes",
-    "no": "No"
-  },
   "Dashboard": {
-    "setComplete": "Mark as Read",
-    "resetProgress": "Mark as Unread",
-    "continueReading": "Continue Reading",
-    "downloadMore": "Download More",
     "contextMenu": {
       "deleteComic": {
-        "title": "Do you really want to delete?",
+        "confirmCancel": "Cancel",
         "confirmMessage": "All the read progress will be lost!",
         "confirmOk": "Confirm",
-        "confirmCancel": "Cancel"
+        "title": "Do you really want to delete?"
       }
-    }
+    },
+    "continueReading": "Continue Reading",
+    "downloadMore": "Download More",
+    "resetProgress": "Mark as Unread",
+    "setComplete": "Mark as Read"
+  },
+  "General": {
+    "alertConfirmButton": "Ok",
+    "author": "Author",
+    "cancel": "Cancel",
+    "checking": "Checking...",
+    "edit": "Edit",
+    "githubRepository": "Github Repository",
+    "license": "License",
+    "no": "No",
+    "save": "Save",
+    "version": "Version",
+    "yes": "Yes"
   },
   "HomeNav": {
     "about": "About This App",
+    "changeUser": "Change User",
+    "closeApp": "Close App",
+    "plugins": "Plugins",
     "settings": "Settings",
     "userSettings": "User Settings",
-    "plugins": "Plugins",
-    "changeUser": "Change User",
-    "closeApp": "Close App"
-  },
-  "SearchComic": {
-    "windowTitle": "Search Comics",
-    "textPlaceholder": "Type your Search",
-    "bookmarkComic": "Bookmark",
-    "alreadyBookmarked": "Bookmarked",
-    "availableChapters": "Chapters Available",
-    "noReposAvailable": "No Repos Available"
+    "sync": {
+      "noUserTitle": "No User Found",
+      "noUserMessage": "Please log in first.",
+      "partialSuccessTitle": "Sync Partially Complete",
+      "partialSuccessMessage": "Synced {{synced}} of {{total}} items successfully.\n\nSome items failed to sync.",
+      "failedTitle": "Sync Failed",
+      "failedMessage": "Failed to sync. Please check your connection and try again.",
+      "authRequiredTitle": "Authentication Required",
+      "authRequiredMessage": "Please connect to your website account to sync.",
+      "errorTitle": "Sync Error",
+      "errorMessage": "An error occurred during sync. Please try again.",
+      "connectButton": "Connect",
+      "okButton": "OK"
+    }
   },
   "Pagination": {
-    "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "previous": "Previous"
+  },
+  "Reader": {
+    "chapter": "Chapter",
+    "nextChapter": "Next Chapter",
+    "previousChapter": "Previous Chapter",
+    "read": "Read",
+    "readingSettings": "Reading Settings",
+    "rightToLeft": "Right to Left",
+    "settings": "Settings",
+    "switchToHorizontal": "Switch to Horizontal Reading",
+    "switchToLtr": "Switch to Left to Right Reading",
+    "switchToRtl": "Switch to Right to Left Reading",
+    "switchToVertical": "Switch to Vertical Reading",
+    "verticalReading": "Vertical Reading"
+  },
+  "SearchComic": {
+    "alreadyBookmarked": "Bookmarked",
+    "availableChapters": "Chapters Available",
+    "bookmarkComic": "Bookmark",
+    "noReposAvailable": "No Repos Available",
+    "textPlaceholder": "Type your Search",
+    "windowTitle": "Search Comics"
   },
   "Settings": {
-    "windowTitle": "Application Settings",
+    "about": {
+      "repositoryDescription": "Visit the project repository on GitHub",
+      "title": "About This App"
+    },
     "app": {
       "title": "App Settings"
+    },
+    "general": {
+      "checkForUpdates": "Check for Updates",
+      "currentVersion": "Current Version",
+      "debug": {
+        "enableLogging": "Enable Debug Logging",
+        "enableLoggingDescription": "Enable detailed logging for debugging purposes"
+      },
+      "language": {
+        "description": "Choose your preferred language for the application interface",
+        "label": "Select Language"
+      },
+      "theme": {
+        "dark": "Dark",
+        "description": "Choose your preferred theme for the application interface",
+        "label": "Theme",
+        "light": "Light"
+      },
+      "title": "General Settings",
+      "updatePreferences": "Update Preferences",
+      "webUI": {
+        "autoPort": "Automatic Port",
+        "autoPortDescription": "Automatically find an available port starting from 8080",
+        "enableWebUI": "Enable Web UI",
+        "enableWebUIDescription": "Enable web-based user interface for remote access",
+        "port": "Web UI Port",
+        "portDescription": "Port number for the Web UI server",
+        "portRange": "(1024-65535)",
+        "url": "Web UI URL",
+        "urlDescription": "Access the Web UI through this URL"
+      },
+      "webUIPreferences": "Web UI Preferences",
+      "webUIStatus": "Web UI Status",
+      "webUIStatusRunning": "Running",
+      "webUIStatusStopped": "Stopped",
+      "webUIStatusUnknown": "Unknown"
     },
     "options": {
       "generalLabel": "General",
@@ -57,135 +124,114 @@
       "userLabel": "Users"
     },
     "plugin": {
-      "title": "Plugin Settings",
       "install": {
-        "label": "Install Plugin",
-        "description": "Download and install plugins from the repository",
-        "selectPlaceholder": "Select a plugin to install",
         "buttonTitle": "Download and Install Plugin",
-        "notAvailableInWebUI": "Plugin installation is not available in Web UI mode. Plugins must be installed directly on the server running the application."
+        "description": "Download and install plugins from the repository",
+        "label": "Install Plugin",
+        "notAvailableInWebUI": "Plugin installation is not available in Web UI mode. Plugins must be installed directly on the server running the application.",
+        "selectPlaceholder": "Select a plugin to install"
       },
       "installed": {
-        "title": "Installed Plugins",
-        "noPluginsInstalled": "No plugins installed"
-      }
-    },
-    "user": {
-      "title": "User Settings",
-      "currentUser": "Current User",
-      "currentUserDescription": "The currently selected user for reading progress",
-      "namePlaceholder": "Enter user name",
-      "noUserSelected": "No user selected",
-      "chaptersRead": "Chapters Read",
-      "chaptersReadDescription": "Total number of chapters with reading progress",
-      "pagesRead": "Pages Read",
-      "pagesReadDescription": "Total number of pages read across all chapters",
-      "exportData": "Export Data",
-      "exportDataDescription": "Export your reading data and settings",
-      "readingDirection": "Reading Direction",
-      "readingDirectionDescription": "Choose the reading direction for comics",
-      "ltr": "Left to Right",
-      "rtl": "Right to Left",
-      "defaultReadingMode": "Default Reading Mode",
-      "defaultReadingModeDescription": "Choose the default reading mode for comics (can be overridden per comic)",
-      "horizontal": "Horizontal",
-      "vertical": "Vertical",
-      "theme": "Theme",
-      "themeDescription": "Choose your preferred theme (overrides app theme)",
-      "light": "Light",
-      "dark": "Dark",
-      "auto": "Auto",
-      "inherit": "Inherit from App",
-      "wallpaper": {
-        "label": "Wallpaper",
-        "description": "Choose a custom wallpaper for the app",
-        "addWallpaper": "Add Wallpaper",
-        "default": "Default",
-        "remove": "Remove",
-        "removeConfirm": "Are you sure you want to remove this wallpaper?"
+        "noPluginsInstalled": "No plugins installed",
+        "title": "Installed Plugins"
       },
-      "language": "Language",
-      "languageDescription": "Choose your preferred language (overrides app language)"
-    },
-    "about": {
-      "title": "About This App",
-      "repositoryDescription": "Visit the project repository on GitHub"
-    },
-    "general": {
-      "title": "General Settings",
-      "webUIPreferences": "Web UI Preferences",
-      "webUIStatus": "Web UI Status",
-      "webUIStatusRunning": "Running",
-      "webUIStatusStopped": "Stopped",
-      "webUIStatusUnknown": "Unknown",
-      "language": {
-        "label": "Select Language",
-        "description": "Choose your preferred language for the application interface"
-      },
-      "debug": {
-        "enableLogging": "Enable Debug Logging",
-        "enableLoggingDescription": "Enable detailed logging for debugging purposes"
-      },
-      "webUI": {
-        "enableWebUI": "Enable Web UI",
-        "enableWebUIDescription": "Enable web-based user interface for remote access",
-        "autoPort": "Automatic Port",
-        "autoPortDescription": "Automatically find an available port starting from 8080",
-        "port": "Web UI Port",
-        "portDescription": "Port number for the Web UI server",
-        "portRange": "(1024-65535)",
-        "url": "Web UI URL",
-        "urlDescription": "Access the Web UI through this URL"
-      },
-      "theme": {
-        "label": "Theme",
-        "description": "Choose your preferred theme for the application interface",
-        "dark": "Dark",
-        "light": "Light"
-      },
-      "updatePreferences": "Update Preferences",
-      "checkForUpdates": "Check for Updates",
-      "currentVersion": "Current Version"
+      "title": "Plugin Settings"
     },
     "update": {
       "autoUpdate": {
-        "enable": "Enable Automatic Updates",
         "description": "Automatically download and install updates when available",
+        "enable": "Enable Automatic Updates",
         "notAvailableMacOS": "Auto-update is not available on macOS. Updates must be downloaded manually.",
-        "notAvailableWindows": "Auto-update is not available on Windows. Updates must be downloaded manually.",
-        "notAvailableOther": "Auto-update is not available on this platform. Updates must be downloaded manually."
+        "notAvailableOther": "Auto-update is not available on this platform. Updates must be downloaded manually.",
+        "notAvailableWindows": "Auto-update is not available on Windows. Updates must be downloaded manually."
       },
       "nonStable": {
-        "optIn": "Opt-in for Non-Stable Updates",
         "description": "Allow the app to check for and install beta and alpha releases",
-        "notAvailableWhenAutoUpdateDisabled": "Non-stable updates are only available when auto-update is enabled."
+        "notAvailableWhenAutoUpdateDisabled": "Non-stable updates are only available when auto-update is enabled.",
+        "optIn": "Opt-in for Non-Stable Updates"
       }
-    }
+    },
+    "user": {
+      "auto": "Auto",
+      "chaptersRead": "Chapters Read",
+      "chaptersReadDescription": "Total number of chapters with reading progress",
+      "currentUser": "Current User",
+      "currentUserDescription": "The currently selected user for reading progress",
+      "dark": "Dark",
+      "defaultReadingMode": "Default Reading Mode",
+      "defaultReadingModeDescription": "Choose the default reading mode for comics (can be overridden per comic)",
+      "exportData": "Export Data",
+      "exportDataDescription": "Export your reading data and settings",
+      "horizontal": "Horizontal",
+      "inherit": "Inherit from App",
+      "language": "Language",
+      "languageDescription": "Choose your preferred language (overrides app language)",
+      "light": "Light",
+      "ltr": "Left to Right",
+      "namePlaceholder": "Enter user name",
+      "noUserSelected": "No user selected",
+      "pagesRead": "Pages Read",
+      "pagesReadDescription": "Total number of pages read across all chapters",
+      "readingDirection": "Reading Direction",
+      "readingDirectionDescription": "Choose the reading direction for comics",
+      "rtl": "Right to Left",
+      "theme": "Theme",
+      "themeDescription": "Choose your preferred theme (overrides app theme)",
+      "title": "User Settings",
+      "vertical": "Vertical",
+      "wallpaper": {
+        "addWallpaper": "Add Wallpaper",
+        "default": "Default",
+        "description": "Choose a custom wallpaper for the app",
+        "label": "Wallpaper",
+        "remove": "Remove",
+        "removeConfirm": "Are you sure you want to remove this wallpaper?"
+      },
+      "websiteAuth": {
+        "connect": "Connect to Website",
+        "connected": "Connected to Website",
+        "connectError": "Failed to connect to website account",
+        "connecting": "Connecting...",
+        "connectSuccess": "Successfully connected to website account",
+        "connectToSync": "Connect to Website",
+        "description": "Connect your app account to your Comic Universe website account at comicuniverse.app",
+        "deviceName": "Device Name",
+        "deviceNamePlaceholder": "e.g., My Desktop Computer",
+        "disconnect": "Disconnect from Website",
+        "disconnectError": "Failed to disconnect from website account",
+        "disconnectSuccess": "Successfully disconnected from website account",
+        "emailInvalid": "Invalid email format",
+        "emailPlaceholder": "your@email.com",
+        "emailRequired": "Email is required",
+        "lastConnected": "Last connected",
+        "never": "Never",
+        "notConnected": "Not Connected",
+        "passwordMinLength": "Password must be at least 6 characters",
+        "passwordPlaceholder": "••••••••",
+        "passwordRequired": "Password is required",
+        "reAuthenticate": "Re-authenticate",
+        "reAuthMessage": "Your website authentication has expired or is invalid. Please re-authenticate to continue using website features.",
+        "reAuthRequired": "Website Authentication Required",
+        "skip": "Skip",
+        "syncRequired": "Website Authentication Required",
+        "syncRequiredMessage": "You need to connect your app to your Comic Universe website account to sync your comics and reading progress.",
+        "title": "Website Account",
+        "tokenExpired": "Connection expired, please reconnect",
+        "cancelButton": "Cancel"
+      }
+    },
+    "windowTitle": "Application Settings"
   },
   "Users": {
-    "header": "Select Your User",
-    "createButton": "Create new User",
     "cancelButton": "Cancel",
-    "namePlaceholder": "User Name",
+    "createButton": "Create new User",
     "deleteUser": {
-      "deleteUserTitle": "Delete User",
-      "deleteUserMessage": "Are you sure you want to delete this user? All reading progress will be lost permanently.",
+      "cancelDeleteButton": "Cancel",
       "confirmDeleteButton": "Delete",
-      "cancelDeleteButton": "Cancel"
-    }
-  },
-  "Reader": {
-    "chapter": "Chapter",
-    "previousChapter": "Previous Chapter",
-    "nextChapter": "Next Chapter",
-    "read": "Read",
-    "verticalReading": "Vertical Reading",
-    "switchToVertical": "Switch to Vertical Reading",
-    "switchToHorizontal": "Switch to Horizontal Reading",
-    "rightToLeft": "Right to Left",
-    "switchToRtl": "Switch to Right to Left Reading",
-    "switchToLtr": "Switch to Left to Right Reading",
-    "settings": "Settings",
-    "readingSettings": "Reading Settings"
+      "deleteUserMessage": "Are you sure you want to delete this user? All reading progress will be lost permanently.",
+      "deleteUserTitle": "Delete User"
+    },
+    "header": "Select Your User",
+    "namePlaceholder": "User Name"
   }
 }

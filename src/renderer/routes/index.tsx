@@ -1,10 +1,8 @@
-import { ReactElement } from 'react'
-import { Route, Routes, Navigate, RoutesProps } from 'react-router-dom'
+import { FC } from 'react'
+import { Route, Routes, Navigate } from 'react-router-dom'
+import { Home, Reader } from 'layouts'
 
-import Home from 'pages/Home'
-import Reader from 'pages/Reader'
-
-const Router = (): ReactElement<RoutesProps> => {
+const Router: FC = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />}>

@@ -1,7 +1,7 @@
-import { BrowserWindow, app, shell, dialog, OpenDialogOptions } from 'electron'
-import pathLib from 'path'
 import fs from 'fs'
+import pathLib from 'path'
 import { is } from '@electron-toolkit/utils'
+import { BrowserWindow, app, shell, dialog, OpenDialogOptions } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import SettingsRepository, {
   LanguageSettings,

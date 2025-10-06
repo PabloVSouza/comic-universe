@@ -1,5 +1,6 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { relations } from 'drizzle-orm'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { v4 as uuidv4 } from 'uuid'
 
 // Plugin table
 export const plugins = sqliteTable('Plugin', {
@@ -13,15 +14,26 @@ export const plugins = sqliteTable('Plugin', {
 
 // User table
 export const users = sqliteTable('User', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
   name: text('name').notNull(),
   default: integer('default', { mode: 'boolean' }).default(false).notNull(),
-  settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({})
+  settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({}),
+  websiteAuthToken: text('websiteAuthToken'), // Token for website authentication
+  websiteAuthExpiresAt: text('websiteAuthExpiresAt'), // ISO string of expiration date
+  websiteAuthDeviceName: text('websiteAuthDeviceName'), // Device name for the token
+  websiteUserId: text('websiteUserId') // User ID from the website
 })
 
 // Comic table
 export const comics = sqliteTable('Comic', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  userId: text('userId')
+    .notNull()
+    .references(() => users.id),
   siteId: text('siteId').notNull(),
   name: text('name').notNull(),
   cover: text('cover').notNull(),
@@ -40,8 +52,10 @@ export const comics = sqliteTable('Comic', {
 
 // Chapter table
 export const chapters = sqliteTable('Chapter', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  comicId: integer('comicId')
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  comicId: text('comicId')
     .notNull()
     .references(() => comics.id),
   siteId: text('siteId').notNull(),
@@ -58,28 +72,51 @@ export const chapters = sqliteTable('Chapter', {
 
 // ReadProgress table
 export const readProgress = sqliteTable('ReadProgress', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  chapterId: integer('chapterId')
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  chapterId: text('chapterId')
     .notNull()
     .references(() => chapters.id),
-  comicId: integer('comicId')
+  comicId: text('comicId')
     .notNull()
     .references(() => comics.id),
-  userId: integer('userId')
+  userId: text('userId')
     .notNull()
     .references(() => users.id),
   totalPages: integer('totalPages').notNull(),
-  page: integer('page').notNull()
+  page: integer('page').notNull(),
+  updatedAt: text('updatedAt').$defaultFn(() => new Date().toISOString())
+})
+
+export const changelog = sqliteTable('Changelog', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  userId: text('userId')
+    .notNull()
+    .references(() => users.id),
+  entityType: text('entityType').notNull(), // 'comic', 'chapter', 'readProgress', 'sync'
+  entityId: text('entityId').notNull(), // ID of the comic/chapter/readProgress, or 'sync' for sync events
+  action: text('action').notNull(), // 'created', 'updated', 'deleted', 'sync_started', 'sync_completed', 'sync_failed'
+  data: text('data'), // JSON string of the changed data or sync metadata
+  createdAt: text('createdAt').$defaultFn(() => new Date().toISOString()),
+  synced: integer('synced', { mode: 'boolean' }).default(false)
 })
 
 // Relations
 export const pluginsRelations = relations(plugins, () => ({}))
 
 export const usersRelations = relations(users, ({ many }) => ({
-  readProgress: many(readProgress)
+  readProgress: many(readProgress),
+  comics: many(comics)
 }))
 
-export const comicsRelations = relations(comics, ({ many }) => ({
+export const comicsRelations = relations(comics, ({ one, many }) => ({
+  user: one(users, {
+    fields: [comics.userId],
+    references: [users.id]
+  }),
   chapters: many(chapters),
   readProgress: many(readProgress)
 }))

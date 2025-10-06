@@ -39,7 +39,7 @@ jobs:
           # Get the latest stable release to determine base version
           LATEST_STABLE_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[] | select(.prerelease == false) | .tag_name' | head -1)
           echo "Latest stable release: $LATEST_STABLE_RELEASE"
-          
+
           # Extract version from stable release (remove 'v' prefix)
           if [[ $LATEST_STABLE_RELEASE =~ v([0-9]+\.[0-9]+\.[0-9]+) ]]; then
             STABLE_VERSION="${BASH_REMATCH[1]}"
@@ -58,7 +58,8 @@ jobs:
           fi
 
           # Get the latest development release for this base version to determine build number
-          LATEST_DEV_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r ".[] | select(.tag_name | contains(\"${NEW_BASE_VERSION}-dev.\")) | .tag_name" | head -1)
+          # Sort by build number (numerically) to handle versions beyond .9
+          LATEST_DEV_RELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r ".[] | select(.tag_name | contains(\"${NEW_BASE_VERSION}-dev.\")) | .tag_name" | sed 's/v//' | sort -t. -k4 -V | tail -1 | sed 's/^/v/')
           echo "Latest development release for $NEW_BASE_VERSION: $LATEST_DEV_RELEASE"
 
           # Extract build number from latest development release or start from 1

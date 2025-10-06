@@ -1,5 +1,5 @@
-import wallpaperManager, { WallpaperInfo } from './wallpaperManager'
 import { wallpaperComponents } from 'components/WallpaperComponents'
+import wallpaperManager, { WallpaperInfo } from './wallpaperManager'
 
 // Extended wallpaper info that includes all types
 export interface ExtendedWallpaperInfo extends WallpaperInfo {

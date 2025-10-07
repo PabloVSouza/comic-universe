@@ -2,8 +2,7 @@ import { FC, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useApi } from 'hooks'
-import { getApiBaseUrl } from 'shared/constants'
+import { useApi, useWebsiteSync } from 'hooks'
 import { usePersistSessionStore, useWindowManagerStore } from 'store'
 import { Box, Title } from 'components/SettingsComponents'
 import { Button, Input } from 'components/UiComponents'
@@ -14,11 +13,10 @@ const WebsiteAuth: FC = () => {
   const queryClient = useQueryClient()
   const { currentUser } = usePersistSessionStore()
   const { removeWindow } = useWindowManagerStore()
+  const { syncWithToken } = useWebsiteSync()
 
   const [isConnecting, setIsConnecting] = useState(false)
   const [deviceName, setDeviceName] = useState('')
-
-  const websiteUrl = getApiBaseUrl(process.env.NODE_ENV === 'development')
 
   useEffect(() => {
     const generateDeviceName = () => {
@@ -58,25 +56,18 @@ const WebsiteAuth: FC = () => {
       setIsConnecting(true)
 
       try {
-        const response = await fetch(`${websiteUrl}/api/auth/app-login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: credentials.email,
-            password: credentials.password,
-            userId: currentUser.id,
-            deviceName: deviceName || 'Unknown Device'
-          })
+        // Use Electron IPC to communicate with website API (bypasses CORS)
+        const data = await invoke<{
+          token: string
+          user: { id: string; email: string; name: string }
+          expiresAt: string
+          deviceName: string
+        }>('websiteLogin', {
+          email: credentials.email,
+          password: credentials.password,
+          userId: currentUser.id,
+          deviceName: deviceName || 'Unknown Device'
         })
-
-        if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.error || 'Authentication failed')
-        }
-
-        const data = await response.json()
 
         const authResult = await invoke<{
           userId: string
@@ -101,14 +92,30 @@ const WebsiteAuth: FC = () => {
         setIsConnecting(false)
       }
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data.userIdChanged && data.newUserId) {
         const { setCurrentUser } = usePersistSessionStore.getState()
         setCurrentUser({ ...currentUser, id: data.newUserId })
 
-        queryClient.removeQueries()
+        queryClient.invalidateQueries({ queryKey: ['userData'] })
+
+        queryClient.removeQueries({
+          predicate: (query) => {
+            const key = query.queryKey[0]
+            return key !== 'userData'
+          }
+        })
       } else {
         queryClient.invalidateQueries()
+      }
+
+      try {
+        const userId = data.newUserId || currentUser.id
+        if (userId) {
+          await syncWithToken(userId, data.token)
+        }
+      } catch (syncError) {
+        console.error('Initial sync failed after authentication:', syncError)
       }
 
       const currentWindows = useWindowManagerStore.getState().currentWindows
@@ -170,6 +177,7 @@ const WebsiteAuth: FC = () => {
                     <label className="block text-base text-text-default mb-2">Email</label>
                     <Input
                       type="email"
+                      className="w-full"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       placeholder={t('Settings.user.websiteAuth.emailPlaceholder')}
@@ -198,6 +206,7 @@ const WebsiteAuth: FC = () => {
                     <label className="block text-base text-text-default mb-2">Password</label>
                     <Input
                       type="password"
+                      className="w-full"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       placeholder={t('Settings.user.websiteAuth.passwordPlaceholder')}

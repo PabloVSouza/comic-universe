@@ -27,6 +27,7 @@ const useWebsiteSync = () => {
       setIsSyncing(true)
 
       if (!currentUser?.id) {
+        setIsSyncing(false)
         if (!silent) {
           confirmAlert({
             title: t('HomeNav.sync.noUserTitle'),
@@ -34,7 +35,7 @@ const useWebsiteSync = () => {
             buttons: [{ label: t('HomeNav.sync.okButton') }]
           })
         }
-        throw new Error('No user')
+        return null
       }
 
       const websiteAuth = await invoke<{
@@ -43,6 +44,7 @@ const useWebsiteSync = () => {
       } | null>('dbGetWebsiteAuthToken', { userId: currentUser.id })
 
       if (!websiteAuth?.token || websiteAuth.isExpired) {
+        setIsSyncing(false)
         if (!silent) {
           confirmAlert({
             title: t('Settings.user.websiteAuth.syncRequired'),
@@ -56,7 +58,7 @@ const useWebsiteSync = () => {
             ]
           })
         }
-        throw new Error('Not authenticated')
+        return null
       }
 
       const result = await invoke<SyncResult>('dbSyncData', {
@@ -67,7 +69,10 @@ const useWebsiteSync = () => {
 
       return { result, silent }
     },
-    onSuccess: ({ result, silent }) => {
+    onSuccess: (data) => {
+      if (!data) return
+
+      const { result, silent } = data
       setIsSyncing(false)
 
       if (result.entriesProcessed > 0) {
@@ -104,27 +109,11 @@ const useWebsiteSync = () => {
       console.error('Sync error:', error)
 
       if (!silent) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-
-        if (errorMessage.includes('authentication') || errorMessage.includes('Not authenticated')) {
-          confirmAlert({
-            title: t('HomeNav.sync.authRequiredTitle'),
-            message: t('HomeNav.sync.authRequiredMessage'),
-            buttons: [
-              { label: t('General.cancel') },
-              {
-                label: t('HomeNav.sync.connectButton'),
-                action: () => openWindow({ component: 'WebsiteAuth', props: {} })
-              }
-            ]
-          })
-        } else if (errorMessage !== 'No user') {
-          confirmAlert({
-            title: t('HomeNav.sync.errorTitle'),
-            message: t('HomeNav.sync.errorMessage'),
-            buttons: [{ label: t('HomeNav.sync.okButton') }]
-          })
-        }
+        confirmAlert({
+          title: t('HomeNav.sync.errorTitle'),
+          message: t('HomeNav.sync.errorMessage'),
+          buttons: [{ label: t('HomeNav.sync.okButton') }]
+        })
       }
     }
   })
@@ -148,9 +137,40 @@ const useWebsiteSync = () => {
     })
   }, [mutateAsync, userSettings?.syncPreferences?.autoSync, currentUser?.id])
 
+  const syncWithToken = async (userId: string, token: string) => {
+    setIsSyncing(true)
+
+    try {
+      const result = await invoke<SyncResult>('dbSyncData', {
+        direction: 'bidirectional',
+        userId,
+        token
+      })
+
+      if (result.entriesProcessed > 0) {
+        queryClient.invalidateQueries({ queryKey: ['comicList', userId] })
+        queryClient.invalidateQueries({ queryKey: ['chapters'] })
+        queryClient.invalidateQueries({ queryKey: ['readProgress'] })
+      }
+
+      if (result.success) {
+        setShowSuccess(true)
+        setTimeout(() => setShowSuccess(false), 3000)
+      }
+
+      return result
+    } catch (error) {
+      console.error('Sync with token error:', error)
+      throw error
+    } finally {
+      setIsSyncing(false)
+    }
+  }
+
   return {
     queueSync: useWebsiteSyncStore.getState().queueSync,
     handleSync: useWebsiteSyncStore.getState().handleManualSync,
+    syncWithToken,
     isSyncing: store.isSyncing,
     isAutoSyncPending: store.isAutoSyncPending,
     showSuccess: store.showSuccess

@@ -255,6 +255,13 @@ class DBRepository implements IDBRepository {
       })
     },
 
+    dbDeleteChangelogEntries: async ({ entryIds }): Promise<void> => {
+      await this.repository.deleteChangelogEntries(entryIds)
+      return new Promise((resolve) => {
+        resolve()
+      })
+    },
+
     dbGetChangelogEntriesSince: async ({ userId, timestamp }): Promise<IChangelogEntry[]> => {
       const result = await this.repository.getChangelogEntriesSince(userId, timestamp)
       return new Promise((resolve) => {

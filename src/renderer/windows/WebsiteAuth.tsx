@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useApi, useWebsiteSync } from 'hooks'
-import { getApiBaseUrl } from 'shared/constants'
 import { usePersistSessionStore, useWindowManagerStore } from 'store'
 import { Box, Title } from 'components/SettingsComponents'
 import { Button, Input } from 'components/UiComponents'
@@ -18,8 +17,6 @@ const WebsiteAuth: FC = () => {
 
   const [isConnecting, setIsConnecting] = useState(false)
   const [deviceName, setDeviceName] = useState('')
-
-  const websiteUrl = getApiBaseUrl(process.env.NODE_ENV === 'development')
 
   useEffect(() => {
     const generateDeviceName = () => {
@@ -59,25 +56,18 @@ const WebsiteAuth: FC = () => {
       setIsConnecting(true)
 
       try {
-        const response = await fetch(`${websiteUrl}/api/auth/app-login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: credentials.email,
-            password: credentials.password,
-            userId: currentUser.id,
-            deviceName: deviceName || 'Unknown Device'
-          })
+        // Use Electron IPC to communicate with website API (bypasses CORS)
+        const data = await invoke<{
+          token: string
+          user: { id: string; email: string; name: string }
+          expiresAt: string
+          deviceName: string
+        }>('websiteLogin', {
+          email: credentials.email,
+          password: credentials.password,
+          userId: currentUser.id,
+          deviceName: deviceName || 'Unknown Device'
         })
-
-        if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.error || 'Authentication failed')
-        }
-
-        const data = await response.json()
 
         const authResult = await invoke<{
           userId: string
@@ -107,7 +97,14 @@ const WebsiteAuth: FC = () => {
         const { setCurrentUser } = usePersistSessionStore.getState()
         setCurrentUser({ ...currentUser, id: data.newUserId })
 
-        queryClient.removeQueries()
+        queryClient.invalidateQueries({ queryKey: ['userData'] })
+
+        queryClient.removeQueries({
+          predicate: (query) => {
+            const key = query.queryKey[0]
+            return key !== 'userData'
+          }
+        })
       } else {
         queryClient.invalidateQueries()
       }

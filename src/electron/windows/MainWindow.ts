@@ -155,27 +155,24 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
   const isWindows = process.platform === 'win32'
 
   const getIconPath = (iconName: string): string => {
-    if (is.dev) {
-      return join(__dirname, '../../../build', iconName)
-    } else {
-      const possiblePaths = [
-        join(process.resourcesPath, iconName),
-        join(process.resourcesPath, 'build', iconName),
-        join(__dirname, '../../../build', iconName),
-        join(__dirname, '../../build', iconName),
-        join(__dirname, '../build', iconName)
-      ]
+    const possiblePaths = [
+      join(process.resourcesPath, iconName),
+      join(process.resourcesPath, 'build', iconName),
+      join(__dirname, '../../../build', iconName),
+      join(__dirname, '../../build', iconName),
+      join(__dirname, '../build', iconName)
+    ]
 
-      for (const path of possiblePaths) {
-        try {
-          accessSync(path)
-          return path
-        } catch {
-        }
+    for (const path of possiblePaths) {
+      try {
+        accessSync(path)
+        return path
+      } catch {
+        // Path doesn't exist, continue to next
       }
-
-      return possiblePaths[0]
     }
+
+    return possiblePaths[0]
   }
 
   const iconPath = isWindows ? getIconPath('icon-256.png') : getIconPath('icon.png')

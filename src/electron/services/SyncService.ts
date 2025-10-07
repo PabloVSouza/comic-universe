@@ -1,5 +1,3 @@
-
-
 import { generateChangelogDiff, validateEntityData } from 'electron-utils/ChangelogDiff'
 import DebugLogger from 'electron-utils/DebugLogger'
 import { IDatabaseRepository } from '../repositories/database/interfaces/IDatabaseRepository'
@@ -21,7 +19,6 @@ export class SyncService {
     this.config = config
   }
 
-  
   start(): void {
     if (this.config.syncInterval && this.config.syncInterval > 0) {
       this.syncTimer = setInterval(() => {
@@ -33,7 +30,6 @@ export class SyncService {
     }
   }
 
-  
   stop(): void {
     if (this.syncTimer) {
       clearInterval(this.syncTimer)
@@ -42,7 +38,6 @@ export class SyncService {
     }
   }
 
-  
   async sync(direction: SyncDirection, userId?: string, token?: string): Promise<SyncResult> {
     if (this.syncInProgress) {
       throw new Error('Sync already in progress')
@@ -153,7 +148,6 @@ export class SyncService {
     }
   }
 
-  
   private async getWebsiteUserId(token: string): Promise<string> {
     const response = await fetch(`${this.config.apiBaseUrl}/api/auth/verify-app-token`, {
       method: 'POST',
@@ -169,7 +163,6 @@ export class SyncService {
     return data.user.id
   }
 
-  
   private async pushToCloud(
     userId: string,
     token: string,
@@ -255,7 +248,6 @@ export class SyncService {
     }
   }
 
-  
   private async pullFromCloud(userId: string, token: string): Promise<SyncResult> {
     const conflicts: SyncConflict[] = []
     const errors: string[] = []
@@ -329,7 +321,6 @@ export class SyncService {
     }
   }
 
-  
   private async bidirectionalSync(
     userId: string,
     token: string,
@@ -451,7 +442,6 @@ export class SyncService {
     }
   }
 
-  
   private sortEntriesByDependency(entries: IChangelogEntry[]): IChangelogEntry[] {
     const priority: Record<string, number> = {
       comic: 1,
@@ -474,7 +464,6 @@ export class SyncService {
     })
   }
 
-  
   private async applyChangelogEntry(entry: IChangelogEntry, userId: string): Promise<void> {
     if (entry.entityType === 'sync') return
 
@@ -505,7 +494,6 @@ export class SyncService {
     })
   }
 
-  
   private async applyComicChange(entry: IChangelogEntry): Promise<void> {
     const comic = entry.data as IComic
 
@@ -543,7 +531,6 @@ export class SyncService {
     }
   }
 
-  
   private async applyChapterChange(entry: IChangelogEntry): Promise<void> {
     const chapter = entry.data as IChapter
 
@@ -584,7 +571,6 @@ export class SyncService {
     }
   }
 
-  
   private async applyReadProgressChange(entry: IChangelogEntry, userId: string): Promise<void> {
     const progress = entry.data as IReadProgress
 
@@ -619,7 +605,6 @@ export class SyncService {
     }
   }
 
-  
   getSyncStatus(): SyncState {
     return {
       lastSyncTimestamp: this.lastSyncTimestamp,
@@ -628,12 +613,10 @@ export class SyncService {
     }
   }
 
-  
   getLastSyncTimestamp(): string | null {
     return this.lastSyncTimestamp
   }
 
-  
   isSyncing(): boolean {
     return this.syncInProgress
   }

@@ -32,7 +32,7 @@ declare global {
     entityType: 'comic' | 'chapter' | 'readProgress' | 'sync'
     entityId: string
     action: 'created' | 'updated' | 'deleted' | 'sync_started' | 'sync_completed' | 'sync_failed'
-    data?: any
+    data?: unknown
     createdAt?: string
     synced?: boolean
   }

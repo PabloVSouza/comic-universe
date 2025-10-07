@@ -11,8 +11,8 @@ export class DatabaseFactory implements IDatabaseFactory {
   private static instance: DatabaseFactory
   private currentORM: SupportedORM = 'drizzle'
 
-  private constructor() {
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private constructor() {}
 
   static getInstance(): DatabaseFactory {
     if (!DatabaseFactory.instance) {
@@ -21,7 +21,7 @@ export class DatabaseFactory implements IDatabaseFactory {
     return DatabaseFactory.instance
   }
 
-  createRepository(_config: IDatabaseConfig): IDatabaseRepository {
+  createRepository(): IDatabaseRepository {
     switch (this.currentORM) {
       case 'drizzle':
         return new DrizzleDatabaseRepository()
@@ -52,7 +52,7 @@ export class DatabaseFactory implements IDatabaseFactory {
   }
 
   async createAndInitializeRepository(config: IDatabaseConfig): Promise<IDatabaseRepository> {
-    const repository = this.createRepository(config)
+    const repository = this.createRepository()
     await repository.initialize(config.dbPath)
     return repository
   }

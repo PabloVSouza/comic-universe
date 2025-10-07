@@ -55,9 +55,9 @@ class ApiManager {
       const routes = this.generateRoutes()
       app.use(routes)
 
-      this.server = app.listen(port, () => {
-      })
-    } catch (error) {
+      this.server = app.listen(port, () => {})
+    } catch {
+      // Server startup failed, will retry
     }
   }
 
@@ -78,7 +78,6 @@ class ApiManager {
     const routes = Router()
     const { methods: apiMethods } = this.methodsInstance
     const properties = Object.getOwnPropertyNames(apiMethods)
-
 
     const frontendPath = path.join(__dirname, '..', '..', 'out', 'renderer')
     const pluginsPath = DataPaths.getPluginsPath()
@@ -120,7 +119,7 @@ class ApiManager {
 
         const imageBuffer = await response.arrayBuffer()
         res.send(Buffer.from(imageBuffer))
-      } catch (error) {
+      } catch {
         res.status(500).json({ error: 'Internal server error' })
       }
     })

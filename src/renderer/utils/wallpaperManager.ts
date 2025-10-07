@@ -15,27 +15,22 @@ class WallpaperManager {
     this.api = useApi()
   }
 
-  
   async getWallpaperDirectory(): Promise<string> {
     return await this.api.invoke('getWallpaperDirectory')
   }
 
-  
   async getAvailableWallpapers(): Promise<WallpaperInfo[]> {
     return await this.api.invoke('getAvailableWallpapers')
   }
 
-  
   async addWallpaper(filePath: string): Promise<string> {
     return await this.api.invoke('addWallpaper', { filePath })
   }
 
-  
   async removeWallpaper(filename: string): Promise<void> {
     return await this.api.invoke('removeWallpaper', { filename })
   }
 
-  
   async getWallpaperUrl(filename: string): Promise<string> {
     if (filename === 'default.webp') {
       return defaultWallpaper
@@ -46,7 +41,6 @@ class WallpaperManager {
     return `http://localhost:${port}/wallpapers/${encodedFilename}`
   }
 
-  
   isSupportedImageFormat(filename: string): boolean {
     const supportedFormats = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp']
     const ext = path.extname(filename).toLowerCase()

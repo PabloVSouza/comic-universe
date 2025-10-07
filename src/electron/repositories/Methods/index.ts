@@ -10,7 +10,8 @@ import ApiManager from '../ApiManager'
 import EventManager from '../EventManager'
 
 class Methods {
-  public methods: Record<string, (...args: any[]) => any> = {}
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  public methods: Record<string, Function> = {}
   private apiManager: ApiManager | null = null
   private pluginsRepository: PluginsRepository | null = null
   private eventManager: EventManager | null = null

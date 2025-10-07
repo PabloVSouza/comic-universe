@@ -17,8 +17,15 @@ class EventManager {
     })
   }
 
+  listEvents(): string[] {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const events = Array.from((ipcMain as any)._invokeHandlers.keys()) as string[]
+    return events
+  }
+
   public removeEvents = () => {
-    const events = Array.from(ipcMain._invokeHandlers.keys()) as string[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const events = Array.from((ipcMain as any)._invokeHandlers.keys()) as string[]
     for (const event of events) {
       ipcMain.removeHandler(event)
     }
@@ -29,7 +36,8 @@ class EventManager {
     this.startEvents()
   }
 
-  public updateMethods = (newMethods: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  public updateMethods = (newMethods: Record<string, Function>) => {
     this.methods = newMethods
     this.resetEvents()
   }

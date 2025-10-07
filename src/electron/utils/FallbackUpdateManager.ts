@@ -39,7 +39,6 @@ export class FallbackUpdateManager {
     })
   }
 
-  
   public async handleUpdateWithFallback(updateInfo: UpdateInfo): Promise<UpdateFallbackResult> {
     const currentVersion = app.getVersion()
     const versionInfo = this.analyzeVersionGap(currentVersion, updateInfo.version)
@@ -56,7 +55,6 @@ export class FallbackUpdateManager {
     }
   }
 
-  
   private analyzeVersionGap(currentVersion: string, targetVersion: string) {
     const currentDate = this.getVersionReleaseDate(currentVersion)
     const targetDate = this.getVersionReleaseDate(targetVersion)
@@ -74,7 +72,6 @@ export class FallbackUpdateManager {
     }
   }
 
-  
   private async handleVeryOldVersion(
     updateInfo: UpdateInfo,
     versionInfo: {
@@ -131,7 +128,6 @@ export class FallbackUpdateManager {
     }
   }
 
-  
   private async attemptAutoUpdate(): Promise<UpdateFallbackResult> {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
@@ -159,7 +155,6 @@ export class FallbackUpdateManager {
     })
   }
 
-  
   private async handleAutoUpdateFailure(
     updateInfo: UpdateInfo,
     error: Error
@@ -229,7 +224,6 @@ export class FallbackUpdateManager {
     }
   }
 
-  
   private async downloadUpdateManually(
     options: FallbackUpdateOptions
   ): Promise<UpdateFallbackResult> {
@@ -264,7 +258,6 @@ export class FallbackUpdateManager {
     }
   }
 
-  
   private async downloadUpdateInBackground(
     options: FallbackUpdateOptions
   ): Promise<UpdateFallbackResult> {
@@ -305,7 +298,6 @@ export class FallbackUpdateManager {
     }
   }
 
-  
   private showInstallationInstructions(options: FallbackUpdateOptions): void {
     const instructions = this.getInstallationInstructions(options)
 
@@ -325,7 +317,6 @@ export class FallbackUpdateManager {
       })
   }
 
-  
   private getInstallationInstructions(options: FallbackUpdateOptions): string {
     const platform = process.platform
     const version = options.version
@@ -370,7 +361,6 @@ Your data and settings will be preserved.`
     return instructions
   }
 
-  
   private showBackgroundDownloadNotification(options: FallbackUpdateOptions): void {
     dialog.showMessageBox(this.mainWindow, {
       type: 'info',
@@ -381,7 +371,6 @@ Your data and settings will be preserved.`
     })
   }
 
-  
   private completeBackgroundDownload(options: FallbackUpdateOptions): void {
     this.isDownloading = false
 
@@ -406,7 +395,6 @@ Your data and settings will be preserved.`
       })
   }
 
-  
   private getDownloadUrl(updateInfo: UpdateInfo): string {
     const baseUrl = 'https://github.com/PabloVSouza/comic-universe/releases'
 
@@ -417,28 +405,23 @@ Your data and settings will be preserved.`
     }
   }
 
-  
   private isCertificateError(errorMessage: string): boolean {
     const certKeywords = ['certificate', 'signature', 'code signature', 'expired', 'invalid']
     return certKeywords.some((keyword) => errorMessage.toLowerCase().includes(keyword))
   }
 
-  
   private isNetworkError(errorMessage: string): boolean {
     const networkKeywords = ['network', 'connection', 'timeout', 'dns', 'unreachable']
     return networkKeywords.some((keyword) => errorMessage.toLowerCase().includes(keyword))
   }
 
-  
   private hasMajorVersionJump(currentVersion: string, targetVersion: string): boolean {
     const currentMajor = parseInt(currentVersion.split('.')[0])
     const targetMajor = parseInt(targetVersion.split('.')[0])
     return targetMajor > currentMajor
   }
 
-  
   private getVersionReleaseDate(version: string): number {
-
     if (version.includes('alpha')) {
       return Date.now() - 30 * 24 * 60 * 60 * 1000
     } else if (version.includes('beta')) {
@@ -448,7 +431,6 @@ Your data and settings will be preserved.`
     }
   }
 
-  
   public async checkForFallbackUpdate(): Promise<UpdateFallbackResult> {
     return {
       success: false,

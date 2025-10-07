@@ -29,8 +29,7 @@ class AssetServer {
       const wallpaperPath = path.join(DataPaths.getBaseDataPath(), 'wallpapers')
       app.use('/wallpapers', express.static(wallpaperPath))
 
-      this.server = app.listen(port, () => {
-      })
+      this.server = app.listen(port, () => {})
     } catch (error) {
       console.error('Error starting asset server:', error)
     }

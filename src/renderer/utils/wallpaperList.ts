@@ -9,7 +9,6 @@ export interface ExtendedWallpaperInfo extends WallpaperInfo {
 }
 
 class WallpaperList {
-  
   async getAllWallpapers(): Promise<ExtendedWallpaperInfo[]> {
     const imageWallpapers = await wallpaperManager.getAvailableWallpapers()
 
@@ -36,7 +35,6 @@ class WallpaperList {
     return [...componentWallpapers, ...pureImageWallpapers]
   }
 
-  
   async getWallpaperPreviewUrl(wallpaper: ExtendedWallpaperInfo): Promise<string> {
     if (wallpaper.isSpecial && wallpaper.preview) {
       return wallpaper.preview
@@ -45,7 +43,6 @@ class WallpaperList {
     return await wallpaperManager.getWallpaperUrl(wallpaper.filename)
   }
 
-  
   getWallpaperDisplayName(wallpaper: ExtendedWallpaperInfo, t?: (key: string) => string): string {
     if (wallpaper.displayName) {
       return wallpaper.displayName
@@ -58,7 +55,6 @@ class WallpaperList {
     return wallpaper.filename
   }
 
-  
   canRemoveWallpaper(wallpaper: ExtendedWallpaperInfo): boolean {
     return !wallpaper.isDefault && !wallpaper.isSpecial
   }

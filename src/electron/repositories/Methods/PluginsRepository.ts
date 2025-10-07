@@ -93,7 +93,6 @@ class PluginsRepository {
             ...this.activePlugins,
             [instantiatedPlugin.RepoTag]: instantiatedPlugin
           }
-
         } catch (error) {
           console.error(`Failed to activate plugin ${plugin.name}:`, error)
         }

@@ -9,7 +9,6 @@ export async function initializeDatabase(dbPath: string): Promise<IDatabaseRepos
   }
 
   try {
-
     const config: IDatabaseConfig = {
       dbPath,
       enableForeignKeys: true,

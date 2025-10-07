@@ -137,7 +137,6 @@ export class UpdateManager {
   }
 
   private getVersionReleaseDate(version: string): number {
-
     if (version.includes('alpha')) {
       return Date.now() - 30 * 24 * 60 * 60 * 1000
     } else if (version.includes('beta')) {

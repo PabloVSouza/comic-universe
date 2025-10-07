@@ -45,11 +45,11 @@ export interface ComicUniverseAPI {
   maximizeWindow: () => void
   closeWindow: () => void
   minimizeWindow: () => void
-  openWindow: (args: { window: string; data?: any }) => void
+  openWindow: (args: { window: string; data?: unknown }) => void
   openExternal: (args: { url: string }) => void
 
   loadSettings: () => Promise<AppSettings>
-  updateSettings: (key: string, value: any) => Promise<AppSettings>
+  updateSettings: (key: string, value: unknown) => Promise<AppSettings>
   getUpdateSettings: () => Promise<UpdateSettings>
   updateUpdateSettings: (settings: Partial<UpdateSettings>) => Promise<UpdateSettings>
   getLanguageSettings: () => Promise<LanguageSettings>
@@ -97,17 +97,17 @@ export interface ComicUniverseAPI {
     settings: Partial<IUserSettings>
   }) => Promise<IUserSettings | undefined>
 
-  [key: string]: any
+  [key: string]: unknown
 
   restartApiServer: () => Promise<{ message: string }>
 }
 
 export interface IpcImplementation {
-  invoke: (method: string, args?: any) => Promise<any>
-  on: (channel: string, callback: (...args: any[]) => void) => void
+  invoke: (method: string, args?: unknown) => Promise<unknown>
+  on: (channel: string, callback: (...args: unknown[]) => void) => void
   removeAllListeners: (channel: string) => void
 }
 
 export interface RestImplementation {
-  invoke: (method: string, args?: any) => Promise<any>
+  invoke: (method: string, args?: unknown) => Promise<unknown>
 }

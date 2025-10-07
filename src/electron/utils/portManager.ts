@@ -1,7 +1,6 @@
 import net from 'net'
 import SettingsRepository from '../repositories/Methods/SettingsRepository'
 
-
 export const isPortAvailable = (port: number): Promise<boolean> => {
   return new Promise((resolve) => {
     const server = net.createServer()
@@ -18,7 +17,6 @@ export const isPortAvailable = (port: number): Promise<boolean> => {
     })
   })
 }
-
 
 export const findAvailablePort = async (
   startPort: number = 8080,
@@ -38,7 +36,6 @@ export const findAvailablePort = async (
   )
 }
 
-
 export const getPreferredPort = async (settingsRepository: SettingsRepository): Promise<number> => {
   try {
     const webUISettings = await settingsRepository.methods.getWebUISettings()
@@ -50,7 +47,6 @@ export const getPreferredPort = async (settingsRepository: SettingsRepository): 
     return 8080
   }
 }
-
 
 export const getPortToUse = async (
   settingsRepository: SettingsRepository | null,

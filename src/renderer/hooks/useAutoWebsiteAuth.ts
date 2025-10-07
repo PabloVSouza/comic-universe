@@ -22,8 +22,8 @@ const useAutoWebsiteAuth = () => {
         if (authData && authData.token && !authData.isExpired) {
           return
         }
-
       } catch {
+        // Auth check failed, continue to retry
       }
     }
 

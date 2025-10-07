@@ -143,7 +143,8 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   ): Promise<void> {
     const db = this.getDb()
 
-    const { chapters: comicChapters, ...comicData } = comic
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { chapters: _comicChapters, ...comicData } = comic
     const cleanComicData = {
       ...(comic.id && { id: comic.id }),
       userId,
@@ -166,19 +167,18 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
 
     if (chapterList && chapterList.length > 0 && newComic[0]?.id) {
       for (const chapter of chapterList) {
-        const { comicId, Comic, ReadProgress, ...chapterData } = chapter
         const cleanChapterData = {
           ...(chapter.id && { id: chapter.id }),
-          siteId: chapterData.siteId,
-          siteLink: chapterData.siteLink || null,
-          releaseId: chapterData.releaseId || null,
+          siteId: chapter.siteId,
+          siteLink: chapter.siteLink || null,
+          releaseId: chapter.releaseId || null,
           repo,
-          name: chapterData.name || null,
-          number: chapterData.number,
-          pages: chapterData.pages || null,
-          date: chapterData.date || null,
-          offline: chapterData.offline || false,
-          language: chapterData.language || null,
+          name: chapter.name || null,
+          number: chapter.number,
+          pages: chapter.pages || null,
+          date: chapter.date || null,
+          offline: chapter.offline || false,
+          language: chapter.language || null,
           comicId: newComic[0].id
         }
 
@@ -217,6 +217,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async updateComic(id: string, comic: Partial<IComic>): Promise<IComic | undefined> {
     const db = this.getDb()
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
     const { chapters, addedAt, updatedAt, ...comicData } = comic as any
 
     const result = await db.update(comics).set(comicData).where(eq(comics.id, id)).returning()
@@ -337,6 +338,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       throw new Error('comicId is required for chapter creation')
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cleanChapterData: any = {
       comicId: chapter.comicId,
       siteId: chapter.siteId,
@@ -378,6 +380,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async createChapters(chapterList: IChapter[]): Promise<void> {
     const db = this.getDb()
     for (const chapter of chapterList) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
       const { Comic, ReadProgress, createdAt, ...chapterData } = chapter as any
       if (!chapterData.comicId) {
         throw new Error('comicId is required for chapter creation')
@@ -421,6 +424,7 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
   async updateChapter(id: string, chapter: Partial<IChapter>): Promise<IChapter | undefined> {
     const db = this.getDb()
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cleanChapterData: any = {}
 
     if (chapter.comicId !== undefined) cleanChapterData.comicId = chapter.comicId
@@ -925,16 +929,12 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       .where(and(inArray(changelog.id, entryIds), eq(changelog.synced, false)))
   }
 
-  async getChangelogEntriesSince(userId: string, _timestamp: string): Promise<IChangelogEntry[]> {
+  async getChangelogEntriesSince(userId: string): Promise<IChangelogEntry[]> {
     const db = this.getDb()
     const result = await db
       .select()
       .from(changelog)
-      .where(
-        and(
-          eq(changelog.userId, userId)
-        )
-      )
+      .where(and(eq(changelog.userId, userId)))
       .orderBy(asc(changelog.createdAt))
 
     return result.map((entry) => ({

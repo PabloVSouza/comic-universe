@@ -8,7 +8,6 @@ import {
   canModifyWebUISettings as canModifyWebUISettingsUtil
 } from 'renderer-utils/environment'
 
-
 export const useEnvironment = () => {
   const environment = useMemo(() => {
     return {

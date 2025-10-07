@@ -1,4 +1,3 @@
-
 declare global {
   type SyncDirection = 'push' | 'pull' | 'bidirectional'
 

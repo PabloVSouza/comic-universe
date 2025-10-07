@@ -137,9 +137,40 @@ const useWebsiteSync = () => {
     })
   }, [mutateAsync, userSettings?.syncPreferences?.autoSync, currentUser?.id])
 
+  const syncWithToken = async (userId: string, token: string) => {
+    setIsSyncing(true)
+
+    try {
+      const result = await invoke<SyncResult>('dbSyncData', {
+        direction: 'bidirectional',
+        userId,
+        token
+      })
+
+      if (result.entriesProcessed > 0) {
+        queryClient.invalidateQueries({ queryKey: ['comicList', userId] })
+        queryClient.invalidateQueries({ queryKey: ['chapters'] })
+        queryClient.invalidateQueries({ queryKey: ['readProgress'] })
+      }
+
+      if (result.success) {
+        setShowSuccess(true)
+        setTimeout(() => setShowSuccess(false), 3000)
+      }
+
+      return result
+    } catch (error) {
+      console.error('Sync with token error:', error)
+      throw error
+    } finally {
+      setIsSyncing(false)
+    }
+  }
+
   return {
     queueSync: useWebsiteSyncStore.getState().queueSync,
     handleSync: useWebsiteSyncStore.getState().handleManualSync,
+    syncWithToken,
     isSyncing: store.isSyncing,
     isAutoSyncPending: store.isAutoSyncPending,
     showSuccess: store.showSuccess

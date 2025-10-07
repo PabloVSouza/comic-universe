@@ -52,6 +52,7 @@ type IDBMethods = {
   dbCreateChangelogEntry: (input: { entry: IChangelogEntry }) => Promise<IChangelogEntry>
   dbGetUnsyncedChangelogEntries: (input: { userId: string }) => Promise<IChangelogEntry[]>
   dbMarkChangelogEntriesAsSynced: (input: { entryIds: string[] }) => Promise<void>
+  dbDeleteChangelogEntries: (input: { entryIds: string[] }) => Promise<void>
   dbGetChangelogEntriesSince: (input: {
     userId: string
     timestamp: string

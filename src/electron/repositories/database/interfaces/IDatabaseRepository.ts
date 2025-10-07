@@ -77,6 +77,7 @@ export interface IDatabaseRepository {
   createChangelogEntry(entry: IChangelogEntry): Promise<IChangelogEntry>
   getUnsyncedChangelogEntries(userId: string): Promise<IChangelogEntry[]>
   markChangelogEntriesAsSynced(entryIds: string[]): Promise<void>
+  deleteChangelogEntries(entryIds: string[]): Promise<void>
   getChangelogEntriesSince(userId: string, timestamp: string): Promise<IChangelogEntry[]>
 
   getAllPlugins(): Promise<IPlugin[]>

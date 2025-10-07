@@ -363,6 +363,8 @@ export class SyncService {
       if (data.syncedEntryIds && data.syncedEntryIds.length > 0) {
         await this.db.markChangelogEntriesAsSynced(data.syncedEntryIds)
         entriesProcessed += data.syncedEntryIds.length
+
+        await this.cleanupLocalChangelog(userId)
       }
 
       if (data.serverEntries && data.serverEntries.length > 0) {
@@ -603,6 +605,51 @@ export class SyncService {
         }
         break
       }
+    }
+  }
+
+  private async cleanupLocalChangelog(userId: string): Promise<void> {
+    try {
+      DebugLogger.info('Starting local changelog cleanup...')
+
+      const allEntries = await this.db.getChangelogEntriesSince(userId, '1970-01-01')
+
+      const syncedDataEntries = allEntries.filter(
+        (entry) => entry.synced && entry.entityType !== 'sync'
+      )
+
+      if (syncedDataEntries.length > 0) {
+        const idsToDelete = syncedDataEntries.map((e) => e.id!).filter((id) => id)
+        if (idsToDelete.length > 0) {
+          await this.db.deleteChangelogEntries(idsToDelete)
+          DebugLogger.info(`Cleaned up ${idsToDelete.length} synced changelog entries`)
+        }
+      }
+
+      // Keep only last 10 sync tracking entries
+      const syncTrackingEntries = allEntries
+        .filter((entry) => entry.entityType === 'sync')
+        .sort((a, b) => {
+          const timeA = new Date(a.createdAt || 0).getTime()
+          const timeB = new Date(b.createdAt || 0).getTime()
+          return timeB - timeA // Newest first
+        })
+
+      if (syncTrackingEntries.length > 10) {
+        const entriesToDelete = syncTrackingEntries
+          .slice(10)
+          .map((e) => e.id!)
+          .filter((id) => id)
+
+        if (entriesToDelete.length > 0) {
+          await this.db.deleteChangelogEntries(entriesToDelete)
+          DebugLogger.info(`Cleaned up ${entriesToDelete.length} old sync tracking entries`)
+        }
+      }
+
+      DebugLogger.info('Local changelog cleanup completed')
+    } catch (error) {
+      DebugLogger.error('Failed to cleanup local changelog:', error)
     }
   }
 

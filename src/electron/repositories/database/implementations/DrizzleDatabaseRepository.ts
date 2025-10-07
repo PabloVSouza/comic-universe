@@ -929,6 +929,13 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
       .where(and(inArray(changelog.id, entryIds), eq(changelog.synced, false)))
   }
 
+  async deleteChangelogEntries(entryIds: string[]): Promise<void> {
+    const db = this.getDb()
+    if (entryIds.length === 0) return
+
+    await db.delete(changelog).where(inArray(changelog.id, entryIds))
+  }
+
   async getChangelogEntriesSince(userId: string): Promise<IChangelogEntry[]> {
     const db = this.getDb()
     const result = await db

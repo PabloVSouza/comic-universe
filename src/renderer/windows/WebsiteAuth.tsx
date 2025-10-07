@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useApi } from 'hooks'
+import { useApi, useWebsiteSync } from 'hooks'
 import { getApiBaseUrl } from 'shared/constants'
 import { usePersistSessionStore, useWindowManagerStore } from 'store'
 import { Box, Title } from 'components/SettingsComponents'
@@ -14,6 +14,7 @@ const WebsiteAuth: FC = () => {
   const queryClient = useQueryClient()
   const { currentUser } = usePersistSessionStore()
   const { removeWindow } = useWindowManagerStore()
+  const { syncWithToken } = useWebsiteSync()
 
   const [isConnecting, setIsConnecting] = useState(false)
   const [deviceName, setDeviceName] = useState('')
@@ -101,7 +102,7 @@ const WebsiteAuth: FC = () => {
         setIsConnecting(false)
       }
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data.userIdChanged && data.newUserId) {
         const { setCurrentUser } = usePersistSessionStore.getState()
         setCurrentUser({ ...currentUser, id: data.newUserId })
@@ -109,6 +110,15 @@ const WebsiteAuth: FC = () => {
         queryClient.removeQueries()
       } else {
         queryClient.invalidateQueries()
+      }
+
+      try {
+        const userId = data.newUserId || currentUser.id
+        if (userId) {
+          await syncWithToken(userId, data.token)
+        }
+      } catch (syncError) {
+        console.error('Initial sync failed after authentication:', syncError)
       }
 
       const currentWindows = useWindowManagerStore.getState().currentWindows

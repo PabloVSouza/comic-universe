@@ -50,7 +50,6 @@ class DebugLogger {
     }
   }
 
-  // Force refresh debug settings (useful when settings change)
   static async refreshSettings(): Promise<void> {
     this.initialized = false
     await this.initialize()

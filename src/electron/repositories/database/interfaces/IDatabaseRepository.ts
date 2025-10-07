@@ -1,28 +1,23 @@
-// ORM-agnostic interface for database operations
-// Uses global type definitions from @types directory
 export interface IDatabaseRepository {
-  // Initialization
   initialize(dbPath: string): Promise<void>
   close(): void
   isInitialized(): boolean
 
-  // Migration management
   runDrizzleMigrations(): Promise<void>
   verifyMigrations(): Promise<boolean>
 
-  // Comic operations
-  getAllComics(): Promise<IComic[]>
-  getComicById(id: number): Promise<IComic | undefined>
-  getComicBySiteId(siteId: string): Promise<IComic | undefined>
-  createComic(comic: IComic, chapters: IChapter[], repo: string): Promise<void>
-  updateComic(id: number, comic: Partial<IComic>): Promise<IComic | undefined>
-  deleteComic(id: number): Promise<void>
+  getAllComics(userId: string): Promise<IComic[]>
+  getComicById(id: string): Promise<IComic | undefined>
+  getComicBySiteId(siteId: string, userId: string): Promise<IComic | undefined>
+  createComic(comic: IComic, chapters: IChapter[], repo: string, userId: string): Promise<void>
+  updateComic(id: string, comic: Partial<IComic>): Promise<IComic | undefined>
+  deleteComic(id: string): Promise<void>
   getComicWithChapters(
-    comicId: number
+    comicId: string
   ): Promise<{ comic: IComic; chapters: IChapter[] } | undefined>
   getComicWithProgress(
-    comicId: number,
-    userId: number
+    comicId: string,
+    userId: string
   ): Promise<
     | {
         comic: IComic
@@ -32,44 +27,58 @@ export interface IDatabaseRepository {
     | undefined
   >
 
-  // Chapter operations
   getAllChaptersNoPage(): Promise<IChapter[]>
-  getChaptersByComicId(comicId: number): Promise<IChapter[]>
-  getChapterById(id: number): Promise<IChapter | undefined>
+  getChaptersByComicId(comicId: string): Promise<IChapter[]>
+  getChapterById(id: string): Promise<IChapter | undefined>
   getChapterBySiteId(siteId: string): Promise<IChapter | undefined>
   createChapter(chapter: IChapter): Promise<IChapter>
   createChapters(chapters: IChapter[]): Promise<void>
-  updateChapter(id: number, chapter: Partial<IChapter>): Promise<IChapter | undefined>
-  deleteChapter(id: number): Promise<void>
+  updateChapter(id: string, chapter: Partial<IChapter>): Promise<IChapter | undefined>
+  deleteChapter(id: string): Promise<void>
 
-  // User operations
   getAllUsers(): Promise<IUser[]>
-  getUserById(id: number): Promise<IUser | undefined>
+  getUserById(id: string): Promise<IUser | undefined>
   getDefaultUser(): Promise<IUser | undefined>
   createUser(user: IUser): Promise<IUser>
-  updateUser(id: number, user: Partial<IUser>): Promise<IUser | undefined>
-  deleteUser(id: number): Promise<void>
+  updateUser(id: string, user: Partial<IUser>): Promise<IUser | undefined>
+  deleteUser(id: string): Promise<void>
 
-  // User settings operations
-  getUserSettings(userId: number): Promise<IUserSettings | undefined>
+  getUserSettings(userId: string): Promise<IUserSettings | undefined>
   updateUserSettings(
-    userId: number,
+    userId: string,
     settings: Partial<IUserSettings>
   ): Promise<IUserSettings | undefined>
 
-  // ReadProgress operations
-  getReadProgressByUser(userId: number): Promise<IReadProgress[]>
-  getReadProgressByComic(comicId: number, userId: number): Promise<IReadProgress[]>
-  getReadProgressByChapter(chapterId: number, userId: number): Promise<IReadProgress | undefined>
+  setWebsiteAuthToken(
+    userId: string,
+    token: string,
+    expiresAt: string,
+    deviceName: string
+  ): Promise<{ userId: string; userIdChanged: boolean }>
+  getWebsiteAuthToken(userId: string): Promise<{
+    token: string | null
+    expiresAt: string | null
+    deviceName: string | null
+    isExpired: boolean
+  } | null>
+  clearWebsiteAuthToken(userId: string): Promise<void>
+
+  getReadProgressByUser(userId: string): Promise<IReadProgress[]>
+  getReadProgressByComic(comicId: string, userId: string): Promise<IReadProgress[]>
+  getReadProgressByChapter(chapterId: string, userId: string): Promise<IReadProgress | undefined>
   getReadProgress(search: Record<string, unknown>): Promise<IReadProgress[]>
   createReadProgress(progress: IReadProgress): Promise<IReadProgress>
   updateReadProgress(
-    id: number,
+    id: string,
     progress: Partial<IReadProgress>
   ): Promise<IReadProgress | undefined>
-  deleteReadProgress(id: number): Promise<void>
+  deleteReadProgress(id: string): Promise<void>
 
-  // Plugin operations
+  createChangelogEntry(entry: IChangelogEntry): Promise<IChangelogEntry>
+  getUnsyncedChangelogEntries(userId: string): Promise<IChangelogEntry[]>
+  markChangelogEntriesAsSynced(entryIds: string[]): Promise<void>
+  getChangelogEntriesSince(userId: string, timestamp: string): Promise<IChangelogEntry[]>
+
   getAllPlugins(): Promise<IPlugin[]>
   getPluginById(id: number): Promise<IPlugin | undefined>
   getEnabledPlugins(): Promise<IPlugin[]>
@@ -78,7 +87,6 @@ export interface IDatabaseRepository {
   deletePlugin(id: number): Promise<void>
 }
 
-// Database configuration interface
 export interface IDatabaseConfig {
   dbPath: string
   enableForeignKeys?: boolean
@@ -86,7 +94,6 @@ export interface IDatabaseConfig {
   connectionTimeout?: number
 }
 
-// Migration interface
 export interface IMigration {
   version: number
   name: string
@@ -94,7 +101,6 @@ export interface IMigration {
   down?(): Promise<void>
 }
 
-// Database factory interface
 export interface IDatabaseFactory {
   createRepository(config: IDatabaseConfig): IDatabaseRepository
   getSupportedORMs(): string[]

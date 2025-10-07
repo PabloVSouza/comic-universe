@@ -1,6 +1,6 @@
+import { useGlobalStore } from 'store'
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import useGlobalStore from './useGlobalStore'
 
 interface IusePersistSessionStore {
   currentUser: IUser

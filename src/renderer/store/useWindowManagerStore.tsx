@@ -1,5 +1,5 @@
-import { create } from 'zustand'
 import * as Portals from 'react-reverse-portal'
+import { create } from 'zustand'
 
 type TuseWindowManagerStore = {
   currentWindows: TWindow[]
@@ -30,7 +30,6 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
 
   addWindow: (window): void => {
     set((state: TuseWindowManagerStore) => {
-      // Store the original container size when window is created
       const windowWithOriginalSize = {
         ...window,
         originalContainerSize: { ...state.containerSize }
@@ -113,9 +112,7 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
       const oldSize = state.containerSize
       state.containerSize = size
 
-      // If container size changed, adjust window positions
       if (oldSize.width !== size.width || oldSize.height !== size.height) {
-        // Use setTimeout to ensure the state update is complete before adjusting positions
         setTimeout(() => {
           const { adjustWindowPositions } = useWindowManagerStore.getState()
           adjustWindowPositions()
@@ -190,12 +187,10 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
         const { isMaximized } = window.windowStatus
         const { initialStatus } = window
 
-        // Skip maximized windows
         if (isMaximized) {
           return window
         }
 
-        // Check if window is outside container bounds
         const isOutsideBounds =
           left + width > containerSize.width ||
           left < 0 ||
@@ -203,24 +198,20 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
           top < 0
 
         if (!isOutsideBounds) {
-          // Window is still within bounds, no adjustment needed
           return window
         }
 
         let newTop = top
         let newLeft = left
 
-        // Try to maintain proportional position first
         if (window.originalContainerSize) {
           const { width: oldWidth, height: oldHeight } = window.originalContainerSize
           const widthRatio = containerSize.width / oldWidth
           const heightRatio = containerSize.height / oldHeight
 
-          // Calculate proportional position
           const proportionalLeft = left * widthRatio
           const proportionalTop = top * heightRatio
 
-          // Check if proportional position fits within bounds
           if (
             proportionalLeft >= 0 &&
             proportionalLeft + width <= containerSize.width &&
@@ -233,7 +224,6 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
               `Using proportional position for ${window.component.name}: (${left}, ${top}) -> (${newLeft}, ${newTop})`
             )
           } else {
-            // Proportional position doesn't fit, use fallback to initial position
             newLeft =
               initialStatus.startPosition === 'center'
                 ? Math.max(0, (containerSize.width - width) / 2)
@@ -247,7 +237,6 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
             )
           }
         } else {
-          // No original container size, use fallback to initial position
           newLeft =
             initialStatus.startPosition === 'center'
               ? Math.max(0, (containerSize.width - width) / 2)
@@ -261,7 +250,6 @@ const useWindowManagerStore = create<TuseWindowManagerStore>((set) => ({
           )
         }
 
-        // Ensure position is within bounds (safety check)
         newLeft = Math.max(0, Math.min(newLeft, containerSize.width - width))
         newTop = Math.max(0, Math.min(newTop, containerSize.height - height))
 

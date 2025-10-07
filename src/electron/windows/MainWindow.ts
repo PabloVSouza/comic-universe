@@ -1,11 +1,11 @@
-import { shell, BrowserWindow, app, dialog } from 'electron'
-import { is } from '@electron-toolkit/utils'
-import { join } from 'path'
 import { accessSync } from 'fs'
+import { join } from 'path'
+import { is } from '@electron-toolkit/utils'
+import { shell, BrowserWindow, app, dialog } from 'electron'
 import { autoUpdater } from 'electron-updater'
-import Methods from 'repositories/Methods'
-import EventManager from 'repositories/EventManager'
 import ApiManager from 'repositories/ApiManager'
+import EventManager from 'repositories/EventManager'
+import Methods from 'repositories/Methods'
 import SettingsRepository from 'repositories/Methods/SettingsRepository'
 
 function getVersionTypeString(version: string): string {
@@ -154,37 +154,28 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
   const isMac = process.platform === 'darwin'
   const isWindows = process.platform === 'win32'
 
-  // Get the correct icon path for both development and production
   const getIconPath = (iconName: string): string => {
-    if (is.dev) {
-      return join(__dirname, '../../../build', iconName)
-    } else {
-      // Try multiple possible paths for production
-      const possiblePaths = [
-        join(process.resourcesPath, iconName), // extraResources path
-        join(process.resourcesPath, 'build', iconName),
-        join(__dirname, '../../../build', iconName),
-        join(__dirname, '../../build', iconName),
-        join(__dirname, '../build', iconName)
-      ]
+    const possiblePaths = [
+      join(process.resourcesPath, iconName),
+      join(process.resourcesPath, 'build', iconName),
+      join(__dirname, '../../../build', iconName),
+      join(__dirname, '../../build', iconName),
+      join(__dirname, '../build', iconName)
+    ]
 
-      // Return the first path that exists, or fall back to the first option
-      for (const path of possiblePaths) {
-        try {
-          accessSync(path)
-          return path
-        } catch {
-          // Path doesn't exist, try next one
-        }
+    for (const path of possiblePaths) {
+      try {
+        accessSync(path)
+        return path
+      } catch {
+        // Path doesn't exist, continue to next
       }
-
-      // Fall back to the first option if none exist
-      return possiblePaths[0]
     }
+
+    return possiblePaths[0]
   }
 
   const iconPath = isWindows ? getIconPath('icon-256.png') : getIconPath('icon.png')
-  // Application startup information
 
   const windowConfig: Electron.BrowserWindowConstructorOptions = {
     width: 1000,
@@ -260,7 +251,6 @@ const CreateMainWindow = async (): Promise<BrowserWindow> => {
           })
           .catch((error) => {
             console.error('Error checking auto-update settings:', error)
-            // Default to disabled if we can't read settings
             console.log('Auto-updater disabled - could not read settings')
           })
       }

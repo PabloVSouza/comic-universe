@@ -41,17 +41,6 @@ This started as a simple tool used by myself, just to keep track of my reading p
 - As an electron app, it have some nice features, but also a few challenges with some libraries, forcing me to create new solutions and migrate to more suitable alternatives.
 - It evolved together with my experience as a developer, and now on it's third fully rebuild iteration, it's a (almost) fully featured app, with suport for Windows, Linux and Mac, multiple web sources, multiple languages, themming, and a shiny and modern new interface.
 
-## 📚 Documentation
-
-Comprehensive documentation is available in the [`docs/`](./docs/) folder:
-
-- **[Auto-Updater Fix](./docs/AUTO_UPDATER_FIX.md)** - Fix "Could not get code signature" errors
-- **[Fallback Update System](./docs/FALLBACK_UPDATE_SYSTEM.md)** - Handle old version users gracefully
-- **[Certificate Management](./docs/CERTIFICATE_EXPIRATION.md)** - Manage certificate expiration
-- **[Code Signing Guide](./docs/CODE_SIGNING.md)** - General code signing setup
-- **[CI/CD Code Signing](./docs/CI_CD_CODE_SIGNING.md)** - CI/CD pipeline setup
-- **[Documentation Index](./docs/INDEX.md)** - Quick navigation guide
-
 ### Quick Commands
 
 ```bash

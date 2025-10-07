@@ -1,5 +1,5 @@
-import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { contextBridge, ipcRenderer } from 'electron'
 
 const initializePreload = async (): Promise<void> => {
   if (process.contextIsolated) {
@@ -14,8 +14,8 @@ const initializePreload = async (): Promise<void> => {
       console.error(error)
     }
   } else {
-    // @ts-ignore (define in dts)
-    window.Electron = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(window as any).Electron = {
       ...electronAPI,
       minimizeWindow: () => ipcRenderer.invoke('minimize-window'),
       maximizeWindow: () => ipcRenderer.invoke('maximize-window'),

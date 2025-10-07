@@ -1,0 +1,1 @@
+ALTER TABLE `ReadProgress` ADD `updatedAt` text;

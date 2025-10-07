@@ -1,6 +1,5 @@
+import { dialog, shell, app, BrowserWindow } from 'electron'
 import { autoUpdater, UpdateInfo } from 'electron-updater'
-import { dialog, shell, app } from 'electron'
-import { BrowserWindow } from 'electron'
 
 export interface UpdateSettings {
   autoUpdate: boolean
@@ -33,25 +32,20 @@ export class UpdateManager {
   }
 
   private setupAutoUpdater(): void {
-    // Configure auto-updater for better compatibility
     autoUpdater.disableDifferentialDownload = true
     autoUpdater.disableWebInstaller = true
     autoUpdater.allowDowngrade = false
     autoUpdater.allowPrerelease = true
 
-    // Set the update channel based on current version type
     this.setUpdateChannel()
 
-    // Set up event handlers
     this.setupEventHandlers()
   }
 
   private setUpdateChannel(): void {
     const currentVersion = app.getVersion()
     const versionType = this.getVersionTypeString(currentVersion)
-    
-    // Set the update channel to match the current version type
-    // This ensures each version type only updates to the same type
+
     if (versionType === 'alpha') {
       autoUpdater.channel = 'alpha'
     } else if (versionType === 'beta') {
@@ -59,9 +53,9 @@ export class UpdateManager {
     } else if (versionType === 'dev') {
       autoUpdater.channel = 'dev'
     } else {
-      autoUpdater.channel = 'latest' // stable releases
+      autoUpdater.channel = 'latest'
     }
-    
+
     console.log(`Auto-updater configured for ${versionType} channel (version: ${currentVersion})`)
   }
 
@@ -108,17 +102,14 @@ export class UpdateManager {
     available: { isStable: boolean; isBeta: boolean; isAlpha: boolean },
     settings: UpdateSettings
   ): boolean {
-    // Alpha can only update to alpha
     if (current.isAlpha && available.isAlpha) {
       return true
     }
 
-    // Beta can update to beta or stable
     if (current.isBeta && (available.isBeta || available.isStable)) {
       return true
     }
 
-    // Stable can update to stable, or to beta if opt-in is enabled
     if (current.isStable) {
       if (available.isStable) {
         return true
@@ -128,16 +119,14 @@ export class UpdateManager {
       }
     }
 
-    // All other transitions are invalid
     return false
   }
 
   private getVersionInfo(currentVersion: string, latestVersion: string): VersionInfo {
-    // Parse version dates (this would need to be implemented based on your versioning scheme)
     const currentDate = this.getVersionReleaseDate(currentVersion)
 
     const daysSinceRelease = (Date.now() - currentDate) / (1000 * 60 * 60 * 24)
-    const isOldVersion = daysSinceRelease > 365 // More than 1 year old
+    const isOldVersion = daysSinceRelease > 365
 
     return {
       current: currentVersion,
@@ -148,17 +137,12 @@ export class UpdateManager {
   }
 
   private getVersionReleaseDate(version: string): number {
-    // This is a simplified implementation
-    // In reality, you'd need to map versions to their release dates
-    // For now, we'll use a heuristic based on version numbers
-
     if (version.includes('alpha')) {
-      return Date.now() - 30 * 24 * 60 * 60 * 1000 // 30 days ago
+      return Date.now() - 30 * 24 * 60 * 60 * 1000
     } else if (version.includes('beta')) {
-      return Date.now() - 60 * 24 * 60 * 60 * 1000 // 60 days ago
+      return Date.now() - 60 * 24 * 60 * 60 * 1000
     } else {
-      // Assume stable versions are older
-      return Date.now() - 365 * 24 * 60 * 60 * 1000 // 1 year ago
+      return Date.now() - 365 * 24 * 60 * 60 * 1000
     }
   }
 
@@ -167,7 +151,6 @@ export class UpdateManager {
     const currentVersion = app.getVersion()
     const versionInfo = this.getVersionInfo(currentVersion, info.version)
 
-    // Determine current and available version types
     const currentIsStable = !currentVersion.includes('alpha') && !currentVersion.includes('beta')
     const currentIsBeta = currentVersion.includes('beta')
     const currentIsAlpha = currentVersion.includes('alpha')
@@ -176,7 +159,6 @@ export class UpdateManager {
     const availableIsBeta = info.version.includes('beta')
     const availableIsAlpha = info.version.includes('alpha')
 
-    // Check if this is a valid update type transition
     const isValidTransition = this.isValidUpdateTransition(
       { isStable: currentIsStable, isBeta: currentIsBeta, isAlpha: currentIsAlpha },
       { isStable: availableIsStable, isBeta: availableIsBeta, isAlpha: availableIsAlpha },
@@ -190,7 +172,6 @@ export class UpdateManager {
       return
     }
 
-    // Check if user wants this type of update based on release types
     let shouldShowUpdate = false
 
     if (availableIsStable && settings.releaseTypes.includes('stable')) {
@@ -208,7 +189,6 @@ export class UpdateManager {
       return
     }
 
-    // Check if this is an old version that might have compatibility issues
     if (versionInfo.isOldVersion) {
       this.showOldVersionUpdateDialog(versionInfo, info)
     } else {
@@ -229,13 +209,10 @@ export class UpdateManager {
       })
       .then((result) => {
         if (result.response === 0) {
-          // Download manually
           this.openManualDownload()
         } else if (result.response === 1) {
-          // Try auto-update
           this.proceedWithAutoUpdate(updateInfo)
         }
-        // If response === 2, user chose "Later"
       })
   }
 
@@ -250,7 +227,6 @@ export class UpdateManager {
   }
 
   private proceedWithAutoUpdate(updateInfo: UpdateInfo): void {
-    // Proceed with normal auto-update
     console.log('Proceeding with auto-update for version:', updateInfo.version)
   }
 
@@ -277,7 +253,6 @@ export class UpdateManager {
   private handleUpdateError(error: Error): void {
     console.error('Auto-updater error:', error)
 
-    // Analyze the error to determine the best response
     const errorMessage = error.message.toLowerCase()
 
     if (this.isCertificateError(errorMessage)) {
@@ -360,7 +335,6 @@ export class UpdateManager {
       })
       .then((result) => {
         if (result.response === 0) {
-          // Retry the update
           this.checkForUpdates()
         } else if (result.response === 1) {
           this.openManualDownload()
@@ -384,7 +358,6 @@ export class UpdateManager {
     const message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`
     console.log(message)
 
-    // Send progress to renderer process
     this.mainWindow.webContents.send('update-download-progress', progressObj)
   }
 
@@ -397,8 +370,6 @@ export class UpdateManager {
   }
 
   public async getCurrentVersionInfo(): Promise<VersionInfo | null> {
-    // This would need to be implemented to get the latest version
-    // For now, we'll return null
     return null
   }
 }

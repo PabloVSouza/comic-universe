@@ -1,0 +1,155 @@
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useQueryClient } from '@tanstack/react-query'
+import { useApi } from 'hooks'
+import { usePersistSessionStore, useUserSettingsStore } from 'store'
+import { Item } from 'components/SettingsComponents'
+import { LoadingOverlay, Select } from 'components/UiComponents'
+import WallpaperSelector from './WallpaperSelector'
+
+const UserPreferences = () => {
+  const { t } = useTranslation()
+  const { invoke } = useApi()
+  const queryClient = useQueryClient()
+  const { currentUser } = usePersistSessionStore()
+  const { settings, isLoading, loadUserSettings, updateSetting } = useUserSettingsStore()
+
+  useEffect(() => {
+    if (currentUser.id) {
+      loadUserSettings(currentUser.id, invoke)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser.id])
+
+  const handleSettingChange = (
+    category: keyof IUserSettings,
+    key: string,
+    value: string | null
+  ) => {
+    if (!currentUser.id) return
+
+    updateSetting(currentUser.id, category, key, value, invoke, (queryKey) =>
+      queryClient.invalidateQueries({ queryKey })
+    )
+  }
+
+  if (!currentUser.id) {
+    return (
+      <div className="text-center text-text-default opacity-70 py-8">
+        {t('Settings.user.noUserSelected')}
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <LoadingOverlay isLoading={isLoading} />
+
+      <Item
+        labelI18nKey="Settings.user.readingDirection"
+        descriptionI18nKey="Settings.user.readingDirectionDescription"
+      >
+        <Select
+          value={{
+            value: settings.readingPreferences.readingDirection,
+            label: t(`Settings.user.${settings.readingPreferences.readingDirection}`)
+          }}
+          onChange={(selected) =>
+            handleSettingChange(
+              'readingPreferences',
+              'readingDirection',
+              (selected as { value: string })?.value || null
+            )
+          }
+          options={[
+            { value: 'ltr', label: t('Settings.user.ltr') },
+            { value: 'rtl', label: t('Settings.user.rtl') }
+          ]}
+        />
+      </Item>
+
+      <Item
+        labelI18nKey="Settings.user.defaultReadingMode"
+        descriptionI18nKey="Settings.user.defaultReadingModeDescription"
+      >
+        <Select
+          value={{
+            value: settings.readingPreferences.defaultReadingMode,
+            label: t(`Settings.user.${settings.readingPreferences.defaultReadingMode}`)
+          }}
+          onChange={(selected) =>
+            handleSettingChange(
+              'readingPreferences',
+              'defaultReadingMode',
+              (selected as { value: string })?.value || null
+            )
+          }
+          options={[
+            { value: 'horizontal', label: t('Settings.user.horizontal') },
+            { value: 'vertical', label: t('Settings.user.vertical') }
+          ]}
+        />
+      </Item>
+
+      <Item labelI18nKey="Settings.user.theme" descriptionI18nKey="Settings.user.themeDescription">
+        <Select
+          value={{
+            value: settings.displayPreferences.theme,
+            label: t(`Settings.user.${settings.displayPreferences.theme}`)
+          }}
+          onChange={(selected) =>
+            handleSettingChange(
+              'displayPreferences',
+              'theme',
+              (selected as { value: string })?.value || null
+            )
+          }
+          options={[
+            { value: 'inherit', label: t('Settings.user.inherit') },
+            { value: 'light', label: t('Settings.user.light') },
+            { value: 'dark', label: t('Settings.user.dark') },
+            { value: 'auto', label: t('Settings.user.auto') }
+          ]}
+        />
+      </Item>
+
+      <Item
+        labelI18nKey="Settings.user.language"
+        descriptionI18nKey="Settings.user.languageDescription"
+      >
+        <Select
+          value={{
+            value: settings.appPreferences.language,
+            label:
+              settings.appPreferences.language === 'inherit'
+                ? t('Settings.user.inherit')
+                : settings.appPreferences.language === 'enUS'
+                  ? 'English'
+                  : 'Português'
+          }}
+          onChange={(selected) =>
+            handleSettingChange(
+              'appPreferences',
+              'language',
+              (selected as { value: string })?.value || null
+            )
+          }
+          options={[
+            { value: 'inherit', label: t('Settings.user.inherit') },
+            { value: 'enUS', label: 'English' },
+            { value: 'ptBR', label: 'Português' }
+          ]}
+        />
+      </Item>
+
+      <WallpaperSelector
+        currentWallpaper={settings.displayPreferences.wallpaper}
+        onWallpaperChange={(wallpaper) =>
+          handleSettingChange('displayPreferences', 'wallpaper', wallpaper)
+        }
+      />
+    </div>
+  )
+}
+
+export default UserPreferences

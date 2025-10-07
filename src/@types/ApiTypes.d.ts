@@ -1,4 +1,3 @@
-// API Types for the application
 export interface AppData {
   version: string
   description: string
@@ -39,21 +38,18 @@ export interface AppSettings {
   webUI: WebUISettings
 }
 
-// Main API interface
 export interface ComicUniverseAPI {
-  // App methods
   getAppData: () => AppData
   path: (args: string[]) => string
   getAppParams: () => AppParams
   maximizeWindow: () => void
   closeWindow: () => void
   minimizeWindow: () => void
-  openWindow: (args: { window: string; data?: any }) => void
+  openWindow: (args: { window: string; data?: unknown }) => void
   openExternal: (args: { url: string }) => void
 
-  // Settings methods
   loadSettings: () => Promise<AppSettings>
-  updateSettings: (key: string, value: any) => Promise<AppSettings>
+  updateSettings: (key: string, value: unknown) => Promise<AppSettings>
   getUpdateSettings: () => Promise<UpdateSettings>
   updateUpdateSettings: (settings: Partial<UpdateSettings>) => Promise<UpdateSettings>
   getLanguageSettings: () => Promise<LanguageSettings>
@@ -63,13 +59,17 @@ export interface ComicUniverseAPI {
   getWebUISettings: () => Promise<WebUISettings>
   updateWebUISettings: (settings: Partial<WebUISettings>) => Promise<WebUISettings>
 
-  // Database methods
   dbRunMigrations: () => Promise<void>
   dbVerifyMigrations: () => Promise<boolean>
   dbGetComic: (args: { id: string }) => Promise<IComic>
-  dbGetComics: () => Promise<IComic[]>
-  dbInsertComic: (args: { comic: IComic; chapters: IChapter[]; repo: string }) => Promise<void>
-  dbUpdateComic: (args: { id: number; comic: Partial<IComic> }) => Promise<IComic | undefined>
+  dbGetComics: (args: { userId: string }) => Promise<IComic[]>
+  dbInsertComic: (args: {
+    comic: IComic
+    chapters: IChapter[]
+    repo: string
+    userId: string
+  }) => Promise<void>
+  dbUpdateComic: (args: { id: string; comic: Partial<IComic> }) => Promise<IComic | undefined>
   dbDeleteComic: (args: { id: string }) => Promise<void>
   dbGetChapters: (args: { comicId: string }) => Promise<IChapter[]>
   dbInsertChapter: (args: { chapter: IChapter; pages: IPage[] }) => Promise<void>
@@ -80,7 +80,7 @@ export interface ComicUniverseAPI {
   dbUpdatePage: (args: { id: string; page: Partial<IPage> }) => Promise<void>
   dbDeletePage: (args: { id: string }) => Promise<void>
   dbGetReadProgress: (args: { chapterId: string }) => Promise<IReadProgress[]>
-  dbGetReadProgressByUser: (args: { userId: number }) => Promise<IReadProgress[]>
+  dbGetReadProgressByUser: (args: { userId: string }) => Promise<IReadProgress[]>
   dbInsertReadProgress: (args: { readProgress: IReadProgress }) => Promise<void>
   dbUpdateReadProgress: (args: {
     id: string
@@ -91,27 +91,23 @@ export interface ComicUniverseAPI {
   dbInsertUser: (args: { user: IUser }) => Promise<void>
   dbUpdateUser: (args: { id: string; user: Partial<IUser> }) => Promise<void>
   dbDeleteUser: (args: { id: string }) => Promise<void>
-  dbGetUserSettings: (args: { userId: number }) => Promise<IUserSettings | undefined>
+  dbGetUserSettings: (args: { userId: string }) => Promise<IUserSettings | undefined>
   dbUpdateUserSettings: (args: {
-    userId: number
+    userId: string
     settings: Partial<IUserSettings>
   }) => Promise<IUserSettings | undefined>
 
-  // Plugin methods (dynamic based on installed plugins)
-  [key: string]: any
+  [key: string]: unknown
 
-  // API server methods
   restartApiServer: () => Promise<{ message: string }>
 }
 
-// IPC Implementation interface
 export interface IpcImplementation {
-  invoke: (method: string, args?: any) => Promise<any>
-  on: (channel: string, callback: (...args: any[]) => void) => void
+  invoke: (method: string, args?: unknown) => Promise<unknown>
+  on: (channel: string, callback: (...args: unknown[]) => void) => void
   removeAllListeners: (channel: string) => void
 }
 
-// REST Implementation interface
 export interface RestImplementation {
-  invoke: (method: string, args?: any) => Promise<any>
+  invoke: (method: string, args?: unknown) => Promise<unknown>
 }

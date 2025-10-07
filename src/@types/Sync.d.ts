@@ -1,10 +1,6 @@
-// Sync service types
-
 declare global {
-  // Sync direction
   type SyncDirection = 'push' | 'pull' | 'bidirectional'
 
-  // Changelog diff - represents what needs to be synced
   interface ChangelogDiff {
     toCreate: {
       comics: IComic[]
@@ -23,16 +19,14 @@ declare global {
     }
   }
 
-  // Sync conflict - when same entity modified in both places
   interface SyncConflict {
     entityType: 'comic' | 'chapter' | 'readProgress'
     entityId: string
     localUpdatedAt: string
     remoteUpdatedAt: string
-    resolution: 'local' | 'remote' // latest-wins
+    resolution: 'local' | 'remote'
   }
 
-  // Sync result
   interface SyncResult {
     success: boolean
     direction: SyncDirection
@@ -43,14 +37,12 @@ declare global {
     timestamp: string
   }
 
-  // Sync state for storing last sync info
   interface SyncState {
     lastSyncTimestamp: string | null
     lastSyncDirection: SyncDirection | null
     inProgress: boolean
   }
 
-  // Request/Response for API
   interface SyncRequest {
     token: string
     entries: IChangelogEntry[]

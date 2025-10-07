@@ -9,22 +9,18 @@ class DBRepository implements IDBRepository {
   private syncService!: SyncService
 
   constructor() {
-    // Use the centralized data paths utility
     DataPaths.ensureDirectoryExists(DataPaths.getDatabasePath())
   }
 
   public startup = async () => {
-    // Initialize ORM-agnostic database with custom path
     const dbPath = DataPaths.getDatabaseFilePath()
     this.repository = await initializeDatabase(dbPath)
 
-    // Initialize sync service
-    // Use localhost in development, production URL otherwise
     const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
     const apiBaseUrl = getApiBaseUrl(isDev)
     this.syncService = new SyncService(this.repository, {
       apiBaseUrl,
-      syncInterval: 0 // Manual sync only for now
+      syncInterval: 0
     })
   }
 
@@ -37,7 +33,6 @@ class DBRepository implements IDBRepository {
       return await this.repository.verifyMigrations()
     },
 
-    //Comics
     dbGetComic: async ({ id }): Promise<IComic> => {
       const comic = await this.repository.getComicById(id)
       return new Promise((resolve) => {
@@ -51,7 +46,6 @@ class DBRepository implements IDBRepository {
         throw new Error(`Comic with id ${id} not found`)
       }
 
-      // Transform the data to match the expected interface
       const comic = {
         ...comicData.comic,
         chapters: comicData.chapters.map((chapter) => ({
@@ -94,7 +88,6 @@ class DBRepository implements IDBRepository {
       return new Promise((resolve) => resolve())
     },
 
-    //Chapters
     dbGetAllChaptersNoPage: async (): Promise<IChapter[]> => {
       const chapters = await this.repository.getAllChaptersNoPage()
       return new Promise((resolve) => {
@@ -137,7 +130,6 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    //Read Progress
     dbGetReadProgress: async (search: Record<string, unknown>): Promise<IReadProgress[]> => {
       const progress = await this.repository.getReadProgress(search)
       return new Promise((resolve) => {
@@ -167,7 +159,6 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    //Users
     dbGetAllUsers: async (): Promise<IUser[]> => {
       const users = await this.repository.getAllUsers()
       return new Promise((resolve) => {
@@ -199,7 +190,6 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    // User Settings
     dbGetUserSettings: async ({ userId }): Promise<IUserSettings | undefined> => {
       const settings = await this.repository.getUserSettings(userId)
       return new Promise((resolve) => {
@@ -214,7 +204,6 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    // Website Authentication
     dbSetWebsiteAuthToken: async ({
       userId,
       token,
@@ -245,7 +234,6 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    // Changelog methods
     dbCreateChangelogEntry: async ({ entry }): Promise<IChangelogEntry> => {
       const result = await this.repository.createChangelogEntry(entry)
       return new Promise((resolve) => {
@@ -274,7 +262,6 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    // Sync methods
     dbSyncData: async ({ direction, userId, token }): Promise<SyncResult> => {
       return await this.syncService.sync(direction, userId, token)
     },

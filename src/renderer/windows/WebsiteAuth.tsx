@@ -18,23 +18,18 @@ const WebsiteAuth: FC = () => {
   const [isConnecting, setIsConnecting] = useState(false)
   const [deviceName, setDeviceName] = useState('')
 
-  // Use localhost in development, production URL otherwise
   const websiteUrl = getApiBaseUrl(process.env.NODE_ENV === 'development')
 
-  // Automatically generate device name
   useEffect(() => {
     const generateDeviceName = () => {
       try {
-        // Try to get platform information
         const userAgent = navigator.userAgent || ''
 
-        // Extract OS information
         let os = 'Unknown OS'
         if (userAgent.includes('Windows')) os = 'Windows'
         else if (userAgent.includes('Mac')) os = 'macOS'
         else if (userAgent.includes('Linux')) os = 'Linux'
 
-        // Generate a simple device name
         const deviceName = `${os} Device`
         setDeviceName(deviceName)
       } catch (error) {
@@ -56,7 +51,6 @@ const WebsiteAuth: FC = () => {
     }
   })
 
-  // Connect to website mutation
   const { mutate: connectToWebsite } = useMutation({
     mutationFn: async (credentials: { email: string; password: string }) => {
       if (!currentUser.id) throw new Error('No user selected')
@@ -64,7 +58,6 @@ const WebsiteAuth: FC = () => {
       setIsConnecting(true)
 
       try {
-        // Call website API to authenticate and get token
         const response = await fetch(`${websiteUrl}/api/auth/app-login`, {
           method: 'POST',
           headers: {
@@ -85,14 +78,13 @@ const WebsiteAuth: FC = () => {
 
         const data = await response.json()
 
-        // Store the token in the app database
         const authResult = await invoke<{
           userId: string
           userIdChanged: boolean
         }>('dbSetWebsiteAuthToken', {
           userId: currentUser.id,
           token: data.token,
-          expiresAt: data.expiresAt, // This is already an ISO string from the API
+          expiresAt: data.expiresAt,
           deviceName: deviceName || 'Unknown Device'
         })
 
@@ -110,19 +102,15 @@ const WebsiteAuth: FC = () => {
       }
     },
     onSuccess: (data) => {
-      // If user ID changed, update the session store
       if (data.userIdChanged && data.newUserId) {
         const { setCurrentUser } = usePersistSessionStore.getState()
         setCurrentUser({ ...currentUser, id: data.newUserId })
 
-        // Remove all queries for the old user ID to prevent refetch errors
         queryClient.removeQueries()
       } else {
-        // Just invalidate queries for the current user to refresh data
         queryClient.invalidateQueries()
       }
 
-      // Close the window and refresh data
       const currentWindows = useWindowManagerStore.getState().currentWindows
       const websiteAuthWindow = currentWindows.find(
         (window) => window.component.name === 'WebsiteAuth'

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { loadingIcon } from 'assets'
 import { FixFilePaths } from 'functions'
-import { useApi } from 'hooks'
+import { useApi, useWebsiteSync } from 'hooks'
 import { useGlobalStore, usePersistSessionStore } from 'store'
 import { BottomBar, ZoomWindow, type MousePosition } from 'components/ReaderComponents'
 import { Cover, Image } from 'components/UiComponents'
@@ -11,6 +11,7 @@ import { Cover, Image } from 'components/UiComponents'
 const Reader: FC = () => {
   const navigate = useNavigate()
   const { invoke } = useApi()
+  const { queueSync } = useWebsiteSync()
   const queryClient = useQueryClient()
   const { activeComic, setActiveComic } = useGlobalStore()
   const { currentUser } = usePersistSessionStore()
@@ -152,7 +153,10 @@ const Reader: FC = () => {
     mutationFn: async (readProgress: IReadProgress) => {
       await invoke<void>('dbUpdateReadProgress', { readProgress })
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['readProgressData'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['readProgressData'] })
+      queueSync('readProgress')
+    }
   })
 
   const { mutate: updateReadingMode } = useMutation({
@@ -181,12 +185,10 @@ const Reader: FC = () => {
     }
   })
 
-  // Reset reading mode when comic changes
   useEffect(() => {
     setCurrentReadingMode(null)
   }, [activeComic.id])
 
-  // Initialize reading mode from comic data or default
   useEffect(() => {
     if (currentReadingMode === null && activeComic.id) {
       const savedReadingMode = activeComic.settings?.readingMode
@@ -365,7 +367,6 @@ const Reader: FC = () => {
       updateReadingMode(newMode)
       setShouldScrollToPage(true)
     }
-    // Close zoom window when switching to vertical mode
     if (newMode === 'vertical') {
       setZoomVisible(false)
     }
@@ -555,7 +556,7 @@ const Reader: FC = () => {
                     </div>
                   ))}
               </div>
-              {/* Fixed navigation buttons for horizontal mode */}
+              {}
               <div className="absolute inset-0 w-full h-full flex justify-between pointer-events-none z-10">
                 <button
                   className="w-16 h-full transition-colors duration-200 bg-transparent border-none cursor-pointer hover:bg-black/10 pointer-events-auto"
@@ -587,7 +588,7 @@ const Reader: FC = () => {
           )}
         </div>
 
-        {/* Reader Bottom Bar */}
+        {}
         <BottomBar
           chapterName={chapters?.[chapterIndex]?.name || undefined}
           currentPage={readProgress?.page || 1}

@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useApi } from 'hooks'
+import { Box, Title } from 'components/SettingsComponents'
 import PluginInstallSettings from './PluginInstallSettings'
 import PluginList from './PluginList'
-import Box from '../Box'
-import Title from '../Title'
 
 const SettingsPlugin = () => {
   const { invoke } = useApi()

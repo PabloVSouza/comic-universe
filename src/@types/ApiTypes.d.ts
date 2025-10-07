@@ -1,4 +1,3 @@
-// API Types for the application
 export interface AppData {
   version: string
   description: string
@@ -39,21 +38,18 @@ export interface AppSettings {
   webUI: WebUISettings
 }
 
-// Main API interface
 export interface ComicUniverseAPI {
-  // App methods
   getAppData: () => AppData
   path: (args: string[]) => string
   getAppParams: () => AppParams
   maximizeWindow: () => void
   closeWindow: () => void
   minimizeWindow: () => void
-  openWindow: (args: { window: string; data?: any }) => void
+  openWindow: (args: { window: string; data?: unknown }) => void
   openExternal: (args: { url: string }) => void
 
-  // Settings methods
   loadSettings: () => Promise<AppSettings>
-  updateSettings: (key: string, value: any) => Promise<AppSettings>
+  updateSettings: (key: string, value: unknown) => Promise<AppSettings>
   getUpdateSettings: () => Promise<UpdateSettings>
   updateUpdateSettings: (settings: Partial<UpdateSettings>) => Promise<UpdateSettings>
   getLanguageSettings: () => Promise<LanguageSettings>
@@ -63,7 +59,6 @@ export interface ComicUniverseAPI {
   getWebUISettings: () => Promise<WebUISettings>
   updateWebUISettings: (settings: Partial<WebUISettings>) => Promise<WebUISettings>
 
-  // Database methods
   dbRunMigrations: () => Promise<void>
   dbVerifyMigrations: () => Promise<boolean>
   dbGetComic: (args: { id: string }) => Promise<IComic>
@@ -102,21 +97,17 @@ export interface ComicUniverseAPI {
     settings: Partial<IUserSettings>
   }) => Promise<IUserSettings | undefined>
 
-  // Plugin methods (dynamic based on installed plugins)
-  [key: string]: any
+  [key: string]: unknown
 
-  // API server methods
   restartApiServer: () => Promise<{ message: string }>
 }
 
-// IPC Implementation interface
 export interface IpcImplementation {
-  invoke: (method: string, args?: any) => Promise<any>
-  on: (channel: string, callback: (...args: any[]) => void) => void
+  invoke: (method: string, args?: unknown) => Promise<unknown>
+  on: (channel: string, callback: (...args: unknown[]) => void) => void
   removeAllListeners: (channel: string) => void
 }
 
-// REST Implementation interface
 export interface RestImplementation {
-  invoke: (method: string, args?: any) => Promise<any>
+  invoke: (method: string, args?: unknown) => Promise<unknown>
 }

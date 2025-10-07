@@ -64,7 +64,8 @@ const Nav: FC = () => {
       ? []
       : closeOption
 
-  const handleClick = (onClick: () => void): void => {
+  const handleClick = (e: React.MouseEvent, onClick: () => void): void => {
+    e.stopPropagation()
     toggleMenu()
     onClick()
   }
@@ -80,7 +81,7 @@ const Nav: FC = () => {
         {finalMenuOptions.map((option) => (
           <li
             className="group h-12 bg-default flex items-center cursor-pointer hover:bg-light hover:text-text-oposite"
-            onClick={(): void => handleClick(option.onClick)}
+            onClick={(e): void => handleClick(e, option.onClick)}
             key={option.label}
           >
             <Image

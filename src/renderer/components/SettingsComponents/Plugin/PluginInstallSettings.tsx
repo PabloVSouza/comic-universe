@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { downloadIcon3, loadingIcon } from 'assets'
 import { useApi } from 'hooks'
+import { Item } from 'components/SettingsComponents'
 import { Button, Select } from 'components/UiComponents'
-import Item from '../Item'
 
 const PluginInstallSettings = () => {
   const { t } = useTranslation()

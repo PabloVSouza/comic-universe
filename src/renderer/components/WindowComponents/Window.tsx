@@ -147,7 +147,6 @@ const Window = ({
 
     const zIndex = isFocused ? 51 : 50
 
-    // Safari requires explicit units for positioning and sizing
     const finalStyle = isMaximized
       ? { ...maximizedStyle, zIndex }
       : {

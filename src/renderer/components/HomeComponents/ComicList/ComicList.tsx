@@ -2,7 +2,7 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { trashIcon } from 'assets'
-import { useApi } from 'hooks'
+import { useApi, useWebsiteSync } from 'hooks'
 import { usePersistSessionStore } from 'store'
 import { confirmAlert, ContextMenu, openContextMenu, ContextOption } from 'components/UiComponents'
 import ComicListItem from './ComicListItem'
@@ -11,10 +11,10 @@ const ComicList: FC<{ comicList: IComic[] }> = ({ comicList }) => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const { currentUser } = usePersistSessionStore()
+  const { queueSync } = useWebsiteSync()
 
   const { mutate: deleteComic } = useMutation({
     mutationFn: async (comic: IComic) => {
-      // Log the deletion in database changelog
       await invoke('dbCreateChangelogEntry', {
         entry: {
           userId: currentUser.id || '',
@@ -25,10 +25,12 @@ const ComicList: FC<{ comicList: IComic[] }> = ({ comicList }) => {
         }
       })
 
-      // Perform the actual deletion
       return await invoke('dbDeleteComic', { comic })
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comicList'] })
+      queueSync('comic')
+    }
   })
 
   const { t } = useTranslation()

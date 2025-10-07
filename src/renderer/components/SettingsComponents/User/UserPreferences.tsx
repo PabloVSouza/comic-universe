@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useApi } from 'hooks'
-import { usePersistSessionStore } from 'store'
+import { usePersistSessionStore, useUserSettingsStore } from 'store'
+import { Item } from 'components/SettingsComponents'
 import { LoadingOverlay, Select } from 'components/UiComponents'
-import Item from '../Item'
 import WallpaperSelector from './WallpaperSelector'
 
 const UserPreferences = () => {
@@ -12,68 +12,25 @@ const UserPreferences = () => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const { currentUser } = usePersistSessionStore()
-
-  const [settings, setSettings] = useState<IUserSettings>({
-    readingPreferences: {
-      readingDirection: 'ltr',
-      defaultReadingMode: 'horizontal'
-    },
-    displayPreferences: {
-      theme: 'inherit',
-      wallpaper: null
-    },
-    appPreferences: {
-      language: 'inherit'
-    }
-  })
-
-  const { data: userSettings, isLoading } = useQuery({
-    queryKey: ['userSettings', currentUser.id],
-    queryFn: async () => {
-      if (currentUser.id) {
-        return await invoke<IUserSettings | null>('dbGetUserSettings', { userId: currentUser.id })
-      }
-      return null
-    },
-    enabled: !!currentUser.id,
-    initialData: null
-  })
-
-  const { mutate: updateSettings } = useMutation({
-    mutationFn: async (newSettings: Partial<IUserSettings>) => {
-      if (currentUser.id) {
-        return await invoke<void>('dbUpdateUserSettings', {
-          userId: currentUser.id,
-          settings: newSettings
-        })
-      }
-      return null
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['userSettings', currentUser.id] })
-    }
-  })
+  const { settings, isLoading, loadUserSettings, updateSetting } = useUserSettingsStore()
 
   useEffect(() => {
-    if (userSettings) {
-      setSettings((prev) => ({ ...prev, ...userSettings }))
+    if (currentUser.id) {
+      loadUserSettings(currentUser.id, invoke)
     }
-  }, [userSettings])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser.id])
 
   const handleSettingChange = (
     category: keyof IUserSettings,
     key: string,
     value: string | null
   ) => {
-    const newSettings = {
-      ...settings,
-      [category]: {
-        ...settings[category],
-        [key]: value
-      }
-    }
-    setSettings(newSettings)
-    updateSettings({ [category]: newSettings[category] })
+    if (!currentUser.id) return
+
+    updateSetting(currentUser.id, category, key, value, invoke, (queryKey) =>
+      queryClient.invalidateQueries({ queryKey })
+    )
   }
 
   if (!currentUser.id) {
@@ -185,7 +142,6 @@ const UserPreferences = () => {
         />
       </Item>
 
-      {/* Wallpaper Selection */}
       <WallpaperSelector
         currentWallpaper={settings.displayPreferences.wallpaper}
         onWallpaperChange={(wallpaper) =>

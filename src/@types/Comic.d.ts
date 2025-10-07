@@ -1,7 +1,7 @@
 interface IComicSettings {
   readingMode?: 'horizontal' | 'vertical'
   readingDirection?: 'ltr' | 'rtl'
-  [key: string]: any
+  [key: string]: unknown
 }
 
 interface IComic {

@@ -1,7 +1,6 @@
 import { ReactElement, ReactNode, useRef, useEffect } from 'react'
 import * as Portals from 'react-reverse-portal'
 import classNames from 'classnames'
-// import MinimizedBar from './MinimizedBar'
 import { useWindowManagerStore } from 'store'
 import Window from './Window'
 
@@ -30,7 +29,6 @@ const WindowManager = ({ children, className }: WindowManagerProps): ReactElemen
     }
   }, [containerRef])
 
-  // const MinimizedWindows = currentWindows.filter((window) => window.windowStatus.isMinimized)
   const ActiveWindows = currentWindows.filter((window) => !window.windowStatus.isMinimized)
 
   return (
@@ -59,7 +57,7 @@ const WindowManager = ({ children, className }: WindowManagerProps): ReactElemen
         )
       })}
       {children}
-      {/* <MinimizedBar MinimizedList={MinimizedWindows} /> */}
+      {}
     </div>
   )
 }

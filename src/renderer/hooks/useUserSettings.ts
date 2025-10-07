@@ -23,7 +23,6 @@ export const useUserSettings = () => {
     initialData: null
   })
 
-  // Apply theme settings
   useEffect(() => {
     if (userSettings?.displayPreferences?.theme) {
       const userTheme = userSettings.displayPreferences.theme
@@ -33,13 +32,11 @@ export const useUserSettings = () => {
         themeToApply = userTheme
       }
 
-      // Apply theme to document
       if (themeToApply === 'dark') {
         document.documentElement.classList.add('dark')
       } else if (themeToApply === 'light') {
         document.documentElement.classList.remove('dark')
       } else if (themeToApply === 'auto') {
-        // Auto theme based on system preference
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
         if (prefersDark) {
           document.documentElement.classList.add('dark')
@@ -50,7 +47,6 @@ export const useUserSettings = () => {
     }
   }, [userSettings?.displayPreferences?.theme, appTheme.theme])
 
-  // Apply language settings
   useEffect(() => {
     let languageToApply = appLanguage.language
 

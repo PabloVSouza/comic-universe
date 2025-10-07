@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useApi, useEnvironment } from 'hooks'
 import { usePersistStore } from 'store'
+import { Item } from 'components/SettingsComponents'
 import { Button, DisplayValue, Input } from 'components/UiComponents'
-import Item from '../Item'
 
 const SettingsWebUIPreferences = () => {
   const { t } = useTranslation()
@@ -18,28 +18,23 @@ const SettingsWebUIPreferences = () => {
 
   useEffect(() => {
     setCurrentWebUI(webUI.enableWebUI)
-    // Load auto port setting from store if available
     if (webUI.autoPort !== undefined) {
       setAutoPort(webUI.autoPort)
     }
-    // Load port setting from store if available
     if (webUI.port !== undefined) {
       setWebUIPortInput(webUI.port.toString())
     }
   }, [webUI])
 
-  // Load Web UI status and port
   useEffect(() => {
     const loadWebUIStatus = async () => {
       try {
         setWebUIStatus(currentWebUI ? 'running' : 'stopped')
 
-        // Load the actual port from the server
         if (currentWebUI) {
           const portResult = await invoke<{ port?: number }>('getWebUIPort')
           if (portResult && portResult.port) {
             setActualPort(portResult.port)
-            // Update the input field to show the actual port if no manual port is set
             if (!webUI.port) {
               setWebUIPortInput(portResult.port.toString())
             }
@@ -51,7 +46,8 @@ const SettingsWebUIPreferences = () => {
     }
 
     loadWebUIStatus()
-  }, [currentWebUI, webUI.port]) // Remove invoke dependency to prevent infinite loop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentWebUI, webUI.port])
 
   const handleWebUIToggle = async () => {
     const newValue = !currentWebUI
@@ -60,8 +56,8 @@ const SettingsWebUIPreferences = () => {
 
     try {
       await invoke<void>('restartApiServer')
-    } catch {
-      // Failed to restart API server
+    } catch (error) {
+      console.error('Error toggling Web UI:', error)
     }
   }
 
@@ -72,11 +68,10 @@ const SettingsWebUIPreferences = () => {
     if (!isNaN(portNumber) && portNumber >= 1024 && portNumber <= 65535) {
       try {
         await invoke<void>('updateWebUISettings', { port: portNumber })
-        setWebUIPort(portNumber) // Update the store
-        // Restart the server to use the new port
+        setWebUIPort(portNumber)
         await invoke<void>('restartApiServer')
-      } catch {
-        // Error updating port setting
+      } catch (error) {
+        console.error('Error updating port:', error)
       }
     }
   }
@@ -88,12 +83,11 @@ const SettingsWebUIPreferences = () => {
 
     try {
       await invoke<void>('updateWebUISettings', { autoPort: newAutoPort })
-    } catch {
-      // Error updating auto port setting
+    } catch (error) {
+      console.error('Error updating auto port:', error)
     }
   }
 
-  // Show loading state while store is hydrating
   if (!_hasHydrated) {
     return (
       <div className="space-y-6">
@@ -111,7 +105,7 @@ const SettingsWebUIPreferences = () => {
 
   return (
     <div className="space-y-6">
-      {/* Web UI Status */}
+      {}
       <Item labelI18nKey="Settings.general.webUIStatus">
         <div
           className={`text-base px-3 py-2 rounded-md ${
@@ -128,7 +122,7 @@ const SettingsWebUIPreferences = () => {
         </div>
       </Item>
 
-      {/* Enable Web UI Toggle */}
+      {}
       <Item
         labelI18nKey="Settings.general.webUI.enableWebUI"
         descriptionI18nKey={
@@ -145,7 +139,7 @@ const SettingsWebUIPreferences = () => {
         />
       </Item>
 
-      {/* Automatic Port Toggle */}
+      {}
       <Item
         labelI18nKey="Settings.general.webUI.autoPort"
         descriptionI18nKey="Settings.general.webUI.autoPortDescription"
@@ -158,7 +152,7 @@ const SettingsWebUIPreferences = () => {
         />
       </Item>
 
-      {/* Web UI Port */}
+      {}
       <Item
         labelI18nKey="Settings.general.webUI.port"
         descriptionI18nKey="Settings.general.webUI.portDescription"
@@ -179,7 +173,7 @@ const SettingsWebUIPreferences = () => {
         </div>
       </Item>
 
-      {/* Web UI URL */}
+      {}
       {currentWebUI && (
         <Item
           labelI18nKey="Settings.general.webUI.url"

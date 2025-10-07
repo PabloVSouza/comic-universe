@@ -2,10 +2,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useApi } from 'hooks'
 import { confirmAlert } from 'components/UiComponents'
 import timeoutPromise from 'functions/timeoutPromise'
+import useWebsiteSync from './useWebsiteSync'
 
 const useFetchData = (userId: string) => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
+  const { queueSync } = useWebsiteSync()
 
   const { mutateAsync: fetchNewChapters } = useMutation({
     mutationFn: async (comic: IComic) => {
@@ -42,7 +44,10 @@ const useFetchData = (userId: string) => {
         repo,
         userId
       }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList', userId] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comicList', userId] })
+      queueSync('comic')
+    }
   })
 
   const { mutate: insertChapters } = useMutation({
@@ -57,7 +62,10 @@ const useFetchData = (userId: string) => {
       await invoke<void>('dbInsertChapters', { chapters: finalChapters })
     },
 
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['comicList'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comicList'] })
+      queueSync('chapter')
+    }
   })
 
   const { mutate: fetchChapterPages } = useMutation({
@@ -73,11 +81,6 @@ const useFetchData = (userId: string) => {
         })
       }
       return pages.length > 0
-    },
-    onSuccess: (data) => {
-      if (data) {
-        // Queue removal should be handled by the component using useQueue
-      }
     },
     onError: () => {
       confirmAlert({

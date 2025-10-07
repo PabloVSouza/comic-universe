@@ -5,7 +5,8 @@ import { useWebsiteSync } from 'hooks'
 import { Button } from 'components/UiComponents'
 
 const ComicNav: FC = () => {
-  const { handleSync, isSyncing, showSuccess } = useWebsiteSync()
+  const { handleSync, isSyncing, showSuccess, isAutoSyncPending } = useWebsiteSync()
+  const isDisabled = isSyncing || isAutoSyncPending || showSuccess
 
   return (
     <ul className="bg-default">
@@ -23,7 +24,7 @@ const ComicNav: FC = () => {
           size="xs"
           theme="pure"
           onClick={handleSync}
-          disabled={isSyncing || showSuccess}
+          disabled={isDisabled}
           loading={isSyncing}
           loadingAnimation="spin-reverse"
         />

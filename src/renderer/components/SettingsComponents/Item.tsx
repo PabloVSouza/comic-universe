@@ -20,7 +20,6 @@ const SettingsItem = ({
 }: SettingsItemProps) => {
   const { t } = useTranslation()
 
-  // Use i18n key if provided, otherwise use direct label
   const labelText = labelI18nKey ? t(labelI18nKey) : label
   const descriptionText = descriptionI18nKey ? t(descriptionI18nKey) : description
 

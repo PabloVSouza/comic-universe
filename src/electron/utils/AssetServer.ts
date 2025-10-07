@@ -16,11 +16,9 @@ class AssetServer {
     try {
       const app = express()
 
-      // Use a different port range for assets (starting from 3000)
-      const port = await getPortToUse(null, 3000)
+      const port = await getPortToUse(null, 4000)
       this.currentPort = port
 
-      // Enable CORS for all requests
       app.use((_req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*')
         res.header('Access-Control-Allow-Methods', 'GET, OPTIONS')
@@ -28,13 +26,10 @@ class AssetServer {
         next()
       })
 
-      // Serve wallpapers
       const wallpaperPath = path.join(DataPaths.getBaseDataPath(), 'wallpapers')
       app.use('/wallpapers', express.static(wallpaperPath))
 
-      this.server = app.listen(port, () => {
-        // Asset server started successfully
-      })
+      this.server = app.listen(port, () => {})
     } catch (error) {
       console.error('Error starting asset server:', error)
     }
@@ -52,7 +47,6 @@ class AssetServer {
     }
   }
 
-  // Public methods for external access
   public methods = {
     getAssetServerPort: () => this.getCurrentPort(),
     stopAssetServer: this.stop

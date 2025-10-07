@@ -54,7 +54,7 @@ const ReaderBottomBar: FC<ReaderBottomBarProps> = ({
 
   return (
     <div className="w-full h-16 bg-background/95 backdrop-blur-sm border-t border-border flex items-center justify-between px-4 z-50">
-      {/* Left side - Chapter navigation */}
+      {}
       <div className="flex items-center">
         <Button
           theme="navigation"
@@ -66,7 +66,7 @@ const ReaderBottomBar: FC<ReaderBottomBarProps> = ({
         </Button>
       </div>
 
-      {/* Center - Chapter info and progress */}
+      {}
       <div className="flex-1 max-w-md mx-4 flex flex-col justify-center">
         {chapterName && (
           <div className="text-sm text-text-default text-center mb-1 truncate">{chapterName}</div>
@@ -84,7 +84,7 @@ const ReaderBottomBar: FC<ReaderBottomBarProps> = ({
         </div>
       </div>
 
-      {/* Right side - Reading controls menu and next chapter */}
+      {}
       <div className="flex items-center gap-3">
         <Button
           theme="pure"
@@ -103,7 +103,7 @@ const ReaderBottomBar: FC<ReaderBottomBarProps> = ({
         </Button>
       </div>
 
-      {/* Slide-up menu */}
+      {}
       <SlideUpMenu options={menuOptions} isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </div>
   )

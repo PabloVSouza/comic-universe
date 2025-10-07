@@ -20,17 +20,13 @@ const useAutoWebsiteAuth = () => {
         } | null>('dbGetWebsiteAuthToken', { userId: currentUser.id })
 
         if (authData && authData.token && !authData.isExpired) {
-          // User is authenticated and token is valid
           return
         }
-
-        // No valid token - user needs to authenticate manually via Settings > User > Website Auth
       } catch {
-        // Silently handle errors - user will authenticate manually if needed
+        // Auth check failed, continue to retry
       }
     }
 
-    // Small delay to ensure user is fully loaded
     const timer = setTimeout(checkAuthStatus, 1000)
     return () => clearTimeout(timer)
   }, [currentUser, invoke, queryClient])

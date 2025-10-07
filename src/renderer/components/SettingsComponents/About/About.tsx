@@ -2,10 +2,8 @@ import { FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { iconIcon } from 'assets'
 import { useApi } from 'hooks'
+import { Item, Box, Title } from 'components/SettingsComponents'
 import { DisplayValue, Image, LoadingOverlay } from 'components/UiComponents'
-import Box from '../Box'
-import Item from '../Item'
-import Title from '../Title'
 
 const SettingsAbout: FC = () => {
   const { invoke } = useApi()
@@ -43,7 +41,7 @@ const SettingsAbout: FC = () => {
         <div className="mx-auto">
           <Box>
             <div className="space-y-6">
-              {/* App Information */}
+              {}
               <div className="flex flex-col items-center text-center space-y-4">
                 <LoadingOverlay isLoading={isLoading} />
                 <Image src={iconIcon} className="w-24 h-24 flex-shrink-0" />
@@ -53,7 +51,7 @@ const SettingsAbout: FC = () => {
                 </div>
               </div>
 
-              {/* App Details */}
+              {}
               <div className="space-y-4">
                 <Item labelI18nKey="General.version">
                   <DisplayValue>{appVersion || appData?.version}</DisplayValue>
@@ -68,7 +66,7 @@ const SettingsAbout: FC = () => {
                 </Item>
               </div>
 
-              {/* Repository Link */}
+              {}
               <div className="space-y-4">
                 <Item
                   labelI18nKey="General.githubRepository"

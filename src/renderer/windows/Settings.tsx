@@ -42,7 +42,6 @@ const Settings = ({ initialTab }: { initialTab?: string }): ReactElement => {
     if (!initialTab) {
       setActiveOption(settingsOptions[0].tag)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialTab])
 
   const componentList = {

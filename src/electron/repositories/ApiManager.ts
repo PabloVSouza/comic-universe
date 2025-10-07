@@ -16,7 +16,6 @@ class ApiManager {
   constructor(methods: Methods) {
     this.methodsInstance = methods
     this.settingsRepository = new SettingsRepository()
-    // Defer startup to allow async settings check
     setImmediate(() => {
       this.startUp()
     })
@@ -24,7 +23,6 @@ class ApiManager {
 
   startUp = async () => {
     try {
-      // Check if web UI is enabled
       const webUISettings = await this.settingsRepository.methods.getWebUISettings()
       if (!webUISettings.enableWebUI) {
         return
@@ -43,7 +41,6 @@ class ApiManager {
         })
       )
 
-      // Add CORS headers to all responses
       app.use((_req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*')
         res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
@@ -58,27 +55,21 @@ class ApiManager {
       const routes = this.generateRoutes()
       app.use(routes)
 
-      this.server = app.listen(port, () => {
-        // API server started
-      })
-    } catch (error) {
-      // Error starting API server
+      this.server = app.listen(port, () => {})
+    } catch {
+      // Server startup failed, will retry
     }
   }
 
-  // Method to restart server when web UI setting changes
   restartServer = async () => {
-    // Stop existing server if running
     if (this.server) {
       this.server.close()
       this.server = null
     }
 
-    // Start server again (will check setting)
     await this.startUp()
   }
 
-  // Public methods for external access
   public methods = {
     restartServer: this.restartServer
   }
@@ -88,8 +79,6 @@ class ApiManager {
     const { methods: apiMethods } = this.methodsInstance
     const properties = Object.getOwnPropertyNames(apiMethods)
 
-    // Methods are being exposed for WebUI access
-
     const frontendPath = path.join(__dirname, '..', '..', 'out', 'renderer')
     const pluginsPath = DataPaths.getPluginsPath()
     const wallpaperPath = path.join(DataPaths.getBaseDataPath(), 'wallpapers')
@@ -98,7 +87,6 @@ class ApiManager {
     routes.use('/api/plugins', express.static(pluginsPath + '/'))
     routes.use('/api/wallpapers', express.static(wallpaperPath + '/'))
 
-    // Proxy route for external images to bypass CORS
     routes.get('/api/proxy-image', async (req, res): Promise<void> => {
       try {
         const imageUrl = req.query.url as string
@@ -108,7 +96,6 @@ class ApiManager {
           return
         }
 
-        // Validate that it's a valid image URL
         if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
           res.status(400).json({ error: 'Invalid URL' })
           return
@@ -121,22 +108,18 @@ class ApiManager {
           return
         }
 
-        // Set appropriate headers
         const contentType = response.headers.get('content-type')
         if (contentType) {
           res.set('Content-Type', contentType)
         }
 
-        // Set CORS headers
         res.set('Access-Control-Allow-Origin', '*')
         res.set('Access-Control-Allow-Methods', 'GET')
         res.set('Access-Control-Allow-Headers', 'Content-Type')
 
-        // Get the image data and send it
         const imageBuffer = await response.arrayBuffer()
         res.send(Buffer.from(imageBuffer))
-      } catch (error) {
-        // Error proxying image
+      } catch {
         res.status(500).json({ error: 'Internal server error' })
       }
     })
@@ -150,7 +133,6 @@ class ApiManager {
     return routes
   }
 
-  // Get the current port the server is running on
   getCurrentPort = (): number | null => {
     return this.currentPort
   }

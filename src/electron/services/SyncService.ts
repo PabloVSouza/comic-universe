@@ -1,17 +1,10 @@
-/**
- * Sync Service
- *
- * Handles bidirectional synchronization between local database and cloud.
- * Uses changelog-based approach to track and merge changes.
- */
-
 import { generateChangelogDiff, validateEntityData } from 'electron-utils/ChangelogDiff'
 import DebugLogger from 'electron-utils/DebugLogger'
 import { IDatabaseRepository } from '../repositories/database/interfaces/IDatabaseRepository'
 
 export interface SyncServiceConfig {
   apiBaseUrl: string
-  syncInterval?: number // Auto-sync interval in milliseconds (0 = manual only)
+  syncInterval?: number
 }
 
 export class SyncService {
@@ -26,9 +19,6 @@ export class SyncService {
     this.config = config
   }
 
-  /**
-   * Start auto-sync if configured
-   */
   start(): void {
     if (this.config.syncInterval && this.config.syncInterval > 0) {
       this.syncTimer = setInterval(() => {
@@ -40,9 +30,6 @@ export class SyncService {
     }
   }
 
-  /**
-   * Stop auto-sync
-   */
   stop(): void {
     if (this.syncTimer) {
       clearInterval(this.syncTimer)
@@ -51,9 +38,6 @@ export class SyncService {
     }
   }
 
-  /**
-   * Main sync function
-   */
   async sync(direction: SyncDirection, userId?: string, token?: string): Promise<SyncResult> {
     if (this.syncInProgress) {
       throw new Error('Sync already in progress')
@@ -63,7 +47,6 @@ export class SyncService {
     this.syncInProgress = true
 
     try {
-      // Get user and token if not provided
       if (!userId || !token) {
         const defaultUser = await this.db.getDefaultUser()
         if (!defaultUser || !defaultUser.id) {
@@ -81,20 +64,16 @@ export class SyncService {
         }
       }
 
-      // At this point, userId and token are guaranteed to be strings
       const syncUserId = userId as string
       const syncToken = token as string
 
-      // Get website user ID once for the entire sync
       const websiteUserId = await this.getWebsiteUserId(syncToken)
 
-      // Store website user ID for reference (optional, for caching)
       const defaultUser = await this.db.getDefaultUser()
       if (defaultUser && defaultUser.websiteUserId !== websiteUserId) {
         await this.db.updateUser(syncUserId, { websiteUserId })
       }
 
-      // Log sync start
       await this.db.createChangelogEntry({
         userId: syncUserId,
         entityType: 'sync',
@@ -127,7 +106,6 @@ export class SyncService {
       result.duration = Date.now() - startTime
       result.timestamp = this.lastSyncTimestamp
 
-      // Log sync completion
       await this.db.createChangelogEntry({
         userId: syncUserId,
         entityType: 'sync',
@@ -148,7 +126,6 @@ export class SyncService {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
 
-      // Log sync failure
       if (userId) {
         await this.db.createChangelogEntry({
           userId,
@@ -171,9 +148,6 @@ export class SyncService {
     }
   }
 
-  /**
-   * Get website user ID from token
-   */
   private async getWebsiteUserId(token: string): Promise<string> {
     const response = await fetch(`${this.config.apiBaseUrl}/api/auth/verify-app-token`, {
       method: 'POST',
@@ -189,9 +163,6 @@ export class SyncService {
     return data.user.id
   }
 
-  /**
-   * Push local changes to cloud
-   */
   private async pushToCloud(
     userId: string,
     token: string,
@@ -202,7 +173,6 @@ export class SyncService {
     let entriesProcessed = 0
 
     try {
-      // Get unsynced local changelog entries
       const unsyncedEntries = await this.db.getUnsyncedChangelogEntries(userId)
 
       if (unsyncedEntries.length === 0) {
@@ -217,13 +187,11 @@ export class SyncService {
         }
       }
 
-      // Remap entries to use website user ID
       const remappedEntries = unsyncedEntries.map((entry) => ({
         ...entry,
         userId: websiteUserId
       }))
 
-      // Send to server
       const requestBody: SyncRequest = {
         token,
         entries: remappedEntries
@@ -246,13 +214,11 @@ export class SyncService {
 
       const data: SyncResponse = await response.json()
 
-      // Mark local entries as synced
       if (data.syncedEntryIds && data.syncedEntryIds.length > 0) {
         await this.db.markChangelogEntriesAsSynced(data.syncedEntryIds)
         entriesProcessed = data.syncedEntryIds.length
       }
 
-      // Process conflicts
       if (data.conflicts && data.conflicts.length > 0) {
         errors.push(...data.conflicts.map((c) => c.error))
       }
@@ -282,22 +248,17 @@ export class SyncService {
     }
   }
 
-  /**
-   * Pull changes from cloud
-   */
   private async pullFromCloud(userId: string, token: string): Promise<SyncResult> {
     const conflicts: SyncConflict[] = []
     const errors: string[] = []
     let entriesProcessed = 0
 
     try {
-      // Request server changes
       const requestBody: SyncRequest = {
         token,
-        entries: [] // Empty - we're just pulling
+        entries: []
       }
 
-      // Only include lastSyncTimestamp if it exists
       if (this.lastSyncTimestamp) {
         requestBody.lastSyncTimestamp = this.lastSyncTimestamp
       }
@@ -321,9 +282,7 @@ export class SyncService {
 
       const data: SyncResponse = await response.json()
 
-      // Apply server entries locally
       if (data.serverEntries && data.serverEntries.length > 0) {
-        // Sort entries by dependency order: comics -> chapters -> readProgress
         const sortedEntries = this.sortEntriesByDependency(data.serverEntries)
 
         for (const entry of sortedEntries) {
@@ -362,9 +321,6 @@ export class SyncService {
     }
   }
 
-  /**
-   * Bidirectional sync - push and pull
-   */
   private async bidirectionalSync(
     userId: string,
     token: string,
@@ -375,16 +331,13 @@ export class SyncService {
     let entriesProcessed = 0
 
     try {
-      // Get local unsynced entries
       const localEntries = await this.db.getUnsyncedChangelogEntries(userId)
 
-      // Remap entries to use website user ID
       const remappedEntries = localEntries.map((entry) => ({
         ...entry,
         userId: websiteUserId
       }))
 
-      // Send local changes and get server changes
       const requestBody: SyncRequest = {
         token,
         entries: remappedEntries
@@ -407,13 +360,11 @@ export class SyncService {
 
       const data: SyncResponse = await response.json()
 
-      // Mark local entries as synced
       if (data.syncedEntryIds && data.syncedEntryIds.length > 0) {
         await this.db.markChangelogEntriesAsSynced(data.syncedEntryIds)
         entriesProcessed += data.syncedEntryIds.length
       }
 
-      // Apply server changes locally
       if (data.serverEntries && data.serverEntries.length > 0) {
         DebugLogger.info(`Applying ${data.serverEntries.length} server entries locally`)
 
@@ -423,10 +374,8 @@ export class SyncService {
         )
         conflicts.push(...detectedConflicts)
 
-        // Sort entries by dependency order: comics -> chapters -> readProgress
         const sortedEntries = this.sortEntriesByDependency(data.serverEntries)
 
-        // Log the sorted order for debugging
         DebugLogger.info('Sorted entries order:')
         sortedEntries.forEach((entry, index) => {
           const entityId =
@@ -455,7 +404,6 @@ export class SyncService {
             DebugLogger.error(`Failed to apply ${entry.entityType} ${entry.action}:`, errorMessage)
             errors.push(`Failed to process ${entry.entityType} change: ${errorMessage}`)
 
-            // If it's a chapter error, log the chapter data
             if (entry.entityType === 'chapter') {
               console.error('Chapter data:', JSON.stringify(entry.data, null, 2))
             }
@@ -465,7 +413,6 @@ export class SyncService {
         DebugLogger.info('No server entries to apply')
       }
 
-      // Process conflicts
       if (data.conflicts && data.conflicts.length > 0) {
         errors.push(...data.conflicts.map((c) => c.error))
       }
@@ -495,10 +442,6 @@ export class SyncService {
     }
   }
 
-  /**
-   * Sort changelog entries by dependency order
-   * Comics must be created before chapters, chapters before read progress
-   */
   private sortEntriesByDependency(entries: IChangelogEntry[]): IChangelogEntry[] {
     const priority: Record<string, number> = {
       comic: 1,
@@ -515,25 +458,20 @@ export class SyncService {
         return priorityA - priorityB
       }
 
-      // Within same entity type, sort by createdAt timestamp
       const timeA = new Date(a.createdAt || 0).getTime()
       const timeB = new Date(b.createdAt || 0).getTime()
       return timeA - timeB
     })
   }
 
-  /**
-   * Apply a changelog entry to the local database
-   */
   private async applyChangelogEntry(entry: IChangelogEntry, userId: string): Promise<void> {
-    if (entry.entityType === 'sync') return // Skip sync metadata
+    if (entry.entityType === 'sync') return
 
     if (!entry.data) {
       throw new Error(`No data in changelog entry for ${entry.entityType} ${entry.entityId}`)
     }
 
-    // Validate data
-    if (!validateEntityData(entry.entityType, entry.data)) {
+    if (!validateEntityData(entry.entityType, entry.data as IComic | IChapter | IReadProgress)) {
       throw new Error(`Invalid data for ${entry.entityType}`)
     }
 
@@ -549,7 +487,6 @@ export class SyncService {
         break
     }
 
-    // Create local changelog entry (mark as synced)
     await this.db.createChangelogEntry({
       ...entry,
       userId,
@@ -557,9 +494,6 @@ export class SyncService {
     })
   }
 
-  /**
-   * Apply comic changes
-   */
   private async applyComicChange(entry: IChangelogEntry): Promise<void> {
     const comic = entry.data as IComic
 
@@ -575,16 +509,13 @@ export class SyncService {
         const existing = await this.db.getComicById(comic.id)
         if (existing) {
           DebugLogger.info(`Updating existing comic: ${comic.id}`)
-          // Remove chapters from comic data before updating - they're synced separately
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { chapters, ...comicWithoutChapters } = comic
+          const { chapters: _chapters, ...comicWithoutChapters } = comic
           await this.db.updateComic(comic.id, comicWithoutChapters)
         } else {
           DebugLogger.info(`Creating new comic: ${comic.id} with userId: ${comic.userId}`)
-          // Use the comic's userId directly - it matches the local user after auth
           await this.db.createComic(comic, [], comic.repo, comic.userId)
 
-          // Verify the comic was created
           const created = await this.db.getComicById(comic.id)
           if (created) {
             DebugLogger.info(`✓ Successfully created comic: ${comic.id}`)
@@ -601,9 +532,6 @@ export class SyncService {
     }
   }
 
-  /**
-   * Apply chapter changes
-   */
   private async applyChapterChange(entry: IChangelogEntry): Promise<void> {
     const chapter = entry.data as IChapter
 
@@ -616,7 +544,6 @@ export class SyncService {
         if (!chapter.id) throw new Error('Chapter ID is required')
         if (!chapter.comicId) throw new Error('Chapter comicId is required')
 
-        // Verify the parent comic exists
         const comic = await this.db.getComicById(chapter.comicId)
 
         if (!comic) {
@@ -645,9 +572,6 @@ export class SyncService {
     }
   }
 
-  /**
-   * Apply read progress changes
-   */
   private async applyReadProgressChange(entry: IChangelogEntry, userId: string): Promise<void> {
     const progress = entry.data as IReadProgress
 
@@ -660,7 +584,6 @@ export class SyncService {
         )
 
         if (existingProgress) {
-          // Only update if server version is newer
           const serverTime = new Date(progress.updatedAt || 0).getTime()
           const localTime = new Date(existingProgress.updatedAt || 0).getTime()
 
@@ -683,27 +606,18 @@ export class SyncService {
     }
   }
 
-  /**
-   * Get sync status
-   */
   getSyncStatus(): SyncState {
     return {
       lastSyncTimestamp: this.lastSyncTimestamp,
-      lastSyncDirection: null, // Could be tracked if needed
+      lastSyncDirection: null,
       inProgress: this.syncInProgress
     }
   }
 
-  /**
-   * Get last sync timestamp
-   */
   getLastSyncTimestamp(): string | null {
     return this.lastSyncTimestamp
   }
 
-  /**
-   * Check if sync is in progress
-   */
   isSyncing(): boolean {
     return this.syncInProgress
   }

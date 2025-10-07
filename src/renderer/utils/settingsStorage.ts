@@ -4,7 +4,6 @@ import { DEFAULT_SETTINGS } from 'constants/defaultSettings'
 import IpcImplementation from 'hooks/api/IpcImplementation'
 import RestImplementation from 'hooks/api/RestImplementation'
 
-// Get API implementation without using the hook
 const getApi = () => {
   if (typeof window !== 'undefined' && window.Electron) {
     return IpcImplementation

@@ -77,7 +77,7 @@ const getWindowSettings = () => {
         'flex w-full h-full flex-col justify-evenly items-center overflow-auto pt-5',
       maximizable: true,
       unique: true,
-      title: 'Users' // Will be translated dynamically in openWindow
+      title: 'Users'
     },
     initialStatus: {
       startPosition: 'center',

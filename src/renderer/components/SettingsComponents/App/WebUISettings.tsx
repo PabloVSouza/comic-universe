@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useApi } from 'hooks'
 import { usePersistStore } from 'store'
+import { Item } from 'components/SettingsComponents'
 import { Button } from 'components/UiComponents'
-import Item from '../Item'
 
 const WebUISettings = () => {
   const { webUI, setWebUI, _hasHydrated } = usePersistStore()
   const { invoke } = useApi()
   const [currentWebUI, setCurrentWebUI] = useState(webUI.enableWebUI)
 
-  // Check if we're running in Web UI mode
   const isWebUIMode = window.location.origin.includes('localhost:8888')
 
   useEffect(() => {
@@ -21,7 +20,6 @@ const WebUISettings = () => {
     setCurrentWebUI(newValue)
     setWebUI(newValue)
 
-    // Trigger API server restart when WebUI setting changes
     try {
       await invoke('restartApiServer')
     } catch (error) {
@@ -29,7 +27,6 @@ const WebUISettings = () => {
     }
   }
 
-  // Show loading state while store is hydrating
   if (!_hasHydrated) {
     return (
       <Item

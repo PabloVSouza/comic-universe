@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useApi } from 'hooks'
 import { usePersistSessionStore } from 'store'
+import { Item } from 'components/SettingsComponents'
 import { DisplayValue } from 'components/UiComponents'
-import Item from '../Item'
 
 const UserStatistics = () => {
   const { invoke } = useApi()

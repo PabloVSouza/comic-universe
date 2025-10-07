@@ -11,15 +11,15 @@
       "preload/*": ["../../src/electron/preload/*"],
       "repositories/*": ["../../src/electron/repositories/*"],
       "scripts/*": ["../../src/electron/scripts/*"],
-      "electron-utils/*": ["../../src/electron/utils/*"],
-      "windows/*": ["../../src/electron/windows/*"],
       "database/*": ["../../src/database/*"],
-
+      "assets": ["./assets/index"],
       "assets/*": ["./assets/*"],
       "components/*": ["./components/*"],
       "electron/*": ["./electron/*"],
+      "hooks": ["./hooks/index"],
       "hooks/*": ["./hooks/*"],
-      "pages/*": ["./pages/*"],
+      "layouts/*": ["./layouts/*"],
+      "windows/*": ["./windows/*"],
       "lang/*": ["./lang/*"],
       "functions/*": ["./functions/*"],
       "routes/*": ["./routes/*"],
@@ -28,9 +28,12 @@
       "constants/*": ["./constants/*"],
       "@types/*": ["./@types/*"],
       "shared/*": ["../shared/*"],
-      "shared-utils/*": ["../utils/*"],
-      "shared-utils": ["../utils/index"],
-      "renderer-utils/*": ["./utils/*"]
+      "electron-utils": ["../../src/electron/utils/index"],
+      "electron-utils/*": ["../../src/electron/utils/*"],
+      "renderer-utils": ["./utils/index"],
+      "renderer-utils/*": ["./utils/*"],
+      "i18n": ["./i18n/index"],
+      "i18n/*": ["./i18n/*"]
     }
   }
 }

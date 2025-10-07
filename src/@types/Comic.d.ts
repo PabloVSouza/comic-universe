@@ -1,11 +1,12 @@
 interface IComicSettings {
   readingMode?: 'horizontal' | 'vertical'
   readingDirection?: 'ltr' | 'rtl'
-  [key: string]: any
+  [key: string]: unknown
 }
 
 interface IComic {
-  id?: number
+  id?: string
+  userId?: string
   siteId: string
   name: string
   cover: string

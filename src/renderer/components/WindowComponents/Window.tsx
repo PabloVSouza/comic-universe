@@ -1,7 +1,7 @@
 import { useRef, useEffect, ReactElement } from 'react'
-import useWindowManagerStore from 'store/useWindowManagerStore'
-import Button from 'components/Button'
 import classNames from 'classnames'
+import { useWindowManagerStore } from 'store'
+import { Button } from 'components/UiComponents'
 
 const Window = ({
   children,
@@ -149,7 +149,13 @@ const Window = ({
 
     const finalStyle = isMaximized
       ? { ...maximizedStyle, zIndex }
-      : { ...position, ...size, zIndex }
+      : {
+          top: typeof position.top === 'number' ? `${position.top}px` : position.top,
+          left: typeof position.left === 'number' ? `${position.left}px` : position.left,
+          width: typeof size.width === 'number' ? `${size.width}px` : size.width,
+          height: typeof size.height === 'number' ? `${size.height}px` : size.height,
+          zIndex
+        }
 
     const verifyAndSetMove = (): void => {
       if (movable) setIsMoving(id, true)

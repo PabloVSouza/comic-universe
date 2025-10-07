@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import useApi from 'api'
+import { useQuery } from '@tanstack/react-query'
+import { useApi } from 'hooks'
 import usePersistSessionStore from 'store/usePersistSessionStore'
 import usePersistStore from 'store/usePersistStore'
 
@@ -15,7 +15,7 @@ export const useUserSettings = () => {
     queryKey: ['userSettings', currentUser.id],
     queryFn: async () => {
       if (currentUser.id) {
-        return await invoke('dbGetUserSettings', { userId: currentUser.id })
+        return await invoke<IUserSettings | null>('dbGetUserSettings', { userId: currentUser.id })
       }
       return null
     },
@@ -23,7 +23,6 @@ export const useUserSettings = () => {
     initialData: null
   })
 
-  // Apply theme settings
   useEffect(() => {
     if (userSettings?.displayPreferences?.theme) {
       const userTheme = userSettings.displayPreferences.theme
@@ -33,13 +32,11 @@ export const useUserSettings = () => {
         themeToApply = userTheme
       }
 
-      // Apply theme to document
       if (themeToApply === 'dark') {
         document.documentElement.classList.add('dark')
       } else if (themeToApply === 'light') {
         document.documentElement.classList.remove('dark')
       } else if (themeToApply === 'auto') {
-        // Auto theme based on system preference
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
         if (prefersDark) {
           document.documentElement.classList.add('dark')
@@ -50,7 +47,6 @@ export const useUserSettings = () => {
     }
   }, [userSettings?.displayPreferences?.theme, appTheme.theme])
 
-  // Apply language settings
   useEffect(() => {
     let languageToApply = appLanguage.language
 
@@ -65,7 +61,6 @@ export const useUserSettings = () => {
       i18n.changeLanguage(languageToApply)
     }
   }, [userSettings?.appPreferences?.language, appLanguage.language, i18n])
-
 
   return {
     userSettings,

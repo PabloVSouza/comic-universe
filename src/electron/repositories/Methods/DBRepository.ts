@@ -1,18 +1,27 @@
+import { app } from 'electron'
+import { DataPaths } from 'electron-utils'
+import { getApiBaseUrl } from 'shared/constants'
+import { SyncService } from '../../services/SyncService'
 import { initializeDatabase, IDatabaseRepository } from '../database'
-import { DataPaths } from 'electron-utils/utils'
 
 class DBRepository implements IDBRepository {
   private repository!: IDatabaseRepository
+  private syncService!: SyncService
 
   constructor() {
-    // Use the centralized data paths utility
     DataPaths.ensureDirectoryExists(DataPaths.getDatabasePath())
   }
 
   public startup = async () => {
-    // Initialize ORM-agnostic database with custom path
     const dbPath = DataPaths.getDatabaseFilePath()
     this.repository = await initializeDatabase(dbPath)
+
+    const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
+    const apiBaseUrl = getApiBaseUrl(isDev)
+    this.syncService = new SyncService(this.repository, {
+      apiBaseUrl,
+      syncInterval: 0
+    })
   }
 
   methods: IDBMethods = {
@@ -24,7 +33,6 @@ class DBRepository implements IDBRepository {
       return await this.repository.verifyMigrations()
     },
 
-    //Comics
     dbGetComic: async ({ id }): Promise<IComic> => {
       const comic = await this.repository.getComicById(id)
       return new Promise((resolve) => {
@@ -38,7 +46,6 @@ class DBRepository implements IDBRepository {
         throw new Error(`Comic with id ${id} not found`)
       }
 
-      // Transform the data to match the expected interface
       const comic = {
         ...comicData.comic,
         chapters: comicData.chapters.map((chapter) => ({
@@ -52,15 +59,15 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    dbGetAllComics: async (): Promise<IComic[]> => {
-      const comics = await this.repository.getAllComics()
+    dbGetAllComics: async ({ userId }): Promise<IComic[]> => {
+      const comics = await this.repository.getAllComics(userId)
       return new Promise((resolve) => {
         resolve(comics as IComic[])
       })
     },
 
-    dbInsertComic: async ({ comic, chapters, repo }): Promise<void> => {
-      await this.repository.createComic(comic, chapters, repo)
+    dbInsertComic: async ({ comic, chapters, repo, userId }): Promise<void> => {
+      await this.repository.createComic(comic, chapters, repo, userId)
       return new Promise((resolve) => {
         resolve()
       })
@@ -81,7 +88,6 @@ class DBRepository implements IDBRepository {
       return new Promise((resolve) => resolve())
     },
 
-    //Chapters
     dbGetAllChaptersNoPage: async (): Promise<IChapter[]> => {
       const chapters = await this.repository.getAllChaptersNoPage()
       return new Promise((resolve) => {
@@ -93,6 +99,13 @@ class DBRepository implements IDBRepository {
       const chapters = await this.repository.getChaptersByComicId(comicId)
       return new Promise((resolve) => {
         resolve(chapters as IChapter[])
+      })
+    },
+
+    dbGetChapterById: async ({ id }): Promise<IChapter | undefined> => {
+      const chapter = await this.repository.getChapterById(id)
+      return new Promise((resolve) => {
+        resolve(chapter)
       })
     },
 
@@ -117,7 +130,6 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    //Read Progress
     dbGetReadProgress: async (search: Record<string, unknown>): Promise<IReadProgress[]> => {
       const progress = await this.repository.getReadProgress(search)
       return new Promise((resolve) => {
@@ -135,6 +147,11 @@ class DBRepository implements IDBRepository {
       return new Promise((resolve) => resolve())
     },
 
+    dbInsertReadProgress: async ({ readProgress }): Promise<void> => {
+      await this.repository.createReadProgress(readProgress)
+      return new Promise((resolve) => resolve())
+    },
+
     dbGetReadProgressByUser: async ({ userId }): Promise<IReadProgress[]> => {
       const progress = await this.repository.getReadProgressByUser(userId)
       return new Promise((resolve) => {
@@ -142,7 +159,6 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    //Users
     dbGetAllUsers: async (): Promise<IUser[]> => {
       const users = await this.repository.getAllUsers()
       return new Promise((resolve) => {
@@ -174,7 +190,6 @@ class DBRepository implements IDBRepository {
       })
     },
 
-    // User Settings
     dbGetUserSettings: async ({ userId }): Promise<IUserSettings | undefined> => {
       const settings = await this.repository.getUserSettings(userId)
       return new Promise((resolve) => {
@@ -186,6 +201,81 @@ class DBRepository implements IDBRepository {
       const updatedSettings = await this.repository.updateUserSettings(userId, settings)
       return new Promise((resolve) => {
         resolve(updatedSettings || undefined)
+      })
+    },
+
+    dbSetWebsiteAuthToken: async ({
+      userId,
+      token,
+      expiresAt,
+      deviceName
+    }): Promise<{ userId: string; userIdChanged: boolean }> => {
+      return await this.repository.setWebsiteAuthToken(userId, token, expiresAt, deviceName)
+    },
+
+    dbGetWebsiteAuthToken: async ({
+      userId
+    }): Promise<{
+      token: string | null
+      expiresAt: string | null
+      deviceName: string | null
+      isExpired: boolean
+    } | null> => {
+      const authData = await this.repository.getWebsiteAuthToken(userId)
+      return new Promise((resolve) => {
+        resolve(authData)
+      })
+    },
+
+    dbClearWebsiteAuthToken: async ({ userId }): Promise<void> => {
+      await this.repository.clearWebsiteAuthToken(userId)
+      return new Promise((resolve) => {
+        resolve()
+      })
+    },
+
+    dbCreateChangelogEntry: async ({ entry }): Promise<IChangelogEntry> => {
+      const result = await this.repository.createChangelogEntry(entry)
+      return new Promise((resolve) => {
+        resolve(result)
+      })
+    },
+
+    dbGetUnsyncedChangelogEntries: async ({ userId }): Promise<IChangelogEntry[]> => {
+      const result = await this.repository.getUnsyncedChangelogEntries(userId)
+      return new Promise((resolve) => {
+        resolve(result)
+      })
+    },
+
+    dbMarkChangelogEntriesAsSynced: async ({ entryIds }): Promise<void> => {
+      await this.repository.markChangelogEntriesAsSynced(entryIds)
+      return new Promise((resolve) => {
+        resolve()
+      })
+    },
+
+    dbDeleteChangelogEntries: async ({ entryIds }): Promise<void> => {
+      await this.repository.deleteChangelogEntries(entryIds)
+      return new Promise((resolve) => {
+        resolve()
+      })
+    },
+
+    dbGetChangelogEntriesSince: async ({ userId, timestamp }): Promise<IChangelogEntry[]> => {
+      const result = await this.repository.getChangelogEntriesSince(userId, timestamp)
+      return new Promise((resolve) => {
+        resolve(result)
+      })
+    },
+
+    dbSyncData: async ({ direction, userId, token }): Promise<SyncResult> => {
+      return await this.syncService.sync(direction, userId, token)
+    },
+
+    dbGetSyncStatus: async (): Promise<SyncState> => {
+      return new Promise((resolve) => {
+        resolve(this.syncService.getSyncStatus())
       })
     }
   }

@@ -1,1 +1,0 @@
-ALTER TABLE `ReadProgress` ADD `readingMode` text DEFAULT 'horizontal';

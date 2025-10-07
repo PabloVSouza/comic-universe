@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { openWindow } from 'functions'
 import { useApi } from 'hooks'
-import { usePersistSessionStore } from 'store'
+import { usePersistSessionStore, useUserSettingsStore } from 'store'
 import { Button } from 'components/UiComponents'
 import Item from '../Item'
 
@@ -12,28 +12,15 @@ const WebsiteAuth = () => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const { currentUser } = usePersistSessionStore()
-
-  const [deviceName, setDeviceName] = useState('')
+  const {
+    deviceName,
+    generateDeviceName,
+    disconnectFromWebsite: disconnectFromWebsiteStore
+  } = useUserSettingsStore()
 
   useEffect(() => {
-    const generateDeviceName = () => {
-      try {
-        const userAgent = navigator.userAgent || ''
-
-        let os = 'Unknown OS'
-        if (userAgent.includes('Windows')) os = 'Windows'
-        else if (userAgent.includes('Mac')) os = 'macOS'
-        else if (userAgent.includes('Linux')) os = 'Linux'
-
-        const deviceName = `${os} Device`
-        setDeviceName(deviceName)
-      } catch (error) {
-        console.error('Failed to generate device name:', error)
-        setDeviceName('Comic Universe App')
-      }
-    }
-
     generateDeviceName()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const { data: websiteAuth, isLoading } = useQuery({
@@ -51,37 +38,6 @@ const WebsiteAuth = () => {
     initialData: null
   })
 
-  const { mutate: disconnectFromWebsite } = useMutation({
-    mutationFn: async () => {
-      if (!currentUser.id) throw new Error('No user selected')
-
-      await invoke<void>('dbClearWebsiteAuthToken', { userId: currentUser.id })
-
-      const currentSettings = await invoke<IUserSettings | null>('dbGetUserSettings', {
-        userId: currentUser.id
-      })
-      const updatedSettings = {
-        ...currentSettings,
-        websiteAuth: {
-          ...(currentSettings?.websiteAuth || {}),
-          isConnected: false,
-          lastConnectedAt: undefined
-        }
-      }
-      await invoke<void>('dbUpdateUserSettings', {
-        userId: currentUser.id,
-        settings: updatedSettings
-      })
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['websiteAuth', currentUser.id] })
-      queryClient.invalidateQueries({ queryKey: ['userSettings', currentUser.id] })
-    },
-    onError: (error) => {
-      console.error('Disconnection error:', error)
-    }
-  })
-
   const handleConnectClick = () => {
     openWindow({
       component: 'WebsiteAuth',
@@ -90,7 +46,11 @@ const WebsiteAuth = () => {
   }
 
   const handleDisconnectClick = () => {
-    disconnectFromWebsite()
+    if (!currentUser.id) return
+
+    disconnectFromWebsiteStore(currentUser.id, invoke, (queryKey) =>
+      queryClient.invalidateQueries({ queryKey })
+    )
   }
 
   if (isLoading) {

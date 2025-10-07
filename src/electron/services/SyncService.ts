@@ -471,7 +471,7 @@ export class SyncService {
       throw new Error(`No data in changelog entry for ${entry.entityType} ${entry.entityId}`)
     }
 
-    if (!validateEntityData(entry.entityType, entry.data)) {
+    if (!validateEntityData(entry.entityType, entry.data as IComic | IChapter | IReadProgress)) {
       throw new Error(`Invalid data for ${entry.entityType}`)
     }
 
@@ -509,7 +509,8 @@ export class SyncService {
         const existing = await this.db.getComicById(comic.id)
         if (existing) {
           DebugLogger.info(`Updating existing comic: ${comic.id}`)
-          const { chapters, ...comicWithoutChapters } = comic
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { chapters: _chapters, ...comicWithoutChapters } = comic
           await this.db.updateComic(comic.id, comicWithoutChapters)
         } else {
           DebugLogger.info(`Creating new comic: ${comic.id} with userId: ${comic.userId}`)

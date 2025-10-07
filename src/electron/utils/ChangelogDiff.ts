@@ -143,10 +143,14 @@ function applyChange(
 
   switch (entry.action) {
     case 'created':
-      ;(diff.toCreate[pluralType] as Array<IComic | IChapter | IReadProgress>).push(entry.data)
+      ;(diff.toCreate[pluralType] as Array<IComic | IChapter | IReadProgress>).push(
+        entry.data as IComic | IChapter | IReadProgress
+      )
       break
     case 'updated':
-      ;(diff.toUpdate[pluralType] as Array<IComic | IChapter | IReadProgress>).push(entry.data)
+      ;(diff.toUpdate[pluralType] as Array<IComic | IChapter | IReadProgress>).push(
+        entry.data as IComic | IChapter | IReadProgress
+      )
       break
     case 'deleted': {
       const idKey = `${entityType}Ids` as 'comicIds' | 'chapterIds' | 'readProgressIds'

@@ -15,7 +15,8 @@ const LanguageSettings = () => {
     if (effectiveLanguage === language.language && i18n.language !== language.language) {
       i18n.changeLanguage(language.language)
     }
-  }, [language, i18n, effectiveLanguage])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language.language, effectiveLanguage])
 
   const languageOptions = [
     { value: 'enUS', label: 'English' },

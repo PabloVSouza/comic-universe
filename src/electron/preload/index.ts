@@ -14,7 +14,8 @@ const initializePreload = async (): Promise<void> => {
       console.error(error)
     }
   } else {
-    window.Electron = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(window as any).Electron = {
       ...electronAPI,
       minimizeWindow: () => ipcRenderer.invoke('minimize-window'),
       maximizeWindow: () => ipcRenderer.invoke('maximize-window'),

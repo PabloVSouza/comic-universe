@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { confirmIcon, cancelIcon, pencilIcon } from 'assets'
 import { useApi } from 'hooks'
-import { usePersistSessionStore } from 'store'
+import { usePersistSessionStore, useUserSettingsStore } from 'store'
 import { Button, DisplayValue, Input } from 'components/UiComponents'
 import Item from '../Item'
 import WebsiteAuth from './WebsiteAuth'
@@ -13,6 +13,7 @@ const UserProfile = () => {
   const { invoke } = useApi()
   const queryClient = useQueryClient()
   const { currentUser } = usePersistSessionStore()
+  const { settings, toggleAutoSync } = useUserSettingsStore()
 
   const [isEditing, setIsEditing] = useState(false)
   const [editName, setEditName] = useState('')
@@ -36,6 +37,14 @@ const UserProfile = () => {
     if (currentUser.id && editName.trim()) {
       updateUser({ id: currentUser.id, name: editName.trim() })
     }
+  }
+
+  const handleToggleAutoSync = () => {
+    if (!currentUser.id) return
+
+    toggleAutoSync(currentUser.id, invoke, (queryKey) =>
+      queryClient.invalidateQueries({ queryKey })
+    )
   }
 
   return (
@@ -89,6 +98,21 @@ const UserProfile = () => {
       </Item>
 
       <WebsiteAuth />
+
+      <Item
+        labelI18nKey="Settings.user.autoSync"
+        descriptionI18nKey={
+          settings.websiteAuth?.isConnected
+            ? 'Settings.user.autoSyncDescription'
+            : 'Settings.user.autoSyncDisabledDescription'
+        }
+      >
+        <Button
+          onClick={handleToggleAutoSync}
+          theme="toggle"
+          active={settings.syncPreferences?.autoSync ?? true}
+        />
+      </Item>
     </div>
   )
 }

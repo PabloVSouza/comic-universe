@@ -46,7 +46,8 @@ const SettingsWebUIPreferences = () => {
     }
 
     loadWebUIStatus()
-  }, [currentWebUI, webUI.port, invoke])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentWebUI, webUI.port])
 
   const handleWebUIToggle = async () => {
     const newValue = !currentWebUI

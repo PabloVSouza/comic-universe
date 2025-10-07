@@ -57,6 +57,7 @@ const SettingsUpdatePreferences = () => {
     loadUpdateSettings()
     loadCurrentVersion()
     loadPlatform()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const saveUpdateSettings = async (settings: UpdateSettings) => {

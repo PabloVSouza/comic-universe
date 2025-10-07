@@ -1,4 +1,4 @@
-import useApi from 'api'
+import { useApi } from 'hooks'
 
 export interface SettingsOutput {
   update?: {
@@ -22,7 +22,6 @@ export const useSettingsUtils = () => {
 
   const saveSettings = async (settings: SettingsOutput) => {
     try {
-      // Save each category of settings
       if (settings.update) {
         await invoke('updateUpdateSettings', { updateSettings: settings.update })
       }

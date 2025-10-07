@@ -1,7 +1,7 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { relations } from 'drizzle-orm'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { v4 as uuidv4 } from 'uuid'
 
-// Plugin table
 export const plugins = sqliteTable('Plugin', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   enabled: integer('enabled', { mode: 'boolean' }).default(true).notNull(),
@@ -11,17 +11,26 @@ export const plugins = sqliteTable('Plugin', {
   path: text('path').notNull()
 })
 
-// User table
 export const users = sqliteTable('User', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
   name: text('name').notNull(),
   default: integer('default', { mode: 'boolean' }).default(false).notNull(),
-  settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({})
+  settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({}),
+  websiteAuthToken: text('websiteAuthToken'),
+  websiteAuthExpiresAt: text('websiteAuthExpiresAt'),
+  websiteAuthDeviceName: text('websiteAuthDeviceName'),
+  websiteUserId: text('websiteUserId')
 })
 
-// Comic table
 export const comics = sqliteTable('Comic', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  userId: text('userId')
+    .notNull()
+    .references(() => users.id),
   siteId: text('siteId').notNull(),
   name: text('name').notNull(),
   cover: text('cover').notNull(),
@@ -38,10 +47,11 @@ export const comics = sqliteTable('Comic', {
   settings: text('settings', { mode: 'json' }).$type<Record<string, any>>().default({})
 })
 
-// Chapter table
 export const chapters = sqliteTable('Chapter', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  comicId: integer('comicId')
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  comicId: text('comicId')
     .notNull()
     .references(() => comics.id),
   siteId: text('siteId').notNull(),
@@ -56,30 +66,51 @@ export const chapters = sqliteTable('Chapter', {
   language: text('language')
 })
 
-// ReadProgress table
 export const readProgress = sqliteTable('ReadProgress', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  chapterId: integer('chapterId')
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  chapterId: text('chapterId')
     .notNull()
     .references(() => chapters.id),
-  comicId: integer('comicId')
+  comicId: text('comicId')
     .notNull()
     .references(() => comics.id),
-  userId: integer('userId')
+  userId: text('userId')
     .notNull()
     .references(() => users.id),
   totalPages: integer('totalPages').notNull(),
-  page: integer('page').notNull()
+  page: integer('page').notNull(),
+  updatedAt: text('updatedAt').$defaultFn(() => new Date().toISOString())
 })
 
-// Relations
+export const changelog = sqliteTable('Changelog', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  userId: text('userId')
+    .notNull()
+    .references(() => users.id),
+  entityType: text('entityType').notNull(),
+  entityId: text('entityId').notNull(),
+  action: text('action').notNull(),
+  data: text('data'),
+  createdAt: text('createdAt').$defaultFn(() => new Date().toISOString()),
+  synced: integer('synced', { mode: 'boolean' }).default(false)
+})
+
 export const pluginsRelations = relations(plugins, () => ({}))
 
 export const usersRelations = relations(users, ({ many }) => ({
-  readProgress: many(readProgress)
+  readProgress: many(readProgress),
+  comics: many(comics)
 }))
 
-export const comicsRelations = relations(comics, ({ many }) => ({
+export const comicsRelations = relations(comics, ({ one, many }) => ({
+  user: one(users, {
+    fields: [comics.userId],
+    references: [users.id]
+  }),
   chapters: many(chapters),
   readProgress: many(readProgress)
 }))
@@ -107,7 +138,6 @@ export const readProgressRelations = relations(readProgress, ({ one }) => ({
   })
 }))
 
-// Export types for TypeScript
 export type Plugin = typeof plugins.$inferSelect
 export type NewPlugin = typeof plugins.$inferInsert
 

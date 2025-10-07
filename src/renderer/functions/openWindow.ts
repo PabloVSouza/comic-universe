@@ -1,9 +1,8 @@
-import useWindowManagerStore from 'store/useWindowManagerStore'
 import { v4 as randomUUID } from 'uuid'
-import PageList from 'pages'
+import * as WindowList from 'windows'
+import useWindowManagerStore from 'store/useWindowManagerStore'
 import i18n from '../i18n'
 
-// Function to update window titles when language changes
 export const updateWindowTitles = (): void => {
   const { currentWindows, updateWindowProps } = useWindowManagerStore.getState()
 
@@ -36,18 +35,16 @@ const openWindow = ({
 }): void => {
   const { addWindow, currentWindows } = useWindowManagerStore.getState()
 
-  if (PageList[component]) {
-    const { windowProps, windowStatus, initialStatus } = PageList[component] as TWindow
+  if (WindowList[component]) {
+    const { windowProps, windowStatus, initialStatus } = WindowList[component] as TWindow
 
     const alreadyExist = currentWindows.find((window) => window.component.name === component)
 
     const shouldCreate = !(alreadyExist && windowProps.unique)
 
     if (shouldCreate) {
-      // Apply dynamic translations to window title
       const translatedWindowProps = { ...windowProps }
       if (translatedWindowProps.title) {
-        // Map component names to translation keys
         const titleMap: { [key: string]: string } = {
           Settings: 'Settings.windowTitle',
           About: 'HomeNav.about',
@@ -64,7 +61,7 @@ const openWindow = ({
 
       const window = {
         id: randomUUID(),
-        component: PageList[component][component],
+        component: WindowList[component][component],
         componentProps: props,
         windowProps: translatedWindowProps,
         windowStatus: windowStatus ?? {},

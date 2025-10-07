@@ -1,7 +1,7 @@
-import { BrowserWindow, app, shell, dialog, OpenDialogOptions } from 'electron'
-import pathLib from 'path'
 import fs from 'fs'
+import pathLib from 'path'
 import { is } from '@electron-toolkit/utils'
+import { BrowserWindow, app, shell, dialog, OpenDialogOptions } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import SettingsRepository, {
   LanguageSettings,
@@ -55,8 +55,6 @@ class AppRepository {
         return { message: 'Updates are not checked in development mode' }
       }
 
-      // Only check for updates if this is a CI/CD generated version
-      // (not a dev build or manually built version)
       const currentVersion = app.getVersion()
       const isCICDVersion =
         currentVersion.includes('alpha') ||
@@ -68,7 +66,6 @@ class AppRepository {
       }
 
       try {
-        // Load user's update preferences from file
         const settings = await this.settingsRepository.methods.getUpdateSettings()
 
         if (!settings.autoUpdate) {
@@ -92,14 +89,11 @@ class AppRepository {
     getAppVersion: () => {
       const currentVersion = app.getVersion()
 
-      // In development, show version with -dev suffix
       if (is.dev) {
         const majorVersion = currentVersion.split('.')[0]
         return `${majorVersion}.0.0-dev`
       }
 
-      // In production, return the actual version from package.json
-      // This version is updated by CI/CD when releases are created
       return currentVersion
     },
 
@@ -107,7 +101,6 @@ class AppRepository {
       return process.platform
     },
 
-    // Language settings methods
     getLanguageSettings: async () => {
       return await this.settingsRepository.methods.getLanguageSettings()
     },
@@ -118,7 +111,6 @@ class AppRepository {
       )
     },
 
-    // Update settings methods
     getUpdateSettings: async () => {
       return await this.settingsRepository.methods.getUpdateSettings()
     },
@@ -129,7 +121,6 @@ class AppRepository {
       )
     },
 
-    // Web UI settings methods
     getWebUISettings: async () => {
       return await this.settingsRepository.methods.getWebUISettings()
     },
@@ -137,7 +128,6 @@ class AppRepository {
     updateWebUISettings: async (args: {
       webUISettings: Partial<WebUISettings> | { webUISettings: Partial<WebUISettings> }
     }) => {
-      // Extract the actual settings from the nested structure
       const settings =
         (args.webUISettings as { webUISettings: Partial<WebUISettings> })?.webUISettings ||
         (args.webUISettings as Partial<WebUISettings>)
@@ -145,14 +135,10 @@ class AppRepository {
     },
 
     restartApiServer: async () => {
-      // This method will be overridden by Methods.setApiManager
-      // to call the actual ApiManager restartServer method
       return { message: 'API server restart requested' }
     },
 
     getWebUIPort: async () => {
-      // This method will be overridden by Methods.setApiManager
-      // to call the actual ApiManager getCurrentPort method
       return { port: null }
     },
 

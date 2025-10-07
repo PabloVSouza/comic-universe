@@ -1,22 +1,22 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "611bc124-fd00-4022-b582-a910f7d02c6a",
-  "prevId": "48960170-2eb2-4a1f-8108-5165ce09d9f1",
+  "id": "5c39700a-ae0c-4680-a5a6-ca232e9b81fb",
+  "prevId": "1b8d6341-81e4-4d73-b62f-1f5430e0e616",
   "tables": {
     "Chapter": {
       "name": "Chapter",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "comicId": {
           "name": "comicId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -118,10 +118,17 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         },
         "siteId": {
           "name": "siteId",
@@ -213,10 +220,32 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "settings": {
+          "name": "settings",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'{}'"
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "Comic_userId_User_id_fk": {
+          "name": "Comic_userId_User_id_fk",
+          "tableFrom": "Comic",
+          "tableTo": "User",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -279,28 +308,28 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "chapterId": {
           "name": "chapterId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "comicId": {
           "name": "comicId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "userId": {
           "name": "userId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -319,13 +348,12 @@
           "notNull": true,
           "autoincrement": false
         },
-        "readingMode": {
-          "name": "readingMode",
+        "updatedAt": {
+          "name": "updatedAt",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "'horizontal'"
+          "autoincrement": false
         }
       },
       "indexes": {},
@@ -379,10 +407,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "name": {
           "name": "name",
@@ -406,6 +434,27 @@
           "notNull": false,
           "autoincrement": false,
           "default": "'{}'"
+        },
+        "websiteAuthToken": {
+          "name": "websiteAuthToken",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "websiteAuthExpiresAt": {
+          "name": "websiteAuthExpiresAt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "websiteAuthDeviceName": {
+          "name": "websiteAuthDeviceName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {},

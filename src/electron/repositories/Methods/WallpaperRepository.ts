@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readdirSync, copyFileSync, unlinkSync, statSync } from 'fs'
 import path from 'path'
-import { DataPaths } from 'electron-utils/utils'
+import { DataPaths } from 'electron-utils'
 
 interface WallpaperInfo {
   filename: string
@@ -12,7 +12,6 @@ class WallpaperRepository {
   private wallpaperDirectory: string
 
   constructor() {
-    // Create wallpaper directory in user data folder
     this.wallpaperDirectory = path.join(DataPaths.getBaseDataPath(), 'wallpapers')
     this.ensureWallpaperDirectory()
   }
@@ -31,14 +30,12 @@ class WallpaperRepository {
     getAvailableWallpapers: async (): Promise<WallpaperInfo[]> => {
       const wallpapers: WallpaperInfo[] = []
 
-      // Add default wallpaper
       wallpapers.push({
         filename: 'default.webp',
         path: 'default',
         isDefault: true
       })
 
-      // Add custom wallpapers
       if (existsSync(this.wallpaperDirectory)) {
         const files = readdirSync(this.wallpaperDirectory)
         for (const file of files) {
@@ -68,7 +65,6 @@ class WallpaperRepository {
         throw new Error('Unsupported image format')
       }
 
-      // Generate unique filename if file already exists
       let finalFilename = filename
       let counter = 1
       while (existsSync(path.join(this.wallpaperDirectory, finalFilename))) {

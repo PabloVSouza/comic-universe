@@ -1,18 +1,26 @@
 interface IUserSettings {
-  // Reading preferences
   readingPreferences: {
     readingDirection: 'ltr' | 'rtl'
     defaultReadingMode: 'horizontal' | 'vertical'
   }
 
-  // Display preferences
   displayPreferences: {
     theme: 'inherit' | 'light' | 'dark' | 'auto'
-    wallpaper: string | null // path to custom wallpaper
+    wallpaper: string | null
   }
 
-  // App preferences
   appPreferences: {
     language: 'inherit' | 'enUS' | 'ptBR'
+  }
+
+  syncPreferences?: {
+    autoSync: boolean
+  }
+
+  websiteAuth?: {
+    isConnected: boolean
+    websiteUrl?: string
+    lastConnectedAt?: string
+    deviceName?: string
   }
 }

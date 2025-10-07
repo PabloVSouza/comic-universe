@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useApi } from 'hooks'
 import { usePersistStore } from 'store'
+import { Item } from 'components/SettingsComponents'
 import { Button } from 'components/UiComponents'
-import Item from '../Item'
 
 const WebUISettings = () => {
   const { webUI, setWebUI, _hasHydrated } = usePersistStore()

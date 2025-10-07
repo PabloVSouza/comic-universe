@@ -16,7 +16,7 @@ class AssetServer {
     try {
       const app = express()
 
-      const port = await getPortToUse(null, 3000)
+      const port = await getPortToUse(null, 4000)
       this.currentPort = port
 
       app.use((_req, res, next) => {

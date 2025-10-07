@@ -1,6 +1,6 @@
 import { usePersistStore } from 'store'
+import { Item } from 'components/SettingsComponents'
 import { Button } from 'components/UiComponents'
-import Item from '../Item'
 
 const DebugSettings = () => {
   const { debug, setDebugLogging, _hasHydrated } = usePersistStore()

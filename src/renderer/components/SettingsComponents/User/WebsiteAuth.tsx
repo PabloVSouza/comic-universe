@@ -4,8 +4,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { openWindow } from 'functions'
 import { useApi } from 'hooks'
 import { usePersistSessionStore, useUserSettingsStore } from 'store'
+import { Item } from 'components/SettingsComponents'
 import { Button } from 'components/UiComponents'
-import Item from '../Item'
 
 const WebsiteAuth = () => {
   const { t } = useTranslation()

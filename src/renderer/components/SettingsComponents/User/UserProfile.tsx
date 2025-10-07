@@ -4,8 +4,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { confirmIcon, cancelIcon, pencilIcon } from 'assets'
 import { useApi } from 'hooks'
 import { usePersistSessionStore, useUserSettingsStore } from 'store'
+import { Item } from 'components/SettingsComponents'
 import { Button, DisplayValue, Input } from 'components/UiComponents'
-import Item from '../Item'
 import WebsiteAuth from './WebsiteAuth'
 
 const UserProfile = () => {
@@ -111,6 +111,7 @@ const UserProfile = () => {
           onClick={handleToggleAutoSync}
           theme="toggle"
           active={settings.syncPreferences?.autoSync ?? true}
+          disabled={settings.websiteAuth?.isConnected}
         />
       </Item>
     </div>

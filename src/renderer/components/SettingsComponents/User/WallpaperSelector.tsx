@@ -6,8 +6,8 @@ import { confirmIcon, cancelIcon, uploadIcon } from 'assets'
 import { useApi } from 'hooks'
 import wallpaperList, { ExtendedWallpaperInfo } from 'renderer-utils/wallpaperList'
 import wallpaperManager from 'renderer-utils/wallpaperManager'
+import { Item } from 'components/SettingsComponents'
 import { confirmAlert, Button } from 'components/UiComponents'
-import Item from '../Item'
 
 interface WallpaperSelectorProps {
   currentWallpaper: string | null

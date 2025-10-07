@@ -170,6 +170,7 @@ const WebsiteAuth: FC = () => {
                     <label className="block text-base text-text-default mb-2">Email</label>
                     <Input
                       type="email"
+                      className="w-full"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       placeholder={t('Settings.user.websiteAuth.emailPlaceholder')}
@@ -198,6 +199,7 @@ const WebsiteAuth: FC = () => {
                     <label className="block text-base text-text-default mb-2">Password</label>
                     <Input
                       type="password"
+                      className="w-full"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       placeholder={t('Settings.user.websiteAuth.passwordPlaceholder')}

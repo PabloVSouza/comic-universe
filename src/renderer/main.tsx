@@ -9,6 +9,7 @@ import Routes from 'routes'
 import 'css/main.css'
 import { usePersistStore } from 'store'
 import { AlertProvider, UpdateNotification, WallpaperRenderer } from 'components/UiComponents'
+import { useDeepLink, handleDeepLinkAction } from 'hooks/useDeepLink'
 
 interface Props {
   children: ReactNode
@@ -25,6 +26,12 @@ applyInitialTheme()
 const Main: FC<Props> = ({ children }) => {
   const { theme } = usePersistStore()
   const { effectiveTheme, currentWallpaper } = useUserSettings()
+
+  useDeepLink((data) => {
+    handleDeepLinkAction(data).catch((error) => {
+      console.error('Error handling deep link:', error)
+    })
+  })
 
   useEffect(() => {
     const themeToApply = effectiveTheme || theme?.theme

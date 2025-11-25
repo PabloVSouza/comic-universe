@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { downloadIcon3, loadingIcon } from 'assets'
 import { useApi } from 'hooks'
+import usePersistSessionStore from 'store/usePersistSessionStore'
 import { Item } from 'components/SettingsComponents'
 import { Button, Select } from 'components/UiComponents'
 
@@ -10,11 +11,16 @@ const PluginInstallSettings = () => {
   const { t } = useTranslation()
   const { invoke } = useApi()
   const queryClient = useQueryClient()
+  const { currentUser } = usePersistSessionStore()
 
   const { data: pluginsList } = useQuery({
-    queryKey: ['pluginsList'],
-    queryFn: async () => await invoke<IRepoPluginInfo[]>('getPluginInfoList'),
-    initialData: []
+    queryKey: ['pluginsList', currentUser?.id],
+    queryFn: async () => {
+      if (!currentUser?.id) return []
+      return await invoke<IRepoPluginInfo[]>('getPluginInfoList', { userId: currentUser.id })
+    },
+    initialData: [],
+    enabled: !!currentUser?.id
   })
 
   const { data: apiPlugins } = useQuery({
@@ -25,15 +31,32 @@ const PluginInstallSettings = () => {
 
   const { mutate: updatePlugins } = useMutation({
     mutationFn: async () => {
-      await invoke<void>('refreshPluginHandlers')
-      queryClient.invalidateQueries({ queryKey: ['pluginsList'] })
+      if (!currentUser?.id) return
+      await invoke<void>('refreshPluginHandlers', { userId: currentUser.id })
+      queryClient.invalidateQueries({ queryKey: ['pluginsList', currentUser.id] })
     }
   })
 
-  const { mutate: downloadAndInstallPlugin, isPending: isInstalling } = useMutation({
-    mutationFn: async (plugin: string) => {
-      await invoke<void>('downloadAndInstallPlugin', plugin)
-      updatePlugins()
+  const { mutate: installPlugin, isPending: isInstalling } = useMutation({
+    mutationFn: async (pluginData: IRepoApiPluginList) => {
+      if (!currentUser?.id) {
+        throw new Error('User not logged in')
+      }
+      
+      const tag = pluginData.tag || pluginData.name.toLowerCase().replace(/\s+/g, '-')
+      
+      const plugin = {
+        name: pluginData.name,
+        url: pluginData.repo,
+        tag: tag,
+        logo: pluginData.logoUrl || undefined,
+        description: pluginData.description || undefined,
+        enabled: true
+      }
+
+      await invoke('createPlugin', { plugin, userId: currentUser.id })
+      await invoke('refreshPluginHandlers', { userId: currentUser.id })
+      queryClient.invalidateQueries({ queryKey: ['pluginsList', currentUser.id] })
     }
   })
 
@@ -44,8 +67,12 @@ const PluginInstallSettings = () => {
   }
 
   const handleInstallPlugin = () => {
-    if (typeof selectedPluginToInstall === 'object')
-      downloadAndInstallPlugin(selectedPluginToInstall.value)
+    if (typeof selectedPluginToInstall === 'object') {
+      const pluginData = apiPlugins.find((p) => p.repo === selectedPluginToInstall.value)
+      if (pluginData) {
+        installPlugin(pluginData)
+      }
+    }
   }
 
   useEffect(() => {
@@ -55,7 +82,8 @@ const PluginInstallSettings = () => {
   const pluginSelectOptions = apiPlugins
     .map((val) => ({
       label: val.name,
-      value: val.repo
+      value: val.repo,
+      plugin: val
     }))
     .filter((val) => !pluginsList.find((plugin) => plugin.name == val.label))
 

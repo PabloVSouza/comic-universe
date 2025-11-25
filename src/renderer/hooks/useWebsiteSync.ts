@@ -13,13 +13,29 @@ interface SyncResult {
 }
 
 const useWebsiteSync = () => {
-  const { invoke } = useApi()
+  const { invoke, on, removeAllListeners } = useApi()
   const queryClient = useQueryClient()
   const { currentUser } = usePersistSessionStore()
   const { userSettings } = useUserSettings()
   const { t } = useTranslation()
 
   const store = useWebsiteSyncStore()
+
+  useEffect(() => {
+    const handleRefreshPlugins = async (data: { userId?: string }) => {
+      if (currentUser?.id) {
+        await invoke('refreshPluginHandlers', { userId: data.userId || currentUser.id })
+        queryClient.invalidateQueries({ queryKey: ['repoList'] })
+        queryClient.invalidateQueries({ queryKey: ['pluginsList', currentUser.id] })
+      }
+    }
+
+    on('refreshPlugins', handleRefreshPlugins)
+
+    return () => {
+      removeAllListeners('refreshPlugins')
+    }
+  }, [on, removeAllListeners, invoke, queryClient, currentUser?.id])
   const { setIsSyncing, setShowSuccess } = store
 
   const syncMutation = useMutation({

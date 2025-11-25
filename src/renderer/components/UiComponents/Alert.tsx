@@ -62,6 +62,15 @@ let showAlert: (props: AlertProps) => void
 export const confirmAlert = (props: AlertProps) => {
   if (showAlert) {
     showAlert(props)
+  } else {
+    console.warn('confirmAlert called before AlertProvider is ready, retrying...')
+    setTimeout(() => {
+      if (showAlert) {
+        showAlert(props)
+      } else {
+        console.error('confirmAlert failed: AlertProvider not available')
+      }
+    }, 100)
   }
 }
 

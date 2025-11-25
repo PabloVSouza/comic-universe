@@ -1,8 +1,10 @@
 interface IPlugin {
   id: number
+  userId: string
   enabled: boolean
   name: string
-  repository: string
-  version: string
-  path: string
+  url: string
+  logo?: string
+  tag: string
+  description?: string
 }

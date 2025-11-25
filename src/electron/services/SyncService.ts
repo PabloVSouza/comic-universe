@@ -252,6 +252,7 @@ export class SyncService {
     const conflicts: SyncConflict[] = []
     const errors: string[] = []
     let entriesProcessed = 0
+    let pluginsChanged = false
 
     try {
       const requestBody: SyncRequest = {
@@ -287,12 +288,23 @@ export class SyncService {
 
         for (const entry of sortedEntries) {
           try {
+            if (entry.entityType === 'userPlugin') {
+              pluginsChanged = true
+            }
             await this.applyChangelogEntry(entry, userId)
             entriesProcessed++
           } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error'
             errors.push(`Failed to apply ${entry.entityType} ${entry.action}: ${errorMessage}`)
           }
+        }
+      }
+
+      if (pluginsChanged) {
+        const { BrowserWindow } = await import('electron')
+        const win = BrowserWindow.getAllWindows()[0]
+        if (win) {
+          win.webContents.send('refreshPlugins', { userId })
         }
       }
 
@@ -329,6 +341,7 @@ export class SyncService {
     const conflicts: SyncConflict[] = []
     const errors: string[] = []
     let entriesProcessed = 0
+    let pluginsChanged = false
 
     try {
       const localEntries = await this.db.getUnsyncedChangelogEntries(userId)
@@ -394,6 +407,9 @@ export class SyncService {
             DebugLogger.info(
               `Applying ${entry.entityType} ${entry.action} for entity ${entry.entityId}`
             )
+            if (entry.entityType === 'userPlugin') {
+              pluginsChanged = true
+            }
             await this.applyChangelogEntry(entry, userId)
             entriesProcessed++
             DebugLogger.info(`Successfully applied ${entry.entityType} ${entry.entityId}`)
@@ -417,6 +433,14 @@ export class SyncService {
 
       if (data.conflicts && data.conflicts.length > 0) {
         errors.push(...data.conflicts.map((c) => c.error))
+      }
+
+      if (pluginsChanged) {
+        const { BrowserWindow } = await import('electron')
+        const win = BrowserWindow.getAllWindows()[0]
+        if (win) {
+          win.webContents.send('refreshPlugins', { userId })
+        }
       }
 
       return {
@@ -449,7 +473,8 @@ export class SyncService {
       comic: 1,
       chapter: 2,
       readProgress: 3,
-      sync: 4
+      userPlugin: 4,
+      sync: 5
     }
 
     return [...entries].sort((a, b) => {
@@ -473,7 +498,10 @@ export class SyncService {
       throw new Error(`No data in changelog entry for ${entry.entityType} ${entry.entityId}`)
     }
 
-    if (!validateEntityData(entry.entityType, entry.data as IComic | IChapter | IReadProgress)) {
+    if (
+      entry.entityType !== 'userPlugin' &&
+      !validateEntityData(entry.entityType, entry.data as IComic | IChapter | IReadProgress)
+    ) {
       throw new Error(`Invalid data for ${entry.entityType}`)
     }
 
@@ -486,6 +514,9 @@ export class SyncService {
         break
       case 'readProgress':
         await this.applyReadProgressChange(entry, userId)
+        break
+      case 'userPlugin':
+        await this.applyPluginChange(entry, userId)
         break
     }
 
@@ -605,6 +636,41 @@ export class SyncService {
         }
         break
       }
+    }
+  }
+
+  private async applyPluginChange(entry: IChangelogEntry, userId: string): Promise<void> {
+    const plugin = entry.data as IPlugin
+
+    DebugLogger.info(`Applying plugin change: ${entry.action} for plugin ${plugin.name || plugin.id}`)
+
+    switch (entry.action) {
+      case 'created':
+      case 'updated': {
+        if (!plugin.id) throw new Error('Plugin ID is required')
+        if (!plugin.userId) throw new Error('Plugin userId is required')
+
+        const existing = await this.db.getPluginById(plugin.id, userId)
+        if (existing) {
+          DebugLogger.info(`Updating existing plugin: ${plugin.id}`)
+          await this.db.updatePlugin(plugin.id, plugin, userId)
+        } else {
+          DebugLogger.info(`Creating new plugin: ${plugin.id} with userId: ${plugin.userId}`)
+          await this.db.createPlugin(plugin)
+
+          const created = await this.db.getPluginById(plugin.id, userId)
+          if (created) {
+            DebugLogger.info(`✓ Successfully created plugin: ${plugin.id}`)
+          } else {
+            throw new Error(`Failed to create plugin ${plugin.id} - verification failed`)
+          }
+        }
+        break
+      }
+      case 'deleted':
+        DebugLogger.info(`Deleting plugin: ${entry.entityId}`)
+        await this.db.deletePlugin(parseInt(entry.entityId, 10), userId)
+        break
     }
   }
 

@@ -1,12 +1,8 @@
 import axios from 'axios'
+import { getApiBaseUrl } from 'shared/constants'
 
-/**
- * WebsiteApiRepository
- * Handles API communication with the Comic Universe website from the Electron main process
- * This bypasses CORS restrictions since main process is not subject to browser security
- */
 class WebsiteApiRepository {
-  private readonly baseUrl = 'https://comicuniverse.app'
+  private readonly baseUrl = getApiBaseUrl(process.env.NODE_ENV === 'development')
 
   public methods = {
     /**

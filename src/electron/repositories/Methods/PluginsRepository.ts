@@ -1,151 +1,155 @@
-import fs from 'fs'
-import path from 'path'
-import { is } from '@electron-toolkit/utils'
+import axios from 'axios'
 import { BrowserWindow } from 'electron'
-import {
-  CreateDirectory,
-  githubApi,
-  ComicUniverseApi,
-  DownloadFile,
-  DataPaths
-} from 'electron-utils'
-import { extract } from 'pacote'
+import { getApiBaseUrl } from 'shared/constants'
+import { getDatabase } from '../database'
+import { ApiPluginClient } from './ApiPluginClient'
 
 class PluginsRepository {
   public activePlugins = {} as { [key: string]: IRepoPluginRepository }
 
-  private get pluginsFinalPath(): string {
-    return DataPaths.getPluginsPath()
-  }
-
   public startUp = async () => {
-    DataPaths.resetCache()
-    if (!this.methods.verifyPluginFolderExists()) CreateDirectory(this.pluginsFinalPath)
-    await this.methods.installPlugins()
-    await this.methods.activatePlugins()
-  }
-
-  private getPluginFolderList = () =>
-    fs
-      .readdirSync(this.pluginsFinalPath, { withFileTypes: true })
-      .filter((val) => val.name !== '.DS_Store' && val.isDirectory())
-      .map((val) => val.name)
-
-  private getNotInstalledPluginsList = () =>
-    fs
-      .readdirSync(this.pluginsFinalPath, { withFileTypes: true })
-      .filter((val) => val.name.includes('.tgz') && !val.isDirectory())
-      .map((val) => val.name)
-
-  private getGithubData = async (repoUrl: string) => {
-    const { data } = await githubApi.get(`repos/${repoUrl}/releases/latest`)
-    return data
+    try {
+      const db = getDatabase()
+      let targetUser = await db.getDefaultUser()
+      if (!targetUser) {
+        const allUsers = await db.getAllUsers()
+        if (allUsers.length > 0) {
+          targetUser = allUsers[0]
+        }
+      }
+      if (targetUser?.id) {
+        await this.methods.activatePlugins({ userId: targetUser.id })
+      }
+    } catch (error) {
+      console.error('Error in plugins startup:', error)
+    }
   }
 
   public methods = {
-    verifyPluginFolderExists: () => {
-      return fs.existsSync(this.pluginsFinalPath)
-    },
-
-    installPlugins: async () => {
-      const pluginsList = this.getNotInstalledPluginsList()
-
-      for (const plugin of pluginsList) {
-        const { platform } = process
-
-        const pluginPath = path.join(this.pluginsFinalPath, plugin)
-        const devPath = is.dev && !path.isAbsolute(pluginPath) ? './' + pluginPath : pluginPath
-        const finalPath = platform === 'win32' ? 'file://' + devPath : devPath
-        const destPath = path.join(
-          this.pluginsFinalPath,
-          plugin.substring(0, plugin.lastIndexOf('-'))
-        )
-
-        await extract(finalPath, destPath)
-
-        fs.unlinkSync(devPath)
-      }
-    },
-
-    activatePlugins: async () => {
+    activatePlugins: async ({ userId }: { userId: string }) => {
       this.activePlugins = {}
 
-      const pluginsList = this.methods.getPluginInfoList()
-
-      for (const plugin of pluginsList) {
-        const pluginPath = path.join(this.pluginsFinalPath, plugin.name, plugin.path)
-
-        const { platform } = process
-
-        const importPath = platform === 'win32' ? 'file://' + pluginPath : pluginPath
-
-        try {
-          if (require.cache[importPath]) {
-            delete require.cache[importPath]
-          }
-
-          const newPlugin: IRepoPluginRepositoryConstruct = (await import(importPath)).default
-            .default
-
-          const instantiatedPlugin = new newPlugin()
-
-          this.activePlugins = {
-            ...this.activePlugins,
-            [instantiatedPlugin.RepoTag]: instantiatedPlugin
-          }
-        } catch (error) {
-          console.error(`Failed to activate plugin ${plugin.name}:`, error)
-        }
-      }
-
-      const win = BrowserWindow.getAllWindows()[0]
-      if (win) win.webContents.send('updateRepos')
-    },
-
-    updatePlugins: async () => {
-      await this.methods.installPlugins()
-      await this.methods.activatePlugins()
-    },
-
-    downloadAndInstallPlugin: async (plugin: string) => {
-      const githubData = await this.getGithubData(plugin)
-      await DownloadFile(this.pluginsFinalPath + '/', githubData.assets[0].browser_download_url)
-    },
-
-    getPluginsFromApi: async () => {
-      const { data } = await ComicUniverseApi.get('plugins')
-
-      return data
-    },
-
-    getPluginInfoList: () => {
-      const folderList = this.getPluginFolderList()
-      const pluginsList = [] as { name: string; path: string }[]
-
-      for (const folder of folderList) {
-        const folderPath = path.join(this.pluginsFinalPath, folder)
-        const packagePath = path.join(folderPath, 'package.json')
-
-        if (fs.existsSync(packagePath)) {
-          const packageFile = JSON.parse(String(fs.readFileSync(packagePath)))
+      try {
+        const db = getDatabase()
+        const enabledPlugins = await db.getEnabledPlugins(userId)
+        for (const plugin of enabledPlugins) {
           try {
-            const repoObj = {
-              name: packageFile.name,
-              path: packageFile.main,
-              author: packageFile.author,
-              version: packageFile.version,
-              repository: packageFile.repository,
-              iconPath: path.join(folderPath, packageFile.icon)
-            } as IRepoPluginInfo
-
-            pluginsList.push(repoObj)
-          } catch {
-            console.log(`Not a valid plugin: ${folder}`)
+            const apiPlugin = new ApiPluginClient(plugin)
+            this.activePlugins = {
+              ...this.activePlugins,
+              [apiPlugin.RepoTag]: apiPlugin
+            }
+          } catch (error) {
+            console.error(`Failed to activate plugin ${plugin.name}:`, error)
           }
         }
+        const win = BrowserWindow.getAllWindows()[0]
+        if (win) win.webContents.send('updateRepos')
+      } catch (error) {
+        console.error('Error loading plugins from database:', error)
       }
+    },
 
-      return pluginsList
+    getAllPlugins: async ({ userId }: { userId: string }) => {
+      try {
+        const db = getDatabase()
+        return await db.getAllPlugins(userId)
+      } catch (error) {
+        console.error('Error getting all plugins:', error)
+        return []
+      }
+    },
+
+    getPluginById: async ({ id, userId }: { id: number; userId: string }) => {
+      try {
+        const db = getDatabase()
+        return await db.getPluginById(id, userId)
+      } catch (error) {
+        console.error('Error getting plugin by id:', error)
+        return undefined
+      }
+    },
+
+    createPlugin: async ({
+      plugin,
+      userId
+    }: {
+      plugin: Omit<IPlugin, 'id' | 'userId'>
+      userId: string
+    }) => {
+      try {
+        const db = getDatabase()
+        const pluginWithUserId = { ...plugin, userId } as IPlugin
+        const created = await db.createPlugin(pluginWithUserId)
+
+        await db.createChangelogEntry({
+          userId,
+          entityType: 'userPlugin',
+          entityId: String(created.id),
+          action: 'created',
+          data: created,
+          synced: false
+        })
+
+        return created
+      } catch (error) {
+        console.error('Error creating plugin:', error)
+        throw error
+      }
+    },
+
+    updatePlugin: async ({
+      id,
+      plugin,
+      userId
+    }: {
+      id: number
+      plugin: Partial<IPlugin>
+      userId: string
+    }) => {
+      try {
+        const db = getDatabase()
+        const updated = await db.updatePlugin(id, plugin, userId)
+        if (updated) {
+          await this.methods.activatePlugins({ userId })
+
+          await db.createChangelogEntry({
+            userId,
+            entityType: 'userPlugin',
+            entityId: String(id),
+            action: 'updated',
+            data: updated,
+            synced: false
+          })
+        }
+        return updated
+      } catch (error) {
+        console.error('Error updating plugin:', error)
+        throw error
+      }
+    },
+
+    deletePlugin: async ({ id, userId }: { id: number; userId: string }) => {
+      try {
+        const db = getDatabase()
+        const plugin = await db.getPluginById(id, userId)
+        await db.deletePlugin(id, userId)
+        await this.methods.activatePlugins({ userId })
+
+        if (plugin) {
+          await db.createChangelogEntry({
+            userId,
+            entityType: 'userPlugin',
+            entityId: String(id),
+            action: 'deleted',
+            data: plugin,
+            synced: false
+          })
+        }
+      } catch (error) {
+        console.error('Error deleting plugin:', error)
+        throw error
+      }
     },
 
     getRepoList: async () => {
@@ -153,6 +157,79 @@ class PluginsRepository {
         label: plugin.RepoName,
         value: plugin.RepoTag
       }))
+    },
+
+    getPluginInfoList: async ({ userId }: { userId: string }) => {
+      try {
+        const db = getDatabase()
+        const plugins = await db.getAllPlugins(userId)
+        return plugins.map((plugin) => ({
+          name: plugin.name,
+          author: 'Unknown',
+          repository: plugin.url,
+          path: '',
+          iconPath: plugin.logo || '',
+          version: 'API'
+        })) as IRepoPluginInfo[]
+      } catch (error) {
+        console.error('Error getting plugin info list:', error)
+        return []
+      }
+    },
+
+    getPluginsFromApi: async () => {
+      try {
+        const baseUrl = getApiBaseUrl(process.env.NODE_ENV === 'development')
+        const response = await axios.get(`${baseUrl}/api/plugins`, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+
+        if (response.data.success && Array.isArray(response.data.data)) {
+          return response.data.data.map(
+            (plugin: {
+              name: string
+              apiUrl: string
+              tags?: string | null
+              description?: string | null
+              logoUrl?: string | null
+              version?: string | null
+              author?: string | null
+              website?: string | null
+            }) => {
+              const tags = plugin.tags
+                ? typeof plugin.tags === 'string'
+                  ? JSON.parse(plugin.tags)
+                  : plugin.tags
+                : []
+              const tag =
+                Array.isArray(tags) && tags.length > 0
+                  ? tags[0]
+                  : plugin.name.toLowerCase().replace(/\s+/g, '-')
+
+              return {
+                name: plugin.name,
+                repo: plugin.apiUrl,
+                tag: tag,
+                description: plugin.description || undefined,
+                logoUrl: plugin.logoUrl || undefined,
+                version: plugin.version || undefined,
+                author: plugin.author || undefined,
+                website: plugin.website || undefined
+              } as IRepoApiPluginList
+            }
+          )
+        }
+
+        return []
+      } catch (error) {
+        console.error('Error fetching plugins from API:', error)
+        if (axios.isAxiosError(error) && error.response) {
+          console.error('API response error:', error.response.status, error.response.data)
+        }
+        return []
+      }
     }
   }
 }

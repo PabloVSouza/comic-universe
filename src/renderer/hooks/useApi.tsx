@@ -7,9 +7,9 @@ interface ApiImplementation {
   removeAllListeners?: (channel: string) => void
 }
 
-const ApiList: Record<string, ApiImplementation> = { IpcImplementation, RestImplemention }
+export const ApiList: Record<string, ApiImplementation> = { IpcImplementation, RestImplemention }
 
-const getDefaultImplementation = (): keyof typeof ApiList => {
+export const getDefaultImplementation = (): keyof typeof ApiList => {
   if (typeof window !== 'undefined' && window.Electron) {
     return 'IpcImplementation'
   }

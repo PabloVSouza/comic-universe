@@ -29,7 +29,7 @@ declare global {
   interface IChangelogEntry {
     id?: string
     userId: string
-    entityType: 'comic' | 'chapter' | 'readProgress' | 'sync'
+    entityType: 'comic' | 'chapter' | 'readProgress' | 'sync' | 'userPlugin'
     entityId: string
     action: 'created' | 'updated' | 'deleted' | 'sync_started' | 'sync_completed' | 'sync_failed'
     data?: unknown

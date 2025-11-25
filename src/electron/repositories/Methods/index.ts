@@ -1,5 +1,6 @@
 import { BrowserWindow } from 'electron'
 import AssetServer from 'electron-utils/AssetServer'
+import { getDatabase } from '../database'
 import ApiRepository from './ApiRepository'
 import AppRepository from './AppRepository'
 import DBRepository from './DBRepository'
@@ -16,6 +17,7 @@ class Methods {
   private apiManager: ApiManager | null = null
   private pluginsRepository: PluginsRepository | null = null
   private eventManager: EventManager | null = null
+  private dbRepository: DBRepository | null = null
 
   constructor(
     private path: string,
@@ -24,6 +26,9 @@ class Methods {
   ) {}
 
   starUp = async () => {
+    this.dbRepository = new DBRepository()
+    await this.dbRepository.startup()
+
     this.pluginsRepository = new PluginsRepository()
     await this.pluginsRepository.startUp()
     await this.refreshMethods()
@@ -32,8 +37,10 @@ class Methods {
   refreshMethods = async () => {
     const apiRepository = new ApiRepository(this.pluginsRepository!)
     const appRepository = new AppRepository(this.path, this.runningPath, this.win)
-    const dbRepository = new DBRepository()
-    await dbRepository.startup()
+    if (!this.dbRepository) {
+      this.dbRepository = new DBRepository()
+      await this.dbRepository.startup()
+    }
     const settingsRepository = new SettingsRepository()
     const wallpaperRepository = new WallpaperRepository()
     const websiteApiRepository = new WebsiteApiRepository()
@@ -42,15 +49,25 @@ class Methods {
     this.methods = {
       ...apiRepository.methods,
       ...appRepository.methods,
-      ...dbRepository.methods,
+      ...this.dbRepository.methods,
       ...this.pluginsRepository!.methods,
       ...settingsRepository.methods,
       ...wallpaperRepository.methods,
       ...websiteApiRepository.methods,
       ...assetServer.methods,
-      refreshPluginHandlers: async () => {
-        await this.pluginsRepository!.methods.installPlugins()
-        await this.pluginsRepository!.methods.activatePlugins()
+      refreshPluginHandlers: async ({ userId }: { userId?: string } = {}) => {
+        let targetUserId = userId
+        if (!targetUserId) {
+          const db = getDatabase()
+          const defaultUser = await db.getDefaultUser()
+          if (defaultUser?.id) {
+            targetUserId = defaultUser.id
+          } else {
+            return { success: false, message: 'No user found' }
+          }
+        }
+
+        await this.pluginsRepository!.methods.activatePlugins({ userId: targetUserId })
         await this.refreshMethods()
 
         if (this.eventManager) {

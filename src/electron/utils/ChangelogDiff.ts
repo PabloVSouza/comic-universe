@@ -2,13 +2,15 @@ export interface ProcessedChangelog {
   comics: Map<string, { entry: IChangelogEntry; timestamp: string }>
   chapters: Map<string, { entry: IChangelogEntry; timestamp: string }>
   readProgress: Map<string, { entry: IChangelogEntry; timestamp: string }>
+  userPlugins: Map<string, { entry: IChangelogEntry; timestamp: string }>
 }
 
 export function processChangelogEntries(entries: IChangelogEntry[]): ProcessedChangelog {
   const processed: ProcessedChangelog = {
     comics: new Map(),
     chapters: new Map(),
-    readProgress: new Map()
+    readProgress: new Map(),
+    userPlugins: new Map()
   }
 
   const sortedEntries = [...entries].sort((a, b) => {
@@ -32,6 +34,9 @@ export function processChangelogEntries(entries: IChangelogEntry[]): ProcessedCh
         break
       case 'readProgress':
         processed.readProgress.set(entityId, { entry, timestamp })
+        break
+      case 'userPlugin':
+        processed.userPlugins.set(entityId, { entry, timestamp })
         break
     }
   }

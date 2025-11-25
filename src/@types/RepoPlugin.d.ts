@@ -39,4 +39,9 @@ interface IRepoApiPluginList {
   name: string
   repo: string
   tag: string
+  description?: string
+  logoUrl?: string
+  version?: string
+  author?: string
+  website?: string
 }

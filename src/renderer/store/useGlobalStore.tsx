@@ -40,7 +40,6 @@ const useGlobalStore = create<IuseGlobalStore>((set) => ({
   toggleMenu: (): void => set((state) => ({ ...state, menuVisible: !state.menuVisible })),
 
   updatePlugins: async (invoke) => {
-    await invoke('installPlugins')
     await invoke('activatePlugins')
     await invoke('resetEvents')
   }

@@ -29,6 +29,20 @@
       "when": 1759584459034,
       "tag": "0003_fast_madame_hydra",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1759600000000,
+      "tag": "0004_refactor_plugins_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1759700000000,
+      "tag": "0005_add_userid_to_plugins",
+      "breakpoints": true
     }
   ]
 }

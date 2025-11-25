@@ -80,12 +80,12 @@ export interface IDatabaseRepository {
   deleteChangelogEntries(entryIds: string[]): Promise<void>
   getChangelogEntriesSince(userId: string, timestamp: string): Promise<IChangelogEntry[]>
 
-  getAllPlugins(): Promise<IPlugin[]>
-  getPluginById(id: number): Promise<IPlugin | undefined>
-  getEnabledPlugins(): Promise<IPlugin[]>
+  getAllPlugins(userId: string): Promise<IPlugin[]>
+  getPluginById(id: number, userId: string): Promise<IPlugin | undefined>
+  getEnabledPlugins(userId: string): Promise<IPlugin[]>
   createPlugin(plugin: IPlugin): Promise<IPlugin>
-  updatePlugin(id: number, plugin: Partial<IPlugin>): Promise<IPlugin | undefined>
-  deletePlugin(id: number): Promise<void>
+  updatePlugin(id: number, plugin: Partial<IPlugin>, userId: string): Promise<IPlugin | undefined>
+  deletePlugin(id: number, userId: string): Promise<void>
 }
 
 export interface IDatabaseConfig {

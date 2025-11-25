@@ -71,12 +71,8 @@
           "name": "Changelog_userId_User_id_fk",
           "tableFrom": "Changelog",
           "tableTo": "User",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -180,12 +176,8 @@
           "name": "Chapter_comicId_Comic_id_fk",
           "tableFrom": "Chapter",
           "tableTo": "Comic",
-          "columnsFrom": [
-            "comicId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["comicId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -317,12 +309,8 @@
           "name": "Comic_userId_User_id_fk",
           "tableFrom": "Comic",
           "tableTo": "User",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -356,25 +344,32 @@
           "notNull": true,
           "autoincrement": false
         },
-        "repository": {
-          "name": "repository",
+        "url": {
+          "name": "url",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "version": {
-          "name": "version",
+        "logo": {
+          "name": "logo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "tag": {
+          "name": "tag",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "path": {
-          "name": "path",
+        "description": {
+          "name": "description",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         }
       },
@@ -443,12 +438,8 @@
           "name": "ReadProgress_chapterId_Chapter_id_fk",
           "tableFrom": "ReadProgress",
           "tableTo": "Chapter",
-          "columnsFrom": [
-            "chapterId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["chapterId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -456,12 +447,8 @@
           "name": "ReadProgress_comicId_Comic_id_fk",
           "tableFrom": "ReadProgress",
           "tableTo": "Comic",
-          "columnsFrom": [
-            "comicId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["comicId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -469,12 +456,8 @@
           "name": "ReadProgress_userId_User_id_fk",
           "tableFrom": "ReadProgress",
           "tableTo": "User",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

@@ -14,7 +14,7 @@ type TOption = {
 }
 
 const Search: FC = () => {
-  const { invoke } = useApi()
+  const { invoke, on, removeAllListeners } = useApi()
   const queryClient = useQueryClient()
   const [search, setSearch] = useState('')
   const [offset, setOffset] = useState(0)
@@ -68,9 +68,15 @@ const Search: FC = () => {
   }, [])
 
   useEffect(() => {
+    const handleUpdateRepos = () => {
+      queryClient.invalidateQueries({ queryKey: ['repoList'] })
+    }
+
+    on('updateRepos', handleUpdateRepos)
+
     return () => {
       debouncedResults.cancel()
-      queryClient.invalidateQueries({ queryKey: ['repoList'] })
+      removeAllListeners('updateRepos')
     }
   }, [])
 

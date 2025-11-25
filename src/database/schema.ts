@@ -4,11 +4,15 @@ import { v4 as uuidv4 } from 'uuid'
 
 export const plugins = sqliteTable('Plugin', {
   id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: text('userId')
+    .notNull()
+    .references(() => users.id),
   enabled: integer('enabled', { mode: 'boolean' }).default(true).notNull(),
   name: text('name').notNull(),
-  repository: text('repository').notNull(),
-  version: text('version').notNull(),
-  path: text('path').notNull()
+  url: text('url').notNull(),
+  logo: text('logo'),
+  tag: text('tag').notNull(),
+  description: text('description')
 })
 
 export const users = sqliteTable('User', {
@@ -99,11 +103,17 @@ export const changelog = sqliteTable('Changelog', {
   synced: integer('synced', { mode: 'boolean' }).default(false)
 })
 
-export const pluginsRelations = relations(plugins, () => ({}))
+export const pluginsRelations = relations(plugins, ({ one }) => ({
+  user: one(users, {
+    fields: [plugins.userId],
+    references: [users.id]
+  })
+}))
 
 export const usersRelations = relations(users, ({ many }) => ({
   readProgress: many(readProgress),
-  comics: many(comics)
+  comics: many(comics),
+  plugins: many(plugins)
 }))
 
 export const comicsRelations = relations(comics, ({ one, many }) => ({

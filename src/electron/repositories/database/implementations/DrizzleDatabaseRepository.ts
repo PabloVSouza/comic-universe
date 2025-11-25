@@ -844,23 +844,31 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     }
   }
 
-  async getAllPlugins(): Promise<IPlugin[]> {
-    const db = this.getDb()
-    return await db.select().from(plugins).orderBy(asc(plugins.name))
-  }
-
-  async getPluginById(id: number): Promise<IPlugin | undefined> {
-    const db = this.getDb()
-    const result = await db.select().from(plugins).where(eq(plugins.id, id)).limit(1)
-    return result[0]
-  }
-
-  async getEnabledPlugins(): Promise<IPlugin[]> {
+  async getAllPlugins(userId: string): Promise<IPlugin[]> {
     const db = this.getDb()
     return await db
       .select()
       .from(plugins)
-      .where(eq(plugins.enabled, true))
+      .where(eq(plugins.userId, userId))
+      .orderBy(asc(plugins.name))
+  }
+
+  async getPluginById(id: number, userId: string): Promise<IPlugin | undefined> {
+    const db = this.getDb()
+    const result = await db
+      .select()
+      .from(plugins)
+      .where(and(eq(plugins.id, id), eq(plugins.userId, userId)))
+      .limit(1)
+    return result[0]
+  }
+
+  async getEnabledPlugins(userId: string): Promise<IPlugin[]> {
+    const db = this.getDb()
+    return await db
+      .select()
+      .from(plugins)
+      .where(and(eq(plugins.enabled, true), eq(plugins.userId, userId)))
       .orderBy(asc(plugins.name))
   }
 
@@ -870,15 +878,19 @@ export class DrizzleDatabaseRepository implements IDatabaseRepository {
     return result[0]
   }
 
-  async updatePlugin(id: number, plugin: Partial<IPlugin>): Promise<IPlugin | undefined> {
+  async updatePlugin(id: number, plugin: Partial<IPlugin>, userId: string): Promise<IPlugin | undefined> {
     const db = this.getDb()
-    const result = await db.update(plugins).set(plugin).where(eq(plugins.id, id)).returning()
+    const result = await db
+      .update(plugins)
+      .set(plugin)
+      .where(and(eq(plugins.id, id), eq(plugins.userId, userId)))
+      .returning()
     return result[0]
   }
 
-  async deletePlugin(id: number): Promise<void> {
+  async deletePlugin(id: number, userId: string): Promise<void> {
     const db = this.getDb()
-    await db.delete(plugins).where(eq(plugins.id, id))
+    await db.delete(plugins).where(and(eq(plugins.id, id), eq(plugins.userId, userId)))
   }
 
   async createChangelogEntry(entry: IChangelogEntry): Promise<IChangelogEntry> {

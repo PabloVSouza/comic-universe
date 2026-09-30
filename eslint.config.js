@@ -83,6 +83,10 @@ module.exports = [
       'no-useless-catch': 'warn',
       'react-hooks/rules-of-hooks': 'warn',
       'react-hooks/exhaustive-deps': 'warn',
+      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/immutability': 'warn',
+      'react-hooks/refs': 'warn',
+      'react-hooks/globals': 'warn',
       'prettier/prettier': 'error',
 
       // Import sorting rules

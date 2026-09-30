@@ -137,9 +137,7 @@ function applyChange(
   if (!entry.data) return
 
   const pluralType = `${entityType}${entityType === 'readProgress' ? '' : 's'}` as
-    | 'comics'
-    | 'chapters'
-    | 'readProgress'
+    'comics' | 'chapters' | 'readProgress'
 
   switch (entry.action) {
     case 'created':
